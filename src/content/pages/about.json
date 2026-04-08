@@ -1,4 +1,8 @@
 {
+  "caption": {
+    "office_image_caption_en": "A collaborative space where sketches become structures.",
+    "office_image_caption_th": "พื้นที่แห่งการสร้างสรรค์ ที่ซึ่งภาพร่างถูกเปลี่ยนให้เป็นอาคารที่มีชีวิต"
+  },
   "team_statement_th": "สถาปนิก วิศวกร ผู้จัดการโครงการ และผู้เชี่ยวชาญงานหน้างานมากกว่า 50 คน",
   "bio": {
     "bio_1_en": "TNC.18 was founded with a single conviction — that buildings should outlast the trends of the moment they were built in. Nearly two decades later, that conviction remains unchanged. We believe that true quality is found in the intersection of structural integrity and timeless design",
@@ -8,7 +12,19 @@
     "bio_2_th": "เราคือบริษัทสถาปนิก วิศวกร และช่างก่อสร้างที่ตั้งอยู่ในกรุงเทพฯ ผลงานของเราครอบคลุมตั้งแต่บ้านพักอาศัยส่วนตัว อาคารพาณิชย์ งานออกแบบภายใน ไปจนถึงโครงการโรงแรมทั่วประเทศไทย ด้วยการให้บริการแบบครบวงจร (All-in-one) เราจึงมั่นใจได้ว่าวิสัยทัศน์เริ่มต้นจะถูกส่งต่อไปถึงงานก่อสร้างจริงได้อย่างสมบูรณ์แบบ",
     "bio_3_th": "ทุกโครงการของเราเริ่มต้นด้วยคำถามเดียวกันคือ \"อาคารหลังนี้จะมีคุณค่าอย่างไรในอีก 50 ปีข้างหน้า?\" คำถามนั้นคือสิ่งที่กำหนดการเลือกวัสดุ การตัดสินใจทางโครงสร้าง และทุกรายละเอียดของงาน เพราะเราไม่ได้เพียงแค่สร้างอาคาร แต่เรากำลังสร้างมรดกที่ส่งต่อคุณค่าได้อย่างยั่งยืน"
   },
+  "bio1": {
+    "bio_1_en": "TNC.18 was founded with a single conviction — that buildings should outlast the trends of the moment they were built in. Nearly two decades later, that conviction remains unchanged. We believe that true quality is found in the intersection of structural integrity and timeless design.",
+    "bio_1_th": "TNC.18 ก่อตั้งขึ้นด้วยความเชื่อมั่นเพียงหนึ่งเดียว คืออาคารควรมีความสวยงามและคงทนเหนือกาลเวลา มากกว่าเพียงแค่ทำตามกระแสในยุคสมัยนั้น กว่า 18 ปีที่ผ่านมา ความเชื่อนี้ยังคงไม่เปลี่ยนแปลง เราเชื่อว่าคุณภาพที่แท้จริงเกิดจากการบรรจบกันของโครงสร้างที่แข็งแกร่งและการออกแบบที่ไร้กาลเวลา"
+  },
   "office_image_caption_en": "TNC.18 Headquarters, Bangkok",
+  "bio2": {
+    "bio_2_en": "We are a Bangkok-based firm of architects, engineers, and builders. Our work spans private residences, commercial towers, interior commissions, and hospitality projects across Thailand. By offering a true \"all-in-one\" service, we ensure that the original vision is never lost between the drawing board and the final brick.",
+    "bio_2_th": "เราคือบริษัทสถาปนิก วิศวกร และช่างก่อสร้างที่ตั้งอยู่ในกรุงเทพฯ ผลงานของเราครอบคลุมตั้งแต่บ้านพักอาศัยส่วนตัว อาคารพาณิชย์ งานออกแบบภายใน ไปจนถึงโครงการโรงแรมทั่วประเทศไทย ด้วยการให้บริการแบบครบวงจร (All-in-one) เราจึงมั่นใจได้ว่าวิสัยทัศน์เริ่มต้นจะถูกส่งต่อไปถึงงานก่อสร้างจริงได้อย่างสมบูรณ์แบบ"
+  },
+  "bio3": {
+    "bio_3_en": "Every project begins with the same question: what will this building mean in fifty years? That question shapes every material choice, every structural decision, and every detail. We don't just build structures; we build legacies.",
+    "bio_3_th": "ทุกโครงการของเราเริ่มต้นด้วยคำถามเดียวกันคือ \"อาคารหลังนี้จะมีคุณค่าอย่างไรในอีก 50 ปีข้างหน้า?\" คำถามนั้นคือสิ่งที่กำหนดการเลือกวัสดุ การตัดสินใจทางโครงสร้าง และทุกรายละเอียดของงาน เพราะเราไม่ได้เพียงแค่สร้างอาคาร แต่เรากำลังสร้างมรดกที่ส่งต่อคุณค่าได้อย่างยั่งยืน"
+  },
   "bio_3_en": "Every project begins with the same question: what will this building mean in fifty years? That question shapes every material choice, every structural decision, every detail.",
   "bio_2_en": "We are a Bangkok-based firm of architects, engineers, and builders. Our work spans private residences, commercial towers, interior commissions, and hospitality projects across Thailand.",
   "bio_1_en": "TNC.18 was founded in 2006 with a single conviction — that buildings should outlast the trends of the moment they were built in. Eighteen years later, that conviction remains unchanged.",
@@ -20,7 +36,7 @@
   "bio_1_th": "TNC.18 ก่อตั้งขึ้นในปี 2549 ด้วยความเชื่อมั่นเดียว — ว่าอาคารควรคงอยู่ยาวนานกว่ากระแสของยุคสมัยที่สร้างขึ้น สิบแปดปีต่อมา ความเชื่อมั่นนั้นยังคงไม่เปลี่ยนแปลง",
   "hero_headline_th": "สร้างด้วยฝีมือ นิยามด้วยความยั่งยืน",
   "hero": {
-    "hero_image": "",
+    "hero_image": "https://res.cloudinary.com/dynjnftnu/image/upload/v1775659999/SnapInsta.to_660310928_18070249577334549_4593593654637420227_n_s9ouwu.jpg",
     "hero_headline_en": "Built on craft. Defined by permanence.",
     "hero_headline_th": "รากฐานจากความประณีต นิยามด้วยความยั่งยืน"
   },
