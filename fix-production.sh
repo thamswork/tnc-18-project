@@ -1,3 +1,17 @@
+#!/bin/bash
+# ============================================================
+# TNC.18 — Fix Production CSS & Fonts
+# Problem: /src/styles/global.css doesn't work on Cloudflare Pages
+# Fix: Import CSS properly via Astro + embed critical variables
+# ============================================================
+
+set -e
+echo ""
+echo "🔧 Fixing production CSS and fonts..."
+echo ""
+
+# ── Fix Layout.astro — proper CSS import + Google Fonts ──────
+cat > src/layouts/Layout.astro << 'ENDOFFILE'
 ---
 export interface Props {
   title: string;
@@ -78,3 +92,46 @@ const { title, description = 'TNC.18 — Architecture & Construction Excellence,
   ::-webkit-scrollbar-track { background: var(--stone); }
   ::-webkit-scrollbar-thumb { background: var(--gold); }
 </style>
+ENDOFFILE
+echo "✅  src/layouts/Layout.astro — CSS now embedded properly"
+
+# ── Fix global.css — use @import for Tailwind properly ───────
+cat > src/styles/global.css << 'ENDOFFILE'
+@import "tailwindcss";
+ENDOFFILE
+echo "✅  src/styles/global.css — simplified"
+
+# ── Fix astro.config.mjs — ensure CSS is processed ───────────
+cat > astro.config.mjs << 'ENDOFFILE'
+// @ts-check
+import { defineConfig } from 'astro/config';
+import react from '@astrojs/react';
+import sitemap from '@astrojs/sitemap';
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig({
+  site: 'https://tnc-18-project.pages.dev',
+  integrations: [react(), sitemap()],
+  vite: {
+    plugins: [tailwindcss()],
+  },
+});
+ENDOFFILE
+echo "✅  astro.config.mjs — site URL updated"
+
+git add .
+git commit -m "fix: move CSS to Layout is:global so fonts + tokens work in production"
+git push origin main
+
+echo ""
+echo "════════════════════════════════════════════════════"
+echo "✅  Pushed — Cloudflare will rebuild in ~1 minute"
+echo "════════════════════════════════════════════════════"
+echo ""
+echo "Live site: https://tnc-18-project.pages.dev"
+echo ""
+echo "The fix: CSS variables and fonts were in global.css"
+echo "which Cloudflare Pages can't serve from /src/."
+echo "Now they're in Layout.astro with is:global — Astro"
+echo "bundles them into the final HTML at build time."
+echo ""
