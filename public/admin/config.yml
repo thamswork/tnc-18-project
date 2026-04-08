@@ -4,7 +4,6 @@ backend:
   branch: main
   base_url: https://tnc-18-auth.tyme-sak.workers.dev
 
-# ── Media: upload to public/uploads, serve from /uploads ──
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
@@ -74,130 +73,75 @@ collections:
     editor: { preview: false }
     files:
 
-      - name: homepage
-        label: "Homepage"
-        file: src/content/pages/homepage.json
-        fields:
-          - label: "Hero Media"
-            name: hero_media
-            widget: object
-            fields:
-              - { label: "Hero Video (MP4 URL or upload)", name: hero_video, widget: string, required: false, hint: "Paste a video URL or leave blank" }
-              - { label: "Hero Fallback Image", name: hero_image, widget: image, required: false }
-          - label: "Hero Text"
-            name: hero_text
-            widget: object
-            fields:
-              - { label: "Location (EN)", name: hero_location_en, widget: string }
-              - { label: "Location (TH)", name: hero_location_th, widget: string }
-              - { label: "Line 1 (EN)",   name: hero_line1_en,    widget: string }
-              - { label: "Line 1 (TH)",   name: hero_line1_th,    widget: string }
-              - { label: "Line 2 (EN)",   name: hero_line2_en,    widget: string }
-              - { label: "Line 2 (TH)",   name: hero_line2_th,    widget: string }
-          - label: "Statement Quote"
-            name: statement
-            widget: object
-            fields:
-              - { label: "Quote (EN)", name: statement_en, widget: text }
-              - { label: "Quote (TH)", name: statement_th, widget: text }
-          - label: "About Section"
-            name: about
-            widget: object
-            fields:
-              - { label: "Headline (EN)",    name: about_headline_en,   widget: string }
-              - { label: "Headline (TH)",    name: about_headline_th,   widget: string }
-              - { label: "Body text (EN)",   name: about_body_en,       widget: text }
-              - { label: "Body text (TH)",   name: about_body_th,       widget: text }
-              - { label: "Years stat",       name: stats_years,         widget: string }
-              - { label: "Projects stat",    name: stats_projects,      widget: string }
-              - { label: "Specialists stat", name: stats_specialists,   widget: string }
-          - label: "Contact Band"
-            name: contact_band
-            widget: object
-            fields:
-              - { label: "Headline (EN)", name: contact_headline_en, widget: string }
-              - { label: "Headline (TH)", name: contact_headline_th, widget: string }
-              - { label: "Body (EN)",     name: contact_body_en,     widget: text }
-              - { label: "Body (TH)",     name: contact_body_th,     widget: text }
-
       - name: about
         label: "About Page"
         file: src/content/pages/about.json
         fields:
-          - label: "Hero"
-            name: hero
-            widget: object
-            fields:
-              - { label: "Headline (EN)", name: hero_headline_en, widget: string }
-              - { label: "Headline (TH)", name: hero_headline_th, widget: string }
-              - label: "Office / Team Photo"
-                name: hero_image
-                widget: image
-                required: false
-                hint: "Upload your office or team photo here. It appears on the left side of the About page."
-          - label: "Biography — Paragraph 1"
-            name: bio1
-            widget: object
-            fields:
-              - { label: "English", name: bio_1_en, widget: text }
-              - { label: "Thai",    name: bio_1_th, widget: text }
-          - label: "Biography — Paragraph 2"
-            name: bio2
-            widget: object
-            fields:
-              - { label: "English", name: bio_2_en, widget: text }
-              - { label: "Thai",    name: bio_2_th, widget: text }
-          - label: "Biography — Paragraph 3"
-            name: bio3
-            widget: object
-            fields:
-              - { label: "English", name: bio_3_en, widget: text }
-              - { label: "Thai",    name: bio_3_th, widget: text }
-          - label: "Photo Caption"
-            name: caption
-            widget: object
-            fields:
-              - { label: "Caption (EN)", name: office_image_caption_en, widget: string }
-              - { label: "Caption (TH)", name: office_image_caption_th, widget: string }
-          - label: "Team Statement"
-            name: team
-            widget: object
-            fields:
-              - { label: "Statement (EN)", name: team_statement_en, widget: text }
-              - { label: "Statement (TH)", name: team_statement_th, widget: text }
+          - { label: "Hero Headline (EN)", name: hero_headline_en, widget: string }
+          - { label: "Hero Headline (TH)", name: hero_headline_th, widget: string }
+          - label: "Office Photo (upload)"
+            name: office_photo
+            widget: image
+            required: false
+            hint: "Upload a photo — it appears on the left side of the About page"
+          - label: "Office Photo (paste URL from Cloudinary etc.)"
+            name: office_photo_url
+            widget: string
+            required: false
+            hint: "Alternative: paste a direct image URL if not uploading"
+          - { label: "Bio Paragraph 1 (EN)", name: bio_1_en, widget: text }
+          - { label: "Bio Paragraph 1 (TH)", name: bio_1_th, widget: text }
+          - { label: "Bio Paragraph 2 (EN)", name: bio_2_en, widget: text }
+          - { label: "Bio Paragraph 2 (TH)", name: bio_2_th, widget: text }
+          - { label: "Bio Paragraph 3 (EN)", name: bio_3_en, widget: text }
+          - { label: "Bio Paragraph 3 (TH)", name: bio_3_th, widget: text }
+          - { label: "Photo Caption (EN)",   name: office_caption_en, widget: string }
+          - { label: "Photo Caption (TH)",   name: office_caption_th, widget: string }
+          - { label: "Team Statement (EN)",  name: team_en, widget: text }
+          - { label: "Team Statement (TH)",  name: team_th, widget: text }
+
+      - name: homepage
+        label: "Homepage"
+        file: src/content/pages/homepage.json
+        fields:
+          - { label: "Hero Line 1 (EN)", name: hero_line1_en, widget: string }
+          - { label: "Hero Line 1 (TH)", name: hero_line1_th, widget: string }
+          - { label: "Hero Line 2 (EN)", name: hero_line2_en, widget: string }
+          - { label: "Hero Line 2 (TH)", name: hero_line2_th, widget: string }
+          - { label: "Statement Quote (EN)", name: statement_en, widget: text }
+          - { label: "Statement Quote (TH)", name: statement_th, widget: text }
+          - { label: "About Headline (EN)", name: about_headline_en, widget: string }
+          - { label: "About Headline (TH)", name: about_headline_th, widget: string }
+          - { label: "About Body (EN)", name: about_body_en, widget: text }
+          - { label: "About Body (TH)", name: about_body_th, widget: text }
+          - { label: "Years stat", name: stats_years, widget: string }
+          - { label: "Projects stat", name: stats_projects, widget: string }
+          - { label: "Specialists stat", name: stats_specialists, widget: string }
+          - { label: "Contact Headline (EN)", name: contact_headline_en, widget: string }
+          - { label: "Contact Headline (TH)", name: contact_headline_th, widget: string }
+          - { label: "Contact Body (EN)", name: contact_body_en, widget: text }
+          - { label: "Contact Body (TH)", name: contact_body_th, widget: text }
 
   - name: settings
     label: "Global Settings"
     delete: false
     editor: { preview: false }
     files:
-
       - name: contact
         label: "Contact & Social"
         file: src/content/settings/contact.json
         fields:
-          - { label: Phone,           name: phone,      widget: string }
-          - { label: Email,           name: email,      widget: string }
-          - { label: "Address (EN)",  name: address,    widget: text,   required: false }
-          - { label: "Address (TH)",  name: address_th, widget: text,   required: false }
-          - { label: "Line OA URL",   name: line,       widget: string, required: false }
-          - { label: Instagram,       name: instagram,  widget: string, required: false }
-          - { label: TikTok,          name: tiktok,     widget: string, required: false }
-
-      - name: colors
-        label: "Brand Colors"
-        file: src/content/settings/colors.json
-        fields:
-          - { label: "Stone (background)", name: stone,    widget: color, default: "#F7F4EF" }
-          - { label: "Charcoal (text)",    name: charcoal, widget: color, default: "#1C1A17" }
-          - { label: "Gold (accent)",      name: gold,     widget: color, default: "#A67C4E" }
-          - { label: "Blue (hover)",       name: blue,     widget: color, default: "#1B3F7A" }
-
+          - { label: Phone,          name: phone,      widget: string }
+          - { label: Email,          name: email,      widget: string }
+          - { label: "Address (EN)", name: address,    widget: text,   required: false }
+          - { label: "Address (TH)", name: address_th, widget: text,   required: false }
+          - { label: "Line OA URL",  name: line,       widget: string, required: false }
+          - { label: Instagram,      name: instagram,  widget: string, required: false }
+          - { label: TikTok,         name: tiktok,     widget: string, required: false }
       - name: siteinfo
         label: "Site Info"
         file: src/content/settings/siteinfo.json
         fields:
           - { label: "Site Name",        name: site_name, widget: string }
           - { label: "Tagline (EN)",     name: tagline,   widget: string }
-          - { label: "Tagline (TH)",     name: tagline_th,widget: string, required: false }
           - { label: "Meta Description", name: meta_desc, widget: text }
