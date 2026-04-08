@@ -1,0 +1,129 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const projects = allProjects.sort((a,b) => b.data.year - a.data.year);
+const categories = ['All', ...new Set(allProjects.map(p => p.data.category))];
+---
+<Layout title="Projects — Selected Work">
+  <Navbar />
+
+  <section class="proj-hero">
+    <div class="proj-hero-inner">
+      <span class="page-label" data-anim="rise" data-en="Selected Work" data-th="ผลงานคัดสรร">Selected Work</span>
+      <h1 data-split data-en="Every project is a permanent mark." data-th="ทุกโครงการคือรอยประทับถาวร">Every project is a permanent mark.</h1>
+    </div>
+  </section>
+
+  <section class="proj-grid-section">
+    <div class="proj-filter" data-anim="rise">
+      {categories.map(cat => (
+        <button class={`filter-btn ${cat==='All'?'active':''}`} data-cat={cat}
+          data-en={cat} data-th={cat}>{cat}</button>
+      ))}
+    </div>
+
+    <div class="proj-grid" id="proj-grid">
+      {projects.map((p, i) => (
+        <article class="proj-card" data-cat={p.data.category} data-anim="rise" data-delay={String((i%3)+1)}>
+          <a href={`/projects/${p.slug}`} class="proj-card-link">
+            <div class="proj-card-img">
+              {p.data.cover && !p.data.cover.includes('silom-residence')
+                ? <img src={p.data.cover} alt={p.data.title} loading="lazy" />
+                : <div class="proj-card-ph" style={`background:hsl(${40+i*8},${15+i*2}%,${70-i*4}%);`}></div>
+              }
+              <div class="proj-card-overlay">
+                <span class="proj-card-cat" data-en={p.data.category} data-th={p.data.category_th||p.data.category}>{p.data.category}</span>
+                <span class="proj-card-arr">→</span>
+              </div>
+            </div>
+            <div class="proj-card-info">
+              <span class="proj-card-year">{p.data.year}</span>
+              <h2 class="proj-card-title" data-en={p.data.title} data-th={p.data.title_th||p.data.title}>{p.data.title}</h2>
+            </div>
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div><span class="footer-logo">TNC<em>.</em>18</span></div>
+      <nav class="footer-nav">
+        <a href="/services" data-en="Services" data-th="บริการ">Services</a>
+        <a href="/about" data-en="About" data-th="เกี่ยวกับ">About</a>
+        <a href="/contact" data-en="Contact" data-th="ติดต่อ">Contact</a>
+      </nav>
+      <p class="footer-copy">© 2024 TNC.18</p>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  .proj-hero { background:var(--charcoal); padding:10rem 5rem 5rem; min-height:50vh; display:flex; align-items:flex-end; }
+  .proj-hero-inner { max-width:700px; }
+  .page-label { font-size:0.62rem; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:1.5rem; }
+  .proj-hero h1 { font-family:var(--font-serif); font-size:clamp(2.5rem,6vw,5rem); font-weight:300; color:var(--stone); line-height:1.1; }
+
+  .proj-grid-section { background:var(--warm-white); padding:4rem 5rem; }
+
+  .proj-filter { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:2.5rem; padding-bottom:1.5rem; border-bottom:1px solid var(--stone-dark); }
+  .filter-btn { background:none; border:1px solid var(--stone-dark); padding:0.4rem 1rem; font-size:0.62rem; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); cursor:pointer; transition:all 0.25s; font-family:var(--font-sans); }
+  .filter-btn:hover,.filter-btn.active { background:var(--charcoal); color:var(--stone); border-color:var(--charcoal); }
+
+  .proj-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem 1.75rem; }
+  .proj-card-link { display:block; text-decoration:none; color:inherit; }
+  .proj-card-img { aspect-ratio:4/3; overflow:hidden; background:var(--stone-mid); position:relative; margin-bottom:0.85rem; }
+  .proj-card-img img { width:100%; height:100%; object-fit:cover; transition:transform 0.85s cubic-bezier(0.4,0,0.2,1); }
+  .proj-card-ph { width:100%; height:100%; transition:transform 0.85s cubic-bezier(0.4,0,0.2,1); }
+  .proj-card-link:hover .proj-card-ph,.proj-card-link:hover img { transform:scale(1.05); }
+  .proj-card-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(20,18,15,0.7) 0%,transparent 60%); display:flex; align-items:flex-end; justify-content:space-between; padding:1rem 1.25rem; opacity:0; transition:opacity 0.4s; }
+  .proj-card-link:hover .proj-card-overlay { opacity:1; }
+  .proj-card-cat { font-size:0.58rem; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-light); }
+  .proj-card-arr { color:var(--gold); font-size:0.9rem; }
+  .proj-card-info { display:flex; flex-direction:column; gap:0.2rem; }
+  .proj-card-year { font-size:0.58rem; color:var(--muted); letter-spacing:0.1em; }
+  .proj-card-title { font-family:var(--font-serif); font-size:clamp(0.95rem,1.4vw,1.15rem); font-weight:300; color:var(--charcoal); transition:color 0.3s; line-height:1.2; }
+  .proj-card-link:hover .proj-card-title { color:var(--blue); }
+
+  .proj-card.hidden { display:none; }
+
+  .footer { background:#0F0E0C; padding:1.75rem 5rem; border-top:1px solid rgba(247,244,239,0.05); }
+  .footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+  .footer-logo { font-family:var(--font-sans); font-size:0.85rem; font-weight:500; letter-spacing:0.1em; color:rgba(247,244,239,0.4); }
+  .footer-logo em { font-style:normal; color:var(--gold); }
+  .footer-nav { display:flex; gap:2rem; }
+  .footer-nav a { font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(247,244,239,0.2); text-decoration:none; transition:color 0.3s; }
+  .footer-nav a:hover { color:rgba(247,244,239,0.65); }
+  .footer-copy { font-size:0.55rem; color:rgba(247,244,239,0.12); }
+
+  @media (max-width:900px) {
+    .proj-hero,.proj-grid-section,.footer { padding-left:1.75rem; padding-right:1.75rem; }
+    .proj-grid { grid-template-columns:1fr 1fr; }
+    .footer-inner { flex-direction:column; align-items:flex-start; }
+  }
+  @media (max-width:600px) { .proj-grid { grid-template-columns:1fr; } }
+</style>
+<script>
+  // Filter
+  document.querySelectorAll('.filter-btn').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat=btn.getAttribute('data-cat')||'All';
+      document.querySelectorAll('.proj-card').forEach((card:any)=>{
+        card.classList.toggle('hidden', cat!=='All' && card.dataset.cat!==cat);
+      });
+    });
+  });
+  // Animations
+  const io=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;const el=entry.target as HTMLElement;if(el.dataset.anim==='rise'){el.style.opacity='1';el.style.transform='translateY(0)';}el.querySelectorAll('.word').forEach((w:any)=>{w.style.transform='translateY(0)';w.style.opacity='1';});io.unobserve(el);});},{threshold:0.1});
+  document.querySelectorAll('[data-anim="rise"]').forEach((el:any)=>{el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition=`opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s,transform 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s`;io.observe(el);});
+  document.querySelectorAll('[data-split]').forEach(el=>{const text=el.textContent?.trim()||'';el.innerHTML=text.split(' ').map((w,i)=>`<span style="display:inline-block;overflow:hidden"><span class="word" style="display:inline-block;transform:translateY(105%);opacity:0;transition:transform 0.75s cubic-bezier(0.16,1,0.3,1) ${i*0.055}s,opacity 0.5s ease ${i*0.055}s">${w}</span></span>`).join(' ');io.observe(el);});
+  function applyLang(lang:string){localStorage.setItem('tnc-lang',lang);document.querySelectorAll('[data-en][data-th]').forEach(el=>{el.textContent=lang==='th'?el.getAttribute('data-th')||'':el.getAttribute('data-en')||'';});}
+  applyLang(localStorage.getItem('tnc-lang')||'en');
+  document.getElementById('lang-toggle')?.addEventListener('click',()=>{applyLang((document.documentElement.getAttribute('data-lang')||'en')==='en'?'th':'en');});
+</script>

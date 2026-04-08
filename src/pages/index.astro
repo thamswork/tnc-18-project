@@ -1,20 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
+import { getCollection } from 'astro:content';
+
+// Pull featured projects from CMS, sorted by year desc, max 4
+const allProjects = await getCollection('projects');
+const featured = allProjects
+  .filter(p => p.data.featured)
+  .sort((a, b) => b.data.year - a.data.year)
+  .slice(0, 4);
+
+// Fallback if no featured projects yet
+const projects = featured.length > 0 ? featured : allProjects
+  .sort((a, b) => b.data.year - a.data.year)
+  .slice(0, 4);
+
+// Pull services sorted by order
+const allServices = await getCollection('services');
+const services = allServices.sort((a, b) => a.data.order - b.data.order);
 ---
 
 <Layout title="Architecture & Construction Excellence">
   <Navbar />
 
-  <!--
-    DEFINITIVE APPROACH:
-    - No snap container. Normal page scroll.
-    - Each section is a natural block with sensible padding.
-    - No justify-content games. Content just flows.
-    - Hero is 100vh. Every other section sizes to its content.
-  -->
-
-  <!-- §1 HERO — full viewport, video bg -->
+  <!-- HERO -->
   <section class="hero">
     <div class="hero-media">
       <video autoplay muted loop playsinline>
@@ -24,34 +33,24 @@ import Navbar from '../components/Navbar.astro';
       <div class="hero-vignette"></div>
     </div>
     <div class="hero-body">
-      <p class="hero-location"
-        data-en="Bangkok · Thailand"
-        data-th="กรุงเทพมหานคร · ประเทศไทย">Bangkok · Thailand</p>
+      <p class="hero-location" data-en="Bangkok · Thailand" data-th="กรุงเทพมหานคร · ประเทศไทย">Bangkok · Thailand</p>
       <h1 class="hero-headline">
-        <span class="hero-line" data-split
-          data-en="We Build"
-          data-th="เราสร้าง">We Build</span>
-        <span class="hero-line hero-italic" data-split
-          data-en="What Lasts."
-          data-th="สิ่งที่ยั่งยืน">What Lasts.</span>
+        <span class="hero-line" data-split data-en="We Build" data-th="เราสร้าง">We Build</span>
+        <span class="hero-line hero-italic" data-split data-en="What Lasts." data-th="สิ่งที่ยั่งยืน">What Lasts.</span>
       </h1>
       <div class="hero-rule"></div>
     </div>
     <div class="hero-foot">
-      <a href="/projects" class="hero-cta"
-        data-en="View Our Work"
-        data-th="ดูผลงานของเรา">
+      <a href="/projects" class="hero-cta" data-en="View Our Work" data-th="ดูผลงานของเรา">
         View Our Work <span class="hero-arrow">→</span>
       </a>
-      <p class="hero-tag"
-        data-en="Architecture · Engineering · Construction"
-        data-th="สถาปัตยกรรม · วิศวกรรม · การก่อสร้าง">
+      <p class="hero-tag" data-en="Architecture · Engineering · Construction" data-th="สถาปัตยกรรม · วิศวกรรม · การก่อสร้าง">
         Architecture · Engineering · Construction
       </p>
     </div>
   </section>
 
-  <!-- §2 STATEMENT -->
+  <!-- STATEMENT -->
   <section class="statement">
     <div class="statement-inner">
       <div class="statement-side">
@@ -66,119 +65,77 @@ import Navbar from '../components/Navbar.astro';
     </div>
   </section>
 
-  <!-- §3 PROJECTS — Balanced mosaic, editorial hover reveal -->
+  <!-- PROJECTS — from CMS -->
   <section class="projects">
     <header class="section-header" data-anim="rise">
-      <span class="section-label"
-        data-en="Selected Work"
-        data-th="ผลงานคัดสรร">Selected Work</span>
-      <a href="/projects" class="link-sm"
-        data-en="All Projects →"
-        data-th="ผลงานทั้งหมด →">All Projects →</a>
+      <span class="section-label" data-en="Selected Work" data-th="ผลงานคัดสรร">Selected Work</span>
+      <a href="/projects" class="link-sm" data-en="All Projects →" data-th="ผลงานทั้งหมด →">All Projects →</a>
     </header>
 
     <div class="mosaic">
-
-      <!-- Row 1: two landscape cards, equal width -->
       <div class="mosaic-row mosaic-row--top">
-
-        <article class="mosaic-card" data-anim="rise" data-delay="1">
-          <a href="/projects/silom-residence" class="mosaic-link">
-            <div class="mosaic-img">
-              <div class="mosaic-ph" style="background:#C8C2B2;"></div>
-              <!-- swap: <img src="cloudinary-url" alt="Silom Residence" loading="lazy" /> -->
-              <div class="mosaic-overlay">
-                <div class="mosaic-overlay-inner">
-                  <span class="mosaic-cat" data-en="Residential" data-th="ที่พักอาศัย">Residential</span>
-                  <h2 class="mosaic-title" data-en="Silom Residence" data-th="บ้านพักสีลม">Silom Residence</h2>
-                  <span class="mosaic-year">2024</span>
+        {projects.slice(0, 2).map((p, i) => (
+          <article class="mosaic-card" data-anim="rise" data-delay={String(i + 1)}>
+            <a href={`/projects/${p.slug}`} class="mosaic-link">
+              <div class="mosaic-img">
+                {p.data.cover && p.data.cover !== '/images/uploads/silom-residence.jpg'
+                  ? <img src={p.data.cover} alt={p.data.title} loading="lazy" />
+                  : <div class="mosaic-ph" style={`background:${['#C8C2B2','#B0AA9C','#989082','#7E786C'][i]};`}></div>
+                }
+                <div class="mosaic-overlay">
+                  <div class="mosaic-overlay-inner">
+                    <span class="mosaic-cat" data-en={p.data.category} data-th={p.data.category_th || p.data.category}>{p.data.category}</span>
+                    <h2 class="mosaic-title" data-en={p.data.title} data-th={p.data.title_th || p.data.title}>{p.data.title}</h2>
+                    <span class="mosaic-year">{p.data.year}</span>
+                  </div>
+                  <span class="mosaic-arrow">→</span>
                 </div>
-                <span class="mosaic-arrow">→</span>
               </div>
-            </div>
-          </a>
-        </article>
-
-        <article class="mosaic-card" data-anim="rise" data-delay="2">
-          <a href="/projects/thonglor-tower" class="mosaic-link">
-            <div class="mosaic-img">
-              <div class="mosaic-ph" style="background:#B0AA9C;"></div>
-              <div class="mosaic-overlay">
-                <div class="mosaic-overlay-inner">
-                  <span class="mosaic-cat" data-en="Commercial" data-th="เชิงพาณิชย์">Commercial</span>
-                  <h2 class="mosaic-title" data-en="Thonglor Office Tower" data-th="อาคารสำนักงานทองหล่อ">Thonglor Office Tower</h2>
-                  <span class="mosaic-year">2023</span>
-                </div>
-                <span class="mosaic-arrow">→</span>
-              </div>
-            </div>
-          </a>
-        </article>
-
+            </a>
+          </article>
+        ))}
       </div>
 
-      <!-- Row 2: portrait left (narrower) + landscape right (wider) -->
       <div class="mosaic-row mosaic-row--bot">
-
-        <article class="mosaic-card mosaic-card--portrait" data-anim="rise" data-delay="3">
-          <a href="/projects/sathorn-penthouse" class="mosaic-link">
-            <div class="mosaic-img">
-              <div class="mosaic-ph" style="background:#989082;"></div>
-              <div class="mosaic-overlay">
-                <div class="mosaic-overlay-inner">
-                  <span class="mosaic-cat" data-en="Interior" data-th="การออกแบบภายใน">Interior</span>
-                  <h2 class="mosaic-title" data-en="Sathorn Penthouse" data-th="เพนท์เฮาส์สาทร">Sathorn Penthouse</h2>
-                  <span class="mosaic-year">2023</span>
+        {projects.slice(2, 4).map((p, i) => (
+          <article class={`mosaic-card ${i === 0 ? 'mosaic-card--portrait' : 'mosaic-card--wide'}`} data-anim="rise" data-delay={String(i + 3)}>
+            <a href={`/projects/${p.slug}`} class="mosaic-link">
+              <div class="mosaic-img">
+                {p.data.cover && p.data.cover !== '/images/uploads/silom-residence.jpg'
+                  ? <img src={p.data.cover} alt={p.data.title} loading="lazy" />
+                  : <div class="mosaic-ph" style={`background:${['#989082','#7E786C'][i]};`}></div>
+                }
+                <div class="mosaic-overlay">
+                  <div class="mosaic-overlay-inner">
+                    <span class="mosaic-cat" data-en={p.data.category} data-th={p.data.category_th || p.data.category}>{p.data.category}</span>
+                    <h2 class="mosaic-title" data-en={p.data.title} data-th={p.data.title_th || p.data.title}>{p.data.title}</h2>
+                    <span class="mosaic-year">{p.data.year}</span>
+                  </div>
+                  <span class="mosaic-arrow">→</span>
                 </div>
-                <span class="mosaic-arrow">→</span>
               </div>
-            </div>
-          </a>
-        </article>
-
-        <article class="mosaic-card mosaic-card--wide" data-anim="rise" data-delay="4">
-          <a href="/projects/charoennakhon-villa" class="mosaic-link">
-            <div class="mosaic-img">
-              <div class="mosaic-ph" style="background:#7E786C;"></div>
-              <div class="mosaic-overlay">
-                <div class="mosaic-overlay-inner">
-                  <span class="mosaic-cat" data-en="Residential" data-th="ที่พักอาศัย">Residential</span>
-                  <h2 class="mosaic-title" data-en="Charoennakhon Villa" data-th="วิลล่าเจริญนคร">Charoennakhon Villa</h2>
-                  <span class="mosaic-year">2022</span>
-                </div>
-                <span class="mosaic-arrow">→</span>
-              </div>
-            </div>
-          </a>
-        </article>
-
+            </a>
+          </article>
+        ))}
       </div>
-
     </div>
   </section>
 
-  <!-- §4 ABOUT -->
+  <!-- ABOUT -->
   <section class="about">
     <div class="about-inner">
       <div class="about-text">
-        <span class="section-label" data-anim="rise"
-          data-en="About the Firm"
-          data-th="เกี่ยวกับบริษัท">About the Firm</span>
-        <h2 data-split data-delay="1"
-          data-en="Eighteen years of precision, craft, and permanence."
-          data-th="สิบแปดปีแห่งความแม่นยำ ฝีมือ และความยั่งยืน">
+        <span class="section-label" data-anim="rise" data-en="About the Firm" data-th="เกี่ยวกับบริษัท">About the Firm</span>
+        <h2 data-split data-delay="1" data-en="Eighteen years of precision, craft, and permanence." data-th="สิบแปดปีแห่งความแม่นยำ ฝีมือ และความยั่งยืน">
           Eighteen years of precision, craft, and permanence.
         </h2>
         <p data-anim="rise" data-delay="2"
           data-en="TNC.18 is a Bangkok-based architecture and construction firm. We work across residential, commercial, and interior disciplines — always with the same commitment to materials, structure, and lasting design."
-          data-th="TNC.18 เป็นบริษัทสถาปัตยกรรมและก่อสร้างในกรุงเทพฯ เราทำงานทั้งในด้านที่พักอาศัย เชิงพาณิชย์ และการออกแบบภายใน ด้วยความมุ่งมั่นในวัสดุ โครงสร้าง และการออกแบบที่ยั่งยืนเสมอ">
+          data-th="TNC.18 เป็นบริษัทสถาปัตยกรรมและก่อสร้างในกรุงเทพฯ เราทำงานทั้งในด้านที่พักอาศัย เชิงพาณิชย์ และการออกแบบภายใน">
           TNC.18 is a Bangkok-based architecture and construction firm. We work across residential, commercial, and interior disciplines — always with the same commitment to materials, structure, and lasting design.
         </p>
-        <a href="/about" class="link-underline" data-anim="rise" data-delay="3"
-          data-en="Our Story"
-          data-th="เรื่องราวของเรา">Our Story</a>
+        <a href="/about" class="link-underline" data-anim="rise" data-delay="3" data-en="Our Story" data-th="เรื่องราวของเรา">Our Story</a>
       </div>
-
       <div class="about-stats">
         {[
           { n: 18,  suf: '',  en: 'Years',       th: 'ปี' },
@@ -187,9 +144,7 @@ import Navbar from '../components/Navbar.astro';
         ].map((s, i) => (
           <div class="stat" data-anim="rise" data-delay={String(i + 1)}>
             <div class="stat-line" data-anim="line"></div>
-            <span class="stat-num">
-              <span data-counter={String(s.n)} data-suffix={s.suf}>0</span>
-            </span>
+            <span class="stat-num"><span data-counter={String(s.n)} data-suffix={s.suf}>0</span></span>
             <span class="stat-lbl" data-en={s.en} data-th={s.th}>{s.en}</span>
           </div>
         ))}
@@ -197,23 +152,15 @@ import Navbar from '../components/Navbar.astro';
     </div>
   </section>
 
-  <!-- §5 SERVICES -->
+  <!-- SERVICES — from CMS -->
   <section class="services">
     <div class="services-inner">
-      <span class="section-label" data-anim="rise"
-        data-en="What We Do"
-        data-th="สิ่งที่เราทำ">What We Do</span>
+      <span class="section-label" data-anim="rise" data-en="What We Do" data-th="สิ่งที่เราทำ">What We Do</span>
       <div class="svc-list">
-        {[
-          { n:'01', en:'Architecture & Design',   th:'สถาปัตยกรรมและการออกแบบ' },
-          { n:'02', en:'Structural Engineering',   th:'วิศวกรรมโครงสร้าง' },
-          { n:'03', en:'Interior Architecture',    th:'สถาปัตยกรรมภายใน' },
-          { n:'04', en:'Construction Management',  th:'การบริหารการก่อสร้าง' },
-          { n:'05', en:'Site Supervision',         th:'การควบคุมงานหน้างาน' },
-        ].map((s, i) => (
+        {services.map((s, i) => (
           <a href="/services" class="svc-row" data-anim="rise" data-delay={String((i % 3) + 1)}>
-            <span class="svc-n">{s.n}</span>
-            <span class="svc-name" data-en={s.en} data-th={s.th}>{s.en}</span>
+            <span class="svc-n">0{s.data.order}</span>
+            <span class="svc-name" data-en={s.data.title} data-th={s.data.title_th || s.data.title}>{s.data.title}</span>
             <span class="svc-arr">→</span>
           </a>
         ))}
@@ -221,23 +168,15 @@ import Navbar from '../components/Navbar.astro';
     </div>
   </section>
 
-  <!-- §6 CONTACT -->
+  <!-- CONTACT -->
   <section class="contact">
-    <h2 data-split
-      data-en="Have a project in mind?"
-      data-th="มีโครงการในใจอยู่หรือเปล่า?">
-      Have a project in mind?
-    </h2>
+    <h2 data-split data-en="Have a project in mind?" data-th="มีโครงการในใจอยู่หรือเปล่า?">Have a project in mind?</h2>
     <p data-anim="rise" data-delay="2"
       data-en="We work with clients who value precision and permanence. Let's talk about what you're building."
       data-th="เราทำงานกับลูกค้าที่ให้ความสำคัญกับความแม่นยำและความยั่งยืน">
       We work with clients who value precision and permanence.<br/>Let's talk about what you're building.
     </p>
-    <a href="/contact" class="contact-btn" data-anim="rise" data-delay="3"
-      data-en="Start a Conversation"
-      data-th="เริ่มบทสนทนา">
-      Start a Conversation
-    </a>
+    <a href="/contact" class="contact-btn" data-anim="rise" data-delay="3" data-en="Start a Conversation" data-th="เริ่มบทสนทนา">Start a Conversation</a>
   </section>
 
   <!-- FOOTER -->
@@ -245,11 +184,7 @@ import Navbar from '../components/Navbar.astro';
     <div class="footer-inner">
       <div>
         <span class="footer-logo">TNC<em>.</em>18</span>
-        <p class="footer-sub"
-          data-en="Architecture & Construction, Bangkok"
-          data-th="สถาปัตยกรรมและการก่อสร้าง กรุงเทพฯ">
-          Architecture & Construction, Bangkok
-        </p>
+        <p class="footer-sub" data-en="Architecture & Construction, Bangkok" data-th="สถาปัตยกรรมและการก่อสร้าง กรุงเทพฯ">Architecture & Construction, Bangkok</p>
       </div>
       <nav class="footer-nav">
         <a href="tel:+66000000000" data-en="Call" data-th="โทร">Call</a>
@@ -263,626 +198,177 @@ import Navbar from '../components/Navbar.astro';
 </Layout>
 
 <style>
-  /* ─── RESET ─── */
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ─── HERO ─── */
-  .hero {
-    position: relative;
-    height: 100vh;
-    min-height: 600px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;   /* content anchors to bottom */
-    overflow: hidden;
-    background: var(--charcoal);
+  .hero { position:relative; height:100vh; min-height:600px; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; background:var(--charcoal); }
+  .hero-media { position:absolute; inset:0; z-index:0; }
+  .hero-media video { width:100%; height:100%; object-fit:cover; opacity:0.46; }
+  .hero-fallback { position:absolute; inset:0; background:linear-gradient(155deg,#2C2820 0%,#1A1612 60%,#0F0D0A 100%); z-index:-1; }
+  .hero-vignette { position:absolute; inset:0; background:linear-gradient(to top,rgba(28,26,23,0.92) 0%,transparent 55%),linear-gradient(to right,rgba(28,26,23,0.3) 0%,transparent 50%); }
+  .hero-body { position:relative; z-index:2; padding:0 5rem 2.5rem; }
+  .hero-location { font-size:0.64rem; letter-spacing:0.24em; text-transform:uppercase; color:rgba(247,244,239,0.32); margin-bottom:1.25rem; animation:fadeUp 1s 0.3s both; }
+  .hero-headline { font-family:var(--font-serif); font-size:clamp(3.5rem,8vw,7.5rem); font-weight:300; line-height:1.0; color:var(--stone); overflow:hidden; margin-bottom:1.75rem; }
+  .hero-line { display:block; animation:slideUp 1.1s cubic-bezier(0.16,1,0.3,1) both; }
+  .hero-line:nth-child(2) { animation-delay:0.12s; }
+  .hero-italic { font-style:italic; color:rgba(247,244,239,0.5); padding-left:1.5rem; }
+  @keyframes slideUp { from{transform:translateY(110%);opacity:0} to{transform:translateY(0);opacity:1} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+  .hero-rule { width:44px; height:1px; background:var(--gold); transform:scaleX(0); transform-origin:left; animation:lineIn 0.7s 0.9s cubic-bezier(0.4,0,0.2,1) forwards; }
+  @keyframes lineIn { to{transform:scaleX(1)} }
+  .hero-foot { position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; padding:1.25rem 5rem; border-top:1px solid rgba(247,244,239,0.07); animation:fadeUp 0.8s 1s both; }
+  .hero-cta { display:flex; align-items:center; gap:0.6rem; font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--stone); text-decoration:none; }
+  .hero-arrow { color:var(--gold); transition:transform 0.3s,color 0.3s; }
+  .hero-cta:hover .hero-arrow { transform:translateX(5px); color:var(--blue-mid); }
+  .hero-tag { font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,244,239,0.18); }
+
+  .statement { background:var(--stone); border-bottom:1px solid var(--stone-mid); padding:5rem; }
+  .statement-inner { display:grid; grid-template-columns:72px 1fr; gap:2.5rem; max-width:860px; margin:0 auto; align-items:start; }
+  .statement-side { display:flex; flex-direction:column; gap:0.85rem; padding-top:0.3rem; }
+  .tag-label { font-size:0.58rem; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); }
+  .gold-line { width:100%; height:1px; background:var(--stone-dark); }
+  .statement-quote { font-family:var(--font-serif); font-size:clamp(1.25rem,2.2vw,1.75rem); font-weight:300; font-style:italic; color:var(--ink); line-height:1.65; }
+
+  .projects { background:var(--warm-white); border-top:1px solid var(--stone-mid); padding:4rem 5rem; }
+  .section-header { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--stone-dark); padding-bottom:1rem; margin-bottom:2rem; }
+  .section-label { font-family:var(--font-sans); font-size:0.62rem; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); }
+  .link-sm { font-size:0.66rem; letter-spacing:0.1em; color:var(--ink); text-decoration:none; transition:color 0.3s; }
+  .link-sm:hover { color:var(--blue); }
+  .mosaic { display:flex; flex-direction:column; gap:0.6rem; }
+  .mosaic-row { display:grid; gap:0.6rem; }
+  .mosaic-row--top { grid-template-columns:1fr 1fr; }
+  .mosaic-row--bot { grid-template-columns:1fr 1.6fr; }
+  .mosaic-card { position:relative; overflow:hidden; }
+  .mosaic-link { display:block; text-decoration:none; color:inherit; }
+  .mosaic-img { position:relative; overflow:hidden; background:var(--stone-dark); }
+  .mosaic-img img { width:100%; height:100%; object-fit:cover; transition:transform 1s cubic-bezier(0.4,0,0.2,1); }
+  .mosaic-row--top .mosaic-img { aspect-ratio:16/10; }
+  .mosaic-card--portrait .mosaic-img { aspect-ratio:3/4; }
+  .mosaic-card--wide .mosaic-img { aspect-ratio:16/10; }
+  .mosaic-ph { width:100%; height:100%; transition:transform 1s cubic-bezier(0.4,0,0.2,1); }
+  .mosaic-link:hover .mosaic-ph, .mosaic-link:hover .mosaic-img img { transform:scale(1.06); }
+  .mosaic-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(20,18,15,0.82) 0%,rgba(20,18,15,0.3) 45%,transparent 70%); display:flex; align-items:flex-end; justify-content:space-between; padding:1.5rem 1.75rem; opacity:0; transition:opacity 0.5s cubic-bezier(0.4,0,0.2,1); }
+  .mosaic-link:hover .mosaic-overlay { opacity:1; }
+  .mosaic-overlay-inner { display:flex; flex-direction:column; gap:0.2rem; transform:translateY(8px); transition:transform 0.5s cubic-bezier(0.16,1,0.3,1); }
+  .mosaic-link:hover .mosaic-overlay-inner { transform:translateY(0); }
+  .mosaic-cat { font-family:var(--font-sans); font-size:0.58rem; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold-light); }
+  .mosaic-title { font-family:var(--font-serif); font-size:clamp(1rem,1.6vw,1.35rem); font-weight:300; color:var(--warm-white); line-height:1.15; }
+  .mosaic-year { font-size:0.58rem; color:rgba(247,244,239,0.35); letter-spacing:0.1em; margin-top:0.15rem; }
+  .mosaic-arrow { font-size:1.1rem; color:var(--gold); align-self:flex-end; transform:translate(-6px,6px); opacity:0; transition:transform 0.5s cubic-bezier(0.16,1,0.3,1),opacity 0.4s ease; }
+  .mosaic-link:hover .mosaic-arrow { transform:translate(0,0); opacity:1; }
+  .mosaic-img::after { content:''; position:absolute; inset:0; border:1px solid rgba(166,124,78,0); transition:border-color 0.4s; pointer-events:none; z-index:2; }
+  .mosaic-link:hover .mosaic-img::after { border-color:rgba(166,124,78,0.35); }
+
+  .about { background:var(--stone-mid); border-top:1px solid var(--stone-dark); border-bottom:1px solid var(--stone-dark); padding:5rem; }
+  .about-inner { display:grid; grid-template-columns:1fr 220px; gap:5rem; align-items:center; max-width:1000px; margin:0 auto; }
+  .about-text .section-label { display:block; margin-bottom:1rem; }
+  .about-text h2 { font-size:clamp(1.5rem,2.5vw,2rem); font-weight:300; color:var(--charcoal); margin-bottom:1.25rem; line-height:1.25; }
+  .about-text p { font-size:0.85rem; color:var(--ink); line-height:1.85; margin-bottom:1.75rem; max-width:400px; font-weight:300; }
+  .link-underline { font-size:0.64rem; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:var(--charcoal); text-decoration:none; border-bottom:1px solid var(--stone-dark); padding-bottom:2px; transition:color 0.3s,border-color 0.3s; }
+  .link-underline:hover { color:var(--blue); border-color:var(--blue); }
+  .about-stats { display:flex; flex-direction:column; gap:1.75rem; }
+  .stat { display:flex; flex-direction:column; gap:0.15rem; }
+  .stat-line { width:26px; height:1px; background:var(--gold); margin-bottom:0.5rem; }
+  .stat-num { font-family:var(--font-serif); font-size:2.75rem; font-weight:300; color:var(--charcoal); line-height:1; }
+  .stat-lbl { font-size:0.58rem; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); }
+
+  .services { background:var(--stone); padding:4rem 5rem; }
+  .services-inner { max-width:960px; margin:0 auto; }
+  .services .section-label { display:block; margin-bottom:1.5rem; }
+  .svc-list { border-top:1px solid var(--stone-dark); }
+  .svc-row { display:flex; align-items:center; padding:1.1rem 0; border-bottom:1px solid var(--stone-mid); text-decoration:none; color:inherit; position:relative; overflow:hidden; transition:padding-left 0.35s cubic-bezier(0.4,0,0.2,1),background 0.35s; }
+  .svc-row::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--blue); transform:scaleY(0); transition:transform 0.35s cubic-bezier(0.4,0,0.2,1); }
+  .svc-row:hover { padding-left:1rem; background:rgba(234,229,219,0.5); }
+  .svc-row:hover::before { transform:scaleY(1); }
+  .svc-n { font-size:0.58rem; color:var(--muted); width:3rem; flex-shrink:0; letter-spacing:0.1em; }
+  .svc-name { font-family:var(--font-serif); font-size:clamp(1rem,1.6vw,1.35rem); font-weight:300; color:var(--charcoal); flex:1; transition:color 0.3s; }
+  .svc-row:hover .svc-name { color:var(--blue); }
+  .svc-arr { font-size:0.8rem; color:var(--gold); transition:transform 0.3s,color 0.3s; }
+  .svc-row:hover .svc-arr { transform:translateX(5px); color:var(--blue); }
+
+  .contact { background:var(--charcoal); padding:6rem 5rem; text-align:center; display:flex; flex-direction:column; align-items:center; gap:1.5rem; }
+  .contact h2 { font-family:var(--font-serif); font-size:clamp(1.75rem,3.5vw,2.75rem); font-weight:300; font-style:italic; color:var(--stone); line-height:1.2; max-width:600px; }
+  .contact p { font-size:0.85rem; color:rgba(247,244,239,0.38); font-weight:300; line-height:1.85; max-width:420px; }
+  .contact-btn { display:inline-block; margin-top:0.75rem; font-size:0.66rem; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:var(--stone); text-decoration:none; border:1px solid rgba(247,244,239,0.2); padding:0.85rem 2.25rem; position:relative; overflow:hidden; transition:border-color 0.4s; z-index:1; }
+  .contact-btn::before { content:''; position:absolute; inset:0; background:var(--blue); transform:translateY(101%); transition:transform 0.4s cubic-bezier(0.4,0,0.2,1); z-index:-1; }
+  .contact-btn:hover::before { transform:translateY(0); }
+  .contact-btn:hover { border-color:var(--blue); }
+
+  .footer { background:#0F0E0C; border-top:1px solid rgba(247,244,239,0.05); padding:1.75rem 5rem; }
+  .footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+  .footer-logo { font-family:var(--font-sans); font-size:0.85rem; font-weight:500; letter-spacing:0.1em; color:rgba(247,244,239,0.4); }
+  .footer-logo em { font-style:normal; color:var(--gold); }
+  .footer-sub { font-size:0.56rem; letter-spacing:0.1em; color:rgba(247,244,239,0.15); margin-top:0.2rem; }
+  .footer-nav { display:flex; gap:1.75rem; }
+  .footer-nav a { font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(247,244,239,0.2); text-decoration:none; transition:color 0.3s; }
+  .footer-nav a:hover { color:rgba(247,244,239,0.65); }
+  .footer-copy { font-size:0.55rem; color:rgba(247,244,239,0.12); letter-spacing:0.08em; }
+
+  @media (max-width:900px) {
+    .hero-body,.hero-foot { padding-left:1.75rem; padding-right:1.75rem; }
+    .statement,.projects,.about,.services,.contact { padding-left:1.75rem; padding-right:1.75rem; }
+    .statement-inner { grid-template-columns:1fr; gap:1rem; }
+    .mosaic-row--top,.mosaic-row--bot { grid-template-columns:1fr; }
+    .mosaic-card--portrait .mosaic-img { aspect-ratio:16/9; }
+    .about-inner { grid-template-columns:1fr; gap:2.5rem; }
+    .about-stats { flex-direction:row; flex-wrap:wrap; gap:1.5rem; }
+    .footer { padding:1.5rem 1.75rem; }
+    .footer-inner { flex-direction:column; align-items:flex-start; gap:0.75rem; }
   }
-
-  .hero-media { position: absolute; inset: 0; z-index: 0; }
-  .hero-media video { width: 100%; height: 100%; object-fit: cover; opacity: 0.46; }
-  .hero-fallback {
-    position: absolute; inset: 0;
-    background: linear-gradient(155deg,#2C2820 0%,#1A1612 60%,#0F0D0A 100%);
-    z-index: -1;
-  }
-  .hero-vignette {
-    position: absolute; inset: 0;
-    background:
-      linear-gradient(to top, rgba(28,26,23,0.92) 0%, transparent 55%),
-      linear-gradient(to right, rgba(28,26,23,0.3) 0%, transparent 50%);
-  }
-
-  .hero-body {
-    position: relative; z-index: 2;
-    padding: 0 5rem 2.5rem;
-  }
-
-  .hero-location {
-    font-size: 0.64rem; letter-spacing: 0.24em; text-transform: uppercase;
-    color: rgba(247,244,239,0.32); margin-bottom: 1.25rem;
-    animation: fadeUp 1s 0.3s both;
-  }
-
-  .hero-headline {
-    font-family: var(--font-serif);
-    font-size: clamp(3.5rem, 8vw, 7.5rem);
-    font-weight: 300; line-height: 1.0;
-    color: var(--stone); overflow: hidden;
-    margin-bottom: 1.75rem;
-  }
-
-  .hero-line {
-    display: block;
-    animation: slideUp 1.1s cubic-bezier(0.16,1,0.3,1) both;
-  }
-  .hero-line:nth-child(2) { animation-delay: 0.12s; }
-  .hero-italic { font-style: italic; color: rgba(247,244,239,0.5); padding-left: 1.5rem; }
-
-  @keyframes slideUp {
-    from { transform: translateY(110%); opacity: 0; }
-    to   { transform: translateY(0);    opacity: 1; }
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .hero-rule {
-    width: 44px; height: 1px; background: var(--gold);
-    transform: scaleX(0); transform-origin: left;
-    animation: lineIn 0.7s 0.9s cubic-bezier(0.4,0,0.2,1) forwards;
-  }
-  @keyframes lineIn { to { transform: scaleX(1); } }
-
-  .hero-foot {
-    position: relative; z-index: 2;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.25rem 5rem;
-    border-top: 1px solid rgba(247,244,239,0.07);
-    animation: fadeUp 0.8s 1s both;
-  }
-
-  .hero-cta {
-    display: flex; align-items: center; gap: 0.6rem;
-    font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--stone); text-decoration: none;
-  }
-  .hero-arrow { color: var(--gold); transition: transform 0.3s, color 0.3s; }
-  .hero-cta:hover .hero-arrow { transform: translateX(5px); color: var(--blue-mid); }
-
-  .hero-tag {
-    font-size: 0.58rem; letter-spacing: 0.18em;
-    text-transform: uppercase; color: rgba(247,244,239,0.18);
-  }
-
-  /* ─── STATEMENT ─── */
-  .statement {
-    background: var(--stone);
-    border-bottom: 1px solid var(--stone-mid);
-    padding: 5rem;
-  }
-
-  .statement-inner {
-    display: grid; grid-template-columns: 72px 1fr;
-    gap: 2.5rem; max-width: 860px; margin: 0 auto;
-    align-items: start;
-  }
-
-  .statement-side {
-    display: flex; flex-direction: column; gap: 0.85rem; padding-top: 0.3rem;
-  }
-
-  .tag-label {
-    font-size: 0.58rem; font-weight: 500;
-    letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold);
-  }
-
-  .gold-line { width: 100%; height: 1px; background: var(--stone-dark); }
-
-  .statement-quote {
-    font-family: var(--font-serif);
-    font-size: clamp(1.25rem, 2.2vw, 1.75rem);
-    font-weight: 300; font-style: italic;
-    color: var(--ink); line-height: 1.65;
-  }
-
-  /* ─── PROJECTS ─── */
-  .projects {
-    background: var(--warm-white);
-    border-top: 1px solid var(--stone-mid);
-    padding: 4rem 5rem;
-  }
-
-  .section-header {
-    display: flex; justify-content: space-between; align-items: baseline;
-    border-bottom: 1px solid var(--stone-dark);
-    padding-bottom: 1rem; margin-bottom: 2rem;
-  }
-
-  .section-label {
-    font-family: var(--font-sans); font-size: 0.62rem; font-weight: 500;
-    letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted);
-  }
-
-  .link-sm {
-    font-size: 0.66rem; letter-spacing: 0.1em;
-    color: var(--ink); text-decoration: none; transition: color 0.3s;
-  }
-  .link-sm:hover { color: var(--blue); }
-
-  /* 2×2 even grid — 4 projects */
-  .proj-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem 2.5rem;
-  }
-
-  .proj-link { display: block; text-decoration: none; color: inherit; }
-
-  .proj-img {
-    aspect-ratio: 4/3;
-    overflow: hidden;
-    background: var(--stone-mid);
-    margin-bottom: 0.85rem;
-  }
-
-  .proj-ph {
-    width: 100%; height: 100%;
-    transition: transform 0.85s cubic-bezier(0.4,0,0.2,1);
-  }
-  .proj-link:hover .proj-ph { transform: scale(1.04); }
-
-  .proj-info {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 0.2rem 0;
-  }
-
-  .proj-year {
-    font-size: 0.58rem; color: var(--muted);
-    letter-spacing: 0.1em; grid-column: 1;
-  }
-  .proj-cat {
-    font-size: 0.58rem; font-weight: 500; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--muted);
-    grid-column: 2; text-align: right;
-  }
-  .proj-title {
-    font-family: var(--font-serif);
-    font-size: clamp(0.95rem, 1.4vw, 1.2rem);
-    font-weight: 300; color: var(--charcoal);
-    grid-column: 1 / -1;
-    transition: color 0.3s; line-height: 1.2; margin-top: 0.2rem;
-  }
-  .proj-link:hover .proj-title { color: var(--blue); }
-
-  /* ─── ABOUT ─── */
-  .about {
-    background: var(--stone-mid);
-    border-top: 1px solid var(--stone-dark);
-    border-bottom: 1px solid var(--stone-dark);
-    padding: 5rem;
-  }
-
-  .about-inner {
-    display: grid; grid-template-columns: 1fr 220px;
-    gap: 5rem; align-items: center;
-    max-width: 1000px; margin: 0 auto;
-  }
-
-  .about-text .section-label { display: block; margin-bottom: 1rem; }
-
-  .about-text h2 {
-    font-size: clamp(1.5rem, 2.5vw, 2rem);
-    font-weight: 300; color: var(--charcoal);
-    margin-bottom: 1.25rem; line-height: 1.25;
-  }
-
-  .about-text p {
-    font-size: 0.85rem; color: var(--ink); line-height: 1.85;
-    margin-bottom: 1.75rem; max-width: 400px; font-weight: 300;
-  }
-
-  .link-underline {
-    font-size: 0.64rem; font-weight: 500; letter-spacing: 0.16em;
-    text-transform: uppercase; color: var(--charcoal); text-decoration: none;
-    border-bottom: 1px solid var(--stone-dark); padding-bottom: 2px;
-    transition: color 0.3s, border-color 0.3s;
-  }
-  .link-underline:hover { color: var(--blue); border-color: var(--blue); }
-
-  .about-stats { display: flex; flex-direction: column; gap: 1.75rem; }
-
-  .stat { display: flex; flex-direction: column; gap: 0.15rem; }
-
-  .stat-line { width: 26px; height: 1px; background: var(--gold); margin-bottom: 0.5rem; }
-
-  .stat-num {
-    font-family: var(--font-serif); font-size: 2.75rem;
-    font-weight: 300; color: var(--charcoal); line-height: 1;
-  }
-
-  .stat-lbl {
-    font-size: 0.58rem; font-weight: 500;
-    letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted);
-  }
-
-  /* ─── SERVICES ─── */
-  .services {
-    background: var(--stone);
-    padding: 4rem 5rem;
-  }
-
-  .services-inner { max-width: 960px; margin: 0 auto; }
-  .services .section-label { display: block; margin-bottom: 1.5rem; }
-
-  .svc-list { border-top: 1px solid var(--stone-dark); }
-
-  .svc-row {
-    display: flex; align-items: center;
-    padding: 1.1rem 0; border-bottom: 1px solid var(--stone-mid);
-    text-decoration: none; color: inherit;
-    position: relative; overflow: hidden;
-    transition: padding-left 0.35s cubic-bezier(0.4,0,0.2,1), background 0.35s;
-  }
-  .svc-row::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 2px; background: var(--blue);
-    transform: scaleY(0); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
-  }
-  .svc-row:hover { padding-left: 1rem; background: rgba(234,229,219,0.5); }
-  .svc-row:hover::before { transform: scaleY(1); }
-
-  .svc-n { font-size: 0.58rem; color: var(--muted); width: 3rem; flex-shrink: 0; letter-spacing: 0.1em; }
-  .svc-name {
-    font-family: var(--font-serif);
-    font-size: clamp(1rem, 1.6vw, 1.35rem);
-    font-weight: 300; color: var(--charcoal); flex: 1;
-    transition: color 0.3s;
-  }
-  .svc-row:hover .svc-name { color: var(--blue); }
-  .svc-arr {
-    font-size: 0.8rem; color: var(--gold);
-    transition: transform 0.3s, color 0.3s;
-  }
-  .svc-row:hover .svc-arr { transform: translateX(5px); color: var(--blue); }
-
-  /* ─── CONTACT ─── */
-  .contact {
-    background: var(--charcoal);
-    padding: 6rem 5rem;
-    text-align: center;
-    display: flex; flex-direction: column; align-items: center; gap: 1.5rem;
-  }
-
-  .contact h2 {
-    font-family: var(--font-serif);
-    font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-    font-weight: 300; font-style: italic;
-    color: var(--stone); line-height: 1.2;
-    max-width: 600px;
-  }
-
-  .contact p {
-    font-size: 0.85rem; color: rgba(247,244,239,0.38);
-    font-weight: 300; line-height: 1.85; max-width: 420px;
-  }
-
-  .contact-btn {
-    display: inline-block; margin-top: 0.75rem;
-    font-size: 0.66rem; font-weight: 500; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--stone); text-decoration: none;
-    border: 1px solid rgba(247,244,239,0.2); padding: 0.85rem 2.25rem;
-    position: relative; overflow: hidden; transition: border-color 0.4s;
-    z-index: 1;
-  }
-  .contact-btn::before {
-    content: ''; position: absolute; inset: 0; background: var(--blue);
-    transform: translateY(101%);
-    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1); z-index: -1;
-  }
-  .contact-btn:hover::before { transform: translateY(0); }
-  .contact-btn:hover { border-color: var(--blue); }
-
-  /* ─── FOOTER ─── */
-  .footer {
-    background: #0F0E0C;
-    border-top: 1px solid rgba(247,244,239,0.05);
-    padding: 1.75rem 5rem;
-  }
-
-  .footer-inner {
-    display: flex; align-items: center;
-    justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-  }
-
-  .footer-logo {
-    font-family: var(--font-sans); font-size: 0.85rem; font-weight: 500;
-    letter-spacing: 0.1em; color: rgba(247,244,239,0.4);
-  }
-  .footer-logo em { font-style: normal; color: var(--gold); }
-
-  .footer-sub {
-    font-size: 0.56rem; letter-spacing: 0.1em;
-    color: rgba(247,244,239,0.15); margin-top: 0.2rem;
-  }
-
-  .footer-nav { display: flex; gap: 1.75rem; }
-  .footer-nav a {
-    font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
-    color: rgba(247,244,239,0.2); text-decoration: none; transition: color 0.3s;
-  }
-  .footer-nav a:hover { color: rgba(247,244,239,0.65); }
-
-  .footer-copy { font-size: 0.55rem; color: rgba(247,244,239,0.12); letter-spacing: 0.08em; }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 900px) {
-    .hero-body, .hero-foot { padding-left: 1.75rem; padding-right: 1.75rem; }
-    .statement  { padding: 3.5rem 1.75rem; }
-    .statement-inner { grid-template-columns: 1fr; gap: 1rem; }
-    .projects   { padding: 3.5rem 1.75rem; }
-    .proj-grid  { grid-template-columns: 1fr; }
-    .about      { padding: 3.5rem 1.75rem; }
-    .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
-    .about-stats { flex-direction: row; flex-wrap: wrap; gap: 1.5rem; }
-    .services   { padding: 3.5rem 1.75rem; }
-    .contact    { padding: 4rem 1.75rem; }
-    .footer     { padding: 1.5rem 1.75rem; }
-    .footer-inner { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
-  }
-
-  /* ─── MOSAIC PROJECTS ─── */
-  .projects {
-    background: var(--stone);
-    padding: 4rem 5rem;
-    border-top: 1px solid var(--stone-mid);
-  }
-
-  .section-header {
-    display: flex; justify-content: space-between; align-items: baseline;
-    border-bottom: 1px solid var(--stone-dark);
-    padding-bottom: 1rem; margin-bottom: 2rem;
-  }
-
-  .mosaic {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-  }
-
-  .mosaic-row {
-    display: grid;
-    gap: 0.6rem;
-  }
-
-  /* Row 1: two equal landscape */
-  .mosaic-row--top {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  /* Row 2: portrait (1) + wide landscape (1.6) — asymmetric */
-  .mosaic-row--bot {
-    grid-template-columns: 1fr 1.6fr;
-  }
-
-  .mosaic-card {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .mosaic-link {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .mosaic-img {
-    position: relative;
-    overflow: hidden;
-    background: var(--stone-dark);
-  }
-
-  /* Row 1 images — landscape 16:10 */
-  .mosaic-row--top .mosaic-img { aspect-ratio: 16/10; }
-
-  /* Portrait card — taller */
-  .mosaic-card--portrait .mosaic-img { aspect-ratio: 3/4; }
-
-  /* Wide card — shorter landscape */
-  .mosaic-card--wide .mosaic-img { aspect-ratio: 16/10; }
-
-  .mosaic-ph {
-    width: 100%; height: 100%;
-    transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  /* Slow zoom on hover */
-  .mosaic-link:hover .mosaic-ph { transform: scale(1.06); }
-
-  /* Overlay — hidden by default, reveals on hover */
-  .mosaic-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(20, 18, 15, 0.82) 0%,
-      rgba(20, 18, 15, 0.3) 45%,
-      transparent 70%
-    );
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    padding: 1.5rem 1.75rem;
-    opacity: 0;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .mosaic-link:hover .mosaic-overlay { opacity: 1; }
-
-  .mosaic-overlay-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    transform: translateY(8px);
-    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .mosaic-link:hover .mosaic-overlay-inner { transform: translateY(0); }
-
-  .mosaic-cat {
-    font-family: var(--font-sans);
-    font-size: 0.58rem;
-    font-weight: 500;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--gold-light);
-  }
-
-  .mosaic-title {
-    font-family: var(--font-serif);
-    font-size: clamp(1rem, 1.6vw, 1.35rem);
-    font-weight: 300;
-    color: var(--warm-white);
-    line-height: 1.15;
-  }
-
-  .mosaic-year {
-    font-size: 0.58rem;
-    color: rgba(247,244,239,0.35);
-    letter-spacing: 0.1em;
-    margin-top: 0.15rem;
-  }
-
-  .mosaic-arrow {
-    font-size: 1.1rem;
-    color: var(--gold);
-    align-self: flex-end;
-    transform: translate(-6px, 6px);
-    opacity: 0;
-    transition:
-      transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-      opacity 0.4s ease;
-  }
-
-  .mosaic-link:hover .mosaic-arrow {
-    transform: translate(0, 0);
-    opacity: 1;
-  }
-
-  /* Thin gold border reveals on hover */
-  .mosaic-img::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border: 1px solid rgba(166, 124, 78, 0);
-    transition: border-color 0.4s;
-    pointer-events: none;
-    z-index: 2;
-  }
-
-  .mosaic-link:hover .mosaic-img::after {
-    border-color: rgba(166, 124, 78, 0.35);
-  }
-
-  /* Static caption below each card — visible always, complements the hover info */
-  .mosaic-card::after {
-    content: '';
-    display: block;
-    height: 0;
-  }
-
-  @media (max-width: 900px) {
-    .projects { padding: 3.5rem 1.75rem; }
-    .mosaic-row--top { grid-template-columns: 1fr; }
-    .mosaic-row--bot { grid-template-columns: 1fr; }
-    .mosaic-card--portrait .mosaic-img { aspect-ratio: 16/9; }
-  }
-
 </style>
 
 <script>
-  // ── Word split ──
   document.querySelectorAll('[data-split]').forEach(el => {
     const text = el.textContent?.trim() || '';
     el.innerHTML = text.split(' ').map((w, i) =>
-      `<span style="display:inline-block;overflow:hidden"><span class="word" style="display:inline-block;transform:translateY(105%);opacity:0;transition:transform 0.75s cubic-bezier(0.16,1,0.3,1) ${i * 0.055}s,opacity 0.5s ease ${i * 0.055}s">${w}</span></span>`
+      `<span style="display:inline-block;overflow:hidden"><span class="word" style="display:inline-block;transform:translateY(105%);opacity:0;transition:transform 0.75s cubic-bezier(0.16,1,0.3,1) ${i*0.055}s,opacity 0.5s ease ${i*0.055}s">${w}</span></span>`
     ).join(' ');
   });
 
-  // ── Intersection observer — triggers all animations ──
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
       const el = entry.target;
-
-      // rise
-      if (el.dataset.anim === 'rise') {
-        el.style.opacity = '1';
-        el.style.transform = 'translateY(0)';
-      }
-      // line
-      if (el.dataset.anim === 'line') {
-        el.style.transform = 'scaleX(1)';
-      }
-      // word split children
-      el.querySelectorAll('.word').forEach(w => {
-        (w as HTMLElement).style.transform = 'translateY(0)';
-        (w as HTMLElement).style.opacity = '1';
-      });
-
-      // counters
-      el.querySelectorAll('[data-counter]').forEach(counter => {
+      if (el.dataset.anim === 'rise') { el.style.opacity='1'; el.style.transform='translateY(0)'; }
+      if (el.dataset.anim === 'line') { el.style.transform='scaleX(1)'; }
+      el.querySelectorAll('.word').forEach((w:any) => { w.style.transform='translateY(0)'; w.style.opacity='1'; });
+      el.querySelectorAll('[data-counter]').forEach((counter:any) => {
         const target = parseInt(counter.getAttribute('data-counter') || '0');
         const suffix = counter.getAttribute('data-suffix') || '';
-        const dur = 1600;
-        const start = performance.now();
-        const tick = (now: number) => {
-          const p = Math.min((now - start) / dur, 1);
-          const e = 1 - Math.pow(1 - p, 4);
-          counter.textContent = Math.floor(e * target) + suffix;
+        const dur = 1600; const start = performance.now();
+        const tick = (now:number) => {
+          const p = Math.min((now-start)/dur,1); const e = 1-Math.pow(1-p,4);
+          counter.textContent = Math.floor(e*target)+suffix;
           if (p < 1) requestAnimationFrame(tick);
         };
         requestAnimationFrame(tick);
       });
-
       io.unobserve(el);
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -32px 0px' });
+  }, { threshold:0.12, rootMargin:'0px 0px -32px 0px' });
 
-  // Set initial state for rise/line elements
-  document.querySelectorAll('[data-anim="rise"]').forEach(el => {
-    (el as HTMLElement).style.opacity = '0';
-    (el as HTMLElement).style.transform = 'translateY(20px)';
-    (el as HTMLElement).style.transition = `opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay || 0)) * 0.12}s, transform 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay || 0)) * 0.12}s`;
+  document.querySelectorAll('[data-anim="rise"]').forEach((el:any) => {
+    el.style.opacity='0'; el.style.transform='translateY(20px)';
+    el.style.transition=`opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s,transform 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s`;
     io.observe(el);
   });
-
-  document.querySelectorAll('[data-anim="line"]').forEach(el => {
-    (el as HTMLElement).style.transform = 'scaleX(0)';
-    (el as HTMLElement).style.transformOrigin = 'left';
-    (el as HTMLElement).style.transition = 'transform 1s cubic-bezier(0.4,0,0.2,1) 0.2s';
+  document.querySelectorAll('[data-anim="line"]').forEach((el:any) => {
+    el.style.transform='scaleX(0)'; el.style.transformOrigin='left'; el.style.transition='transform 1s cubic-bezier(0.4,0,0.2,1) 0.2s';
     io.observe(el);
   });
-
   document.querySelectorAll('[data-split]').forEach(el => io.observe(el));
   document.querySelectorAll('.stat').forEach(el => io.observe(el));
 
-  // ── Language toggle ──
-  function applyLang(lang: string) {
-    localStorage.setItem('tnc-lang', lang);
-    document.documentElement.setAttribute('data-lang', lang);
-    document.getElementById('lang-en')?.classList.toggle('active', lang === 'en');
-    document.getElementById('lang-th')?.classList.toggle('active', lang === 'th');
+  function applyLang(lang:string) {
+    localStorage.setItem('tnc-lang',lang);
+    document.documentElement.setAttribute('data-lang',lang);
+    document.getElementById('lang-en')?.classList.toggle('active',lang==='en');
+    document.getElementById('lang-th')?.classList.toggle('active',lang==='th');
     document.querySelectorAll('[data-en][data-th]').forEach(el => {
-      el.textContent = lang === 'th'
-        ? el.getAttribute('data-th') || ''
-        : el.getAttribute('data-en') || '';
+      el.textContent = lang==='th' ? el.getAttribute('data-th')||'' : el.getAttribute('data-en')||'';
     });
   }
-  applyLang(localStorage.getItem('tnc-lang') || 'en');
-  document.getElementById('lang-toggle')?.addEventListener('click', () => {
-    applyLang((document.documentElement.getAttribute('data-lang') || 'en') === 'en' ? 'th' : 'en');
+  applyLang(localStorage.getItem('tnc-lang')||'en');
+  document.getElementById('lang-toggle')?.addEventListener('click',()=>{
+    applyLang((document.documentElement.getAttribute('data-lang')||'en')==='en'?'th':'en');
   });
 </script>

@@ -1,0 +1,131 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(p => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = await getEntry('projects', slug);
+if (!project) return Astro.redirect('/projects');
+const { Content } = await project.render();
+---
+<Layout title={project.data.title}>
+  <Navbar />
+
+  <section class="detail-hero">
+    <div class="detail-hero-img">
+      {project.data.cover && !project.data.cover.includes('silom-residence')
+        ? <img src={project.data.cover} alt={project.data.title} />
+        : <div class="detail-ph"></div>
+      }
+      <div class="detail-hero-overlay"></div>
+    </div>
+    <div class="detail-hero-info">
+      <span class="detail-cat">{project.data.category}</span>
+      <h1 class="detail-title">{project.data.title}</h1>
+      <div class="detail-meta">
+        <span>{project.data.year}</span>
+        {project.data.location && <span>{project.data.location}</span>}
+        {project.data.client && <span>{project.data.client}</span>}
+        {project.data.area && <span>{project.data.area} m²</span>}
+      </div>
+    </div>
+  </section>
+
+  <section class="detail-body">
+    <div class="detail-inner">
+      {project.data.description && (
+        <p class="detail-desc">{project.data.description}</p>
+      )}
+      <div class="detail-content">
+        <Content />
+      </div>
+    </div>
+  </section>
+
+  {project.data.gallery && project.data.gallery.length > 0 && (
+    <section class="detail-gallery">
+      <div class="gallery-grid">
+        {project.data.gallery.map((img, i) => (
+          <div class={`gallery-item gallery-item--${i%3===0?'wide':'std'}`}>
+            <img src={img} alt={`${project.data.title} — ${i+1}`} loading="lazy" />
+          </div>
+        ))}
+      </div>
+    </section>
+  )}
+
+  <section class="detail-next">
+    <a href="/projects" class="back-link" data-en="← All Projects" data-th="← ผลงานทั้งหมด">← All Projects</a>
+    <a href="/contact" class="contact-link" data-en="Discuss a similar project →" data-th="พูดคุยเกี่ยวกับโครงการที่คล้ายกัน →">Discuss a similar project →</a>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div><span class="footer-logo">TNC<em>.</em>18</span></div>
+      <nav class="footer-nav">
+        <a href="/projects" data-en="Projects" data-th="ผลงาน">Projects</a>
+        <a href="/contact" data-en="Contact" data-th="ติดต่อ">Contact</a>
+      </nav>
+      <p class="footer-copy">© 2024 TNC.18</p>
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  .detail-hero { position:relative; height:85vh; min-height:500px; overflow:hidden; background:var(--charcoal); }
+  .detail-hero-img { position:absolute; inset:0; }
+  .detail-hero-img img,.detail-ph { width:100%; height:100%; object-fit:cover; }
+  .detail-ph { background:var(--stone-dark); }
+  .detail-hero-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(20,18,15,0.85) 0%,rgba(20,18,15,0.2) 60%,transparent 100%); }
+  .detail-hero-info { position:absolute; bottom:0; left:0; right:0; padding:3rem 5rem; z-index:2; }
+  .detail-cat { font-size:0.6rem; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:0.75rem; }
+  .detail-title { font-family:var(--font-serif); font-size:clamp(2.5rem,6vw,5rem); font-weight:300; color:var(--stone); line-height:1.05; margin-bottom:1rem; }
+  .detail-meta { display:flex; gap:2rem; flex-wrap:wrap; }
+  .detail-meta span { font-size:0.64rem; color:rgba(247,244,239,0.45); letter-spacing:0.12em; }
+
+  .detail-body { background:var(--stone); padding:5rem; border-bottom:1px solid var(--stone-mid); }
+  .detail-inner { max-width:680px; margin:0 auto; }
+  .detail-desc { font-family:var(--font-serif); font-size:1.15rem; font-weight:300; font-style:italic; color:var(--ink); line-height:1.7; margin-bottom:2.5rem; }
+  .detail-content { font-size:0.88rem; color:var(--ink); line-height:1.9; font-weight:300; }
+  .detail-content p { margin-bottom:1.25rem; }
+  .detail-content h2,.detail-content h3 { font-family:var(--font-serif); font-weight:300; color:var(--charcoal); margin:2rem 0 0.75rem; }
+
+  .detail-gallery { background:var(--warm-white); padding:4rem 5rem; }
+  .gallery-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0.75rem; }
+  .gallery-item img { width:100%; height:100%; object-fit:cover; display:block; aspect-ratio:4/3; }
+  .gallery-item--wide { grid-column:span 2; }
+  .gallery-item--wide img { aspect-ratio:16/9; }
+
+  .detail-next { background:var(--stone-mid); padding:2.5rem 5rem; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--stone-dark); }
+  .back-link,.contact-link { font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink); text-decoration:none; transition:color 0.3s; }
+  .back-link:hover { color:var(--blue); }
+  .contact-link { color:var(--gold); }
+  .contact-link:hover { color:var(--blue); }
+
+  .footer { background:#0F0E0C; padding:1.75rem 5rem; border-top:1px solid rgba(247,244,239,0.05); }
+  .footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
+  .footer-logo { font-family:var(--font-sans); font-size:0.85rem; font-weight:500; letter-spacing:0.1em; color:rgba(247,244,239,0.4); }
+  .footer-logo em { font-style:normal; color:var(--gold); }
+  .footer-nav { display:flex; gap:2rem; }
+  .footer-nav a { font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(247,244,239,0.2); text-decoration:none; transition:color 0.3s; }
+  .footer-nav a:hover { color:rgba(247,244,239,0.65); }
+  .footer-copy { font-size:0.55rem; color:rgba(247,244,239,0.12); }
+
+  @media (max-width:900px) {
+    .detail-hero-info,.detail-body,.detail-gallery,.detail-next,.footer { padding-left:1.75rem; padding-right:1.75rem; }
+    .gallery-grid { grid-template-columns:1fr 1fr; }
+    .gallery-item--wide { grid-column:span 2; }
+    .detail-next { flex-direction:column; gap:1rem; align-items:flex-start; }
+    .footer-inner { flex-direction:column; align-items:flex-start; }
+  }
+</style>
+<script>
+  function applyLang(lang:string){localStorage.setItem('tnc-lang',lang);document.querySelectorAll('[data-en][data-th]').forEach(el=>{el.textContent=lang==='th'?el.getAttribute('data-th')||'':el.getAttribute('data-en')||'';});}
+  applyLang(localStorage.getItem('tnc-lang')||'en');
+  document.getElementById('lang-toggle')?.addEventListener('click',()=>{applyLang((document.documentElement.getAttribute('data-lang')||'en')==='en'?'th':'en');});
+</script>
