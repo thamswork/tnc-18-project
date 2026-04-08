@@ -1,0 +1,104 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'TNC.18 — Architecture & Construction Excellence, Thailand' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Merriweather:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+    <title>{title} — TNC.18</title>
+    <link rel="stylesheet" href="/src/styles/global.css" />
+  </head>
+  <body>
+    <slot />
+
+    <script>
+      // ════════════════════════════════════════
+      // WORD SPLIT — wrap each word in a span
+      // ════════════════════════════════════════
+      function splitWords(el) {
+        const text = el.textContent || '';
+        el.innerHTML = text.trim().split(' ').map((word, i) =>
+          `<span class="word-wrap"><span class="word" style="transition-delay:${0.06 * i}s">${word}</span></span>`
+        ).join(' ');
+      }
+
+      document.querySelectorAll('[data-split]').forEach(el => splitWords(el));
+
+      // ════════════════════════════════════════
+      // INTERSECTION OBSERVER — triggers all anims
+      // ════════════════════════════════════════
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const el = entry.target;
+
+          // Rise animation
+          if (el.hasAttribute('data-anim')) {
+            el.classList.add('anim-in');
+          }
+
+          // Word split animation
+          el.querySelectorAll('.word').forEach(w => w.classList.add('word-in'));
+          if (el.classList.contains('word')) el.classList.add('word-in');
+
+          // Counter animation
+          el.querySelectorAll('[data-counter]').forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-counter') || '0', 10);
+            const duration = 1800;
+            const start = performance.now();
+            const suffix = counter.getAttribute('data-suffix') || '';
+
+            function tick(now) {
+              const progress = Math.min((now - start) / duration, 1);
+              // Ease out quart
+              const eased = 1 - Math.pow(1 - progress, 4);
+              counter.textContent = Math.floor(eased * target) + suffix;
+              if (progress < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+          });
+
+          observer.unobserve(el);
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+      // Observe everything animated
+      document.querySelectorAll('[data-anim], [data-split]').forEach(el => observer.observe(el));
+      // Also observe stat blocks that contain counters
+      document.querySelectorAll('.stat-block').forEach(el => observer.observe(el));
+
+      // ════════════════════════════════════════
+      // LANGUAGE TOGGLE
+      // ════════════════════════════════════════
+      function applyLang(lang) {
+        localStorage.setItem('tnc-lang', lang);
+        document.documentElement.setAttribute('data-lang', lang);
+        document.getElementById('lang-en')?.classList.toggle('active', lang === 'en');
+        document.getElementById('lang-th')?.classList.toggle('active', lang === 'th');
+        document.querySelectorAll('[data-en][data-th]').forEach(el => {
+          el.textContent = lang === 'th'
+            ? el.getAttribute('data-th') || ''
+            : el.getAttribute('data-en') || '';
+        });
+      }
+
+      const saved = localStorage.getItem('tnc-lang') || 'en';
+      applyLang(saved);
+
+      document.getElementById('lang-toggle')?.addEventListener('click', () => {
+        const cur = document.documentElement.getAttribute('data-lang') || 'en';
+        applyLang(cur === 'en' ? 'th' : 'en');
+      });
+    </script>
+  </body>
+</html>

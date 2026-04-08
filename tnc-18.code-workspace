@@ -1,0 +1,24 @@
+{
+  "folders": [{ "name": "TNC.18", "path": "." }],
+  "settings": {
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "files.associations": { "*.astro": "astro" },
+    "emmet.includeLanguages": { "astro": "html" },
+    "tailwindCSS.includeLanguages": { "astro": "html" },
+    "workbench.colorCustomizations": {
+      "titleBar.activeBackground": "#1C1A17",
+      "titleBar.activeForeground": "#F7F4EF",
+      "activityBar.background": "#0F0E0C",
+      "statusBar.background": "#A67C4E",
+      "statusBar.foreground": "#F7F4EF"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "astro-build.astro-vscode",
+      "bradlc.vscode-tailwindcss",
+      "esbenp.prettier-vscode"
+    ]
+  }
+}
