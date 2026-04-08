@@ -17,26 +17,28 @@ collections:
     slug: "{{slug}}"
     identifier_field: title
     fields:
-      - { label: "Title (EN)", name: title, widget: string }
-      - { label: "Title (TH)", name: title_th, widget: string, required: false }
-      - { label: "Year", name: year, widget: number, value_type: int }
+      - { label: "Title (EN)",           name: title,          widget: string }
+      - { label: "Title (TH)",           name: title_th,       widget: string,   required: false }
+      - { label: "Year",                 name: year,           widget: number,   value_type: int }
       - label: "Category"
         name: category
         widget: select
         options: [Residential, Commercial, Interior, Mixed-Use, Hospitality]
-      - { label: "Cover Image", name: cover, widget: image }
-      - { label: "Description (EN)", name: description, widget: text, required: false }
-      - { label: "Description (TH)", name: description_th, widget: text, required: false }
+      - { label: "Category (TH)",        name: category_th,    widget: string,   required: false }
+      - { label: "Cover Image",          name: cover,          widget: image }
+      - { label: "Description (EN)",     name: description,    widget: text,     required: false }
+      - { label: "Description (TH)",     name: description_th, widget: text,     required: false }
       - label: "Gallery Images"
         name: gallery
         widget: list
         required: false
         field: { label: Image, name: image, widget: image }
-      - { label: "Client", name: client, widget: string, required: false }
-      - { label: "Location", name: location, widget: string, required: false }
-      - { label: "Area (sqm)", name: area, widget: number, required: false }
-      - { label: "Featured on homepage", name: featured, widget: boolean, default: false }
-      - { label: "Body Content", name: body, widget: markdown, required: false }
+      - { label: "Client",               name: client,         widget: string,   required: false }
+      - { label: "Location",             name: location,       widget: string,   required: false }
+      - { label: "Area (sqm)",           name: area,           widget: number,   required: false }
+      - { label: "Featured on homepage", name: featured,       widget: boolean,  default: false }
+      - { label: "Body Content",         name: body,           widget: markdown, required: false }
+
   - name: services
     label: Services
     folder: src/content/services
@@ -44,10 +46,12 @@ collections:
     delete: true
     slug: "{{slug}}"
     fields:
-      - { label: "Order", name: order, widget: number, value_type: int }
-      - { label: "Title (EN)", name: title, widget: string }
-      - { label: "Title (TH)", name: title_th, widget: string, required: false }
-      - { label: "Description (EN)", name: description, widget: text, required: false }
+      - { label: "Order",            name: order,          widget: number, value_type: int }
+      - { label: "Title (EN)",       name: title,          widget: string }
+      - { label: "Title (TH)",       name: title_th,       widget: string, required: false }
+      - { label: "Description (EN)", name: description,    widget: text,   required: false }
+      - { label: "Description (TH)", name: description_th, widget: text,   required: false }
+
   - name: news
     label: "News & Updates"
     folder: src/content/news
@@ -55,10 +59,11 @@ collections:
     delete: true
     slug: "{{year}}-{{month}}-{{slug}}"
     fields:
-      - { label: "Title (EN)", name: title, widget: string }
-      - { label: "Date", name: date, widget: datetime, date_format: YYYY-MM-DD, time_format: false }
-      - { label: "Cover Image", name: cover, widget: image, required: false }
-      - { label: "Body", name: body, widget: markdown }
+      - { label: "Title (EN)", name: title,  widget: string }
+      - { label: "Date",       name: date,   widget: datetime, date_format: YYYY-MM-DD, time_format: false }
+      - { label: "Cover",      name: cover,  widget: image,    required: false }
+      - { label: "Body",       name: body,   widget: markdown }
+
   - name: settings
     label: "Global Settings"
     delete: false
@@ -68,15 +73,15 @@ collections:
         label: "Contact & Social"
         file: src/content/settings/contact.json
         fields:
-          - { label: Phone, name: phone, widget: string }
-          - { label: Email, name: email, widget: string }
-          - { label: "Line OA URL", name: line, widget: string, required: false }
-          - { label: Instagram, name: instagram, widget: string, required: false }
-          - { label: TikTok, name: tiktok, widget: string, required: false }
+          - { label: Phone,         name: phone,     widget: string }
+          - { label: Email,         name: email,     widget: string }
+          - { label: "Line OA URL", name: line,      widget: string, required: false }
+          - { label: Instagram,     name: instagram, widget: string, required: false }
+          - { label: TikTok,        name: tiktok,    widget: string, required: false }
       - name: siteinfo
         label: "Site Info"
         file: src/content/settings/siteinfo.json
         fields:
-          - { label: "Site Name", name: site_name, widget: string }
-          - { label: "Tagline (EN)", name: tagline, widget: string }
+          - { label: "Site Name",        name: site_name, widget: string }
+          - { label: "Tagline (EN)",     name: tagline,   widget: string }
           - { label: "Meta Description", name: meta_desc, widget: text }
