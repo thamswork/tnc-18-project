@@ -1,3 +1,18 @@
+#!/bin/bash
+# ============================================================
+# TNC.18 — Fix About Page + Photo Upload
+# ============================================================
+
+set -e
+cd "/Users/marketingworks/Downloads/tnc-18-project/tnc-18"
+git pull origin main --rebase
+
+echo ""
+echo "🔧 Fixing About page..."
+echo ""
+
+# ── Rewrite about.astro cleanly ──────────────────────────────
+cat > src/pages/about.astro << 'ENDOFFILE'
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
@@ -356,3 +371,21 @@ import aboutData from '../content/pages/about.json';
     applyLang((document.documentElement.getAttribute('data-lang') || 'en') === 'en' ? 'th' : 'en');
   });
 </script>
+ENDOFFILE
+echo "✅  src/pages/about.astro — fully rewritten"
+
+git add .
+git commit -m "fix: about page hero padding + office image display from CMS"
+git push origin main
+
+echo ""
+echo "════════════════════════════════════════════════════"
+echo "✅  Done — wait 1 min then refresh:"
+echo "    https://tnc-18-project.pages.dev/about"
+echo ""
+echo "To upload your office photo:"
+echo "  CMS → Page Content → About Page"
+echo "  → Hero Image → Choose image → upload your photo"
+echo "  → Publish"
+echo "════════════════════════════════════════════════════"
+echo ""
