@@ -8,6 +8,8 @@ media_folder: public/images/uploads
 public_folder: /images/uploads
 
 collections:
+
+  # ── PROJECTS ────────────────────────────────────────────────
   - name: projects
     label: Projects
     label_singular: Project
@@ -39,6 +41,7 @@ collections:
       - { label: "Featured on homepage", name: featured,       widget: boolean,  default: false }
       - { label: "Body Content",         name: body,           widget: markdown, required: false }
 
+  # ── SERVICES ────────────────────────────────────────────────
   - name: services
     label: Services
     folder: src/content/services
@@ -52,6 +55,7 @@ collections:
       - { label: "Description (EN)", name: description,    widget: text,   required: false }
       - { label: "Description (TH)", name: description_th, widget: text,   required: false }
 
+  # ── NEWS ────────────────────────────────────────────────────
   - name: news
     label: "News & Updates"
     folder: src/content/news
@@ -60,28 +64,126 @@ collections:
     slug: "{{year}}-{{month}}-{{slug}}"
     fields:
       - { label: "Title (EN)", name: title,  widget: string }
+      - { label: "Title (TH)", name: title_th, widget: string, required: false }
       - { label: "Date",       name: date,   widget: datetime, date_format: YYYY-MM-DD, time_format: false }
       - { label: "Cover",      name: cover,  widget: image,    required: false }
+      - { label: "Excerpt (EN)", name: excerpt, widget: text,  required: false }
       - { label: "Body",       name: body,   widget: markdown }
 
+  # ── PAGE CONTENT ────────────────────────────────────────────
+  - name: pages
+    label: "Page Content"
+    delete: false
+    editor: { preview: false }
+    files:
+
+      - name: homepage
+        label: "Homepage Text"
+        file: src/content/pages/homepage.json
+        fields:
+          - label: "Hero Section"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Location text (EN)", name: hero_location_en, widget: string }
+              - { label: "Location text (TH)", name: hero_location_th, widget: string }
+              - { label: "Line 1 (EN)",         name: hero_line1_en,   widget: string }
+              - { label: "Line 1 (TH)",         name: hero_line1_th,   widget: string }
+              - { label: "Line 2 (EN)",         name: hero_line2_en,   widget: string }
+              - { label: "Line 2 (TH)",         name: hero_line2_th,   widget: string }
+          - label: "Statement Quote"
+            name: statement
+            widget: object
+            fields:
+              - { label: "Quote (EN)", name: statement_en, widget: text }
+              - { label: "Quote (TH)", name: statement_th, widget: text }
+          - label: "About Section"
+            name: about
+            widget: object
+            fields:
+              - { label: "Headline (EN)", name: about_headline_en, widget: string }
+              - { label: "Headline (TH)", name: about_headline_th, widget: string }
+              - { label: "Body text (EN)", name: about_body_en, widget: text }
+              - { label: "Body text (TH)", name: about_body_th, widget: text }
+              - { label: "Years stat",       name: stats_years,       widget: string }
+              - { label: "Projects stat",    name: stats_projects,    widget: string }
+              - { label: "Specialists stat", name: stats_specialists, widget: string }
+          - label: "Contact Band"
+            name: contact_band
+            widget: object
+            fields:
+              - { label: "Headline (EN)", name: contact_headline_en, widget: string }
+              - { label: "Headline (TH)", name: contact_headline_th, widget: string }
+              - { label: "Body text (EN)", name: contact_body_en, widget: text }
+              - { label: "Body text (TH)", name: contact_body_th, widget: text }
+
+      - name: about
+        label: "About Page"
+        file: src/content/pages/about.json
+        fields:
+          - label: "Hero"
+            name: hero
+            widget: object
+            fields:
+              - { label: "Headline (EN)", name: hero_headline_en, widget: string }
+              - { label: "Headline (TH)", name: hero_headline_th, widget: string }
+              - { label: "Hero Image",    name: hero_image,        widget: image, required: false }
+          - label: "Biography"
+            name: bio
+            widget: object
+            fields:
+              - { label: "Paragraph 1 (EN)", name: bio_1_en, widget: text }
+              - { label: "Paragraph 1 (TH)", name: bio_1_th, widget: text }
+              - { label: "Paragraph 2 (EN)", name: bio_2_en, widget: text }
+              - { label: "Paragraph 2 (TH)", name: bio_2_th, widget: text }
+              - { label: "Paragraph 3 (EN)", name: bio_3_en, widget: text }
+              - { label: "Paragraph 3 (TH)", name: bio_3_th, widget: text }
+          - label: "Office"
+            name: office
+            widget: object
+            fields:
+              - { label: "Caption (EN)", name: office_image_caption_en, widget: string }
+              - { label: "Caption (TH)", name: office_image_caption_th, widget: string }
+          - label: "Team Statement"
+            name: team
+            widget: object
+            fields:
+              - { label: "Statement (EN)", name: team_statement_en, widget: text }
+              - { label: "Statement (TH)", name: team_statement_th, widget: text }
+
+  # ── GLOBAL SETTINGS ─────────────────────────────────────────
   - name: settings
     label: "Global Settings"
     delete: false
     editor: { preview: false }
     files:
+
       - name: contact
         label: "Contact & Social"
         file: src/content/settings/contact.json
         fields:
-          - { label: Phone,         name: phone,     widget: string }
-          - { label: Email,         name: email,     widget: string }
-          - { label: "Line OA URL", name: line,      widget: string, required: false }
-          - { label: Instagram,     name: instagram, widget: string, required: false }
-          - { label: TikTok,        name: tiktok,    widget: string, required: false }
+          - { label: Phone,           name: phone,     widget: string }
+          - { label: Email,           name: email,     widget: string }
+          - { label: "Address (EN)",  name: address,   widget: text,   required: false }
+          - { label: "Address (TH)",  name: address_th,widget: text,   required: false }
+          - { label: "Line OA URL",   name: line,      widget: string, required: false }
+          - { label: Instagram,       name: instagram, widget: string, required: false }
+          - { label: TikTok,          name: tiktok,    widget: string, required: false }
+
+      - name: colors
+        label: "Brand Colors"
+        file: src/content/settings/colors.json
+        fields:
+          - { label: "Stone (background)", name: stone,    widget: color, default: "#F7F4EF" }
+          - { label: "Charcoal (text)",    name: charcoal, widget: color, default: "#1C1A17" }
+          - { label: "Gold (accent)",      name: gold,     widget: color, default: "#A67C4E" }
+          - { label: "Blue (hover)",       name: blue,     widget: color, default: "#1B3F7A" }
+
       - name: siteinfo
         label: "Site Info"
         file: src/content/settings/siteinfo.json
         fields:
           - { label: "Site Name",        name: site_name, widget: string }
           - { label: "Tagline (EN)",     name: tagline,   widget: string }
+          - { label: "Tagline (TH)",     name: tagline_th,widget: string, required: false }
           - { label: "Meta Description", name: meta_desc, widget: text }

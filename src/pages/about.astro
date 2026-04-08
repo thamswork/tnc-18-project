@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
+import aboutData from '../content/pages/about.json';
 ---
 <Layout title="About — Eighteen Years of Craft">
   <Navbar />
@@ -8,8 +9,10 @@ import Navbar from '../components/Navbar.astro';
   <section class="about-hero">
     <div class="about-hero-inner">
       <span class="page-label" data-anim="rise" data-en="About TNC.18" data-th="เกี่ยวกับ TNC.18">About TNC.18</span>
-      <h1 data-split data-en="Built on craft. Defined by permanence." data-th="สร้างด้วยฝีมือ นิยามด้วยความยั่งยืน">
-        Built on craft.<br/>Defined by permanence.
+      <h1 data-split
+        data-en={aboutData.hero_headline_en}
+        data-th={aboutData.hero_headline_th}>
+        {aboutData.hero_headline_en}
       </h1>
     </div>
   </section>
@@ -17,26 +20,31 @@ import Navbar from '../components/Navbar.astro';
   <section class="about-split">
     <div class="about-split-inner">
       <div class="about-img-col">
-        <div class="about-img-ph"></div>
-        <div class="about-img-caption" data-anim="rise">
-          <span data-en="TNC.18 Headquarters, Bangkok" data-th="สำนักงานใหญ่ TNC.18 กรุงเทพฯ">TNC.18 Headquarters, Bangkok</span>
+        {aboutData.hero_image
+          ? <img src={aboutData.hero_image} alt="TNC.18 Office" class="about-img" />
+          : <div class="about-img-ph"></div>
+        }
+        <div class="about-img-caption" data-anim="rise"
+          data-en={aboutData.office_image_caption_en}
+          data-th={aboutData.office_image_caption_th}>
+          {aboutData.office_image_caption_en}
         </div>
       </div>
       <div class="about-copy">
         <p data-anim="rise" data-delay="1"
-          data-en="TNC.18 was founded in 2006 with a single conviction — that buildings should outlast the trends of the moment they were built in. Eighteen years later, that conviction remains unchanged."
-          data-th="TNC.18 ก่อตั้งขึ้นในปี 2549 ด้วยความเชื่อมั่นเดียว — ว่าอาคารควรคงอยู่ยาวนานกว่ากระแสของยุคสมัยที่สร้างขึ้น สิบแปดปีต่อมา ความเชื่อมั่นนั้นยังคงไม่เปลี่ยนแปลง">
-          TNC.18 was founded in 2006 with a single conviction — that buildings should outlast the trends of the moment they were built in. Eighteen years later, that conviction remains unchanged.
+          data-en={aboutData.bio_1_en}
+          data-th={aboutData.bio_1_th}>
+          {aboutData.bio_1_en}
         </p>
         <p data-anim="rise" data-delay="2"
-          data-en="We are a Bangkok-based firm of architects, engineers, and builders. Our work spans private residences, commercial towers, interior commissions, and hospitality projects across Thailand."
-          data-th="เราเป็นบริษัทที่ตั้งอยู่ในกรุงเทพฯ ประกอบด้วยสถาปนิก วิศวกร และผู้สร้าง ผลงานของเราครอบคลุมทั้งที่พักอาศัยส่วนตัว อาคารพาณิชย์ งานออกแบบภายใน และโครงการการบริการทั่วประเทศไทย">
-          We are a Bangkok-based firm of architects, engineers, and builders. Our work spans private residences, commercial towers, interior commissions, and hospitality projects across Thailand.
+          data-en={aboutData.bio_2_en}
+          data-th={aboutData.bio_2_th}>
+          {aboutData.bio_2_en}
         </p>
         <p data-anim="rise" data-delay="3"
-          data-en="Every project begins with the same question: what will this building mean in fifty years? That question shapes every material choice, every structural decision, every detail."
-          data-th="ทุกโครงการเริ่มต้นด้วยคำถามเดียวกัน: อาคารนี้จะมีความหมายอะไรในห้าสิบปี? คำถามนั้นกำหนดทุกการเลือกวัสดุ ทุกการตัดสินใจด้านโครงสร้าง ทุกรายละเอียด">
-          Every project begins with the same question: what will this building mean in fifty years? That question shapes every material choice, every structural decision, every detail.
+          data-en={aboutData.bio_3_en}
+          data-th={aboutData.bio_3_th}>
+          {aboutData.bio_3_en}
         </p>
       </div>
     </div>
@@ -47,10 +55,10 @@ import Navbar from '../components/Navbar.astro';
       <span class="section-label" data-anim="rise" data-en="Our Values" data-th="ค่านิยมของเรา">Our Values</span>
       <div class="values-grid">
         {[
-          { n:'01', en:'Permanence', th:'ความยั่งยืน', desc_en:'We build for decades, not for the moment. Every material, joint, and detail is chosen to last.', desc_th:'เราสร้างเพื่อทศวรรษ ไม่ใช่เพื่อช่วงเวลา ทุกวัสดุ ข้อต่อ และรายละเอียดถูกเลือกเพื่อความคงทน' },
-          { n:'02', en:'Precision',  th:'ความแม่นยำ',  desc_en:'Architecture is a discipline of exactness. We hold ourselves to tolerances that most firms consider unnecessary.', desc_th:'สถาปัตยกรรมคือวินัยแห่งความถูกต้อง เราถือมาตรฐานที่บริษัทส่วนใหญ่มองว่าไม่จำเป็น' },
-          { n:'03', en:'Craft',      th:'ฝีมือ',       desc_en:'We believe in the intelligence of the hand. Details are designed, not defaulted. Materiality is deliberate.', desc_th:'เราเชื่อในสติปัญญาของมือ รายละเอียดถูกออกแบบ ไม่ใช่ถูกกำหนดโดยค่าเริ่มต้น วัสดุถูกเลือกอย่างตั้งใจ' },
-          { n:'04', en:'Clarity',    th:'ความชัดเจน',  desc_en:'Clear thinking produces clear buildings. We strip away everything that does not serve the project.', desc_th:'การคิดที่ชัดเจนสร้างอาคารที่ชัดเจน เราตัดทิ้งทุกสิ่งที่ไม่รับใช้โครงการ' },
+          { n:'01', en:'Permanence', th:'ความยั่งยืน', desc_en:'We build for decades, not for the moment. Every material, joint, and detail is chosen to last.', desc_th:'เราสร้างเพื่อทศวรรษ ไม่ใช่เพื่อช่วงเวลา' },
+          { n:'02', en:'Precision',  th:'ความแม่นยำ',  desc_en:'Architecture is a discipline of exactness. We hold ourselves to tolerances that most firms consider unnecessary.', desc_th:'สถาปัตยกรรมคือวินัยแห่งความถูกต้อง' },
+          { n:'03', en:'Craft',      th:'ฝีมือ',       desc_en:'We believe in the intelligence of the hand. Details are designed, not defaulted. Materiality is deliberate.', desc_th:'เราเชื่อในสติปัญญาของมือ รายละเอียดถูกออกแบบ ไม่ใช่ถูกกำหนดโดยค่าเริ่มต้น' },
+          { n:'04', en:'Clarity',    th:'ความชัดเจน',  desc_en:'Clear thinking produces clear buildings. We strip away everything that does not serve the project.', desc_th:'การคิดที่ชัดเจนสร้างอาคารที่ชัดเจน' },
         ].map((v, i) => (
           <div class="value-item" data-anim="rise" data-delay={String((i%2)+1)}>
             <span class="value-n">{v.n}</span>
@@ -66,11 +74,12 @@ import Navbar from '../components/Navbar.astro';
     <div class="team-inner">
       <span class="section-label" data-anim="rise" data-en="The Team" data-th="ทีมงาน">The Team</span>
       <p class="team-copy" data-anim="rise" data-delay="1"
-        data-en="50+ architects, engineers, project managers, and site specialists. Bangkok-based. Regionally experienced."
-        data-th="สถาปนิก วิศวกร ผู้จัดการโครงการ และผู้เชี่ยวชาญงานหน้างานมากกว่า 50 คน ตั้งอยู่ในกรุงเทพฯ มีประสบการณ์ในภูมิภาค">
-        50+ architects, engineers, project managers, and site specialists.<br/>Bangkok-based. Regionally experienced.
+        data-en={aboutData.team_statement_en}
+        data-th={aboutData.team_statement_th}>
+        {aboutData.team_statement_en}
       </p>
-      <a href="/contact" class="cta-link" data-anim="rise" data-delay="2" data-en="Work with us →" data-th="ร่วมงานกับเรา →">Work with us →</a>
+      <a href="/contact" class="cta-link" data-anim="rise" data-delay="2"
+        data-en="Work with us →" data-th="ร่วมงานกับเรา →">Work with us →</a>
     </div>
   </section>
 
@@ -95,6 +104,7 @@ import Navbar from '../components/Navbar.astro';
 
   .about-split { background:var(--stone); padding:6rem 5rem; border-bottom:1px solid var(--stone-mid); }
   .about-split-inner { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:start; max-width:1100px; margin:0 auto; }
+  .about-img { width:100%; aspect-ratio:3/4; object-fit:cover; }
   .about-img-ph { aspect-ratio:3/4; background:var(--stone-dark); }
   .about-img-caption { margin-top:0.75rem; font-size:0.6rem; letter-spacing:0.12em; color:var(--muted); }
   .about-copy p { font-size:0.9rem; color:var(--ink); line-height:1.9; font-weight:300; margin-bottom:1.5rem; }
@@ -132,26 +142,10 @@ import Navbar from '../components/Navbar.astro';
   }
 </style>
 <script>
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target as HTMLElement;
-      if (el.dataset.anim==='rise'){el.style.opacity='1';el.style.transform='translateY(0)';}
-      el.querySelectorAll('.word').forEach((w:any)=>{w.style.transform='translateY(0)';w.style.opacity='1';});
-      io.unobserve(el);
-    });
-  },{threshold:0.12});
-  document.querySelectorAll('[data-anim="rise"]').forEach((el:any)=>{
-    el.style.opacity='0';el.style.transform='translateY(20px)';
-    el.style.transition=`opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s,transform 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s`;
-    io.observe(el);
-  });
-  document.querySelectorAll('[data-split]').forEach(el=>{
-    const text=el.textContent?.trim()||'';
-    el.innerHTML=text.split(' ').map((w,i)=>`<span style="display:inline-block;overflow:hidden"><span class="word" style="display:inline-block;transform:translateY(105%);opacity:0;transition:transform 0.75s cubic-bezier(0.16,1,0.3,1) ${i*0.055}s,opacity 0.5s ease ${i*0.055}s">${w}</span></span>`).join(' ');
-    io.observe(el);
-  });
-  function applyLang(lang:string){localStorage.setItem('tnc-lang',lang);document.querySelectorAll('[data-en][data-th]').forEach(el=>{el.textContent=lang==='th'?el.getAttribute('data-th')||'':el.getAttribute('data-en')||'';});}
+  const io=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;const el=entry.target as HTMLElement;if(el.dataset.anim==='rise'){el.style.opacity='1';el.style.transform='translateY(0)';}el.querySelectorAll('.word').forEach((w:any)=>{w.style.transform='translateY(0)';w.style.opacity='1';});io.unobserve(el);});},{threshold:0.12});
+  document.querySelectorAll('[data-anim="rise"]').forEach((el:any)=>{el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition=`opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s,transform 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s`;io.observe(el);});
+  document.querySelectorAll('[data-split]').forEach(el=>{const text=el.textContent?.trim()||'';el.innerHTML=text.split(' ').map((w,i)=>`<span style="display:inline-block;overflow:hidden"><span class="word" style="display:inline-block;transform:translateY(105%);opacity:0;transition:transform 0.75s cubic-bezier(0.16,1,0.3,1) ${i*0.055}s,opacity 0.5s ease ${i*0.055}s">${w}</span></span>`).join(' ');io.observe(el);});
+  function applyLang(lang:string){localStorage.setItem('tnc-lang',lang);document.documentElement.setAttribute('data-lang',lang);document.getElementById('lang-en')?.classList.toggle('active',lang==='en');document.getElementById('lang-th')?.classList.toggle('active',lang==='th');document.querySelectorAll('[data-en][data-th]').forEach(el=>{el.textContent=lang==='th'?el.getAttribute('data-th')||'':el.getAttribute('data-en')||'';});}
   applyLang(localStorage.getItem('tnc-lang')||'en');
   document.getElementById('lang-toggle')?.addEventListener('click',()=>{applyLang((document.documentElement.getAttribute('data-lang')||'en')==='en'?'th':'en');});
 </script>
