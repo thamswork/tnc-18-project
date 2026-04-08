@@ -76,7 +76,7 @@ const services = allServices.sort((a, b) => a.data.order - b.data.order);
       <div class="mosaic-row mosaic-row--top">
         {projects.slice(0, 2).map((p, i) => (
           <article class="mosaic-card" data-anim="rise" data-delay={String(i + 1)}>
-            <a href={`/projects/${p.slug}`} class="mosaic-link">
+            <a href={`/projects/${p.id}`} class="mosaic-link">
               <div class="mosaic-img">
                 {p.data.cover && p.data.cover !== '/images/uploads/silom-residence.jpg'
                   ? <img src={p.data.cover} alt={p.data.title} loading="lazy" />
@@ -99,7 +99,7 @@ const services = allServices.sort((a, b) => a.data.order - b.data.order);
       <div class="mosaic-row mosaic-row--bot">
         {projects.slice(2, 4).map((p, i) => (
           <article class={`mosaic-card ${i === 0 ? 'mosaic-card--portrait' : 'mosaic-card--wide'}`} data-anim="rise" data-delay={String(i + 3)}>
-            <a href={`/projects/${p.slug}`} class="mosaic-link">
+            <a href={`/projects/${p.id}`} class="mosaic-link">
               <div class="mosaic-img">
                 {p.data.cover && p.data.cover !== '/images/uploads/silom-residence.jpg'
                   ? <img src={p.data.cover} alt={p.data.title} loading="lazy" />

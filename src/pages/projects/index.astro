@@ -28,7 +28,7 @@ const categories = ['All', ...new Set(allProjects.map(p => p.data.category))];
     <div class="proj-grid" id="proj-grid">
       {projects.map((p, i) => (
         <article class="proj-card" data-cat={p.data.category} data-anim="rise" data-delay={String((i%3)+1)}>
-          <a href={`/projects/${p.slug}`} class="proj-card-link">
+          <a href={`/projects/${p.id}`} class="proj-card-link">
             <div class="proj-card-img">
               {p.data.cover && !p.data.cover.includes('silom-residence')
                 ? <img src={p.data.cover} alt={p.data.title} loading="lazy" />
