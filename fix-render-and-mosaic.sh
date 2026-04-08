@@ -1,3 +1,38 @@
+#!/bin/bash
+# ============================================================
+# TNC.18 — Fix render() for Astro 6 + restore homepage mosaic
+# ============================================================
+
+set -e
+echo ""
+echo "🔧 Fixing render() and homepage mosaic..."
+echo ""
+
+# ── Fix 1: [slug].astro — Astro 6 uses render(entry) not entry.render() ──
+python3 << 'PYEOF'
+with open('src/pages/projects/[slug].astro', 'r') as f:
+    src = f.read()
+
+# Fix the render call
+src = src.replace(
+    'const { Content } = await project.render();',
+    'const { Content } = await render(project);'
+)
+
+# Fix the import to include render
+src = src.replace(
+    "import { getCollection } from 'astro:content';",
+    "import { getCollection, render } from 'astro:content';"
+)
+
+with open('src/pages/projects/[slug].astro', 'w') as f:
+    f.write(src)
+
+print("✅  Fixed render() in [slug].astro")
+PYEOF
+
+# ── Fix 2: Restore homepage with proper 4-card mosaic ────────
+cat > src/pages/index.astro << 'ENDOFFILE'
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
@@ -507,3 +542,22 @@ const colors = ['#C8C2B2','#B0AA9C','#989082','#7E786C'];
     applyLang((document.documentElement.getAttribute('data-lang')||'en')==='en'?'th':'en');
   });
 </script>
+ENDOFFILE
+echo "✅  src/pages/index.astro restored with full 4-card mosaic"
+
+git add .
+git commit -m "fix: render() for Astro 6 + restore 4-card mosaic homepage"
+git push origin main
+
+echo ""
+echo "════════════════════════════════════════════════"
+echo "✅  Both fixes applied"
+echo "════════════════════════════════════════════════"
+echo ""
+echo "Homepage:       http://localhost:4321"
+echo "Project detail: http://localhost:4321/projects/silom-residence"
+echo ""
+echo "You currently have 1 project in CMS (Silom Residence)."
+echo "The other 3 slots show 'Add in CMS' placeholders."
+echo "Add 3 more projects at: http://localhost:4321/admin"
+echo ""
