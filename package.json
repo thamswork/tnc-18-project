@@ -9,7 +9,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "cms": "npx decap-server",
+    "dev:cms": "concurrently \"npm run dev\" \"npm run cms\""
   },
   "dependencies": {
     "@astrojs/react": "^5.0.3",
@@ -23,6 +25,8 @@
   },
   "devDependencies": {
     "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "concurrently": "^9.2.1",
+    "decap-server": "^3.6.0"
   }
 }
