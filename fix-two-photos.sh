@@ -1,3 +1,80 @@
+#!/bin/bash
+cd "/Users/marketingworks/Downloads/tnc-18-project/tnc-18"
+git pull origin main --rebase
+
+echo "🔧 Adding two separate photo fields..."
+
+# ── Update about.json with two separate photo fields ─────────
+python3 << 'PYEOF'
+import json
+
+with open('src/content/pages/about.json', 'r') as f:
+    data = json.load(f)
+
+# Add separate fields if not present
+data['hero_bg_photo'] = data.get('hero_bg_photo', '')
+data['split_photo'] = data.get('split_photo', data.get('office_photo', ''))
+
+with open('src/content/pages/about.json', 'w') as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
+
+print("✅  about.json updated with hero_bg_photo + split_photo")
+PYEOF
+
+# ── Update CMS config with two photo fields ──────────────────
+python3 << 'PYEOF'
+with open('public/admin/config.yml', 'r') as f:
+    cfg = f.read()
+
+old = """          - label: "Office Photo (upload)"
+            name: office_photo
+            widget: image
+            required: false
+            hint: "Upload a photo — it appears on the left side of the About page"
+          - label: "Office Photo (paste URL from Cloudinary etc.)"
+            name: office_photo_url
+            widget: string
+            required: false
+            hint: "Alternative: paste a direct image URL if not uploading" """
+
+new = """          - label: "Hero Background Photo (top section)"
+            name: hero_bg_photo
+            widget: image
+            required: false
+            hint: "This photo fills the dark hero area at the top of the About page"
+          - label: "Split Section Photo (below hero, left side)"
+            name: split_photo
+            widget: image
+            required: false
+            hint: "This photo appears on the left side of the biography section" """
+
+if old in cfg:
+    cfg = cfg.replace(old, new)
+    print("✅  CMS config updated")
+else:
+    # Try to insert after hero_headline_th field
+    cfg = cfg.replace(
+        '          - { label: "Hero Headline (TH)", name: hero_headline_th, widget: string }',
+        '''          - { label: "Hero Headline (TH)", name: hero_headline_th, widget: string }
+          - label: "Hero Background Photo (top section)"
+            name: hero_bg_photo
+            widget: image
+            required: false
+            hint: "Fills the dark hero area at the top of the About page"
+          - label: "Split Section Photo (below hero, left side)"
+            name: split_photo
+            widget: image
+            required: false
+            hint: "Appears on the left side of the biography section"'''
+    )
+    print("✅  CMS config — fields injected after headline")
+
+with open('public/admin/config.yml', 'w') as f:
+    f.write(cfg)
+PYEOF
+
+# ── Update about.astro to use separate variables ─────────────
+cat > src/pages/about.astro << 'ENDOFFILE'
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
@@ -199,3 +276,20 @@ const splitPhoto = d.split_photo || d.office_photo || '';
     applyLang((document.documentElement.getAttribute('data-lang') || 'en') === 'en' ? 'th' : 'en');
   });
 </script>
+ENDOFFILE
+echo "✅  about.astro — two separate photo variables"
+
+git add .
+git commit -m "feat: separate hero_bg_photo and split_photo fields on about page"
+git push origin main
+
+echo ""
+echo "════════════════════════════════════════════════════"
+echo "✅  Done — wait 1 min then in CMS:"
+echo ""
+echo "Page Content → About Page:"
+echo "  · 'Hero Background Photo' → upload photo for the TOP dark hero"
+echo "  · 'Split Section Photo'   → upload photo for the LEFT biography section"
+echo "  · These are now completely separate"
+echo "════════════════════════════════════════════════════"
+echo ""

@@ -79,6 +79,16 @@ collections:
         fields:
           - { label: "Hero Headline (EN)", name: hero_headline_en, widget: string }
           - { label: "Hero Headline (TH)", name: hero_headline_th, widget: string }
+          - label: "Hero Background Photo (top section)"
+            name: hero_bg_photo
+            widget: image
+            required: false
+            hint: "Fills the dark hero area at the top of the About page"
+          - label: "Split Section Photo (below hero, left side)"
+            name: split_photo
+            widget: image
+            required: false
+            hint: "Appears on the left side of the biography section"
           - label: "Office Photo (upload)"
             name: office_photo
             widget: image
