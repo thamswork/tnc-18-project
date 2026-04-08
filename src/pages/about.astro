@@ -10,6 +10,8 @@ const photo = d.office_photo || d.office_photo_url || '';
   <Navbar />
 
   <section class="hero">
+    {photo && <img src={photo} alt="TNC.18 Office" class="hero-bg" loading="eager" />}
+    <div class="hero-overlay"></div>
     <div class="inner">
       <span class="label" data-en="About TNC.18" data-th="เกี่ยวกับ TNC.18">About TNC.18</span>
       <h1 data-en={d.hero_headline_en} data-th={d.hero_headline_th}>{d.hero_headline_en}</h1>
@@ -82,7 +84,10 @@ const photo = d.office_photo || d.office_photo_url || '';
 </Layout>
 
 <style>
-  .hero { background:var(--charcoal); padding:9rem 5rem 5rem; min-height:60vh; display:flex; align-items:flex-end; }
+  .hero { background:var(--charcoal); padding:9rem 5rem 5rem; min-height:60vh; display:flex; align-items:flex-end; position:relative; overflow:hidden; }
+  .hero-bg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.45; z-index:0; }
+  .hero-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(28,26,23,0.88) 0%,rgba(28,26,23,0.3) 100%); z-index:1; }
+  .inner { position:relative; z-index:2; max-width:800px; }
   .inner { max-width:800px; }
   .label { font-size:0.62rem; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:1.5rem; }
   .hero h1 { font-family:var(--font-serif); font-size:clamp(2.5rem,6vw,5rem); font-weight:300; color:var(--stone); line-height:1.1; }
