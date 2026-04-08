@@ -1,3 +1,21 @@
+#!/bin/bash
+# ============================================================
+# TNC.18 — Project Detail Page (Magazine Style)
+# Layout: Full-bleed hero → specs strip → editorial story →
+#         photo mosaic → related projects → next project
+# ============================================================
+
+set -e
+echo ""
+echo "🏛  Building magazine-style project detail page..."
+echo ""
+
+mkdir -p src/pages/projects
+
+# ══════════════════════════════════════════════════════════════
+# [slug].astro — Magazine layout project detail
+# ══════════════════════════════════════════════════════════════
+cat > 'src/pages/projects/[slug].astro' << 'ENDOFFILE'
 ---
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
@@ -674,3 +692,29 @@ const placeholderColors = [
     applyLang((document.documentElement.getAttribute('data-lang') || 'en') === 'en' ? 'th' : 'en');
   });
 </script>
+ENDOFFILE
+echo "✅  src/pages/projects/[slug].astro"
+
+# Commit
+git add .
+git commit -m "feat: magazine-style project detail page with editorial mosaic"
+git push origin main
+
+echo ""
+echo "════════════════════════════════════════════════"
+echo "✅  Project detail page built & pushed"
+echo "════════════════════════════════════════════════"
+echo ""
+echo "Visit: http://localhost:4321/projects/silom-residence"
+echo ""
+echo "To add real photos to a project:"
+echo "  1. Go to localhost:4321/admin"
+echo "  2. Projects → Silom Residence"
+echo "  3. Scroll to Gallery Images → Add images"
+echo "  4. Save → photos appear in the mosaic instantly"
+echo ""
+echo "Mosaic layout:"
+echo "  Row 1: Wide (8 cols) + Square (4 cols)"
+echo "  Row 2: Three equal thirds"
+echo "  Row 3: Tall portrait (4 cols, 2 rows) + Wide (8 cols)"
+echo ""
