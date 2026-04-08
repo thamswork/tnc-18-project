@@ -1,10 +1,10 @@
 # ─────────────────────────────────────────────────────────────
 # TNC.18 — Decap CMS Config
-# local_backend: true = edit locally without OAuth
+# local_backend: false = edit locally without OAuth
 # Switch to github backend for production
 # ─────────────────────────────────────────────────────────────
 
-local_backend: true
+local_backend: false
 
 backend:
   name: github
