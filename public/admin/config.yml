@@ -1,30 +1,21 @@
-# ─────────────────────────────────────────────────────────────
-# TNC.18 — Decap CMS Config
-# local_backend: false = edit locally without OAuth
-# Switch to github backend for production
-# ─────────────────────────────────────────────────────────────
-
+# TNC.18 Decap CMS Config
 local_backend: false
 
 backend:
   name: github
   repo: thamswork/tnc-18-project
   branch: main
-  base_url: https://sveltia-cms-auth.pages.dev  # free OAuth proxy
+  base_url: https://tnc-18-auth.workers.dev
 
 media_folder: public/images/uploads
 public_folder: /images/uploads
 
-site_url: https://tnc18.com
-display_url: https://tnc18.com
+site_url: https://tnc-18-project.pages.dev
+display_url: https://tnc-18-project.pages.dev
 logo_url: /favicon.svg
 
-# ─────────────────────────────────────────────────────────────
-# COLLECTIONS
-# ─────────────────────────────────────────────────────────────
 collections:
 
-  # ── PROJECTS ──────────────────────────────────────────────
   - name: projects
     label: Projects
     label_singular: Project
@@ -36,33 +27,28 @@ collections:
     summary: "{{title}} — {{year}}"
     sortable_fields: [year, title]
     fields:
-      - { label: Title (EN),        name: title,       widget: string }
-      - { label: Title (TH),        name: title_th,    widget: string, required: false }
-      - { label: Year,              name: year,        widget: number, value_type: int }
+      - { label: Title (EN),             name: title,          widget: string }
+      - { label: Title (TH),             name: title_th,       widget: string,   required: false }
+      - { label: Year,                   name: year,           widget: number,   value_type: int }
       - label: Category (EN)
         name: category
         widget: select
         options: [Residential, Commercial, Interior, Mixed-Use, Hospitality]
-      - label: Category (TH)
-        name: category_th
-        widget: select
-        required: false
-        options: [ที่พักอาศัย, เชิงพาณิชย์, การออกแบบภายใน, อาคารรวม, การบริการ]
-      - { label: Cover Image,       name: cover,       widget: image }
-      - { label: Short Description (EN), name: description, widget: text, required: false }
-      - { label: Short Description (TH), name: description_th, widget: text, required: false }
+      - { label: Category (TH),          name: category_th,    widget: string,   required: false }
+      - { label: Cover Image,            name: cover,          widget: image }
+      - { label: Short Description (EN), name: description,    widget: text,     required: false }
+      - { label: Short Description (TH), name: description_th, widget: text,     required: false }
       - label: Gallery Images
         name: gallery
         widget: list
         required: false
         field: { label: Image, name: image, widget: image }
-      - { label: Client,            name: client,      widget: string, required: false }
-      - { label: Location,          name: location,    widget: string, required: false }
-      - { label: Area (sqm),        name: area,        widget: number, required: false }
-      - { label: Featured,          name: featured,    widget: boolean, default: false }
-      - { label: Body Content,      name: body,        widget: markdown, required: false }
+      - { label: Client,                 name: client,         widget: string,   required: false }
+      - { label: Location,               name: location,       widget: string,   required: false }
+      - { label: Area (sqm),             name: area,           widget: number,   required: false }
+      - { label: Featured on homepage,   name: featured,       widget: boolean,  default: false }
+      - { label: Body Content,           name: body,           widget: markdown, required: false }
 
-  # ── SERVICES ──────────────────────────────────────────────
   - name: services
     label: Services
     label_singular: Service
@@ -71,16 +57,13 @@ collections:
     delete: true
     slug: "{{slug}}"
     summary: "{{order}}. {{title}}"
-    sortable_fields: [order]
     fields:
-      - { label: Order,             name: order,       widget: number, value_type: int }
-      - { label: Title (EN),        name: title,       widget: string }
-      - { label: Title (TH),        name: title_th,    widget: string, required: false }
-      - { label: Description (EN),  name: description, widget: text,   required: false }
-      - { label: Description (TH),  name: description_th, widget: text, required: false }
-      - { label: Icon (optional),   name: icon,        widget: string, required: false }
+      - { label: Order,             name: order,          widget: number, value_type: int }
+      - { label: Title (EN),        name: title,          widget: string }
+      - { label: Title (TH),        name: title_th,       widget: string, required: false }
+      - { label: Description (EN),  name: description,    widget: text,   required: false }
+      - { label: Description (TH),  name: description_th, widget: text,   required: false }
 
-  # ── NEWS / UPDATES ─────────────────────────────────────────
   - name: news
     label: News & Updates
     label_singular: Article
@@ -88,79 +71,47 @@ collections:
     create: true
     delete: true
     slug: "{{year}}-{{month}}-{{slug}}"
-    summary: "{{title}} ({{date}})"
-    sortable_fields: [date, title]
     fields:
-      - { label: Title (EN),        name: title,       widget: string }
-      - { label: Title (TH),        name: title_th,    widget: string, required: false }
-      - { label: Date,              name: date,        widget: datetime, date_format: YYYY-MM-DD, time_format: false }
-      - { label: Cover Image,       name: cover,       widget: image,   required: false }
-      - { label: Excerpt (EN),      name: excerpt,     widget: text,    required: false }
-      - { label: Excerpt (TH),      name: excerpt_th,  widget: text,    required: false }
-      - { label: Body,              name: body,        widget: markdown }
+      - { label: Title (EN),   name: title,      widget: string }
+      - { label: Title (TH),   name: title_th,   widget: string,   required: false }
+      - { label: Date,         name: date,       widget: datetime, date_format: YYYY-MM-DD, time_format: false }
+      - { label: Cover Image,  name: cover,      widget: image,    required: false }
+      - { label: Excerpt (EN), name: excerpt,    widget: text,     required: false }
+      - { label: Excerpt (TH), name: excerpt_th, widget: text,     required: false }
+      - { label: Body,         name: body,       widget: markdown }
 
-  # ── GLOBAL SETTINGS ────────────────────────────────────────
   - name: settings
     label: Global Settings
     delete: false
     editor: { preview: false }
     files:
 
-      # Contact & Social
       - name: contact
         label: Contact & Social Links
         file: src/content/settings/contact.json
         fields:
-          - { label: Phone,             name: phone,       widget: string, hint: "e.g. +66 2 000 0000" }
-          - { label: Email,             name: email,       widget: string }
-          - { label: Address (EN),      name: address,     widget: text,   required: false }
-          - { label: Address (TH),      name: address_th,  widget: text,   required: false }
-          - { label: Line OA URL,       name: line,        widget: string, required: false }
-          - { label: Instagram URL,     name: instagram,   widget: string, required: false }
-          - { label: TikTok URL,        name: tiktok,      widget: string, required: false }
-          - { label: Facebook URL,      name: facebook,    widget: string, required: false }
+          - { label: Phone,         name: phone,       widget: string }
+          - { label: Email,         name: email,       widget: string }
+          - { label: Address (EN),  name: address,     widget: text,   required: false }
+          - { label: Address (TH),  name: address_th,  widget: text,   required: false }
+          - { label: Line OA URL,   name: line,        widget: string, required: false }
+          - { label: Instagram URL, name: instagram,   widget: string, required: false }
+          - { label: TikTok URL,    name: tiktok,      widget: string, required: false }
 
-      # Brand Colors
       - name: colors
         label: Brand Colors
         file: src/content/settings/colors.json
         fields:
-          - { label: Stone (background),  name: stone,       widget: color, default: "#F7F4EF" }
-          - { label: Charcoal (text),     name: charcoal,    widget: color, default: "#1C1A17" }
-          - { label: Gold (accent),       name: gold,        widget: color, default: "#A67C4E" }
-          - { label: Blue (surprise),     name: blue,        widget: color, default: "#1B3F7A" }
-          - { label: Muted (secondary),   name: muted,       widget: color, default: "#8A8680" }
+          - { label: Stone (background), name: stone,    widget: color, default: "#F7F4EF" }
+          - { label: Charcoal (text),    name: charcoal, widget: color, default: "#1C1A17" }
+          - { label: Gold (accent),      name: gold,     widget: color, default: "#A67C4E" }
+          - { label: Blue (hover),       name: blue,     widget: color, default: "#1B3F7A" }
 
-      # Typography
-      - name: typography
-        label: Typography
-        file: src/content/settings/typography.json
-        fields:
-          - label: Heading Font
-            name: heading_font
-            widget: select
-            options:
-              - { label: "Merriweather (current)", value: "Merriweather" }
-              - { label: "Cormorant Garamond",     value: "Cormorant Garamond" }
-              - { label: "Playfair Display",       value: "Playfair Display" }
-              - { label: "Lora",                   value: "Lora" }
-          - label: Body Font
-            name: body_font
-            widget: select
-            options:
-              - { label: "Poppins (current)", value: "Poppins" }
-              - { label: "DM Sans",           value: "DM Sans" }
-              - { label: "Inter",             value: "Inter" }
-              - { label: "Nunito Sans",       value: "Nunito Sans" }
-          - { label: Custom Google Font URL, name: custom_font_url, widget: string, required: false, hint: "Paste a Google Fonts embed URL to override the above" }
-
-      # Site Info
       - name: siteinfo
         label: Site Info
         file: src/content/settings/siteinfo.json
         fields:
-          - { label: Site Name,           name: site_name,    widget: string, default: "TNC.18" }
-          - { label: Tagline (EN),        name: tagline,      widget: string }
-          - { label: Tagline (TH),        name: tagline_th,   widget: string, required: false }
-          - { label: Meta Description,    name: meta_desc,    widget: text }
-          - { label: Google Analytics ID, name: ga_id,        widget: string, required: false }
+          - { label: Site Name,        name: site_name, widget: string }
+          - { label: Tagline (EN),     name: tagline,   widget: string }
+          - { label: Tagline (TH),     name: tagline_th,widget: string, required: false }
+          - { label: Meta Description, name: meta_desc, widget: text }
