@@ -1,3 +1,23 @@
+#!/bin/bash
+# ============================================================
+# TNC.18 — Fix Image Upload for Live CMS
+# Problem: media_folder path wrong for Cloudflare Pages
+# ============================================================
+
+set -e
+cd "/Users/marketingworks/Downloads/tnc-18-project/tnc-18"
+git pull origin main --rebase
+
+echo ""
+echo "🖼  Fixing image upload..."
+echo ""
+
+# The issue: Cloudflare Pages serves from /dist
+# Images uploaded via CMS need to go into /public/uploads
+# and be referenced as /uploads/filename
+
+# Fix 1: Update CMS config with correct media paths
+cat > public/admin/config.yml << 'ENDOFFILE'
 backend:
   name: github
   repo: thamswork/tnc-18-project
@@ -201,3 +221,44 @@ collections:
           - { label: "Tagline (EN)",     name: tagline,   widget: string }
           - { label: "Tagline (TH)",     name: tagline_th,widget: string, required: false }
           - { label: "Meta Description", name: meta_desc, widget: text }
+ENDOFFILE
+echo "✅  config.yml — media_folder fixed to public/uploads"
+
+# Fix 2: Create the uploads folder
+mkdir -p public/uploads
+touch public/uploads/.gitkeep
+echo "✅  public/uploads/ folder created"
+
+# Fix 3: Create a sample news article so the tab shows
+mkdir -p src/content/news
+cat > src/content/news/2024-01-welcome.md << 'ENDOFFILE'
+---
+title: Welcome to TNC.18
+title_th: ยินดีต้อนรับสู่ TNC.18
+date: "2024-01-01"
+excerpt: TNC.18 — eighteen years of architecture and construction excellence in Bangkok.
+excerpt_th: TNC.18 — สิบแปดปีแห่งความเป็นเลิศด้านสถาปัตยกรรมและการก่อสร้างในกรุงเทพฯ
+---
+
+Welcome to TNC.18. We are a Bangkok-based architecture and construction firm with eighteen years of experience across residential, commercial, and interior projects.
+ENDOFFILE
+echo "✅  Sample news article created — News tab will now show"
+
+git add .
+git commit -m "fix: media_folder path + uploads folder + sample news article"
+git push origin main
+
+echo ""
+echo "════════════════════════════════════════════════════"
+echo "✅  Done — wait 1 min then:"
+echo ""
+echo "1. Refresh CMS admin"
+echo "2. Page Content → About Page"
+echo "   → Click 'Office / Team Photo'"
+echo "   → Click 'Choose image'"
+echo "   → Upload your photo"
+echo "   → Publish"
+echo ""
+echo "3. News & Updates tab will now show in CMS"
+echo "════════════════════════════════════════════════════"
+echo ""
