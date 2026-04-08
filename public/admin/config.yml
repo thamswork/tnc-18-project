@@ -1,14 +1,11 @@
-local_backend: false
-
 backend:
   name: github
   repo: thamswork/tnc-18-project
   branch: main
+  base_url: https://tnc-18-auth.tyme-sak.workers.dev
 
 media_folder: public/images/uploads
 public_folder: /images/uploads
-
-site_url: https://tnc-18-project.pages.dev
 
 collections:
   - name: projects
@@ -27,7 +24,6 @@ collections:
         name: category
         widget: select
         options: [Residential, Commercial, Interior, Mixed-Use, Hospitality]
-      - { label: "Category (TH)", name: category_th, widget: string, required: false }
       - { label: "Cover Image", name: cover, widget: image }
       - { label: "Description (EN)", name: description, widget: text, required: false }
       - { label: "Description (TH)", name: description_th, widget: text, required: false }
@@ -52,7 +48,6 @@ collections:
       - { label: "Title (EN)", name: title, widget: string }
       - { label: "Title (TH)", name: title_th, widget: string, required: false }
       - { label: "Description (EN)", name: description, widget: text, required: false }
-      - { label: "Description (TH)", name: description_th, widget: text, required: false }
   - name: news
     label: "News & Updates"
     folder: src/content/news
@@ -61,10 +56,8 @@ collections:
     slug: "{{year}}-{{month}}-{{slug}}"
     fields:
       - { label: "Title (EN)", name: title, widget: string }
-      - { label: "Title (TH)", name: title_th, widget: string, required: false }
       - { label: "Date", name: date, widget: datetime, date_format: YYYY-MM-DD, time_format: false }
       - { label: "Cover Image", name: cover, widget: image, required: false }
-      - { label: "Excerpt (EN)", name: excerpt, widget: text, required: false }
       - { label: "Body", name: body, widget: markdown }
   - name: settings
     label: "Global Settings"
