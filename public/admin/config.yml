@@ -1,4 +1,3 @@
-# TNC.18 Decap CMS Config
 local_backend: false
 
 backend:
@@ -6,13 +5,13 @@ backend:
   repo: thamswork/tnc-18-project
   branch: main
   base_url: https://tnc-18-auth.tyme-sak.workers.dev
+  auth_endpoint: /auth
 
 media_folder: public/images/uploads
 public_folder: /images/uploads
 
 site_url: https://tnc-18-project.pages.dev
 display_url: https://tnc-18-project.pages.dev
-logo_url: /favicon.svg
 
 collections:
 
@@ -25,29 +24,28 @@ collections:
     slug: "{{slug}}"
     identifier_field: title
     summary: "{{title}} — {{year}}"
-    sortable_fields: [year, title]
     fields:
-      - { label: Title (EN),             name: title,          widget: string }
-      - { label: Title (TH),             name: title_th,       widget: string,   required: false }
-      - { label: Year,                   name: year,           widget: number,   value_type: int }
-      - label: Category (EN)
+      - { label: "Title (EN)",             name: title,          widget: string }
+      - { label: "Title (TH)",             name: title_th,       widget: string,   required: false }
+      - { label: "Year",                   name: year,           widget: number,   value_type: int }
+      - label: "Category"
         name: category
         widget: select
         options: [Residential, Commercial, Interior, Mixed-Use, Hospitality]
-      - { label: Category (TH),          name: category_th,    widget: string,   required: false }
-      - { label: Cover Image,            name: cover,          widget: image }
-      - { label: Short Description (EN), name: description,    widget: text,     required: false }
-      - { label: Short Description (TH), name: description_th, widget: text,     required: false }
-      - label: Gallery Images
+      - { label: "Category (TH)",          name: category_th,    widget: string,   required: false }
+      - { label: "Cover Image",            name: cover,          widget: image }
+      - { label: "Description (EN)",       name: description,    widget: text,     required: false }
+      - { label: "Description (TH)",       name: description_th, widget: text,     required: false }
+      - label: "Gallery Images"
         name: gallery
         widget: list
         required: false
         field: { label: Image, name: image, widget: image }
-      - { label: Client,                 name: client,         widget: string,   required: false }
-      - { label: Location,               name: location,       widget: string,   required: false }
-      - { label: Area (sqm),             name: area,           widget: number,   required: false }
-      - { label: Featured on homepage,   name: featured,       widget: boolean,  default: false }
-      - { label: Body Content,           name: body,           widget: markdown, required: false }
+      - { label: "Client",                 name: client,         widget: string,   required: false }
+      - { label: "Location",               name: location,       widget: string,   required: false }
+      - { label: "Area (sqm)",             name: area,           widget: number,   required: false }
+      - { label: "Featured on homepage",   name: featured,       widget: boolean,  default: false }
+      - { label: "Body Content",           name: body,           widget: markdown, required: false }
 
   - name: services
     label: Services
@@ -58,60 +56,60 @@ collections:
     slug: "{{slug}}"
     summary: "{{order}}. {{title}}"
     fields:
-      - { label: Order,             name: order,          widget: number, value_type: int }
-      - { label: Title (EN),        name: title,          widget: string }
-      - { label: Title (TH),        name: title_th,       widget: string, required: false }
-      - { label: Description (EN),  name: description,    widget: text,   required: false }
-      - { label: Description (TH),  name: description_th, widget: text,   required: false }
+      - { label: "Order",            name: order,          widget: number, value_type: int }
+      - { label: "Title (EN)",       name: title,          widget: string }
+      - { label: "Title (TH)",       name: title_th,       widget: string, required: false }
+      - { label: "Description (EN)", name: description,    widget: text,   required: false }
+      - { label: "Description (TH)", name: description_th, widget: text,   required: false }
 
   - name: news
-    label: News & Updates
+    label: "News & Updates"
     label_singular: Article
     folder: src/content/news
     create: true
     delete: true
     slug: "{{year}}-{{month}}-{{slug}}"
     fields:
-      - { label: Title (EN),   name: title,      widget: string }
-      - { label: Title (TH),   name: title_th,   widget: string,   required: false }
-      - { label: Date,         name: date,       widget: datetime, date_format: YYYY-MM-DD, time_format: false }
-      - { label: Cover Image,  name: cover,      widget: image,    required: false }
-      - { label: Excerpt (EN), name: excerpt,    widget: text,     required: false }
-      - { label: Excerpt (TH), name: excerpt_th, widget: text,     required: false }
-      - { label: Body,         name: body,       widget: markdown }
+      - { label: "Title (EN)",   name: title,       widget: string }
+      - { label: "Title (TH)",   name: title_th,    widget: string,   required: false }
+      - { label: "Date",         name: date,        widget: datetime, date_format: YYYY-MM-DD, time_format: false }
+      - { label: "Cover Image",  name: cover,       widget: image,    required: false }
+      - { label: "Excerpt (EN)", name: excerpt,     widget: text,     required: false }
+      - { label: "Excerpt (TH)", name: excerpt_th,  widget: text,     required: false }
+      - { label: "Body",         name: body,        widget: markdown }
 
   - name: settings
-    label: Global Settings
+    label: "Global Settings"
     delete: false
     editor: { preview: false }
     files:
 
       - name: contact
-        label: Contact & Social Links
+        label: "Contact & Social"
         file: src/content/settings/contact.json
         fields:
-          - { label: Phone,         name: phone,       widget: string }
-          - { label: Email,         name: email,       widget: string }
-          - { label: Address (EN),  name: address,     widget: text,   required: false }
-          - { label: Address (TH),  name: address_th,  widget: text,   required: false }
-          - { label: Line OA URL,   name: line,        widget: string, required: false }
-          - { label: Instagram URL, name: instagram,   widget: string, required: false }
-          - { label: TikTok URL,    name: tiktok,      widget: string, required: false }
+          - { label: Phone,         name: phone,      widget: string }
+          - { label: Email,         name: email,      widget: string }
+          - { label: "Address (EN)",name: address,    widget: text,   required: false }
+          - { label: "Address (TH)",name: address_th, widget: text,   required: false }
+          - { label: "Line OA URL", name: line,       widget: string, required: false }
+          - { label: Instagram,     name: instagram,  widget: string, required: false }
+          - { label: TikTok,        name: tiktok,     widget: string, required: false }
 
       - name: colors
-        label: Brand Colors
+        label: "Brand Colors"
         file: src/content/settings/colors.json
         fields:
-          - { label: Stone (background), name: stone,    widget: color, default: "#F7F4EF" }
-          - { label: Charcoal (text),    name: charcoal, widget: color, default: "#1C1A17" }
-          - { label: Gold (accent),      name: gold,     widget: color, default: "#A67C4E" }
-          - { label: Blue (hover),       name: blue,     widget: color, default: "#1B3F7A" }
+          - { label: "Stone (background)", name: stone,    widget: color, default: "#F7F4EF" }
+          - { label: "Charcoal (text)",    name: charcoal, widget: color, default: "#1C1A17" }
+          - { label: "Gold (accent)",      name: gold,     widget: color, default: "#A67C4E" }
+          - { label: "Blue (hover)",       name: blue,     widget: color, default: "#1B3F7A" }
 
       - name: siteinfo
-        label: Site Info
+        label: "Site Info"
         file: src/content/settings/siteinfo.json
         fields:
-          - { label: Site Name,        name: site_name, widget: string }
-          - { label: Tagline (EN),     name: tagline,   widget: string }
-          - { label: Tagline (TH),     name: tagline_th,widget: string, required: false }
-          - { label: Meta Description, name: meta_desc, widget: text }
+          - { label: "Site Name",        name: site_name, widget: string }
+          - { label: "Tagline (EN)",     name: tagline,   widget: string }
+          - { label: "Tagline (TH)",     name: tagline_th,widget: string, required: false }
+          - { label: "Meta Description", name: meta_desc, widget: text }
