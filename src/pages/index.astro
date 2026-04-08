@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import { getCollection } from 'astro:content';
+import homepageData from '../content/pages/homepage.json';
 
 const allProjects = await getCollection('projects');
 const featured = allProjects
@@ -25,10 +26,20 @@ const colors = ['#C8C2B2','#B0AA9C','#989082','#7E786C'];
   <!-- HERO -->
   <section class="hero">
     <div class="hero-media">
-      <video autoplay muted loop playsinline>
-        <source src="/hero.mp4" type="video/mp4" />
-      </video>
-      <div class="hero-fallback"></div>
+      {homepageData.hero_video && (
+        <video autoplay muted loop playsinline class="hero-video">
+          <source src={homepageData.hero_video} type="video/mp4" />
+        </video>
+      )}
+      {!homepageData.hero_video && (
+        <video autoplay muted loop playsinline class="hero-video">
+          <source src="/hero.mp4" type="video/mp4" />
+        </video>
+      )}
+      {homepageData.hero_image
+        ? <img src={homepageData.hero_image} alt="TNC.18" class="hero-img-fallback" />
+        : <div class="hero-fallback"></div>
+      }
       <div class="hero-vignette"></div>
     </div>
     <div class="hero-body">
@@ -315,6 +326,7 @@ const colors = ['#C8C2B2','#B0AA9C','#989082','#7E786C'];
   .hero-media { position:absolute; inset:0; z-index:0; }
   .hero-media video { width:100%; height:100%; object-fit:cover; opacity:0.46; }
   .hero-fallback { position:absolute; inset:0; background:linear-gradient(155deg,#2C2820 0%,#1A1612 60%,#0F0D0A 100%); z-index:-1; }
+  .hero-img-fallback { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.5; z-index:-1; }
   .hero-vignette { position:absolute; inset:0; background:linear-gradient(to top,rgba(28,26,23,0.92) 0%,transparent 55%),linear-gradient(to right,rgba(28,26,23,0.3) 0%,transparent 50%); }
   .hero-body { position:relative; z-index:2; padding:0 5rem 2.5rem; }
   .hero-location { font-size:0.64rem; letter-spacing:0.24em; text-transform:uppercase; color:rgba(247,244,239,0.32); margin-bottom:1.25rem; animation:fadeUp 1s 0.3s both; }

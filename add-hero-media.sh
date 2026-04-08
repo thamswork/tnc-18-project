@@ -1,3 +1,50 @@
+#!/bin/bash
+# ============================================================
+# TNC.18 — Add hero video + image to CMS
+# ============================================================
+
+set -e
+cd "/Users/marketingworks/Downloads/tnc-18-project/tnc-18"
+
+echo ""
+echo "🎬 Adding hero media to CMS..."
+echo ""
+
+# Pull first to avoid conflicts
+git pull origin main --rebase
+
+# ── 1. Update homepage.json to include media fields ──────────
+cat > src/content/pages/homepage.json << 'ENDOFFILE'
+{
+  "hero_video": "",
+  "hero_image": "",
+  "hero_location_en": "Bangkok · Thailand",
+  "hero_location_th": "กรุงเทพมหานคร · ประเทศไทย",
+  "hero_line1_en": "We Build",
+  "hero_line1_th": "เราสร้าง",
+  "hero_line2_en": "What Lasts.",
+  "hero_line2_th": "สิ่งที่ยั่งยืน",
+  "hero_cta_en": "View Our Work",
+  "hero_cta_th": "ดูผลงานของเรา",
+  "statement_en": "Every structure we build carries a single promise — that it will outlast the moment it was made for.",
+  "statement_th": "ทุกสิ่งที่เราสร้างมีคำสัญญาเดียว — ว่ามันจะคงอยู่ยาวนานกว่าช่วงเวลาที่มันถูกสร้างขึ้น",
+  "about_headline_en": "Eighteen years of precision, craft, and permanence.",
+  "about_headline_th": "สิบแปดปีแห่งความแม่นยำ ฝีมือ และความยั่งยืน",
+  "about_body_en": "TNC.18 is a Bangkok-based architecture and construction firm. We work across residential, commercial, and interior disciplines — always with the same commitment to materials, structure, and lasting design.",
+  "about_body_th": "TNC.18 เป็นบริษัทสถาปัตยกรรมและก่อสร้างในกรุงเทพฯ",
+  "contact_headline_en": "Have a project in mind?",
+  "contact_headline_th": "มีโครงการในใจอยู่หรือเปล่า?",
+  "contact_body_en": "We work with clients who value precision and permanence. Let's talk about what you're building.",
+  "contact_body_th": "เราทำงานกับลูกค้าที่ให้ความสำคัญกับความแม่นยำและความยั่งยืน",
+  "stats_years": "18",
+  "stats_projects": "200",
+  "stats_specialists": "50"
+}
+ENDOFFILE
+echo "✅  homepage.json — hero_video + hero_image fields added"
+
+# ── 2. Update CMS config — add video + image to homepage ─────
+cat > public/admin/config.yml << 'ENDOFFILE'
 backend:
   name: github
   repo: thamswork/tnc-18-project
@@ -205,3 +252,91 @@ collections:
           - { label: "Tagline (EN)",     name: tagline,   widget: string }
           - { label: "Tagline (TH)",     name: tagline_th,widget: string, required: false }
           - { label: "Meta Description", name: meta_desc, widget: text }
+ENDOFFILE
+echo "✅  config.yml — hero video + image fields added"
+
+# ── 3. Update index.astro hero to read from CMS ──────────────
+python3 << 'PYEOF'
+with open('src/pages/index.astro', 'r') as f:
+    src = f.read()
+
+# Replace the static hero media block with CMS-driven one
+old = """import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import { getCollection } from 'astro:content';"""
+
+new = """import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import { getCollection } from 'astro:content';
+import homepageData from '../content/pages/homepage.json';"""
+
+src = src.replace(old, new)
+
+# Replace hero media section
+old_media = """    <div class="hero-media">
+      <video autoplay muted loop playsinline>
+        <source src="/hero.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-fallback"></div>
+      <div class="hero-vignette"></div>
+    </div>"""
+
+new_media = """    <div class="hero-media">
+      {homepageData.hero_video && (
+        <video autoplay muted loop playsinline class="hero-video">
+          <source src={homepageData.hero_video} type="video/mp4" />
+        </video>
+      )}
+      {!homepageData.hero_video && (
+        <video autoplay muted loop playsinline class="hero-video">
+          <source src="/hero.mp4" type="video/mp4" />
+        </video>
+      )}
+      {homepageData.hero_image
+        ? <img src={homepageData.hero_image} alt="TNC.18" class="hero-img-fallback" />
+        : <div class="hero-fallback"></div>
+      }
+      <div class="hero-vignette"></div>
+    </div>"""
+
+src = src.replace(old_media, new_media)
+
+with open('src/pages/index.astro', 'w') as f:
+    f.write(src)
+
+print("✅  index.astro hero now reads video + image from CMS")
+PYEOF
+
+# ── 4. Add hero-img-fallback CSS ─────────────────────────────
+python3 << 'PYEOF'
+with open('src/pages/index.astro', 'r') as f:
+    src = f.read()
+
+old_css = "  .hero-fallback { position:absolute; inset:0; background:linear-gradient(155deg,#2C2820 0%,#1A1612 60%,#0F0D0A 100%); z-index:-1; }"
+new_css = """  .hero-fallback { position:absolute; inset:0; background:linear-gradient(155deg,#2C2820 0%,#1A1612 60%,#0F0D0A 100%); z-index:-1; }
+  .hero-img-fallback { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.5; z-index:-1; }"""
+
+src = src.replace(old_css, new_css)
+
+with open('src/pages/index.astro', 'w') as f:
+    f.write(src)
+
+print("✅  hero-img-fallback CSS added")
+PYEOF
+
+git add .
+git commit -m "feat: hero video + image upload from CMS"
+git push origin main
+
+echo ""
+echo "════════════════════════════════════════════════════"
+echo "✅  Done — wait 1 min then:"
+echo ""
+echo "Go to CMS → Page Content → Homepage"
+echo "→ Hero Media section:"
+echo "  · Upload your MP4 video"
+echo "  · Upload a fallback image (shown on mobile)"
+echo "→ Click Publish"
+echo "→ Hero updates on the live site"
+echo "════════════════════════════════════════════════════"
+echo ""
