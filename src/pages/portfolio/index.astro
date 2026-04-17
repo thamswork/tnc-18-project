@@ -200,13 +200,10 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
   .proj-item.hidden { display: none; }
 
   .proj-link {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    align-items: center;
+    display: block;
     text-decoration: none;
     color: inherit;
-    padding: 2.5rem var(--pad-x);
+    padding: 2rem var(--pad-x);
   }
 
   /* Image */
@@ -215,7 +212,7 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
     width: 100%;
     overflow: hidden;
     background: var(--bg-dark);
-    aspect-ratio: 3/2;
+    aspect-ratio: 16/9;
     margin-bottom: 1.75rem;
   }
 
@@ -344,7 +341,14 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
 
   @media (min-width: 768px) {
     .page-hero { padding: 7rem var(--pad-x) 3rem; }
-    .proj-link { grid-template-columns: 55% 1fr; gap: 4rem; }
+    .proj-link {
+      display: grid;
+      grid-template-columns: 55% 1fr;
+      gap: 4rem;
+      align-items: center;
+      padding: 2.5rem var(--pad-x);
+    }
+    .proj-img-wrap { aspect-ratio: 3/2; margin-bottom: 0; }
   }
   .cta-line-btn {
     display: inline-flex;
