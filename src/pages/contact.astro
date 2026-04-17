@@ -22,7 +22,7 @@ const ttHandle = (contactData.tiktok || '')
 
       <!-- LEFT: headline + Line CTA -->
       <div class="contact-left">
-        <div class="contact-left-inner">
+        <div class="contact-left-inner" data-reveal>
           <p class="contact-eyebrow">Get In Touch</p>
           <h1 class="contact-title">{pageData.headline.toUpperCase()}</h1>
           {pageData.subtext && (
@@ -47,7 +47,7 @@ const ttHandle = (contactData.tiktok || '')
 
       <!-- RIGHT: dark navy contact channels -->
       <div class="contact-right">
-        <div class="contact-right-inner">
+        <div class="contact-right-inner" data-reveal-fade>
 
           <p class="right-label">Also Find Us</p>
 
@@ -282,16 +282,17 @@ const ttHandle = (contactData.tiktok || '')
 
   .channel-platform {
     font-family: 'Courier New', monospace;
-    font-size: 0.48rem;
+    font-size: 0.52rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgba(248,247,244,0.35);
+    color: rgba(248,247,244,0.55);
   }
 
   .channel-handle {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(1rem, 2.5vw, 1.4rem);
-    color: rgba(248,247,244,0.9);
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    color: #F8F7F4;
+    font-weight: 400;
     transition: color 0.2s;
   }
   .channel-row:hover .channel-handle { color: #F8F7F4; }
@@ -324,7 +325,7 @@ const ttHandle = (contactData.tiktok || '')
   .studio-address {
     font-family: var(--font-display, 'Tenor Sans', serif);
     font-size: 1.1rem;
-    color: rgba(248,247,244,0.6);
+    color: rgba(248,247,244,0.85);
   }
 
   .studio-hours {
@@ -386,9 +387,40 @@ const ttHandle = (contactData.tiktok || '')
       min-height: 100%;
     }
   }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  [data-reveal] { opacity: 0; transform: translateY(28px); }
+  [data-reveal].revealed {
+    animation: fadeUp 0.75s cubic-bezier(0.4,0,0.2,1) forwards;
+  }
+  [data-reveal-fade] { opacity: 0; }
+  [data-reveal-fade].revealed {
+    animation: fadeIn 0.9s ease forwards;
+  }
+
+  .channel-row {
+    opacity: 0;
+    transform: translateX(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease, padding-left 0.2s;
+  }
+  .channel-row.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
 </style>
 
 <script>
+  // Reveal blocks
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
@@ -396,5 +428,17 @@ const ttHandle = (contactData.tiktok || '')
       io.unobserve(e.target);
     });
   }, { threshold: 0.06 });
-  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+  document.querySelectorAll('[data-reveal], [data-reveal-fade]').forEach(el => io.observe(el));
+
+  // Stagger channel rows
+  const rows = document.querySelectorAll('.channel-row');
+  const rowObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const i = Array.from(rows).indexOf(e.target);
+      setTimeout(() => e.target.classList.add('visible'), i * 90);
+      rowObs.unobserve(e.target);
+    });
+  }, { threshold: 0.1 });
+  rows.forEach(r => rowObs.observe(r));
 </script>
