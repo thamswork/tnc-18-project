@@ -71,6 +71,12 @@ collections:
         label: "Homepage"
         file: src/content/pages/homepage.json
         fields:
+          - label: "Hero Slides (auto-play slideshow)"
+            name: hero_slides
+            widget: list
+            required: false
+            hint: "Upload 3-6 images for the hero slideshow"
+            field: { label: "Slide Image", name: image, widget: image }
           - label: "Hero Header Image"
             name: hero_image
             widget: image
@@ -82,6 +88,10 @@ collections:
           - { label: "Hero Headline Line 2", name: hero_line2, widget: string }
           - { label: "Hero Subline",         name: hero_sub,   widget: string, required: false }
           - { label: "Statement / Tagline",  name: statement,  widget: text }
+          - label: "Statement Background Image"
+            name: statement_image
+            widget: image
+            required: false
           - { label: "About Headline",       name: about_headline, widget: string }
           - { label: "About Body",           name: about_body,     widget: text }
 

@@ -10,7 +10,7 @@ export async function getStaticPaths() {
     params: {
       slug: p.data.title
         .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-')
         .replace(/^-|-$/g, '')
     },
     props: { project: p }

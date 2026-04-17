@@ -10,133 +10,182 @@ import pageData    from '../content/pages/contact.json';
 
   <main class="main">
 
-    <!-- HEADLINE -->
-    <section class="hero-text" data-reveal>
-      <h1 class="headline">{pageData.headline.toUpperCase()}</h1>
-      {pageData.subtext && <p class="subtext">{pageData.subtext}</p>}
+    <!-- Headline -->
+    <section class="head" data-reveal>
+      <h1 class="head-title">{pageData.headline.toUpperCase()}</h1>
+      {pageData.subtext && <p class="head-sub">{pageData.subtext}</p>}
       {pageData.promise && (
-        <p class="promise">
+        <p class="head-promise">
           <span class="promise-dot"></span>
           {pageData.promise}
         </p>
       )}
     </section>
 
-    <!-- PRIMARY: LINE OA -->
+    <!-- Line OA — primary -->
     {contactData.line && (
-      <section class="primary-cta" data-reveal>
-        <span class="cta-eyebrow">Primary Contact</span>
-        <a href={contactData.line} target="_blank" rel="noopener" class="btn-line">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M19.365 9.89c.5 0 .907.406.907.907s-.407.907-.907.907h-2.724v1.77h2.724c.5 0 .907.406.907.907s-.407.907-.907.907H15.73a.907.907 0 0 1-.907-.907V9.89c0-.5.406-.907.907-.907h3.636zm-5.453 0c.5 0 .907.406.907.907v4.491a.907.907 0 0 1-1.814 0V10.797a.907.907 0 0 1 .907-.907zm-2.198 0a.907.907 0 0 1 .736.378l2.33 3.176V10.8a.907.907 0 1 1 1.814 0v4.49a.907.907 0 0 1-.907.907.907.907 0 0 1-.735-.377l-2.33-3.177v2.647a.907.907 0 1 1-1.814 0v-4.49c0-.5.406-.907.906-.907zm-3.634 0c.5 0 .906.406.906.907v4.491a.907.907 0 0 1-1.813 0V10.797c0-.5.406-.907.907-.907zM12 2C6.477 2 2 6.108 2 11.148c0 4.515 3.564 8.292 8.37 9.006.325.07.77.214.882.49.1.252.065.647.032.9l-.143.855c-.043.253-.2 1-.876.547-.676-.454-3.647-2.146-4.98-3.627C3.576 17.21 2 14.315 2 11.148 2 6.108 6.477 2 12 2z"/>
-          </svg>
+      <section class="primary" data-reveal>
+        <span class="s-label">Primary Contact</span>
+        <a href={contactData.line} target="_blank" rel="noopener" class="line-cta">
+          <span class="line-dot"></span>
           {pageData.line_label || 'Message us on Line'}
         </a>
-        <p class="line-note">Tap to open Line — fastest response guaranteed.</p>
+        <p class="line-note">{pageData.promise || 'Fastest response guaranteed.'}</p>
       </section>
     )}
 
-    <!-- SECONDARY LINKS -->
-    <section class="secondary" data-reveal>
-      <span class="cta-eyebrow">Also Find Us</span>
-      <div class="social-grid">
+    <!-- Social links -->
+    <section class="socials" data-reveal>
+      <span class="s-label">Also Find Us</span>
+      <div class="social-list">
         {contactData.instagram && (
-          <a href={contactData.instagram} target="_blank" rel="noopener" class="social-card">
+          <a href={contactData.instagram} target="_blank" rel="noopener" class="social-row">
             <span class="social-platform">Instagram</span>
-            <span class="social-handle">{contactData.instagram.replace('https://instagram.com/', '@').replace('https://www.instagram.com/', '@')}</span>
-            <span class="social-arrow">→</span>
+            <span class="social-handle">
+              {contactData.instagram.replace('https://instagram.com/','@').replace('https://www.instagram.com/','@')}
+            </span>
+            <span class="social-arr">→</span>
           </a>
         )}
         {contactData.tiktok && (
-          <a href={contactData.tiktok} target="_blank" rel="noopener" class="social-card">
+          <a href={contactData.tiktok} target="_blank" rel="noopener" class="social-row">
             <span class="social-platform">TikTok</span>
-            <span class="social-handle">{contactData.tiktok.replace('https://tiktok.com/', '').replace('https://www.tiktok.com/', '')}</span>
-            <span class="social-arrow">→</span>
+            <span class="social-handle">
+              {contactData.tiktok.replace('https://tiktok.com/','').replace('https://www.tiktok.com/','')}
+            </span>
+            <span class="social-arr">→</span>
           </a>
         )}
         {contactData.email && (
-          <a href={`mailto:${contactData.email}`} class="social-card">
+          <a href={`mailto:${contactData.email}`} class="social-row">
             <span class="social-platform">Email</span>
             <span class="social-handle">{contactData.email}</span>
-            <span class="social-arrow">→</span>
+            <span class="social-arr">→</span>
           </a>
         )}
         {contactData.phone && (
-          <a href={`tel:${contactData.phone.replace(/\s/g, '')}`} class="social-card">
+          <a href={`tel:${contactData.phone.replace(/\s/g,'')}`} class="social-row">
             <span class="social-platform">Phone</span>
             <span class="social-handle">{contactData.phone}</span>
-            <span class="social-arrow">→</span>
+            <span class="social-arr">→</span>
           </a>
         )}
       </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="footer-inner">
-        <span class="footer-logo">TNC<em>.</em>18</span>
-        <p class="footer-copy">© {new Date().getFullYear()} TNC.18 · Bangkok, Thailand</p>
-      </div>
-    </footer>
-
   </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div>
+        <span class="site-footer-logo">TNC<em>.</em>18</span>
+        <p class="site-footer-sub">Retail & Interior Design · Bangkok</p>
+      </div>
+      <p class="site-footer-copy">© {new Date().getFullYear()} TNC.18.</p>
+    </div>
+  </footer>
 </Layout>
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .main { padding-top: 60px; background: var(--cream); min-height: 100vh; display: flex; flex-direction: column; }
+  .main {
+    padding-top: 64px; background: var(--bg);
+    min-height: 100vh; display: flex; flex-direction: column;
+  }
 
   /* Headline */
-  .hero-text { padding: 4rem 1.5rem 2.5rem; border-bottom: .5px solid var(--cream-dark); opacity: 0; transform: translateY(24px); transition: opacity .8s ease,transform .8s ease; }
-  .hero-text.revealed { opacity: 1; transform: none; }
-  .headline { font-family: var(--font-display); font-size: clamp(2.5rem,10vw,6rem); font-weight: 400; letter-spacing: .06em; color: var(--charcoal); line-height: 1.0; margin-bottom: 1.25rem; }
-  .subtext { font-size: .875rem; color: var(--ink); line-height: 1.85; font-weight: 300; max-width: 480px; margin-bottom: 1rem; }
-  .promise { display: flex; align-items: center; gap: .5rem; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
-  .promise-dot { display: block; width: 5px; height: 5px; border-radius: 50%; background: #06C755; flex-shrink: 0; }
+  .head { padding: var(--section) var(--pad-x) 0; }
+  .head-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 12vw, 7rem);
+    font-weight: 400; letter-spacing: 0.04em;
+    color: var(--ink); line-height: 0.95;
+    margin-bottom: 1.5rem;
+  }
+  .head-sub {
+    font-size: 1rem; line-height: 1.85;
+    color: var(--ink-mid); font-weight: 300;
+    max-width: 480px; margin-bottom: 1rem;
+  }
+  .head-promise {
+    display: flex; align-items: center; gap: 0.55rem;
+    font-family: var(--font-mono); font-size: 0.58rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--navy); font-weight: 400;
+  }
+  .promise-dot {
+    display: block; width: 6px; height: 6px;
+    border-radius: 50%; background: var(--line-green); flex-shrink: 0;
+  }
 
-  /* Primary CTA */
-  .primary-cta { padding: 3rem 1.5rem; border-bottom: .5px solid var(--cream-dark); display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity .8s .1s ease,transform .8s .1s ease; }
-  .primary-cta.revealed { opacity: 1; transform: none; }
-  .cta-eyebrow { font-family: var(--font-body); font-size: .52rem; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
-  .btn-line { display: inline-flex; align-items: center; gap: .65rem; font-family: var(--font-body); font-size: .75rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: #1a1a1a; background: #06C755; padding: 1rem 2rem; transition: background .3s,transform .2s; }
-  .btn-line:hover { background: #05b34c; transform: translateY(-1px); }
-  .line-note { font-size: .58rem; color: var(--muted); letter-spacing: .08em; }
+  /* Primary Line CTA */
+  .primary {
+    padding: var(--section) var(--pad-x) 0;
+    display: flex; flex-direction: column; gap: 1.25rem;
+    align-items: flex-start;
+  }
+  .line-cta {
+    display: inline-flex; align-items: center; gap: 0.65rem;
+    font-family: var(--font-body); font-size: 0.72rem;
+    font-weight: 500; letter-spacing: 0.14em;
+    text-transform: uppercase; text-decoration: none;
+    color: var(--navy, #1A3A6B); background: transparent;
+    padding: 1.1rem 2.25rem;
+    border: 1.5px solid var(--navy, #1A3A6B);
+    transition: background 0.25s, color 0.25s, transform 0.15s;
+    white-space: nowrap;
+  }
+  .line-cta:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; }
+  .line-cta:active { transform: scale(0.98); }
+  .line-note {
+    font-family: var(--font-mono); font-size: 0.52rem;
+    letter-spacing: 0.14em; color: var(--ink-light);
+  }
 
-  /* Social grid */
-  .secondary { padding: 3rem 1.5rem; border-bottom: .5px solid var(--cream-dark); display: flex; flex-direction: column; gap: 1.5rem; opacity: 0; transform: translateY(20px); transition: opacity .8s .15s ease,transform .8s .15s ease; }
-  .secondary.revealed { opacity: 1; transform: none; }
-  .social-grid { display: flex; flex-direction: column; gap: 0; border-top: .5px solid var(--cream-dark); }
-  .social-card { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: .5px solid var(--cream-mid); text-decoration: none; color: inherit; transition: padding-left .25s; }
-  .social-card:hover { padding-left: .5rem; }
-  .social-platform { font-size: .55rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); width: 80px; flex-shrink: 0; }
-  .social-handle { font-family: var(--font-display); font-size: .9rem; color: var(--charcoal); flex: 1; transition: color .25s; }
-  .social-card:hover .social-handle { color: var(--gold); }
-  .social-arrow { color: var(--gold); font-size: .85rem; flex-shrink: 0; transition: transform .25s; }
-  .social-card:hover .social-arrow { transform: translateX(4px); }
-
-  /* Footer */
-  .footer { padding: 2rem 1.5rem; margin-top: auto; background: #191714; }
-  .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem; }
-  .footer-logo { font-family: var(--font-body); font-size: .78rem; font-weight: 500; letter-spacing: .14em; color: rgba(244,240,230,.3); }
-  .footer-logo em { font-style: normal; color: var(--gold); }
-  .footer-copy { font-size: .5rem; color: rgba(244,240,230,.12); letter-spacing: .1em; }
+  /* Social list */
+  .socials {
+    padding: var(--section) var(--pad-x) 0;
+    display: flex; flex-direction: column; gap: 1.5rem;
+    margin-bottom: var(--section);
+  }
+  .social-list { display: flex; flex-direction: column; }
+  .social-row {
+    display: flex; align-items: center; gap: 1rem;
+    padding: 1.1rem 0;
+    border-bottom: 0.5px solid rgba(26,26,26,0.07);
+    text-decoration: none; color: inherit;
+    transition: padding-left 0.2s;
+  }
+  .social-row:hover { padding-left: 0.5rem; }
+  .social-platform {
+    font-family: var(--font-mono); font-size: 0.52rem;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--ink-light); width: 90px; flex-shrink: 0;
+  }
+  .social-handle {
+    font-family: var(--font-display); font-size: 1rem;
+    color: var(--ink); flex: 1;
+    transition: color 0.2s;
+  }
+  .social-row:hover .social-handle { color: var(--navy); }
+  .social-arr {
+    font-size: 0.9rem; color: var(--navy); flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .social-row:hover .social-arr { transform: translateX(4px); }
 
   @media (min-width: 768px) {
-    .hero-text { padding: 6rem 4rem 3rem; }
-    .primary-cta { padding: 4rem; flex-direction: row; align-items: center; gap: 3rem; flex-wrap: wrap; }
-    .secondary { padding: 4rem; }
-    .social-grid { display: grid; grid-template-columns: repeat(2,1fr); }
-    .footer { padding: 2rem 4rem; }
+    .social-list { display: grid; grid-template-columns: repeat(2,1fr); }
   }
 </style>
 
 <script>
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('revealed');
-      io.unobserve(entry.target);
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('revealed');
+      io.unobserve(e.target);
     });
   }, { threshold: 0.06 });
   document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));

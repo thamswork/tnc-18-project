@@ -14,66 +14,56 @@ const services = allServices.sort((a, b) => a.data.order - b.data.order);
 
   <main class="main">
 
-    <!-- HERO STRIP -->
+    <!-- Hero -->
     <section class="hero">
       {pageData.hero_image
         ? <img src={pageData.hero_image} alt="" class="hero-img" />
-        : <div class="hero-fallback"></div>
+        : <div class="hero-ph"></div>
       }
-      <div class="hero-overlay"></div>
+      <div class="hero-veil"></div>
       <div class="hero-content">
         <h1 class="hero-title">{pageData.headline.toUpperCase()}</h1>
       </div>
     </section>
 
-    <!-- MISSION -->
+    <!-- Mission -->
     <section class="mission" data-reveal>
       <p class="mission-text">{pageData.mission}</p>
     </section>
 
-    <!-- BIO + STATS -->
+    <!-- Bio -->
     <section class="bio">
       <div class="bio-inner">
         <div class="bio-text" data-reveal>
           <p class="bio-p">{pageData.bio_1}</p>
           {pageData.bio_2 && <p class="bio-p">{pageData.bio_2}</p>}
         </div>
-        <div class="bio-aside">
-          {(pageData.owner_photo || pageData.owner_name) && (
+        <aside class="bio-side">
+          {pageData.owner_photo && (
             <div class="owner" data-reveal>
-              {pageData.owner_photo && (
-                <img src={pageData.owner_photo} alt={pageData.owner_name || 'Founding Partner'} class="owner-photo" />
-              )}
-              {pageData.owner_name && <p class="owner-name">{pageData.owner_name}</p>}
-              {pageData.owner_title && <p class="owner-title">{pageData.owner_title}</p>}
+              <img src={pageData.owner_photo} alt={pageData.owner_name || ''} class="owner-img" />
+              {pageData.owner_name  && <p class="owner-name">{pageData.owner_name}</p>}
+              {pageData.owner_title && <p class="owner-role">{pageData.owner_title}</p>}
             </div>
           )}
-          <div class="stats" data-reveal>
-            {pageData.years && (
-              <div class="stat">
-                <span class="stat-n">{pageData.years}</span>
-                <span class="stat-l">Years</span>
-              </div>
-            )}
-            {pageData.projects && (
-              <div class="stat">
-                <span class="stat-n">{pageData.projects}</span>
-                <span class="stat-l">Projects</span>
-              </div>
-            )}
-          </div>
-        </div>
+          {(pageData.years || pageData.projects) && (
+            <div class="stats" data-reveal>
+              {pageData.years    && <div class="stat"><span class="stat-n">{pageData.years}</span><span class="stat-l">Years</span></div>}
+              {pageData.projects && <div class="stat"><span class="stat-n">{pageData.projects}</span><span class="stat-l">Projects</span></div>}
+            </div>
+          )}
+        </aside>
       </div>
     </section>
 
-    <!-- SERVICES -->
+    <!-- Services -->
     <section class="services">
-      <header class="svc-header" data-reveal>
-        <span class="section-label">What We Do</span>
-      </header>
+      <div class="svc-head" data-reveal>
+        <span class="s-label">What We Do</span>
+      </div>
       <div class="svc-list">
         {services.map((s, i) => (
-          <div class="svc-row" data-reveal>
+          <div class="svc-row" data-reveal data-delay={String(i % 3)}>
             <span class="svc-n">0{s.data.order}</span>
             <div class="svc-body">
               <h3 class="svc-title">{s.data.title.toUpperCase()}</h3>
@@ -82,109 +72,184 @@ const services = allServices.sort((a, b) => a.data.order - b.data.order);
           </div>
         ))}
         {services.length === 0 && (
-          <p class="empty">Add services in the <a href="/admin">CMS</a>.</p>
+          <p class="svc-empty">Add services in the <a href="/admin">CMS</a>.</p>
         )}
       </div>
     </section>
 
-    <!-- LINE CTA -->
+    <!-- CTA -->
     <section class="cta" data-reveal>
-      <h2 class="cta-title">Work with us directly.</h2>
-      <p class="cta-sub">Senior partners. Fast turnaround. 24/7 support.</p>
-      {contactData.line && (
-        <a href={contactData.line} target="_blank" rel="noopener" class="btn-line">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M19.365 9.89c.5 0 .907.406.907.907s-.407.907-.907.907h-2.724v1.77h2.724c.5 0 .907.406.907.907s-.407.907-.907.907H15.73a.907.907 0 0 1-.907-.907V9.89c0-.5.406-.907.907-.907h3.636zm-5.453 0c.5 0 .907.406.907.907v4.491a.907.907 0 0 1-1.814 0V10.797a.907.907 0 0 1 .907-.907zm-2.198 0a.907.907 0 0 1 .736.378l2.33 3.176V10.8a.907.907 0 1 1 1.814 0v4.49a.907.907 0 0 1-.907.907.907.907 0 0 1-.735-.377l-2.33-3.177v2.647a.907.907 0 1 1-1.814 0v-4.49c0-.5.406-.907.906-.907zm-3.634 0c.5 0 .906.406.906.907v4.491a.907.907 0 0 1-1.813 0V10.797c0-.5.406-.907.907-.907zM12 2C6.477 2 2 6.108 2 11.148c0 4.515 3.564 8.292 8.37 9.006.325.07.77.214.882.49.1.252.065.647.032.9l-.143.855c-.043.253-.2 1-.876.547-.676-.454-3.647-2.146-4.98-3.627C3.576 17.21 2 14.315 2 11.148 2 6.108 6.477 2 12 2z"/>
-          </svg>
-          Message us on Line
-        </a>
-      )}
+      <div class="cta-inner">
+        <div>
+          <h2 class="cta-title">Work with us<br/>directly.</h2>
+          <p class="cta-sub">Senior partners. Fast turnaround. 24/7 support.</p>
+        </div>
+        {contactData.line && (
+          <a href={contactData.line} target="_blank" rel="noopener" class="cta-line-btn">
+            <span class="line-dot"></span>
+            Message on Line
+          </a>
+        )}
+      </div>
     </section>
 
   </main>
+
+  <footer class="site-footer">
+    <div class="site-footer-inner">
+      <div>
+        <span class="site-footer-logo">TNC<em>.</em>18</span>
+        <p class="site-footer-sub">Retail & Interior Design · Bangkok</p>
+      </div>
+      <nav class="site-footer-nav">
+        <a href="/">Home</a>
+        <a href="/portfolio">Work</a>
+        <a href="/contact">Contact</a>
+        {contactData.line && <a href={contactData.line} target="_blank" rel="noopener">Line OA</a>}
+      </nav>
+      <p class="site-footer-copy">© {new Date().getFullYear()} TNC.18.</p>
+    </div>
+  </footer>
 </Layout>
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .main { padding-top: 60px; background: var(--cream); min-height: 100vh; }
+  .main { padding-top: 64px; background: var(--bg); min-height: 100vh; }
 
   /* Hero */
-  .hero { position: relative; height: 45vw; min-height: 220px; max-height: 480px; overflow: hidden; background: var(--charcoal); }
-  .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: .45; }
-  .hero-fallback { position: absolute; inset: 0; background: linear-gradient(155deg,#3a3530,#1a1612); }
-  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top,rgba(20,18,15,.7) 0%,transparent 60%); }
-  .hero-content { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 2rem 1.5rem; }
-  .hero-title { font-family: var(--font-display); font-size: clamp(1.5rem,6vw,3rem); font-weight: 400; letter-spacing: .08em; color: var(--warm-white); line-height: 1.1; }
+  .hero {
+    position: relative; width: 100%;
+    height: 50vw; min-height: 260px; max-height: 520px;
+    overflow: hidden; background: #0a0c10;
+  }
+  .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.42; display: block; }
+  .hero-ph  { position: absolute; inset: 0; background: linear-gradient(155deg,#1a2a3e,#060810); }
+  .hero-veil { position: absolute; inset: 0; background: linear-gradient(to top,rgba(4,6,10,0.75) 0%,transparent 60%); }
+  .hero-content { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 2.5rem var(--pad-x); }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 6vw, 3.5rem);
+    font-weight: 400; letter-spacing: 0.08em;
+    color: #F8F7F4; line-height: 1.05;
+  }
 
   /* Mission */
-  .mission { padding: 3rem 1.5rem; border-bottom: .5px solid var(--cream-dark); opacity: 0; transform: translateY(20px); transition: opacity .8s ease,transform .8s ease; }
-  .mission.revealed { opacity: 1; transform: none; }
-  .mission-text { font-family: var(--font-display); font-size: clamp(1rem,3.5vw,1.5rem); font-weight: 400; letter-spacing: .04em; color: var(--charcoal); line-height: 1.55; max-width: 680px; }
+  .mission { padding: var(--section) var(--pad-x) 0; }
+  .mission-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 3vw, 1.75rem);
+    font-weight: 400; letter-spacing: 0.04em;
+    color: var(--ink); line-height: 1.65; max-width: 720px;
+  }
 
   /* Bio */
-  .bio { padding: 3rem 1.5rem; border-bottom: .5px solid var(--cream-dark); }
-  .bio-inner { display: flex; flex-direction: column; gap: 2.5rem; }
-  .bio-text { opacity: 0; transform: translateY(20px); transition: opacity .8s ease,transform .8s ease; }
-  .bio-text.revealed { opacity: 1; transform: none; }
-  .bio-p { font-size: .875rem; line-height: 1.9; color: var(--ink); font-weight: 300; margin-bottom: 1rem; max-width: 560px; }
+  .bio { padding: var(--section) var(--pad-x) 0; }
+  .bio-inner { display: flex; flex-direction: column; gap: 3rem; }
+  .bio-p {
+    font-size: 1rem; line-height: 1.9;
+    color: var(--ink-mid); font-weight: 300;
+    margin-bottom: 1.25rem; max-width: 560px;
+  }
   .bio-p:last-child { margin-bottom: 0; }
 
-  /* Owner — deliberately small */
-  .owner { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 2rem; opacity: 0; transform: translateY(16px); transition: opacity .7s ease,transform .7s ease; }
-  .owner.revealed { opacity: 1; transform: none; }
-  .owner-photo { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; filter: grayscale(20%); }
-  .owner-name { font-family: var(--font-display); font-size: .85rem; font-weight: 400; letter-spacing: .06em; color: var(--charcoal); margin-top: .25rem; }
-  .owner-title { font-size: .55rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+  .owner { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; }
+  .owner-img { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; }
+  .owner-name {
+    font-family: var(--font-display); font-size: 0.9rem;
+    letter-spacing: 0.06em; color: var(--ink); margin-top: 0.25rem;
+  }
+  .owner-role {
+    font-family: var(--font-mono); font-size: 0.52rem;
+    letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-light);
+  }
 
-  /* Stats */
-  .stats { display: flex; gap: 2.5rem; opacity: 0; transform: translateY(16px); transition: opacity .7s .1s ease,transform .7s .1s ease; }
-  .stats.revealed { opacity: 1; transform: none; }
-  .stat { display: flex; flex-direction: column; gap: .15rem; }
-  .stat-n { font-family: var(--font-display); font-size: 2rem; font-weight: 400; color: var(--charcoal); line-height: 1; }
-  .stat-l { font-size: .52rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+  .stats { display: flex; gap: 3rem; }
+  .stat { display: flex; flex-direction: column; gap: 0.15rem; }
+  .stat-n {
+    font-family: var(--font-display); font-size: 2.25rem;
+    font-weight: 400; color: var(--ink); line-height: 1;
+  }
+  .stat-l {
+    font-family: var(--font-mono); font-size: 0.5rem;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-light);
+  }
 
   /* Services */
-  .services { padding: 3rem 1.5rem; }
-  .svc-header { margin-bottom: 1.5rem; border-bottom: .5px solid var(--cream-dark); padding-bottom: .75rem; opacity: 0; transform: translateY(16px); transition: opacity .6s ease,transform .6s ease; }
-  .svc-header.revealed { opacity: 1; transform: none; }
-  .section-label { font-family: var(--font-body); font-size: .55rem; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
-  .svc-list { border-top: .5px solid var(--cream-dark); }
-  .svc-row { display: flex; gap: 1.25rem; padding: 1.25rem 0; border-bottom: .5px solid var(--cream-mid); align-items: flex-start; opacity: 0; transform: translateY(16px); transition: opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1); }
-  .svc-row.revealed { opacity: 1; transform: none; }
-  .svc-n { font-size: .52rem; color: var(--gold); font-weight: 500; letter-spacing: .14em; flex-shrink: 0; padding-top: .2rem; }
-  .svc-title { font-family: var(--font-display); font-size: clamp(.9rem,3vw,1.15rem); font-weight: 400; letter-spacing: .06em; color: var(--charcoal); margin-bottom: .35rem; }
-  .svc-desc { font-size: .78rem; line-height: 1.75; color: var(--ink); font-weight: 300; max-width: 480px; }
-  .empty { font-size: .8rem; color: var(--muted); padding: 2rem 0; }
-  .empty a { color: var(--gold); text-decoration: none; }
+  .services { padding: var(--section) var(--pad-x) 0; }
+  .svc-head { padding-bottom: 1.5rem; border-bottom: 0.5px solid rgba(26,26,26,0.1); margin-bottom: 0; }
+  .svc-list { border-top: none; }
+  .svc-row {
+    display: flex; gap: 1.5rem; padding: 1.75rem 0;
+    border-bottom: 0.5px solid rgba(26,26,26,0.07);
+    align-items: flex-start;
+  }
+  .svc-n {
+    font-family: var(--font-mono); font-size: 0.52rem;
+    color: var(--navy); letter-spacing: 0.14em; flex-shrink: 0; padding-top: 0.2rem;
+  }
+  .svc-title {
+    font-family: var(--font-display);
+    font-size: clamp(0.95rem, 2.5vw, 1.25rem);
+    font-weight: 400; letter-spacing: 0.08em;
+    color: var(--ink); margin-bottom: 0.45rem;
+  }
+  .svc-desc {
+    font-size: 0.88rem; line-height: 1.85;
+    color: var(--ink-light); font-weight: 300; max-width: 480px;
+  }
+  .svc-empty { font-size: 0.875rem; color: var(--ink-light); padding: 2rem 0; }
+  .svc-empty a { color: var(--navy); text-decoration: none; }
 
   /* CTA */
-  .cta { padding: 4rem 1.5rem; background: var(--charcoal); display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; opacity: 0; transform: translateY(24px); transition: opacity .8s ease,transform .8s ease; }
-  .cta.revealed { opacity: 1; transform: none; }
-  .cta-title { font-family: var(--font-display); font-size: clamp(1.25rem,5vw,2rem); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--warm-white); }
-  .cta-sub { font-size: .78rem; color: rgba(244,240,230,.42); font-weight: 300; line-height: 1.7; }
-  .btn-line { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--font-body); font-size: .65rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: #1a1a1a; background: #06C755; padding: .75rem 1.4rem; transition: background .3s; margin-top: .5rem; }
-  .btn-line:hover { background: #05b34c; }
+  .cta {
+    background: var(--navy-deep);
+    padding: var(--section) var(--pad-x);
+    margin-top: var(--section);
+  }
+  .cta-inner {
+    display: flex; flex-direction: column; gap: 2.5rem;
+    align-items: flex-start; max-width: 800px;
+  }
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 400; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #F8F7F4; line-height: 1.05;
+    margin-bottom: 0.85rem;
+  }
+  .cta-sub {
+    font-size: 0.9rem; color: rgba(248,247,244,0.4);
+    line-height: 1.85; font-weight: 300;
+  }
+  .cta-line-btn {
+    display: inline-flex; align-items: center; gap: 0.65rem;
+    font-family: var(--font-body); font-size: 0.65rem;
+    font-weight: 500; letter-spacing: 0.16em;
+    text-transform: uppercase; text-decoration: none;
+    color: #F8F7F4; background: transparent;
+    padding: 0.9rem 1.8rem;
+    border: 1px solid rgba(248,247,244,0.35);
+    transition: background 0.25s, border-color 0.25s;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .cta-line-btn:hover { background: rgba(248,247,244,0.1); border-color: rgba(248,247,244,0.65); }
 
   @media (min-width: 768px) {
-    .hero-content { padding: 3rem 4rem; }
-    .mission { padding: 4rem; }
-    .bio { padding: 4rem; }
-    .bio-inner { flex-direction: row; gap: 5rem; align-items: flex-start; }
-    .bio-text { flex: 1; }
-    .bio-aside { width: 200px; flex-shrink: 0; }
-    .services { padding: 4rem; }
-    .cta { padding: 5rem 4rem; }
+    .bio-inner { flex-direction: row; gap: 6rem; align-items: flex-start; }
+    .bio-text  { flex: 1; }
+    .bio-side  { width: 220px; flex-shrink: 0; }
+    .cta-inner { flex-direction: row; align-items: center; justify-content: space-between; gap: 5rem; }
   }
 </style>
 
 <script>
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('revealed');
-      io.unobserve(entry.target);
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('revealed');
+      io.unobserve(e.target);
     });
-  }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+  }, { threshold: 0.06 });
   document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
 </script>
