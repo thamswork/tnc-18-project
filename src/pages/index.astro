@@ -342,14 +342,15 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
     letter-spacing: 0.34em; text-transform: uppercase;
     color: rgba(248,247,244,0.4); margin-bottom: 1.25rem;
   }
+  .hero-content-wrap { background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%); }
   .hero-title {
     font-family: var(--font-display,'Tenor Sans',serif);
     font-size: clamp(1.75rem,5vw,3.5rem); font-weight: 400;
     letter-spacing: 0.03em; text-transform: uppercase;
     line-height: 1.1; display: flex; flex-direction: column; margin-bottom: 2rem; align-items: center; text-align: center;
   }
-  .ht-1 { color: #F8F7F4; }
-  .ht-2 { color: rgba(248,247,244,0.22); }
+  .ht-1 { color: #F8F7F4; text-shadow: 0 2px 24px rgba(0,0,0,0.7), 0 1px 4px rgba(0,0,0,0.9); }
+  .ht-2 { color: rgba(248,247,244,0.35); text-shadow: 0 2px 24px rgba(0,0,0,0.7); }
   .hero-more {
     display: inline-flex; align-items: center; gap: 0.75rem;
     font-family: 'Courier New',monospace; font-size: 0.62rem;
@@ -595,11 +596,11 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
     letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink,#1A1A1A);
   }
   .ig-follow {
-    display: flex; align-items: center; gap: 0.5rem;
+    display: flex; align-items: center; gap: 0.5rem; flex-wrap: nowrap; white-space: nowrap;
   }
   .ig-follow-label {
-    font-family: 'Courier New',monospace; font-size: 0.56rem;
-    letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-light,#6B6B6B);
+    font-family: 'Courier New',monospace; font-size: 0.52rem;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-light,#6B6B6B);
   }
   .ig-follow svg { color: var(--ink-light,#6B6B6B); width:16px; height:16px; flex-shrink:0; }
   .ig-handle {
