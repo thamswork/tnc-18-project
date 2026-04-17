@@ -88,8 +88,8 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
     {contactData.line && (
       <div class="page-cta" data-reveal>
         <h2 class="cta-q">Have a project in mind?</h2>
-        <a href={contactData.line} target="_blank" rel="noopener" class="btn-ghost">
-          <span class="line-dot" style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#06C755;margin-right:0.5rem;flex-shrink:0;"></span>
+        <a href={contactData.line} target="_blank" rel="noopener" class="cta-line-btn">
+          <span class="cta-dot"></span>
           Message on Line
         </a>
       </div>
@@ -200,10 +200,13 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
   .proj-item.hidden { display: none; }
 
   .proj-link {
-    display: block;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
     text-decoration: none;
     color: inherit;
-    padding: 2rem var(--pad-x);
+    padding: 2.5rem var(--pad-x);
   }
 
   /* Image */
@@ -212,7 +215,7 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
     width: 100%;
     overflow: hidden;
     background: var(--bg-dark);
-    aspect-ratio: 16/7;
+    aspect-ratio: 3/2;
     margin-bottom: 1.75rem;
   }
 
@@ -257,8 +260,7 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
   .proj-info {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
-    max-width: 680px;
+    gap: 0.75rem;
   }
 
   .proj-meta {
@@ -321,12 +323,14 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
 
   /* Bottom CTA */
   .page-cta {
-    padding: 6rem var(--pad-x);
+    padding: 5rem var(--pad-x);
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    align-items: flex-start;
+    gap: 1.75rem;
+    align-items: center;
+    text-align: center;
     border-top: 0.5px solid rgba(26,26,26,0.07);
+    background: var(--bg-dark, #EFEDE8);
   }
 
   .cta-q {
@@ -339,12 +343,32 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
   }
 
   @media (min-width: 768px) {
-    .page-hero { flex-direction: row; align-items: flex-end; justify-content: space-between; padding: 7rem var(--pad-x) 3rem; }
-    .page-hero-inner { flex: 1; }
-    .page-filters { flex-direction: column; align-items: flex-end; flex-shrink: 0; gap: 0.5rem; }
-    .filter-btn { padding: 0.25rem 0 0.25rem 1.5rem; text-align: right; }
-    .filter-btn::after { bottom: auto; top: 50%; left: 0; right: auto; width: 100%; height: 1px; transform: scaleX(0); }
-    .filter-btn.active::after { transform: scaleX(1); }
+    .page-hero { padding: 7rem var(--pad-x) 3rem; }
+    .proj-link { grid-template-columns: 55% 1fr; gap: 4rem; }
+  }
+  .cta-line-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--navy, #1A3A6B);
+    background: transparent;
+    padding: 0.9rem 2rem;
+    border: 1.5px solid var(--navy, #1A3A6B);
+    transition: background 0.25s, color 0.25s;
+  }
+  .cta-line-btn:hover { background: var(--navy, #1A3A6B); color: #fff; }
+  .cta-dot {
+    display: block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #06C755;
+    flex-shrink: 0;
   }
 </style>
 
