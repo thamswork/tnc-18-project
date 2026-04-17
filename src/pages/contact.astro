@@ -3,75 +3,119 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import contactData from '../content/settings/contact.json';
 import pageData    from '../content/pages/contact.json';
+
+const igHandle = (contactData.instagram || '')
+  .replace('https://www.instagram.com/','@')
+  .replace('https://instagram.com/','@');
+
+const ttHandle = (contactData.tiktok || '')
+  .replace('https://www.tiktok.com/','')
+  .replace('https://tiktok.com/','');
 ---
 
 <Layout title="Contact — TNC.18">
   <Navbar />
 
-  <main class="main">
+  <main class="contact-main">
 
-    <!-- Headline -->
-    <section class="head" data-reveal>
-      <h1 class="head-title">{pageData.headline.toUpperCase()}</h1>
-      {pageData.subtext && <p class="head-sub">{pageData.subtext}</p>}
-      {pageData.promise && (
-        <p class="head-promise">
-          <span class="promise-dot"></span>
-          {pageData.promise}
-        </p>
-      )}
-    </section>
+    <div class="contact-grid">
 
-    <!-- Line OA — primary -->
-    {contactData.line && (
-      <section class="primary" data-reveal>
-        <span class="s-label">Primary Contact</span>
-        <a href={contactData.line} target="_blank" rel="noopener" class="line-cta">
-          <span class="line-dot"></span>
-          {pageData.line_label || 'Message us on Line'}
-        </a>
-        <p class="line-note">{pageData.promise || 'Fastest response guaranteed.'}</p>
-      </section>
-    )}
+      <!-- LEFT: headline + Line CTA -->
+      <div class="contact-left">
+        <div class="contact-left-inner">
+          <p class="contact-eyebrow">Get In Touch</p>
+          <h1 class="contact-title">{pageData.headline.toUpperCase()}</h1>
+          {pageData.subtext && (
+            <p class="contact-sub">{pageData.subtext}</p>
+          )}
 
-    <!-- Social links -->
-    <section class="socials" data-reveal>
-      <span class="s-label">Also Find Us</span>
-      <div class="social-list">
-        {contactData.instagram && (
-          <a href={contactData.instagram} target="_blank" rel="noopener" class="social-row">
-            <span class="social-platform">Instagram</span>
-            <span class="social-handle">
-              {contactData.instagram.replace('https://instagram.com/','@').replace('https://www.instagram.com/','@')}
-            </span>
-            <span class="social-arr">→</span>
-          </a>
-        )}
-        {contactData.tiktok && (
-          <a href={contactData.tiktok} target="_blank" rel="noopener" class="social-row">
-            <span class="social-platform">TikTok</span>
-            <span class="social-handle">
-              {contactData.tiktok.replace('https://tiktok.com/','').replace('https://www.tiktok.com/','')}
-            </span>
-            <span class="social-arr">→</span>
-          </a>
-        )}
-        {contactData.email && (
-          <a href={`mailto:${contactData.email}`} class="social-row">
-            <span class="social-platform">Email</span>
-            <span class="social-handle">{contactData.email}</span>
-            <span class="social-arr">→</span>
-          </a>
-        )}
-        {contactData.phone && (
-          <a href={`tel:${contactData.phone.replace(/\s/g,'')}`} class="social-row">
-            <span class="social-platform">Phone</span>
-            <span class="social-handle">{contactData.phone}</span>
-            <span class="social-arr">→</span>
-          </a>
-        )}
+          {contactData.line && (
+            <a href={contactData.line} target="_blank" rel="noopener" class="btn-line">
+              <span class="line-dot"></span>
+              {pageData.line_label || 'Message us on Line'}
+            </a>
+          )}
+
+          {pageData.promise && (
+            <p class="contact-promise">
+              <span class="promise-dot"></span>
+              {pageData.promise}
+            </p>
+          )}
+        </div>
       </div>
-    </section>
+
+      <!-- RIGHT: dark navy contact channels -->
+      <div class="contact-right">
+        <div class="contact-right-inner">
+
+          <p class="right-label">Also Find Us</p>
+
+          <div class="channel-list">
+
+            {contactData.instagram && (
+              <a href={contactData.instagram} target="_blank" rel="noopener" class="channel-row">
+                <div class="channel-meta">
+                  <span class="channel-platform">Instagram</span>
+                  <span class="channel-handle">{igHandle}</span>
+                </div>
+                <span class="channel-arr">→</span>
+              </a>
+            )}
+
+            {contactData.tiktok && (
+              <a href={contactData.tiktok} target="_blank" rel="noopener" class="channel-row">
+                <div class="channel-meta">
+                  <span class="channel-platform">TikTok</span>
+                  <span class="channel-handle">{ttHandle}</span>
+                </div>
+                <span class="channel-arr">→</span>
+              </a>
+            )}
+
+            {contactData.facebook && (
+              <a href={contactData.facebook} target="_blank" rel="noopener" class="channel-row">
+                <div class="channel-meta">
+                  <span class="channel-platform">Facebook</span>
+                  <span class="channel-handle">TNC.18</span>
+                </div>
+                <span class="channel-arr">→</span>
+              </a>
+            )}
+
+            {contactData.email && (
+              <a href={`mailto:${contactData.email}`} class="channel-row">
+                <div class="channel-meta">
+                  <span class="channel-platform">Email</span>
+                  <span class="channel-handle">{contactData.email}</span>
+                </div>
+                <span class="channel-arr">→</span>
+              </a>
+            )}
+
+            {contactData.phone && (
+              <a href={`tel:${contactData.phone.replace(/\s/g,'')}`} class="channel-row">
+                <div class="channel-meta">
+                  <span class="channel-platform">Phone</span>
+                  <span class="channel-handle">{contactData.phone}</span>
+                </div>
+                <span class="channel-arr">→</span>
+              </a>
+            )}
+
+          </div>
+
+          <!-- Studio address block -->
+          <div class="studio-block">
+            <p class="studio-label">Studio</p>
+            <p class="studio-address">Bangkok, Thailand</p>
+            <p class="studio-hours">Mon – Sat · 09:00 – 18:00</p>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
 
   </main>
 
@@ -89,94 +133,258 @@ import pageData    from '../content/pages/contact.json';
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .main {
-    padding-top: 64px; background: var(--bg);
-    min-height: 100vh; display: flex; flex-direction: column;
+  .contact-main {
+    padding-top: 64px;
+    min-height: calc(100vh - 64px);
+    background: var(--bg, #F8F7F4);
   }
 
-  /* Headline */
-  .head { padding: var(--section) var(--pad-x) 0; }
-  .head-title {
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 12vw, 7rem);
-    font-weight: 400; letter-spacing: 0.04em;
-    color: var(--ink); line-height: 0.95;
-    margin-bottom: 1.5rem;
-  }
-  .head-sub {
-    font-size: 1rem; line-height: 1.85;
-    color: var(--ink-mid); font-weight: 300;
-    max-width: 480px; margin-bottom: 1rem;
-  }
-  .head-promise {
-    display: flex; align-items: center; gap: 0.55rem;
-    font-family: var(--font-mono); font-size: 0.58rem;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--navy); font-weight: 400;
-  }
-  .promise-dot {
-    display: block; width: 6px; height: 6px;
-    border-radius: 50%; background: var(--line-green); flex-shrink: 0;
+  /* ── SPLIT GRID ── */
+  .contact-grid {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 64px);
   }
 
-  /* Primary Line CTA */
-  .primary {
-    padding: var(--section) var(--pad-x) 0;
-    display: flex; flex-direction: column; gap: 1.25rem;
-    align-items: flex-start;
+  /* ── LEFT ── */
+  .contact-left {
+    background: var(--bg, #F8F7F4);
+    display: flex;
+    align-items: center;
+    padding: 5rem var(--pad-x, 5vw);
   }
-  .line-cta {
-    display: inline-flex; align-items: center; gap: 0.65rem;
-    font-family: var(--font-body); font-size: 0.72rem;
-    font-weight: 500; letter-spacing: 0.14em;
-    text-transform: uppercase; text-decoration: none;
-    color: var(--navy, #1A3A6B); background: transparent;
-    padding: 1.1rem 2.25rem;
+
+  .contact-left-inner {
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .contact-eyebrow {
+    font-family: 'Courier New', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--navy, #1A3A6B);
+  }
+
+  .contact-title {
+    font-family: var(--font-display, 'Tenor Sans', serif);
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: var(--ink, #1A1A1A);
+    line-height: 0.95;
+  }
+
+  .contact-sub {
+    font-size: 0.95rem;
+    line-height: 1.9;
+    color: var(--ink-mid, #4A4A4A);
+    font-weight: 300;
+    max-width: 400px;
+  }
+
+  .btn-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--navy, #1A3A6B);
+    background: transparent;
+    padding: 1rem 2rem;
     border: 1.5px solid var(--navy, #1A3A6B);
-    transition: background 0.25s, color 0.25s, transform 0.15s;
-    white-space: nowrap;
+    transition: background 0.25s, color 0.25s;
+    align-self: flex-start;
   }
-  .line-cta:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; }
-  .line-cta:active { transform: scale(0.98); }
-  .line-note {
-    font-family: var(--font-mono); font-size: 0.52rem;
-    letter-spacing: 0.14em; color: var(--ink-light);
+  .btn-line:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; }
+
+  .line-dot {
+    display: block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #06C755;
+    flex-shrink: 0;
   }
 
-  /* Social list */
-  .socials {
-    padding: var(--section) var(--pad-x) 0;
-    display: flex; flex-direction: column; gap: 1.5rem;
-    margin-bottom: var(--section);
+  .contact-promise {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-light, #6B6B6B);
   }
-  .social-list { display: flex; flex-direction: column; }
-  .social-row {
-    display: flex; align-items: center; gap: 1rem;
-    padding: 1.1rem 0;
-    border-bottom: 0.5px solid rgba(26,26,26,0.07);
-    text-decoration: none; color: inherit;
+
+  .promise-dot {
+    display: block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #06C755;
+    flex-shrink: 0;
+  }
+
+  /* ── RIGHT ── */
+  .contact-right {
+    background: var(--navy-deep, #0E2140);
+    display: flex;
+    align-items: flex-start;
+    padding: 5rem var(--pad-x, 5vw);
+  }
+
+  .contact-right-inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .right-label {
+    font-family: 'Courier New', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(248,247,244,0.3);
+  }
+
+  /* Channel rows */
+  .channel-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .channel-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 0;
+    border-bottom: 0.5px solid rgba(248,247,244,0.08);
+    text-decoration: none;
+    color: inherit;
     transition: padding-left 0.2s;
   }
-  .social-row:hover { padding-left: 0.5rem; }
-  .social-platform {
-    font-family: var(--font-mono); font-size: 0.52rem;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--ink-light); width: 90px; flex-shrink: 0;
+  .channel-row:first-child { border-top: 0.5px solid rgba(248,247,244,0.08); }
+  .channel-row:hover { padding-left: 0.5rem; }
+
+  .channel-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
   }
-  .social-handle {
-    font-family: var(--font-display); font-size: 1rem;
-    color: var(--ink); flex: 1;
+
+  .channel-platform {
+    font-family: 'Courier New', monospace;
+    font-size: 0.48rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(248,247,244,0.35);
+  }
+
+  .channel-handle {
+    font-family: var(--font-display, 'Tenor Sans', serif);
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    color: rgba(248,247,244,0.9);
     transition: color 0.2s;
   }
-  .social-row:hover .social-handle { color: var(--navy); }
-  .social-arr {
-    font-size: 0.9rem; color: var(--navy); flex-shrink: 0;
-    transition: transform 0.2s;
-  }
-  .social-row:hover .social-arr { transform: translateX(4px); }
+  .channel-row:hover .channel-handle { color: #F8F7F4; }
 
+  .channel-arr {
+    font-size: 1rem;
+    color: rgba(248,247,244,0.25);
+    transition: transform 0.2s, color 0.2s;
+    flex-shrink: 0;
+  }
+  .channel-row:hover .channel-arr { transform: translateX(5px); color: rgba(248,247,244,0.7); }
+
+  /* Studio block */
+  .studio-block {
+    padding-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .studio-label {
+    font-family: 'Courier New', monospace;
+    font-size: 0.48rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: rgba(248,247,244,0.3);
+    margin-bottom: 0.25rem;
+  }
+
+  .studio-address {
+    font-family: var(--font-display, 'Tenor Sans', serif);
+    font-size: 1.1rem;
+    color: rgba(248,247,244,0.6);
+  }
+
+  .studio-hours {
+    font-family: 'Courier New', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    color: rgba(248,247,244,0.25);
+  }
+
+  /* Footer */
+  .site-footer {
+    background: #080e1a;
+    border-top: 0.5px solid rgba(248,247,244,0.05);
+    padding: 2rem var(--pad-x, 5vw);
+  }
+  .site-footer-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .site-footer-logo {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    color: rgba(248,247,244,0.25);
+  }
+  .site-footer-logo em { font-style: normal; color: rgba(248,247,244,0.5); }
+  .site-footer-sub {
+    font-size: 0.48rem;
+    letter-spacing: 0.12em;
+    color: rgba(248,247,244,0.12);
+    margin-top: 0.2rem;
+  }
+  .site-footer-copy {
+    font-size: 0.45rem;
+    letter-spacing: 0.1em;
+    color: rgba(248,247,244,0.1);
+  }
+
+  /* ── DESKTOP: true split ── */
   @media (min-width: 768px) {
-    .social-list { display: grid; grid-template-columns: repeat(2,1fr); }
+    .contact-grid {
+      flex-direction: row;
+      min-height: calc(100vh - 64px);
+    }
+    .contact-left {
+      flex: 1;
+      padding: 8rem 6vw 8rem 8vw;
+      align-items: center;
+    }
+    .contact-right {
+      width: 42%;
+      flex-shrink: 0;
+      padding: 8rem 6vw 8rem 5vw;
+      align-items: flex-start;
+      min-height: 100%;
+    }
   }
 </style>
 
