@@ -138,9 +138,22 @@ const { Content } = await render(project);
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-      <span class="footer-logo">TNC<em>.</em>18</span>
-      <p class="footer-copy">© {new Date().getFullYear()} TNC.18 · Bangkok</p>
+    <footer class="site-footer">
+      <div class="site-footer-inner">
+        <div class="site-footer-brand">
+          <span class="site-footer-logo">TNC<em>.</em>18</span>
+          <p class="site-footer-sub">Retail & Interior Design · Bangkok</p>
+        </div>
+        <nav class="site-footer-nav">
+          <a href="/portfolio">Work</a>
+          <a href="/about-services">Studio</a>
+          <a href="/contact">Contact</a>
+        </nav>
+        <div class="site-footer-legal">
+          <p class="site-footer-copy">© {new Date().getFullYear()} TNC.18</p>
+          <p class="site-footer-copy">Bangkok, Thailand</p>
+        </div>
+      </div>
     </footer>
 
   </main>
@@ -407,26 +420,7 @@ const { Content } = await render(project);
   }
   .back-link:hover { color: rgba(244,240,230,.75); }
 
-  /* ── FOOTER ── */
-  .footer {
-    background: #0b1220;
-    border-top: .5px solid rgba(244,240,230,.05);
-    padding: 2rem 5%;
-    display: flex; justify-content: space-between;
-    align-items: center; flex-wrap: wrap; gap: .5rem;
-  }
 
-  .footer-logo {
-    font-family: var(--font-body); font-size: .8rem;
-    font-weight: 600; letter-spacing: .18em;
-    color: rgba(244,240,230,.28);
-  }
-  .footer-logo em { font-style: normal; color: rgba(244,240,230,.65); }
-
-  .footer-copy {
-    font-size: .48rem; color: rgba(244,240,230,.12);
-    letter-spacing: .1em;
-  }
 
   /* ── DESKTOP ── */
   @media (min-width: 768px) {

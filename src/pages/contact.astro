@@ -121,11 +121,19 @@ const ttHandle = (contactData.tiktok || '')
 
   <footer class="site-footer">
     <div class="site-footer-inner">
-      <div>
+      <div class="site-footer-brand">
         <span class="site-footer-logo">TNC<em>.</em>18</span>
         <p class="site-footer-sub">Retail & Interior Design · Bangkok</p>
       </div>
-      <p class="site-footer-copy">© {new Date().getFullYear()} TNC.18.</p>
+      <nav class="site-footer-nav">
+        <a href="/portfolio">Work</a>
+        <a href="/about-services">Studio</a>
+        <a href="/contact">Contact</a>
+      </nav>
+      <div class="site-footer-legal">
+        <p class="site-footer-copy">© {new Date().getFullYear()} TNC.18</p>
+        <p class="site-footer-copy">Bangkok, Thailand</p>
+      </div>
     </div>
   </footer>
 </Layout>
@@ -248,11 +256,12 @@ const ttHandle = (contactData.tiktok || '')
   }
 
   .right-label {
-    font-family: 'Courier New', monospace;
-    font-size: 0.52rem;
-    letter-spacing: 0.28em;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.68rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(248,247,244,0.3);
+    color: rgba(248,247,244,0.45);
+    font-weight: 500;
   }
 
   /* Channel rows */
@@ -281,18 +290,20 @@ const ttHandle = (contactData.tiktok || '')
   }
 
   .channel-platform {
-    font-family: 'Courier New', monospace;
-    font-size: 0.52rem;
-    letter-spacing: 0.22em;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(248,247,244,0.55);
+    color: rgba(248,247,244,0.5);
+    font-weight: 500;
   }
 
   .channel-handle {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-size: clamp(1.25rem, 2.5vw, 1.65rem);
     color: #F8F7F4;
     font-weight: 400;
+    letter-spacing: 0.02em;
     transition: color 0.2s;
   }
   .channel-row:hover .channel-handle { color: #F8F7F4; }
@@ -335,38 +346,7 @@ const ttHandle = (contactData.tiktok || '')
     color: rgba(248,247,244,0.25);
   }
 
-  /* Footer */
-  .site-footer {
-    background: #080e1a;
-    border-top: 0.5px solid rgba(248,247,244,0.05);
-    padding: 2rem var(--pad-x, 5vw);
-  }
-  .site-footer-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  .site-footer-logo {
-    font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    color: rgba(248,247,244,0.25);
-  }
-  .site-footer-logo em { font-style: normal; color: rgba(248,247,244,0.5); }
-  .site-footer-sub {
-    font-size: 0.48rem;
-    letter-spacing: 0.12em;
-    color: rgba(248,247,244,0.12);
-    margin-top: 0.2rem;
-  }
-  .site-footer-copy {
-    font-size: 0.45rem;
-    letter-spacing: 0.1em;
-    color: rgba(248,247,244,0.1);
-  }
+
 
   /* ── DESKTOP: true split ── */
   @media (min-width: 768px) {

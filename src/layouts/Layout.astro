@@ -135,58 +135,75 @@ const { title, description = 'TNC.18 — Retail & Interior Design, Bangkok Thail
   /* ── Shared footer ── */
   .site-footer {
     background: var(--navy-deep);
-    padding: 3rem var(--pad-x);
+    padding: 4rem var(--pad-x) 3rem;
+    border-top: 0.5px solid rgba(255,255,255,0.06);
   }
   .site-footer-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
   }
+  /* Brand col */
+  .site-footer-brand {}
   .site-footer-logo {
     font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    color: rgba(255,255,255,0.3);
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    color: rgba(255,255,255,0.55);
     display: block;
-    margin-bottom: 0.2rem;
-  }
-  .site-footer-logo em { font-style: normal; color: rgba(255,255,255,0.65); }
-  .site-footer-sub {
-    font-family: var(--font-mono);
-    font-size: 0.5rem;
-    letter-spacing: 0.18em;
+    margin-bottom: 0.5rem;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.15);
   }
+  .site-footer-logo em { font-style: normal; color: #fff; }
+  .site-footer-sub {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.35);
+    line-height: 1.6;
+  }
+  /* Nav col */
   .site-footer-nav {
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem 2rem;
+    flex-direction: column;
+    gap: 0.9rem;
   }
   .site-footer-nav a {
-    font-family: var(--font-mono);
-    font-size: 0.54rem; white-space: nowrap;
-    letter-spacing: 0.16em;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.22);
+    color: rgba(255,255,255,0.45);
     text-decoration: none;
     transition: color 0.2s;
+    white-space: nowrap;
   }
-  .site-footer-nav a:hover { color: rgba(255,255,255,0.75); }
+  .site-footer-nav a:hover { color: #fff; }
+  /* Legal col */
+  .site-footer-legal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
   .site-footer-copy {
-    font-family: var(--font-mono);
-    font-size: 0.46rem;
-    color: rgba(255,255,255,0.1);
-    letter-spacing: 0.12em;
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.25);
+    letter-spacing: 0.04em;
+    line-height: 1.6;
   }
   @media (min-width: 768px) {
     .site-footer-inner {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      align-items: start;
+      gap: 4rem;
+    }
+    .site-footer-nav {
+      flex-direction: column;
     }
   }
 
