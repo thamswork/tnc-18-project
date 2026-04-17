@@ -203,7 +203,7 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
     display: block;
     text-decoration: none;
     color: inherit;
-    padding: 3rem var(--pad-x);
+    padding: 2rem var(--pad-x);
   }
 
   /* Image */
@@ -293,23 +293,23 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
 
   .proj-name {
     font-family: var(--font-display);
-    font-size: clamp(1.35rem, 3vw, 2rem);
+    font-size: clamp(1rem, 2vw, 1.35rem);
     font-weight: 400;
     letter-spacing: 0.05em;
     text-transform: uppercase;
     color: var(--ink);
-    line-height: 1.1;
+    line-height: 1.15;
     transition: color 0.2s;
   }
   .proj-link:hover .proj-name { color: var(--navy); }
 
   .proj-desc {
-    font-size: 0.88rem;
-    line-height: 1.85;
+    font-size: 0.78rem;
+    line-height: 1.8;
     color: var(--ink-light);
     font-weight: 300;
-    max-width: 560px;
-    margin-top: 0.25rem;
+    max-width: 480px;
+    margin-top: 0.2rem;
   }
 
   .proj-empty {
