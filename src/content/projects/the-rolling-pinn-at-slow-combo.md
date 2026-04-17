@@ -7,6 +7,11 @@ location: Slow Combo, Samyan
 size: 15 sq.m.
 cover: https://res.cloudinary.com/dynjnftnu/image/upload/v1776437277/FenderFoto-09282_lpd0hl.jpg
 media_type: photo
+gallery:
+  - https://res.cloudinary.com/dynjnftnu/image/upload/v1776437273/FenderFoto-09288_uj33lh.jpg
+  - https://res.cloudinary.com/dynjnftnu/image/upload/v1776437255/FenderFoto-09300_ullwhc.jpg
+  - https://res.cloudinary.com/dynjnftnu/image/upload/v1776437256/FenderFoto-09294_rkdjuh.jpg
+  - https://res.cloudinary.com/dynjnftnu/image/upload/v1776437268/FenderFoto-09292_lnc3gw.jpg
 description: A vibrant pop-up experience bringing The Rolling Pinn’s signature
   "naughty" treats to the creative hub of Slow Combo. The design focuses on
   high-impact branding within a compact footprint, utilizing the brand's iconic
