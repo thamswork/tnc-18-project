@@ -745,8 +745,16 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
     function visibleCards() {
       return Array.from(track.querySelectorAll<HTMLElement>('.works-card:not(.hidden)'));
     }
-    function cw() { return (visibleCards()[0]?.offsetWidth || 0) + 3; }
-    function maxIdx() { return Math.max(0, visibleCards().length - Math.round(wrap.offsetWidth / cw())); }
+    function cw() {
+      const card = visibleCards()[0];
+      if (!card) return 0;
+      return card.getBoundingClientRect().width + 3;
+    }
+    function maxIdx() {
+      const w = cw();
+      if (!w) return 0;
+      return Math.max(0, visibleCards().length - Math.floor(wrap.offsetWidth / w));
+    }
 
     function buildDots() {
       dotsWrap.innerHTML = '';
