@@ -1,6 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
+import Footer from '../../components/Footer.astro';
 import { getCollection, render } from 'astro:content';
 import contactData from '../../content/settings/contact.json';
 
@@ -138,23 +139,7 @@ const { Content } = await render(project);
     </section>
 
     <!-- Footer -->
-    <footer class="site-footer">
-      <div class="site-footer-inner">
-        <div class="site-footer-brand">
-          <span class="site-footer-logo">TNC<em>.</em>18</span>
-          <p class="site-footer-sub">Retail & Interior Design · Bangkok</p>
-        </div>
-        <nav class="site-footer-nav">
-          <a href="/portfolio">Work</a>
-          <a href="/about-services">Studio</a>
-          <a href="/contact">Contact</a>
-        </nav>
-        <div class="site-footer-legal">
-          <p class="site-footer-copy">© {new Date().getFullYear()} TNC.18</p>
-          <p class="site-footer-copy">Bangkok, Thailand</p>
-        </div>
-      </div>
-    </footer>
+    <Footer />
 
   </main>
 </Layout>

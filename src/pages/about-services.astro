@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
 import { getCollection } from 'astro:content';
 import contactData from '../content/settings/contact.json';
 import pageData from '../content/pages/about-services.json';
@@ -114,24 +115,7 @@ const services = allServices.sort((a, b) => a.data.order - b.data.order);
 
   </main>
 
-  <footer class="site-footer">
-    <div class="site-footer-inner">
-      <div class="footer-brand">
-        <span class="site-footer-logo">TNC<em>.</em>18</span>
-        <p class="site-footer-sub">Retail & Interior Design · Bangkok</p>
-      </div>
-      <nav class="site-footer-nav">
-        <a href="/">Home</a>
-        <a href="/portfolio">Work</a>
-        <a href="/about-services">Studio</a>
-        <a href="/contact">Contact</a>
-        {contactData.instagram && <a href={contactData.instagram} target="_blank" rel="noopener">Instagram</a>}
-        {contactData.tiktok    && <a href={contactData.tiktok}    target="_blank" rel="noopener">TikTok</a>}
-        {contactData.line      && <a href={contactData.line}      target="_blank" rel="noopener">Line OA</a>}
-      </nav>
-      <p class="site-footer-copy">© {new Date().getFullYear()} TNC.18. All rights reserved.</p>
-    </div>
-  </footer>
+  <Footer />
 </Layout>
 
 <style>
