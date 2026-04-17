@@ -1,0 +1,440 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import { getCollection } from 'astro:content';
+import contactData from '../../content/settings/contact.json';
+
+const allProjects = await getCollection('projects');
+const projects = allProjects.sort((a, b) => b.data.year - a.data.year);
+
+function slug(title: string) {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
+---
+
+<Layout
+  title="Portfolio — TNC.18"
+  description="Retail interior design and construction portfolio — TNC.18 Bangkok. Commercial spaces, pop-ups, flagship stores."
+>
+  <Navbar />
+
+  <main class="main">
+
+    <!-- Page header -->
+    <header class="page-head">
+      <div class="page-head-left">
+        <span class="accent-rule" aria-hidden="true"></span>
+        <h1 class="page-title">Work</h1>
+      </div>
+      <span class="page-count">{projects.length} Projects</span>
+    </header>
+
+    <!-- Architectural gallery -->
+    <div class="gallery-wrap">
+      {projects.map((p, i) => (
+        <article class="project-unit" data-reveal>
+          <a href={`/portfolio/${slug(p.data.title)}`} class="unit-link">
+
+            <!-- Cinematic image frame -->
+            <div class="unit-frame">
+              {p.data.video_url
+                ? <video autoplay muted loop playsinline class="unit-asset">
+                    <source src={p.data.video_url} type="video/mp4" />
+                  </video>
+                : p.data.cover && !p.data.cover.includes('placeholder')
+                  ? <img
+                      src={p.data.cover}
+                      alt={p.data.title}
+                      loading={i < 2 ? 'eager' : 'lazy'}
+                      class="unit-asset"
+                    />
+                  : <div class="unit-ph"></div>
+              }
+
+              <!-- Overlay: fades in on hover, title floats up from bottom -->
+              <div class="unit-overlay">
+                <div class="overlay-inner">
+                  <span class="overlay-cat">{p.data.category?.toUpperCase()}</span>
+                  <h2 class="overlay-title">{p.data.title.toUpperCase()}</h2>
+                  <span class="overlay-cta">View Project →</span>
+                </div>
+              </div>
+
+              <!-- Blue hover line on top edge -->
+              <div class="unit-top-line" aria-hidden="true"></div>
+            </div>
+
+            <!-- Meta below image — left-aligned to frame edge -->
+            <div class="unit-meta">
+              <div class="unit-meta-left">
+                <span class="unit-cat">{p.data.category?.toUpperCase()}</span>
+                {p.data.location && (
+                  <><span class="unit-dot" aria-hidden="true">·</span>
+                  <span class="unit-loc">{p.data.location.toUpperCase()}</span></>
+                )}
+                {p.data.area && (
+                  <><span class="unit-dot" aria-hidden="true">·</span>
+                  <span class="unit-area">{p.data.area} SQ.M</span></>
+                )}
+              </div>
+              <span class="unit-year">{p.data.year}</span>
+            </div>
+
+            <!-- Title row with expanding navy underline on hover -->
+            <div class="unit-title-wrap">
+              <h2 class="unit-title">{p.data.title.toUpperCase()}</h2>
+              <div class="unit-title-line" aria-hidden="true"></div>
+            </div>
+
+          </a>
+        </article>
+      ))}
+
+      {projects.length === 0 && (
+        <div class="empty">
+          <p>No projects yet.</p>
+          <a href="/admin" class="btn-navy" style="margin-top:1rem;display:inline-block">Add in CMS →</a>
+        </div>
+      )}
+    </div>
+
+    <!-- Line CTA -->
+    {contactData.line && (
+      <div class="bottom-cta" data-reveal>
+        <div class="bottom-cta-inner">
+          <div class="bottom-cta-text">
+            <span class="cta-eyebrow">Start a Project</span>
+            <h2 class="cta-headline">Have a space in mind?</h2>
+          </div>
+          <a href={contactData.line} target="_blank" rel="noopener" class="btn-line">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0">
+              <path d="M19.365 9.89c.5 0 .907.406.907.907s-.407.907-.907.907h-2.724v1.77h2.724c.5 0 .907.406.907.907s-.407.907-.907.907H15.73a.907.907 0 0 1-.907-.907V9.89c0-.5.406-.907.907-.907h3.636zm-5.453 0c.5 0 .907.406.907.907v4.491a.907.907 0 0 1-1.814 0V10.797a.907.907 0 0 1 .907-.907zm-2.198 0a.907.907 0 0 1 .736.378l2.33 3.176V10.8a.907.907 0 1 1 1.814 0v4.49a.907.907 0 0 1-.907.907.907.907 0 0 1-.735-.377l-2.33-3.177v2.647a.907.907 0 1 1-1.814 0v-4.49c0-.5.406-.907.906-.907zm-3.634 0c.5 0 .906.406.906.907v4.491a.907.907 0 0 1-1.813 0V10.797c0-.5.406-.907.907-.907zM12 2C6.477 2 2 6.108 2 11.148c0 4.515 3.564 8.292 8.37 9.006.325.07.77.214.882.49.1.252.065.647.032.9l-.143.855c-.043.253-.2 1-.876.547-.676-.454-3.647-2.146-4.98-3.627C3.576 17.21 2 14.315 2 11.148 2 6.108 6.477 2 12 2z"/>
+            </svg>
+            Message on Line
+          </a>
+        </div>
+      </div>
+    )}
+
+  </main>
+</Layout>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .main {
+    padding-top: 60px;
+    background: var(--cream);
+    min-height: 100vh;
+  }
+
+  /* ── PAGE HEADER ── */
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3rem 5% 2rem;
+    border-bottom: .5px solid var(--cream-dark);
+  }
+
+  .page-head-left {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+  }
+
+  .accent-rule {
+    display: block;
+    width: 3px;
+    height: 1.75rem;
+    background: var(--navy);
+    flex-shrink: 0;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 4vw, 1.75rem);
+    font-weight: 400;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+  }
+
+  .page-count {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: .52rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── GALLERY STACK ── */
+  .gallery-wrap {
+    display: flex;
+    flex-direction: column;
+    /* "Vertical Lung" — 120px void between projects */
+    gap: 120px;
+    padding: 100px 0 140px;
+    /* Faint navy radial glow behind cards — non-cliché depth */
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 30%, rgba(26,58,107,.04) 0%, transparent 70%),
+      var(--cream);
+  }
+
+  /* ── PROJECT UNIT ── */
+  .project-unit {
+    opacity: 0;
+    transform: translateY(44px);
+    transition:
+      opacity .95s cubic-bezier(.16,1,.3,1),
+      transform .95s cubic-bezier(.16,1,.3,1);
+  }
+  .project-unit.revealed { opacity: 1; transform: none; }
+
+  .unit-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* ── IMAGE FRAME — full-bleed, 21:9 cinematic ── */
+  .unit-frame {
+    position: relative;
+    width: 100%;
+    /* Mobile: 4:3 — keeps images tall and visible */
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: var(--cream-dark);
+  }
+
+  .unit-asset {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 1.3s cubic-bezier(.4,0,.2,1);
+  }
+
+  .unit-ph {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--cream-mid), var(--cream-dark));
+    transition: transform 1.3s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* Scale 1.02x on hover */
+  .unit-link:hover .unit-asset,
+  .unit-link:hover .unit-ph { transform: scale(1.02); }
+
+  /* Navy top-edge line — expands on hover */
+  .unit-top-line {
+    position: absolute;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--navy);
+    transition: width .5s cubic-bezier(.4,0,.2,1);
+    z-index: 3;
+  }
+  .unit-link:hover .unit-top-line { width: 100%; }
+
+  /* Cinematic overlay — title floats up from bottom */
+  .unit-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(10,20,44,.82) 0%,
+      rgba(10,20,44,.35) 45%,
+      transparent 75%
+    );
+    display: flex;
+    align-items: flex-end;
+    opacity: 0;
+    transition: opacity .4s ease;
+    z-index: 2;
+  }
+  .unit-link:hover .unit-overlay { opacity: 1; }
+
+  .overlay-inner {
+    padding: 1.75rem 5%;
+    transform: translateY(10px);
+    transition: transform .4s cubic-bezier(.16,1,.3,1);
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+  }
+  .unit-link:hover .overlay-inner { transform: none; }
+
+  .overlay-cat {
+    font-size: .48rem; letter-spacing: .24em;
+    color: rgba(244,240,230,.55); font-weight: 600;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  .overlay-title {
+    font-family: var(--font-display);
+    font-size: clamp(.9rem, 3vw, 1.5rem);
+    font-weight: 400; letter-spacing: .05em;
+    color: var(--warm-white); line-height: 1.1;
+  }
+  .overlay-cta {
+    font-size: .55rem; letter-spacing: .2em;
+    text-transform: uppercase; color: rgba(244,240,230,.55);
+    font-family: var(--font-body); margin-top: .15rem;
+  }
+
+  /* ── META ROW ── */
+  .unit-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .85rem 5% .45rem;
+    gap: .5rem;
+  }
+
+  .unit-meta-left {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+  }
+
+  .unit-cat {
+    font-size: .48rem; letter-spacing: .24em;
+    color: var(--navy); font-weight: 600;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  .unit-dot { font-size: .48rem; color: var(--cream-dark); }
+  .unit-loc, .unit-area {
+    font-size: .48rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--muted);
+    font-family: 'Courier New', Courier, monospace;
+  }
+  .unit-year {
+    font-size: .48rem; color: var(--muted-light, #B8B4AF);
+    letter-spacing: .1em;
+    font-family: 'Courier New', Courier, monospace;
+    flex-shrink: 0;
+  }
+
+  /* ── TITLE ROW with expanding blue underline ── */
+  .unit-title-wrap {
+    padding: 0 5% 0;
+    position: relative;
+  }
+
+  .unit-title {
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 4vw, 2rem);
+    font-weight: 400;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    line-height: 1.15;
+    padding-bottom: .65rem;
+  }
+
+  /* The 1px expanding navy underline */
+  .unit-title-line {
+    position: absolute;
+    bottom: 0; left: 5%;
+    height: 1px;
+    width: 0;
+    background: var(--navy);
+    transition: width .45s cubic-bezier(.4,0,.2,1);
+  }
+  .unit-link:hover .unit-title-line { width: 90%; }
+
+  /* ── EMPTY ── */
+  .empty {
+    padding: 6rem 5%;
+    font-size: .875rem;
+    color: var(--muted);
+  }
+
+  /* ── BOTTOM CTA ── */
+  .bottom-cta {
+    border-top: .5px solid var(--cream-dark);
+    padding: 5rem 5%;
+    opacity: 0; transform: translateY(20px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .bottom-cta.revealed { opacity: 1; transform: none; }
+
+  .bottom-cta-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .cta-eyebrow {
+    display: block;
+    font-size: .5rem; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--navy);
+    font-weight: 600; margin-bottom: .5rem;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .cta-headline {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 4vw, 1.75rem);
+    font-weight: 400; letter-spacing: .05em;
+    text-transform: uppercase; color: var(--charcoal);
+  }
+
+  .btn-line {
+    display: inline-flex; align-items: center; gap: .55rem;
+    font-family: var(--font-body); font-size: .65rem;
+    font-weight: 500; letter-spacing: .14em;
+    text-transform: uppercase; text-decoration: none;
+    color: #fff; background: #06C755;
+    padding: .85rem 1.6rem;
+    transition: background .25s; white-space: nowrap;
+  }
+  .btn-line:hover { background: #05b34c; }
+
+  /* ── DESKTOP: 15% horizontal margins, 21:9 cinematic ── */
+  @media (min-width: 768px) {
+    .page-head { padding: 3.5rem 15% 2.5rem; }
+
+    .gallery-wrap {
+      gap: 140px;
+      padding: 120px 0 160px;
+    }
+
+    /* 21:9 cinematic on desktop */
+    .unit-frame { aspect-ratio: 21/9; }
+
+    .unit-meta       { padding: 1rem 15% .5rem; }
+    .unit-title-wrap { padding: 0 15%; }
+
+    .overlay-inner { padding: 2rem 15%; }
+
+    .unit-title-line { left: 15%; }
+    .unit-link:hover .unit-title-line { width: 70%; }
+
+    .bottom-cta { padding: 6rem 15%; }
+    .bottom-cta-inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 5rem;
+    }
+  }
+
+  /* Mobile: single column, no cramping */
+  @media (max-width: 767px) {
+    .gallery-wrap { gap: 100px; padding: 80px 0 120px; }
+    .unit-frame { aspect-ratio: 4/3; }
+  }
+</style>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('revealed');
+      io.unobserve(entry.target);
+    });
+  }, { threshold: 0.04, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+</script>

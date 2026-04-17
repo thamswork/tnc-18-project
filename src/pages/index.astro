@@ -3,317 +3,186 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import { getCollection } from 'astro:content';
 import homepageData from '../content/pages/homepage.json';
+import contactData  from '../content/settings/contact.json';
 
 const allProjects = await getCollection('projects');
-const featured = allProjects
-  .filter(p => p.data.featured)
+const projects = allProjects
   .sort((a, b) => b.data.year - a.data.year)
-  .slice(0, 4);
-const projects = featured.length >= 2 ? featured : allProjects
-  .sort((a, b) => b.data.year - a.data.year)
-  .slice(0, 4);
+  .slice(0, 6);
 
-const allServices = await getCollection('services');
-const services = allServices.sort((a, b) => a.data.order - b.data.order);
-
-// Fallback placeholder colors for each card slot
-const colors = ['#C8C2B2','#B0AA9C','#989082','#7E786C'];
+function slug(title: string) {
+  return title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
 ---
 
-<Layout title="Architecture & Construction Excellence">
+<Layout title="TNC.18 — Retail & Interior Design Bangkok">
   <Navbar />
 
-  <!-- HERO -->
+  <!-- ── HERO ─────────────────────────────────────────────────── -->
   <section class="hero">
+    <div class="hero-mist" aria-hidden="true"></div>
     <div class="hero-media">
-      {homepageData.hero_video && (
-        <video autoplay muted loop playsinline class="hero-video">
-          <source src={homepageData.hero_video} type="video/mp4" />
-        </video>
-      )}
-      {!homepageData.hero_video && (
-        <video autoplay muted loop playsinline class="hero-video">
-          <source src="/hero.mp4" type="video/mp4" />
-        </video>
-      )}
-      {homepageData.hero_image
-        ? <img src={homepageData.hero_image} alt="TNC.18" class="hero-img-fallback" />
-        : <div class="hero-fallback"></div>
+      {homepageData.hero_video
+        ? <video autoplay muted loop playsinline class="hero-video">
+            <source src={homepageData.hero_video} type="video/mp4" />
+          </video>
+        : homepageData.hero_image
+          ? <img src={homepageData.hero_image} alt="" class="hero-img" />
+          : <div class="hero-fallback"></div>
       }
-      <div class="hero-vignette"></div>
+      <div class="hero-overlay"></div>
     </div>
-    <div class="hero-body">
-      <p class="hero-location" data-en="Bangkok · Thailand" data-th="กรุงเทพมหานคร · ประเทศไทย">Bangkok · Thailand</p>
-      <h1 class="hero-headline">
-        <span class="hero-line" data-split data-en="We Build" data-th="เราสร้าง">We Build</span>
-        <span class="hero-line hero-italic" data-split data-en="What Lasts." data-th="สิ่งที่ยั่งยืน">What Lasts.</span>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Bangkok · Thailand</p>
+      <h1 class="hero-title">
+        <span>{homepageData.hero_line1}</span>
+        <span class="hero-title-dim">{homepageData.hero_line2}</span>
       </h1>
-      <div class="hero-rule"></div>
     </div>
+
     <div class="hero-foot">
-      <a href="/projects" class="hero-cta" data-en="View Our Work" data-th="ดูผลงานของเรา">
-        View Our Work <span class="hero-arrow">→</span>
-      </a>
-      <p class="hero-tag" data-en="Architecture · Engineering · Construction" data-th="สถาปัตยกรรม · วิศวกรรม · การก่อสร้าง">
-        Architecture · Engineering · Construction
-      </p>
+      {contactData.line && (
+        <a href={contactData.line} target="_blank" rel="noopener" class="btn-line hero-line-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0">
+            <path d="M19.365 9.89c.5 0 .907.406.907.907s-.407.907-.907.907h-2.724v1.77h2.724c.5 0 .907.406.907.907s-.407.907-.907.907H15.73a.907.907 0 0 1-.907-.907V9.89c0-.5.406-.907.907-.907h3.636zm-5.453 0c.5 0 .907.406.907.907v4.491a.907.907 0 0 1-1.814 0V10.797a.907.907 0 0 1 .907-.907zm-2.198 0a.907.907 0 0 1 .736.378l2.33 3.176V10.8a.907.907 0 1 1 1.814 0v4.49a.907.907 0 0 1-.907.907.907.907 0 0 1-.735-.377l-2.33-3.177v2.647a.907.907 0 1 1-1.814 0v-4.49c0-.5.406-.907.906-.907zm-3.634 0c.5 0 .906.406.906.907v4.491a.907.907 0 0 1-1.813 0V10.797c0-.5.406-.907.907-.907zM12 2C6.477 2 2 6.108 2 11.148c0 4.515 3.564 8.292 8.37 9.006.325.07.77.214.882.49.1.252.065.647.032.9l-.143.855c-.043.253-.2 1-.876.547-.676-.454-3.647-2.146-4.98-3.627C3.576 17.21 2 14.315 2 11.148 2 6.108 6.477 2 12 2z"/>
+          </svg>
+          Message us on Line
+        </a>
+      )}
+      <span class="hero-tag">{homepageData.hero_sub || 'Retail · Interior · Construction'}</span>
+    </div>
+
+    <div class="hero-scroll-hint" aria-hidden="true">
+      <span class="scroll-line"></span>
     </div>
   </section>
 
-  <!-- STATEMENT -->
-  <section class="statement">
-    <div class="statement-inner">
-      <div class="statement-side">
-        <span class="tag-label" data-anim="rise">TNC.18</span>
-        <div class="gold-line" data-anim="line"></div>
+  <!-- ── PILLARS ─────────────────────────────────────────────── -->
+  <section class="pillars">
+    {[
+      { n: '01', title: 'Fast Delivery',  body: 'Tight lead times. Built for urgent retail timelines without sacrificing precision.' },
+      { n: '02', title: 'Senior Only',    body: 'You deal directly with partners. Zero junior hand-offs, from brief to handover.' },
+      { n: '03', title: '24/7 Support',   body: 'Unlimited revisions. Always reachable, always accountable throughout your project.' },
+    ].map((p, i) => (
+      <div class="pillar" data-reveal data-delay={String(i)}>
+        <span class="pillar-accent" aria-hidden="true"></span>
+        <span class="pillar-n">{p.n}</span>
+        <h3 class="pillar-title">{p.title}</h3>
+        <p class="pillar-body">{p.body}</p>
       </div>
-      <blockquote class="statement-quote" data-split data-delay="1"
-        data-en="Every structure we build carries a single promise — that it will outlast the moment it was made for."
-        data-th="ทุกสิ่งที่เราสร้างมีคำสัญญาเดียว — ว่ามันจะคงอยู่ยาวนานกว่าช่วงเวลาที่มันถูกสร้างขึ้น">
-        Every structure we build carries a single promise — that it will outlast the moment it was made for.
-      </blockquote>
-    </div>
+    ))}
   </section>
 
-  <!-- PROJECTS — Balanced mosaic B, 4 cards -->
-  <section class="projects">
-    <header class="section-header" data-anim="rise">
-      <span class="section-label" data-en="Selected Work" data-th="ผลงานคัดสรร">Selected Work</span>
-      <a href="/projects" class="link-sm" data-en="All Projects →" data-th="ผลงานทั้งหมด →">All Projects →</a>
+  <!-- ── PORTFOLIO GRID ─────────────────────────────────────── -->
+  <section class="portfolio">
+    <header class="port-header" data-reveal>
+      <div class="port-header-left">
+        <span class="accent-bar" aria-hidden="true"></span>
+        <span class="section-label">Selected Work</span>
+      </div>
+      <a href="/portfolio" class="link-all">All Projects →</a>
     </header>
 
-    <div class="mosaic">
-      <!-- Row 1: two equal landscape cards -->
-      <div class="mosaic-row mosaic-row--top">
-        {projects.slice(0, 2).map((p, i) => (
-          <article class="mosaic-card" data-anim="rise" data-delay={String(i + 1)}>
-            <a href={`/projects/${p.id}`} class="mosaic-link">
-              <div class="mosaic-img">
-                {p.data.cover && !p.data.cover.includes('placeholder')
-                  ? <img src={p.data.cover} alt={p.data.title} loading="lazy" />
-                  : <div class="mosaic-ph" style={`background:${colors[i]};`}></div>
-                }
-                <div class="mosaic-overlay">
-                  <div class="mosaic-overlay-inner">
-                    <span class="mosaic-cat"
-                      data-en={p.data.category}
-                      data-th={p.data.category_th || p.data.category}>
-                      {p.data.category}
-                    </span>
-                    <h2 class="mosaic-title"
-                      data-en={p.data.title}
-                      data-th={p.data.title_th || p.data.title}>
-                      {p.data.title}
-                    </h2>
-                    <span class="mosaic-year">{p.data.year}</span>
-                  </div>
-                  <span class="mosaic-arrow">→</span>
-                </div>
+    <div class="grid">
+      {projects.map((p, i) => (
+        <article class={`grid-card card-navy ${i === 0 ? 'grid-card--hero' : ''}`} data-reveal>
+          <a href={`/portfolio/${slug(p.data.title)}`} class="card-link">
+            <div class="card-media">
+              {p.data.cover && !p.data.cover.includes('placeholder')
+                ? <img
+                    src={p.data.cover}
+                    alt={p.data.title}
+                    loading={i < 2 ? 'eager' : 'lazy'}
+                    class="card-img"
+                  />
+                : <div class="card-ph"></div>
+              }
+              <div class="card-hover-layer">
+                <span class="card-view-btn">View Project</span>
               </div>
-            </a>
-          </article>
-        ))}
-
-        <!-- If fewer than 2 projects, fill with placeholder cards -->
-        {projects.length < 1 && (
-          <article class="mosaic-card mosaic-card--placeholder">
-            <a href="/admin" class="mosaic-link">
-              <div class="mosaic-img">
-                <div class="mosaic-ph" style={`background:${colors[0]};`}></div>
-                <div class="mosaic-overlay">
-                  <div class="mosaic-overlay-inner">
-                    <span class="mosaic-cat">Add in CMS</span>
-                    <h2 class="mosaic-title">Your First Project</h2>
-                  </div>
-                </div>
+            </div>
+            <div class="card-body">
+              <div class="card-meta">
+                <span class="card-cat">{p.data.category}</span>
+                {p.data.location && <span class="card-loc">{p.data.location}</span>}
+                <span class="card-year">{p.data.year}</span>
               </div>
-            </a>
-          </article>
-        )}
-        {projects.length < 2 && projects.length >= 1 && (
-          <article class="mosaic-card mosaic-card--placeholder">
-            <a href="/admin" class="mosaic-link">
-              <div class="mosaic-img">
-                <div class="mosaic-ph" style={`background:${colors[1]};`}></div>
-                <div class="mosaic-overlay">
-                  <div class="mosaic-overlay-inner">
-                    <span class="mosaic-cat">Add in CMS</span>
-                    <h2 class="mosaic-title">Add Second Project</h2>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </article>
-        )}
-      </div>
-
-      <!-- Row 2: portrait left + wide landscape right -->
-      <div class="mosaic-row mosaic-row--bot">
-        {projects.length >= 3 ? (
-          <article class="mosaic-card mosaic-card--portrait" data-anim="rise" data-delay="3">
-            <a href={`/projects/${projects[2].id}`} class="mosaic-link">
-              <div class="mosaic-img">
-                {projects[2].data.cover && !projects[2].data.cover.includes('placeholder')
-                  ? <img src={projects[2].data.cover} alt={projects[2].data.title} loading="lazy" />
-                  : <div class="mosaic-ph" style={`background:${colors[2]};`}></div>
-                }
-                <div class="mosaic-overlay">
-                  <div class="mosaic-overlay-inner">
-                    <span class="mosaic-cat"
-                      data-en={projects[2].data.category}
-                      data-th={projects[2].data.category_th || projects[2].data.category}>
-                      {projects[2].data.category}
-                    </span>
-                    <h2 class="mosaic-title"
-                      data-en={projects[2].data.title}
-                      data-th={projects[2].data.title_th || projects[2].data.title}>
-                      {projects[2].data.title}
-                    </h2>
-                    <span class="mosaic-year">{projects[2].data.year}</span>
-                  </div>
-                  <span class="mosaic-arrow">→</span>
-                </div>
-              </div>
-            </a>
-          </article>
-        ) : (
-          <article class="mosaic-card mosaic-card--portrait mosaic-card--placeholder">
-            <a href="/admin" class="mosaic-link">
-              <div class="mosaic-img">
-                <div class="mosaic-ph" style={`background:${colors[2]};`}></div>
-                <div class="mosaic-overlay">
-                  <div class="mosaic-overlay-inner">
-                    <span class="mosaic-cat">Add in CMS</span>
-                    <h2 class="mosaic-title">Third Project</h2>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </article>
-        )}
-
-        {projects.length >= 4 ? (
-          <article class="mosaic-card mosaic-card--wide" data-anim="rise" data-delay="4">
-            <a href={`/projects/${projects[3].id}`} class="mosaic-link">
-              <div class="mosaic-img">
-                {projects[3].data.cover && !projects[3].data.cover.includes('placeholder')
-                  ? <img src={projects[3].data.cover} alt={projects[3].data.title} loading="lazy" />
-                  : <div class="mosaic-ph" style={`background:${colors[3]};`}></div>
-                }
-                <div class="mosaic-overlay">
-                  <div class="mosaic-overlay-inner">
-                    <span class="mosaic-cat"
-                      data-en={projects[3].data.category}
-                      data-th={projects[3].data.category_th || projects[3].data.category}>
-                      {projects[3].data.category}
-                    </span>
-                    <h2 class="mosaic-title"
-                      data-en={projects[3].data.title}
-                      data-th={projects[3].data.title_th || projects[3].data.title}>
-                      {projects[3].data.title}
-                    </h2>
-                    <span class="mosaic-year">{projects[3].data.year}</span>
-                  </div>
-                  <span class="mosaic-arrow">→</span>
-                </div>
-              </div>
-            </a>
-          </article>
-        ) : (
-          <article class="mosaic-card mosaic-card--wide mosaic-card--placeholder">
-            <a href="/admin" class="mosaic-link">
-              <div class="mosaic-img">
-                <div class="mosaic-ph" style={`background:${colors[3]};`}></div>
-                <div class="mosaic-overlay">
-                  <div class="mosaic-overlay-inner">
-                    <span class="mosaic-cat">Add in CMS</span>
-                    <h2 class="mosaic-title">Fourth Project</h2>
-                  </div>
-                </div>
-              </div>
-            </a>
-          </article>
-        )}
-      </div>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="about">
-    <div class="about-inner">
-      <div class="about-text">
-        <span class="section-label" data-anim="rise" data-en="About the Firm" data-th="เกี่ยวกับบริษัท">About the Firm</span>
-        <h2 data-split data-delay="1"
-          data-en="Eighteen years of precision, craft, and permanence."
-          data-th="สิบแปดปีแห่งความแม่นยำ ฝีมือ และความยั่งยืน">
-          Eighteen years of precision, craft, and permanence.
-        </h2>
-        <p data-anim="rise" data-delay="2"
-          data-en="TNC.18 is a Bangkok-based architecture and construction firm. We work across residential, commercial, and interior disciplines — always with the same commitment to materials, structure, and lasting design."
-          data-th="TNC.18 เป็นบริษัทสถาปัตยกรรมและก่อสร้างในกรุงเทพฯ เราทำงานทั้งในด้านที่พักอาศัย เชิงพาณิชย์ และการออกแบบภายใน">
-          TNC.18 is a Bangkok-based architecture and construction firm. We work across residential, commercial, and interior disciplines — always with the same commitment to materials, structure, and lasting design.
-        </p>
-        <a href="/about" class="link-underline" data-anim="rise" data-delay="3"
-          data-en="Our Story" data-th="เรื่องราวของเรา">Our Story</a>
-      </div>
-      <div class="about-stats">
-        {[
-          { n: 18,  suf: '',  en: 'Years',       th: 'ปี' },
-          { n: 200, suf: '+', en: 'Projects',    th: 'โครงการ' },
-          { n: 50,  suf: '+', en: 'Specialists', th: 'ผู้เชี่ยวชาญ' },
-        ].map((s, i) => (
-          <div class="stat" data-anim="rise" data-delay={String(i + 1)}>
-            <div class="stat-line" data-anim="line"></div>
-            <span class="stat-num"><span data-counter={String(s.n)} data-suffix={s.suf}>0</span></span>
-            <span class="stat-lbl" data-en={s.en} data-th={s.th}>{s.en}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section class="services">
-    <div class="services-inner">
-      <span class="section-label" data-anim="rise" data-en="What We Do" data-th="สิ่งที่เราทำ">What We Do</span>
-      <div class="svc-list">
-        {services.map((s, i) => (
-          <a href="/services" class="svc-row" data-anim="rise" data-delay={String((i % 3) + 1)}>
-            <span class="svc-n">0{s.data.order}</span>
-            <span class="svc-name" data-en={s.data.title} data-th={s.data.title_th || s.data.title}>{s.data.title}</span>
-            <span class="svc-arr">→</span>
+              <h2 class="card-title">{p.data.title}</h2>
+            </div>
           </a>
-        ))}
+        </article>
+      ))}
+
+      {projects.length === 0 && (
+        <article class="grid-card grid-card--hero card-navy" data-reveal>
+          <a href="/admin" class="card-link">
+            <div class="card-media"><div class="card-ph"></div></div>
+            <div class="card-body">
+              <div class="card-meta"><span class="card-cat">Portfolio</span></div>
+              <h2 class="card-title">Add your first project in the CMS</h2>
+            </div>
+          </a>
+        </article>
+      )}
+    </div>
+
+    <div class="port-foot" data-reveal>
+      <a href="/portfolio" class="btn-navy-ghost">See All Work →</a>
+    </div>
+  </section>
+
+  <!-- ── STATEMENT ──────────────────────────────────────────── -->
+  <section class="statement" data-reveal>
+    <div class="statement-inner">
+      <span class="statement-bar" aria-hidden="true"></span>
+      <blockquote class="statement-quote">{homepageData.statement}</blockquote>
+    </div>
+  </section>
+
+  <!-- ── CTA BAND ───────────────────────────────────────────── -->
+  <section class="cta-band" data-reveal>
+    <div class="cta-mist" aria-hidden="true"></div>
+    <div class="cta-band-inner">
+      <div>
+        <h2 class="cta-title">Ready to start?</h2>
+        <p class="cta-sub">Senior partners. Fast delivery. We reply within 2 hours.</p>
+      </div>
+      <div class="cta-actions">
+        {contactData.line && (
+          <a href={contactData.line} target="_blank" rel="noopener" class="btn-line">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="flex-shrink:0">
+              <path d="M19.365 9.89c.5 0 .907.406.907.907s-.407.907-.907.907h-2.724v1.77h2.724c.5 0 .907.406.907.907s-.407.907-.907.907H15.73a.907.907 0 0 1-.907-.907V9.89c0-.5.406-.907.907-.907h3.636zm-5.453 0c.5 0 .907.406.907.907v4.491a.907.907 0 0 1-1.814 0V10.797a.907.907 0 0 1 .907-.907zm-2.198 0a.907.907 0 0 1 .736.378l2.33 3.176V10.8a.907.907 0 1 1 1.814 0v4.49a.907.907 0 0 1-.907.907.907.907 0 0 1-.735-.377l-2.33-3.177v2.647a.907.907 0 1 1-1.814 0v-4.49c0-.5.406-.907.906-.907zm-3.634 0c.5 0 .906.406.906.907v4.491a.907.907 0 0 1-1.813 0V10.797c0-.5.406-.907.907-.907zM12 2C6.477 2 2 6.108 2 11.148c0 4.515 3.564 8.292 8.37 9.006.325.07.77.214.882.49.1.252.065.647.032.9l-.143.855c-.043.253-.2 1-.876.547-.676-.454-3.647-2.146-4.98-3.627C3.576 17.21 2 14.315 2 11.148 2 6.108 6.477 2 12 2z"/>
+            </svg>
+            Line OA
+          </a>
+        )}
+        {contactData.instagram && (
+          <a href={contactData.instagram} target="_blank" rel="noopener" class="btn-navy-ghost">Instagram</a>
+        )}
+        {contactData.tiktok && (
+          <a href={contactData.tiktok} target="_blank" rel="noopener" class="btn-navy-ghost">TikTok</a>
+        )}
       </div>
     </div>
   </section>
 
-  <!-- CONTACT -->
-  <section class="contact">
-    <h2 data-split data-en="Have a project in mind?" data-th="มีโครงการในใจอยู่หรือเปล่า?">Have a project in mind?</h2>
-    <p data-anim="rise" data-delay="2"
-      data-en="We work with clients who value precision and permanence. Let's talk about what you're building."
-      data-th="เราทำงานกับลูกค้าที่ให้ความสำคัญกับความแม่นยำและความยั่งยืน">
-      We work with clients who value precision and permanence.<br/>Let's talk about what you're building.
-    </p>
-    <a href="/contact" class="contact-btn" data-anim="rise" data-delay="3"
-      data-en="Start a Conversation" data-th="เริ่มบทสนทนา">Start a Conversation</a>
-  </section>
-
-  <!-- FOOTER -->
+  <!-- ── FOOTER ─────────────────────────────────────────────── -->
   <footer class="footer">
     <div class="footer-inner">
-      <div>
+      <div class="footer-brand">
         <span class="footer-logo">TNC<em>.</em>18</span>
-        <p class="footer-sub" data-en="Architecture & Construction, Bangkok" data-th="สถาปัตยกรรมและการก่อสร้าง กรุงเทพฯ">Architecture & Construction, Bangkok</p>
+        <p class="footer-sub">Retail & Interior Design · Bangkok</p>
       </div>
-      <nav class="footer-nav">
-        <a href="tel:+66000000000" data-en="Call" data-th="โทร">Call</a>
-        <a href="https://line.me" target="_blank" rel="noopener">Line OA</a>
-        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://tiktok.com" target="_blank" rel="noopener">TikTok</a>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="/portfolio">Work</a>
+        <a href="/about-services">Studio</a>
+        <a href="/contact">Contact</a>
+        {contactData.instagram && <a href={contactData.instagram} target="_blank" rel="noopener">Instagram</a>}
+        {contactData.tiktok    && <a href={contactData.tiktok}    target="_blank" rel="noopener">TikTok</a>}
+        {contactData.line      && <a href={contactData.line}      target="_blank" rel="noopener">Line OA</a>}
       </nav>
-      <p class="footer-copy">© 2024 TNC.18</p>
+      <p class="footer-copy">© {new Date().getFullYear()} TNC.18</p>
     </div>
   </footer>
 </Layout>
@@ -321,201 +190,118 @@ const colors = ['#C8C2B2','#B0AA9C','#989082','#7E786C'];
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* HERO */
-  .hero { position:relative; height:100vh; min-height:600px; display:flex; flex-direction:column; justify-content:flex-end; overflow:hidden; background:var(--charcoal); }
-  .hero-media { position:absolute; inset:0; z-index:0; }
-  .hero-media video { width:100%; height:100%; object-fit:cover; opacity:0.46; }
-  .hero-fallback { position:absolute; inset:0; background:linear-gradient(155deg,#2C2820 0%,#1A1612 60%,#0F0D0A 100%); z-index:-1; }
-  .hero-img-fallback { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0.5; z-index:-1; }
-  .hero-vignette { position:absolute; inset:0; background:linear-gradient(to top,rgba(28,26,23,0.92) 0%,transparent 55%),linear-gradient(to right,rgba(28,26,23,0.3) 0%,transparent 50%); }
-  .hero-body { position:relative; z-index:2; padding:0 5rem 2.5rem; }
-  .hero-location { font-size:0.64rem; letter-spacing:0.24em; text-transform:uppercase; color:rgba(247,244,239,0.32); margin-bottom:1.25rem; animation:fadeUp 1s 0.3s both; }
-  .hero-headline { font-family:var(--font-serif); font-size:clamp(3.5rem,8vw,7.5rem); font-weight:300; line-height:1.0; color:var(--stone); overflow:hidden; margin-bottom:1.75rem; }
-  .hero-line { display:block; animation:slideUp 1.1s cubic-bezier(0.16,1,0.3,1) both; }
-  .hero-line:nth-child(2) { animation-delay:0.12s; }
-  .hero-italic { font-style:italic; color:rgba(247,244,239,0.5); padding-left:1.5rem; }
-  @keyframes slideUp { from{transform:translateY(110%);opacity:0} to{transform:translateY(0);opacity:1} }
-  @keyframes fadeUp  { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-  .hero-rule { width:44px; height:1px; background:var(--gold); transform:scaleX(0); transform-origin:left; animation:lineIn 0.7s 0.9s cubic-bezier(0.4,0,0.2,1) forwards; }
-  @keyframes lineIn { to{transform:scaleX(1)} }
-  .hero-foot { position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between; padding:1.25rem 5rem; border-top:1px solid rgba(247,244,239,0.07); animation:fadeUp 0.8s 1s both; }
-  .hero-cta { display:flex; align-items:center; gap:0.6rem; font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:var(--stone); text-decoration:none; }
-  .hero-arrow { color:var(--gold); transition:transform 0.3s,color 0.3s; }
-  .hero-cta:hover .hero-arrow { transform:translateX(5px); color:var(--blue-mid); }
-  .hero-tag { font-size:0.58rem; letter-spacing:0.18em; text-transform:uppercase; color:rgba(247,244,239,0.18); }
+  .hero {
+    position: relative; width: 100%; min-height: 100svh;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    overflow: hidden; background: var(--charcoal); padding-top: 60px;
+  }
+  .hero-mist { position: absolute; top: 60px; left: 0; right: 0; height: 100px; background: linear-gradient(to bottom,rgba(26,58,107,.08),transparent); z-index: 2; pointer-events: none; }
+  .hero-media { position: absolute; inset: 0; z-index: 0; }
+  .hero-video, .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: .48; }
+  .hero-fallback { position: absolute; inset: 0; background: linear-gradient(155deg,#2c3a52,#141c28); }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top,rgba(20,18,15,.88) 0%,transparent 55%),linear-gradient(to bottom,rgba(20,18,15,.35) 0%,transparent 35%); }
+  .hero-content { position: relative; z-index: 3; padding: 0 5% 1.5rem; }
+  .hero-eyebrow { font-size: .58rem; letter-spacing: .28em; text-transform: uppercase; color: rgba(244,240,230,.35); margin-bottom: .9rem; animation: fadeUp .8s .2s both; }
+  .hero-title { font-family: var(--font-display); font-size: clamp(2.6rem,11vw,6.5rem); font-weight: 400; letter-spacing: .04em; text-transform: uppercase; color: var(--warm-white); line-height: 1.0; display: flex; flex-direction: column; animation: slideUp 1s cubic-bezier(.16,1,.3,1) .05s both; }
+  .hero-title-dim { color: rgba(244,240,230,.35); }
+  .hero-foot { position: relative; z-index: 3; display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; padding: 1.25rem 5% 2.25rem; border-top: .5px solid rgba(244,240,230,.07); animation: fadeUp .8s .65s both; }
+  .hero-line-btn { font-size: .7rem; padding: .8rem 1.5rem; }
+  .hero-tag { font-size: .55rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(244,240,230,.2); }
+  .hero-scroll-hint { position: absolute; bottom: 1.75rem; right: 5%; z-index: 3; }
+  .scroll-line { display: block; width: 1px; height: 44px; background: linear-gradient(to bottom,var(--navy),transparent); animation: scrollPulse 2.2s ease-in-out infinite; }
+  @keyframes slideUp { from{transform:translateY(48px);opacity:0} to{transform:none;opacity:1} }
+  @keyframes fadeUp  { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+  @keyframes scrollPulse { 0%,100%{opacity:.22} 50%{opacity:1} }
 
-  /* STATEMENT */
-  .statement { background:var(--stone); border-bottom:1px solid var(--stone-mid); padding:5rem; }
-  .statement-inner { display:grid; grid-template-columns:72px 1fr; gap:2.5rem; max-width:860px; margin:0 auto; align-items:start; }
-  .statement-side { display:flex; flex-direction:column; gap:0.85rem; padding-top:0.3rem; }
-  .tag-label { font-size:0.58rem; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); }
-  .gold-line { width:100%; height:1px; background:var(--stone-dark); }
-  .statement-quote { font-family:var(--font-serif); font-size:clamp(1.25rem,2.2vw,1.75rem); font-weight:300; font-style:italic; color:var(--ink); line-height:1.65; }
+  .pillars { display: grid; grid-template-columns: 1fr; background: var(--warm-white); border-top: .5px solid var(--cream-dark); }
+  .pillar { padding: 2rem 5%; border-bottom: .5px solid var(--cream-dark); display: flex; flex-direction: column; gap: .5rem; }
+  .pillar-accent { display: block; width: 24px; height: 2px; background: var(--navy); margin-bottom: .35rem; }
+  .pillar-n { font-size: .52rem; letter-spacing: .22em; color: var(--navy); font-weight: 600; }
+  .pillar-title { font-family: var(--font-display); font-size: 1rem; font-weight: 400; letter-spacing: .08em; text-transform: uppercase; color: var(--charcoal); }
+  .pillar-body { font-size: .78rem; line-height: 1.75; color: var(--muted); font-weight: 300; max-width: 280px; }
 
-  /* PROJECTS MOSAIC */
-  .projects { background:var(--warm-white); border-top:1px solid var(--stone-mid); padding:4rem 5rem; }
-  .section-header { display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px solid var(--stone-dark); padding-bottom:1rem; margin-bottom:2rem; }
-  .section-label { font-family:var(--font-sans); font-size:0.62rem; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); }
-  .link-sm { font-size:0.66rem; letter-spacing:0.1em; color:var(--ink); text-decoration:none; transition:color 0.3s; }
-  .link-sm:hover { color:var(--blue); }
+  .portfolio { background: var(--cream); padding: 3rem 5%; }
+  .port-header { display: flex; justify-content: space-between; align-items: center; border-bottom: .5px solid var(--cream-dark); padding-bottom: .75rem; margin-bottom: 1.5rem; }
+  .port-header-left { display: flex; align-items: center; gap: .65rem; }
+  .accent-bar { display: inline-block; width: 3px; background: var(--navy); align-self: stretch; min-height: 14px; flex-shrink: 0; }
+  .section-label { font-family: var(--font-body); font-size: .55rem; font-weight: 600; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+  .link-all { font-size: .58rem; letter-spacing: .12em; color: var(--charcoal); text-decoration: none; transition: color .2s; }
+  .link-all:hover { color: var(--navy); }
 
-  .mosaic { display:flex; flex-direction:column; gap:0.6rem; }
-  .mosaic-row { display:grid; gap:0.6rem; }
-  .mosaic-row--top { grid-template-columns:1fr 1fr; }
-  .mosaic-row--bot { grid-template-columns:1fr 1.6fr; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 2px; }
+  .grid-card { overflow: hidden; }
+  .card-link { display: block; text-decoration: none; color: inherit; }
+  .card-media { position: relative; width: 100%; overflow: hidden; background: var(--cream-dark); }
+  .grid-card--hero .card-media { aspect-ratio: 4/3; }
+  .grid-card:not(.grid-card--hero) .card-media { aspect-ratio: 3/2; }
+  .card-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1s cubic-bezier(.4,0,.2,1); }
+  .card-ph { width: 100%; height: 100%; background: linear-gradient(135deg,var(--cream-mid),var(--cream-dark)); transition: transform 1s cubic-bezier(.4,0,.2,1); }
+  .card-link:hover .card-img, .card-link:hover .card-ph { transform: scale(1.04); }
+  .card-hover-layer { position: absolute; inset: 0; display: flex; align-items: flex-end; justify-content: flex-end; padding: 1rem; opacity: 0; transition: opacity .3s; }
+  .card-link:hover .card-hover-layer { opacity: 1; }
+  .card-view-btn { font-family: var(--font-body); font-size: .56rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; color: var(--warm-white); background: var(--navy); padding: .4rem .85rem; }
+  .card-body { padding: .65rem 0 1.1rem; background: var(--warm-white); }
+  .card-meta { display: flex; align-items: center; gap: .65rem; margin-bottom: .3rem; }
+  .card-cat { font-size: .5rem; letter-spacing: .22em; text-transform: uppercase; color: var(--navy); font-weight: 600; }
+  .card-loc { font-size: .5rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  .card-year { font-size: .5rem; color: var(--muted-light,#B8B4AF); margin-left: auto; letter-spacing: .08em; }
+  .card-title { font-family: var(--font-display); font-size: clamp(.95rem,3.5vw,1.3rem); font-weight: 400; letter-spacing: .05em; text-transform: uppercase; color: var(--charcoal); line-height: 1.2; }
+  .card-navy { background: var(--warm-white); border: .5px solid var(--cream-dark); border-top: 2.5px solid var(--navy); }
+  .port-foot { margin-top: 2rem; text-align: center; }
 
-  .mosaic-card { position:relative; overflow:hidden; }
-  .mosaic-link { display:block; text-decoration:none; color:inherit; }
-  .mosaic-img { position:relative; overflow:hidden; background:var(--stone-dark); }
-  .mosaic-img img { width:100%; height:100%; object-fit:cover; transition:transform 1s cubic-bezier(0.4,0,0.2,1); }
+  .btn-navy-ghost { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--font-body); font-size: .62rem; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; text-decoration: none; color: var(--navy); background: transparent; padding: .75rem 1.4rem; border: 1.5px solid var(--navy); cursor: pointer; transition: background .25s,color .25s; white-space: nowrap; }
+  .btn-navy-ghost:hover { background: var(--navy); color: var(--warm-white); }
 
-  /* Row 1 — landscape */
-  .mosaic-row--top .mosaic-img { aspect-ratio:16/10; }
-  /* Portrait card */
-  .mosaic-card--portrait .mosaic-img { aspect-ratio:3/4; }
-  /* Wide card */
-  .mosaic-card--wide .mosaic-img { aspect-ratio:16/10; }
+  .statement { background: var(--warm-white); border-top: .5px solid var(--cream-dark); border-bottom: .5px solid var(--cream-dark); padding: 3.5rem 5%; }
+  .statement-inner { display: flex; gap: 1.25rem; align-items: flex-start; max-width: 680px; }
+  .statement-bar { display: block; width: 3px; background: var(--navy); flex-shrink: 0; align-self: stretch; min-height: 1em; margin-top: .15em; }
+  .statement-quote { font-family: var(--font-display); font-size: clamp(1.05rem,3.5vw,1.6rem); font-weight: 400; letter-spacing: .03em; color: var(--charcoal); line-height: 1.55; font-style: normal; }
 
-  .mosaic-ph { width:100%; height:100%; transition:transform 1s cubic-bezier(0.4,0,0.2,1); }
-  .mosaic-link:hover .mosaic-ph,
-  .mosaic-link:hover .mosaic-img img { transform:scale(1.06); }
+  .cta-band { background: var(--cream); border-top: .5px solid var(--cream-dark); padding: 3rem 5%; position: relative; overflow: hidden; }
+  .cta-mist { position: absolute; bottom: 0; left: 0; right: 0; height: 80px; background: linear-gradient(to top,rgba(26,58,107,.06),transparent); pointer-events: none; }
+  .cta-band-inner { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 1.75rem; }
+  .cta-title { font-family: var(--font-display); font-size: clamp(1.5rem,6vw,2.5rem); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--navy); line-height: 1.05; }
+  .cta-sub { font-size: .78rem; color: var(--muted); margin-top: .4rem; line-height: 1.75; font-weight: 300; }
+  .cta-actions { display: flex; flex-wrap: wrap; gap: .65rem; }
 
-  .mosaic-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(20,18,15,0.82) 0%,rgba(20,18,15,0.3) 45%,transparent 70%); display:flex; align-items:flex-end; justify-content:space-between; padding:1.5rem 1.75rem; opacity:0; transition:opacity 0.5s cubic-bezier(0.4,0,0.2,1); }
-  .mosaic-link:hover .mosaic-overlay { opacity:1; }
+  .btn-line { display: inline-flex; align-items: center; gap: .55rem; font-family: var(--font-body); font-size: .65rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: #fff; background: #06C755; padding: .8rem 1.6rem; border: none; cursor: pointer; transition: background .25s; white-space: nowrap; }
+  .btn-line:hover { background: #05b34c; }
 
-  .mosaic-overlay-inner { display:flex; flex-direction:column; gap:0.2rem; transform:translateY(8px); transition:transform 0.5s cubic-bezier(0.16,1,0.3,1); }
-  .mosaic-link:hover .mosaic-overlay-inner { transform:translateY(0); }
+  .footer { background: var(--navy-deep,#102448); border-top: .5px solid rgba(244,240,230,.06); padding: 2.5rem 5%; }
+  .footer-inner { display: flex; flex-direction: column; gap: 1.5rem; }
+  .footer-logo { font-family: var(--font-body); font-size: .8rem; font-weight: 600; letter-spacing: .18em; color: rgba(244,240,230,.32); display: block; margin-bottom: .2rem; }
+  .footer-logo em { font-style: normal; color: rgba(244,240,230,.68); }
+  .footer-sub { font-size: .5rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(244,240,230,.14); line-height: 1; }
+  .footer-nav { display: flex; flex-wrap: wrap; gap: .4rem 1.4rem; }
+  .footer-nav a { font-size: .56rem; letter-spacing: .14em; text-transform: uppercase; color: rgba(244,240,230,.26); text-decoration: none; transition: color .2s; }
+  .footer-nav a:hover { color: rgba(244,240,230,.8); }
+  .footer-copy { font-size: .48rem; color: rgba(244,240,230,.1); letter-spacing: .1em; }
 
-  .mosaic-cat { font-family:var(--font-sans); font-size:0.58rem; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold-light); }
-  .mosaic-title { font-family:var(--font-serif); font-size:clamp(1rem,1.6vw,1.35rem); font-weight:300; color:var(--warm-white); line-height:1.15; }
-  .mosaic-year { font-size:0.58rem; color:rgba(247,244,239,0.35); letter-spacing:0.1em; margin-top:0.15rem; }
-  .mosaic-arrow { font-size:1.1rem; color:var(--gold); align-self:flex-end; transform:translate(-6px,6px); opacity:0; transition:transform 0.5s cubic-bezier(0.16,1,0.3,1),opacity 0.4s ease; }
-  .mosaic-link:hover .mosaic-arrow { transform:translate(0,0); opacity:1; }
-
-  .mosaic-img::after { content:''; position:absolute; inset:0; border:1px solid rgba(166,124,78,0); transition:border-color 0.4s; pointer-events:none; z-index:2; }
-  .mosaic-link:hover .mosaic-img::after { border-color:rgba(166,124,78,0.35); }
-
-  /* Placeholder hint styling */
-  .mosaic-card--placeholder .mosaic-cat { color:rgba(247,244,239,0.4); }
-  .mosaic-card--placeholder .mosaic-overlay { opacity:0.6; }
-
-  /* ABOUT */
-  .about { background:var(--stone-mid); border-top:1px solid var(--stone-dark); border-bottom:1px solid var(--stone-dark); padding:5rem; }
-  .about-inner { display:grid; grid-template-columns:1fr 220px; gap:5rem; align-items:center; max-width:1000px; margin:0 auto; }
-  .about-text .section-label { display:block; margin-bottom:1rem; }
-  .about-text h2 { font-size:clamp(1.5rem,2.5vw,2rem); font-weight:300; color:var(--charcoal); margin-bottom:1.25rem; line-height:1.25; }
-  .about-text p { font-size:0.85rem; color:var(--ink); line-height:1.85; margin-bottom:1.75rem; max-width:400px; font-weight:300; }
-  .link-underline { font-size:0.64rem; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:var(--charcoal); text-decoration:none; border-bottom:1px solid var(--stone-dark); padding-bottom:2px; transition:color 0.3s,border-color 0.3s; }
-  .link-underline:hover { color:var(--blue); border-color:var(--blue); }
-  .about-stats { display:flex; flex-direction:column; gap:1.75rem; }
-  .stat { display:flex; flex-direction:column; gap:0.15rem; }
-  .stat-line { width:26px; height:1px; background:var(--gold); margin-bottom:0.5rem; }
-  .stat-num { font-family:var(--font-serif); font-size:2.75rem; font-weight:300; color:var(--charcoal); line-height:1; }
-  .stat-lbl { font-size:0.58rem; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); }
-
-  /* SERVICES */
-  .services { background:var(--stone); padding:4rem 5rem; }
-  .services-inner { max-width:960px; margin:0 auto; }
-  .services .section-label { display:block; margin-bottom:1.5rem; }
-  .svc-list { border-top:1px solid var(--stone-dark); }
-  .svc-row { display:flex; align-items:center; padding:1.1rem 0; border-bottom:1px solid var(--stone-mid); text-decoration:none; color:inherit; position:relative; overflow:hidden; transition:padding-left 0.35s cubic-bezier(0.4,0,0.2,1),background 0.35s; }
-  .svc-row::before { content:''; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--blue); transform:scaleY(0); transition:transform 0.35s cubic-bezier(0.4,0,0.2,1); }
-  .svc-row:hover { padding-left:1rem; background:rgba(234,229,219,0.5); }
-  .svc-row:hover::before { transform:scaleY(1); }
-  .svc-n { font-size:0.58rem; color:var(--muted); width:3rem; flex-shrink:0; letter-spacing:0.1em; }
-  .svc-name { font-family:var(--font-serif); font-size:clamp(1rem,1.6vw,1.35rem); font-weight:300; color:var(--charcoal); flex:1; transition:color 0.3s; }
-  .svc-row:hover .svc-name { color:var(--blue); }
-  .svc-arr { font-size:0.8rem; color:var(--gold); transition:transform 0.3s,color 0.3s; }
-  .svc-row:hover .svc-arr { transform:translateX(5px); color:var(--blue); }
-
-  /* CONTACT */
-  .contact { background:var(--charcoal); padding:6rem 5rem; text-align:center; display:flex; flex-direction:column; align-items:center; gap:1.5rem; }
-  .contact h2 { font-family:var(--font-serif); font-size:clamp(1.75rem,3.5vw,2.75rem); font-weight:300; font-style:italic; color:var(--stone); line-height:1.2; max-width:600px; }
-  .contact p { font-size:0.85rem; color:rgba(247,244,239,0.38); font-weight:300; line-height:1.85; max-width:420px; }
-  .contact-btn { display:inline-block; margin-top:0.75rem; font-size:0.66rem; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; color:var(--stone); text-decoration:none; border:1px solid rgba(247,244,239,0.2); padding:0.85rem 2.25rem; position:relative; overflow:hidden; transition:border-color 0.4s; z-index:1; }
-  .contact-btn::before { content:''; position:absolute; inset:0; background:var(--blue); transform:translateY(101%); transition:transform 0.4s cubic-bezier(0.4,0,0.2,1); z-index:-1; }
-  .contact-btn:hover::before { transform:translateY(0); }
-  .contact-btn:hover { border-color:var(--blue); }
-
-  /* FOOTER */
-  .footer { background:#0F0E0C; border-top:1px solid rgba(247,244,239,0.05); padding:1.75rem 5rem; }
-  .footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
-  .footer-logo { font-family:var(--font-sans); font-size:0.85rem; font-weight:500; letter-spacing:0.1em; color:rgba(247,244,239,0.4); }
-  .footer-logo em { font-style:normal; color:var(--gold); }
-  .footer-sub { font-size:0.56rem; letter-spacing:0.1em; color:rgba(247,244,239,0.15); margin-top:0.2rem; }
-  .footer-nav { display:flex; gap:1.75rem; }
-  .footer-nav a { font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(247,244,239,0.2); text-decoration:none; transition:color 0.3s; }
-  .footer-nav a:hover { color:rgba(247,244,239,0.65); }
-  .footer-copy { font-size:0.55rem; color:rgba(247,244,239,0.12); letter-spacing:0.08em; }
-
-  /* RESPONSIVE */
-  @media (max-width:900px) {
-    .hero-body,.hero-foot { padding-left:1.75rem; padding-right:1.75rem; }
-    .statement,.projects,.about,.services,.contact { padding-left:1.75rem; padding-right:1.75rem; }
-    .statement-inner { grid-template-columns:1fr; gap:1rem; }
-    .mosaic-row--top,.mosaic-row--bot { grid-template-columns:1fr; }
-    .mosaic-card--portrait .mosaic-img { aspect-ratio:16/9; }
-    .about-inner { grid-template-columns:1fr; gap:2.5rem; }
-    .about-stats { flex-direction:row; flex-wrap:wrap; gap:1.5rem; }
-    .footer { padding:1.5rem 1.75rem; }
-    .footer-inner { flex-direction:column; align-items:flex-start; gap:0.75rem; }
+  @media (min-width: 768px) {
+    .pillars { grid-template-columns: repeat(3,1fr); }
+    .pillar { border-bottom: none; border-right: .5px solid var(--cream-dark); padding: 2.5rem 5%; }
+    .pillar:last-child { border-right: none; }
+    .grid { grid-template-columns: repeat(2,1fr); }
+    .grid-card--hero { grid-column: 1/-1; }
+    .grid-card--hero .card-media { aspect-ratio: 16/6; }
+    .statement { padding: 5rem 10%; }
+    .cta-band { padding: 5rem 10%; }
+    .cta-band-inner { flex-direction: row; align-items: center; justify-content: space-between; gap: 3rem; }
+    .footer-inner { flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+  }
+  @media (min-width: 1100px) {
+    .grid { grid-template-columns: repeat(3,1fr); }
+    .grid-card--hero { grid-column: 1/-1; }
   }
 </style>
 
 <script>
-  document.querySelectorAll('[data-split]').forEach(el => {
-    const text = el.textContent?.trim() || '';
-    el.innerHTML = text.split(' ').map((w, i) =>
-      `<span style="display:inline-block;overflow:hidden"><span class="word" style="display:inline-block;transform:translateY(105%);opacity:0;transition:transform 0.75s cubic-bezier(0.16,1,0.3,1) ${i*0.055}s,opacity 0.5s ease ${i*0.055}s">${w}</span></span>`
-    ).join(' ');
-  });
-
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
-      const el = entry.target as HTMLElement;
-      if (el.dataset.anim === 'rise') { el.style.opacity='1'; el.style.transform='translateY(0)'; }
-      if (el.dataset.anim === 'line') { el.style.transform='scaleX(1)'; }
-      el.querySelectorAll('.word').forEach((w:any) => { w.style.transform='translateY(0)'; w.style.opacity='1'; });
-      el.querySelectorAll('[data-counter]').forEach((counter:any) => {
-        const target = parseInt(counter.getAttribute('data-counter') || '0');
-        const suffix = counter.getAttribute('data-suffix') || '';
-        const dur = 1600; const start = performance.now();
-        const tick = (now:number) => {
-          const p = Math.min((now-start)/dur,1); const e = 1-Math.pow(1-p,4);
-          counter.textContent = Math.floor(e*target)+suffix;
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      });
-      io.unobserve(el);
+      entry.target.classList.add('revealed');
+      io.unobserve(entry.target);
     });
-  }, { threshold:0.12, rootMargin:'0px 0px -32px 0px' });
-
-  document.querySelectorAll('[data-anim="rise"]').forEach((el:any) => {
-    el.style.opacity='0'; el.style.transform='translateY(20px)';
-    el.style.transition=`opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s,transform 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s`;
-    io.observe(el);
-  });
-  document.querySelectorAll('[data-anim="line"]').forEach((el:any) => {
-    el.style.transform='scaleX(0)'; el.style.transformOrigin='left';
-    el.style.transition='transform 1s cubic-bezier(0.4,0,0.2,1) 0.2s';
-    io.observe(el);
-  });
-  document.querySelectorAll('[data-split]').forEach(el => io.observe(el));
-  document.querySelectorAll('.stat').forEach(el => io.observe(el));
-
-  function applyLang(lang:string) {
-    localStorage.setItem('tnc-lang',lang);
-    document.documentElement.setAttribute('data-lang',lang);
-    document.getElementById('lang-en')?.classList.toggle('active',lang==='en');
-    document.getElementById('lang-th')?.classList.toggle('active',lang==='th');
-    document.querySelectorAll('[data-en][data-th]').forEach(el => {
-      el.textContent = lang==='th' ? el.getAttribute('data-th')||'' : el.getAttribute('data-en')||'';
-    });
-  }
-  applyLang(localStorage.getItem('tnc-lang')||'en');
-  document.getElementById('lang-toggle')?.addEventListener('click',()=>{
-    applyLang((document.documentElement.getAttribute('data-lang')||'en')==='en'?'th':'en');
-  });
+  }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
 </script>

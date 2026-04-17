@@ -3,7 +3,7 @@ export interface Props {
   title: string;
   description?: string;
 }
-const { title, description = 'TNC.18 — Architecture & Construction Excellence, Thailand' } = Astro.props;
+const { title, description = 'TNC.18 — Retail & Interior Design, Bangkok, Thailand' } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -11,12 +11,14 @@ const { title, description = 'TNC.18 — Architecture & Construction Excellence,
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:title" content={`${title} — TNC.18`} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- Preconnect for faster font loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Poppins + Merriweather -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Merriweather:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <title>{title} — TNC.18</title>
   </head>
   <body>
@@ -29,52 +31,134 @@ const { title, description = 'TNC.18 — Architecture & Construction Excellence,
 </html>
 
 <style is:global>
-  /* ── TNC.18 Brand Tokens ── */
   :root {
-    --stone:       #F7F4EF;
-    --stone-mid:   #EAE5DB;
-    --stone-dark:  #CFC9BC;
-    --charcoal:    #1C1A17;
-    --ink:         #3B3830;
-    --muted:       #8A8680;
-    --warm-white:  #FDFCFA;
-    --gold:        #A67C4E;
-    --gold-light:  #C49A6C;
-    --gold-pale:   #F0E4D0;
-    --blue:        #1B3F7A;
-    --blue-mid:    #2452A0;
-    --blue-pale:   #E8EEF8;
-    --font-sans:   'Poppins', system-ui, sans-serif;
-    --font-serif:  'Merriweather', Georgia, serif;
+    --navy:         #1A3A6B;
+    --navy-mid:     #254E8F;
+    --navy-deep:    #102448;
+    --navy-mist:    rgba(26,58,107,0.06);
+    --navy-subtle:  #EDF2FA;
+    --cream:        #F4F0E6;
+    --cream-mid:    #E8E3D8;
+    --cream-dark:   #D4CCBC;
+    --warm-white:   #FDFCFA;
+    --charcoal:     #2A2825;
+    --charcoal-mid: #3D3B38;
+    --ink:          #4A4845;
+    --muted:        #8A8680;
+    --muted-light:  #B8B4AF;
+    --gold:         #B59A7D;
+    --gold-light:   #C9B49A;
+    --gold-pale:    #F0E9DE;
+    --line-green:   #06C755;
+    --line-dark:    #05b34c;
+    /* Legacy aliases */
+    --stone:        #F4F0E6;
+    --stone-mid:    #E8E3D8;
+    --stone-dark:   #D4CCBC;
+    --blue:         #1A3A6B;
+    --blue-mid:     #254E8F;
+    --blue-pale:    #EDF2FA;
+    --font-display: 'Tenor Sans', Georgia, serif;
+    --font-body:    'Inter', system-ui, sans-serif;
+    --font-sans:    'Inter', system-ui, sans-serif;
+    --font-serif:   'Tenor Sans', Georgia, serif;
+    --pad-x:        1.25rem;
+    --border-cream: 0.5px solid var(--cream-dark);
+    --border-navy:  2.5px solid var(--navy);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html {
-    background: var(--stone);
+    background: var(--cream);
     color: var(--charcoal);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    font-family: var(--font-sans);
-    font-weight: 300;
+    font-family: var(--font-body);
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
-    background: var(--stone);
+    background: var(--cream);
   }
 
-  h1, h2, h3 {
-    font-family: var(--font-serif);
-    font-weight: 300;
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
     line-height: 1.1;
   }
 
   p { line-height: 1.8; color: var(--ink); }
+  a { color: inherit; }
   img, video { display: block; width: 100%; }
 
-  ::selection { background: var(--blue); color: var(--warm-white); }
+  ::selection           { background: var(--navy); color: var(--warm-white); }
+  ::-webkit-scrollbar   { width: 2px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--navy); border-radius: 1px; }
 
-  ::-webkit-scrollbar { width: 2px; }
-  ::-webkit-scrollbar-track { background: var(--stone); }
-  ::-webkit-scrollbar-thumb { background: var(--gold); }
+  /* ── Global reveal ── */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1),
+                transform 0.85s cubic-bezier(0.16,1,0.3,1);
+  }
+  [data-reveal].revealed { opacity: 1; transform: none; }
+  [data-reveal][data-delay="1"] { transition-delay: 0.1s; }
+  [data-reveal][data-delay="2"] { transition-delay: 0.2s; }
+  [data-reveal][data-delay="3"] { transition-delay: 0.3s; }
+
+  /* ── Global button utilities ── */
+  .btn-navy {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--font-body); font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;
+    color: var(--warm-white); background: var(--navy);
+    padding: 0.8rem 1.6rem; border: none; cursor: pointer;
+    transition: background 0.25s, transform 0.15s; white-space: nowrap;
+  }
+  .btn-navy:hover  { background: var(--navy-mid); }
+  .btn-navy:active { background: var(--navy-deep); transform: scale(0.98); }
+
+  .btn-navy-ghost {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--font-body); font-size: 0.62rem; font-weight: 500;
+    letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none;
+    color: var(--navy); background: transparent;
+    padding: 0.75rem 1.4rem; border: 1.5px solid var(--navy); cursor: pointer;
+    transition: background 0.25s, color 0.25s; white-space: nowrap;
+  }
+  .btn-navy-ghost:hover { background: var(--navy); color: var(--warm-white); }
+
+  .btn-line {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    font-family: var(--font-body); font-size: 0.65rem; font-weight: 500;
+    letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none;
+    color: #fff; background: var(--line-green);
+    padding: 0.8rem 1.6rem; border: none; cursor: pointer;
+    transition: background 0.25s, transform 0.15s; white-space: nowrap;
+  }
+  .btn-line:hover  { background: var(--line-dark); }
+  .btn-line:active { transform: scale(0.98); }
+
+  /* ── Navy accent vertical line ── */
+  .accent-bar {
+    display: inline-block; width: 3px; background: var(--navy);
+    flex-shrink: 0; align-self: stretch; min-height: 1.1em;
+  }
+
+  /* ── Card with navy top accent ── */
+  .card-navy {
+    background: var(--warm-white);
+    border: 0.5px solid var(--cream-dark);
+    border-top: var(--border-navy);
+  }
+
+  @media (min-width: 768px) {
+    :root { --pad-x: 4rem; }
+  }
 </style>

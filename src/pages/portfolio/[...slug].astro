@@ -1,0 +1,484 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import { getCollection, render } from 'astro:content';
+import contactData from '../../content/settings/contact.json';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(p => ({
+    params: {
+      slug: p.data.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+    },
+    props: { project: p }
+  }));
+}
+
+const { project } = Astro.props;
+const d = project.data;
+
+// Astro v4/v5 correct API — render() is a named export, not a method
+const { Content } = await render(project);
+---
+
+<Layout
+  title={`${d.title} — TNC.18`}
+  description={d.description || `${d.title} — Retail & Interior Design by TNC.18 Bangkok`}
+>
+  <Navbar />
+
+  <main class="main">
+
+    <!-- ── HERO — cinematic full-bleed ── -->
+    <div class="hero-wrap">
+      {d.video_url
+        ? <video autoplay muted loop playsinline class="hero-asset">
+            <source src={d.video_url} type="video/mp4" />
+          </video>
+        : d.cover
+          ? <img src={d.cover} alt={d.title} class="hero-asset" loading="eager" />
+          : <div class="hero-ph"></div>
+      }
+      <div class="hero-gradient"></div>
+
+      <!-- Breadcrumb overlaid on image -->
+      <nav class="hero-nav" aria-label="Breadcrumb">
+        <a href="/portfolio" class="crumb-back">
+          <span class="crumb-arrow">←</span> Work
+        </a>
+        <span class="crumb-div" aria-hidden="true">/</span>
+        <span class="crumb-current">{d.title}</span>
+      </nav>
+    </div>
+
+    <!-- ── PROJECT IDENTITY ── -->
+    <div class="identity">
+      <div class="identity-inner">
+
+        <!-- Left: title block -->
+        <div class="identity-lead">
+          <div class="identity-meta">
+            <span class="meta-cat">{d.category?.toUpperCase()}</span>
+            {d.location && <><span class="meta-mid">·</span><span class="meta-loc">{d.location}</span></>}
+          </div>
+          <h1 class="identity-title">{d.title}</h1>
+          {d.description && <p class="identity-desc">{d.description}</p>}
+        </div>
+
+        <!-- Right: specs table with navy top-border -->
+        <div class="specs">
+          {[
+            { k: 'Client',   v: d.client },
+            { k: 'Location', v: d.location },
+            { k: 'Area',     v: d.area ? `${d.area} sq.m` : null },
+            { k: 'Year',     v: d.year?.toString() },
+            { k: 'Type',     v: d.category },
+          ].filter(r => r.v).map(row => (
+            <div class="spec-row">
+              <span class="spec-k">{row.k}</span>
+              <span class="spec-v">{row.v}</span>
+            </div>
+          ))}
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── GALLERY — cinematic, no gutter ── -->
+    {d.gallery && d.gallery.length > 0 && (
+      <section class="gallery" aria-label="Project gallery">
+        {d.gallery.map((img: string, i: number) => (
+          <figure class="gallery-frame" data-reveal>
+            <img
+              src={img}
+              alt={`${d.title} — view ${i + 1}`}
+              loading="lazy"
+              class="gallery-img"
+            />
+          </figure>
+        ))}
+      </section>
+    )}
+
+    <!-- ── BODY COPY ── -->
+    {project.body && project.body.trim() && (
+      <div class="body-wrap" data-reveal>
+        <div class="body-inner prose">
+          <Content />
+        </div>
+      </div>
+    )}
+
+    <!-- ── LINE OA CTA — dominant conversion ── -->
+    <section class="project-cta" data-reveal aria-label="Contact">
+      <div class="cta-inner">
+        <div class="cta-left">
+          <span class="cta-eyebrow">Start a Project</span>
+          <h2 class="cta-headline">Like what you see?</h2>
+          <p class="cta-body">
+            Message us directly on Line. Senior partners respond within 2 hours —
+            no forms, no waiting rooms.
+          </p>
+        </div>
+        <div class="cta-right">
+          {contactData.line && (
+            <a href={contactData.line} target="_blank" rel="noopener" class="btn-line-lg">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M19.365 9.89c.5 0 .907.406.907.907s-.407.907-.907.907h-2.724v1.77h2.724c.5 0 .907.406.907.907s-.407.907-.907.907H15.73a.907.907 0 0 1-.907-.907V9.89c0-.5.406-.907.907-.907h3.636zm-5.453 0c.5 0 .907.406.907.907v4.491a.907.907 0 0 1-1.814 0V10.797a.907.907 0 0 1 .907-.907zm-2.198 0a.907.907 0 0 1 .736.378l2.33 3.176V10.8a.907.907 0 1 1 1.814 0v4.49a.907.907 0 0 1-.907.907.907.907 0 0 1-.735-.377l-2.33-3.177v2.647a.907.907 0 1 1-1.814 0v-4.49c0-.5.406-.907.906-.907zm-3.634 0c.5 0 .906.406.906.907v4.491a.907.907 0 0 1-1.813 0V10.797c0-.5.406-.907.907-.907zM12 2C6.477 2 2 6.108 2 11.148c0 4.515 3.564 8.292 8.37 9.006.325.07.77.214.882.49.1.252.065.647.032.9l-.143.855c-.043.253-.2 1-.876.547-.676-.454-3.647-2.146-4.98-3.627C3.576 17.21 2 14.315 2 11.148 2 6.108 6.477 2 12 2z"/>
+              </svg>
+              Message on Line
+            </a>
+          )}
+          <a href="/portfolio" class="back-link">← All Projects</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span class="footer-logo">TNC<em>.</em>18</span>
+      <p class="footer-copy">© {new Date().getFullYear()} TNC.18 · Bangkok</p>
+    </footer>
+
+  </main>
+</Layout>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .main {
+    padding-top: 60px;
+    background: var(--cream);
+    min-height: 100vh;
+  }
+
+  /* ── HERO ── */
+  .hero-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: var(--charcoal);
+  }
+
+  .hero-asset {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-ph {
+    width: 100%; height: 100%;
+    background: linear-gradient(155deg, #2c3a52, #141c28);
+  }
+
+  .hero-gradient {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to bottom, transparent 45%, rgba(16,36,72,.65) 100%),
+      linear-gradient(to bottom, rgba(20,18,15,.28) 0%, transparent 25%);
+  }
+
+  .hero-nav {
+    position: absolute;
+    bottom: 1.75rem;
+    left: 15%;
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    z-index: 2;
+  }
+
+  .crumb-back {
+    display: flex; align-items: center; gap: .35rem;
+    font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+    color: rgba(253,252,250,.72); text-decoration: none;
+    transition: color .2s;
+  }
+  .crumb-back:hover { color: var(--warm-white); }
+  .crumb-arrow { font-size: .8rem; }
+  .crumb-div  { font-size: .6rem; color: rgba(253,252,250,.25); }
+  .crumb-current {
+    font-size: .6rem; letter-spacing: .1em;
+    color: rgba(253,252,250,.38);
+    max-width: 220px; white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+  }
+
+  /* ── IDENTITY ── */
+  .identity {
+    background: var(--warm-white);
+    border-bottom: .5px solid var(--cream-dark);
+  }
+
+  .identity-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding: 3.5rem 5% 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .identity-meta {
+    display: flex; align-items: center; gap: .6rem;
+    margin-bottom: .85rem;
+  }
+
+  .meta-cat {
+    font-size: .5rem; letter-spacing: .26em;
+    color: var(--navy); font-weight: 600;
+  }
+  .meta-mid { font-size: .5rem; color: var(--cream-dark); }
+  .meta-loc {
+    font-size: .5rem; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--muted);
+  }
+
+  .identity-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 5vw, 3.5rem);
+    font-weight: 400;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    line-height: 1.08;
+    margin-bottom: 1.5rem;
+  }
+
+  .identity-desc {
+    font-size: .9rem;
+    line-height: 2;
+    color: var(--ink);
+    font-weight: 300;
+    max-width: 560px;
+  }
+
+  /* Specs — navy top border accent */
+  .specs {
+    border-top: 2.5px solid var(--navy);
+    padding-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-self: flex-start;
+    min-width: 240px;
+  }
+
+  .spec-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: .65rem 0;
+    border-bottom: .5px solid var(--cream-dark);
+    gap: 1rem;
+  }
+
+  .spec-k {
+    font-size: .5rem; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--muted);
+    font-weight: 500; flex-shrink: 0;
+    /* Monospace for technical credibility */
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .spec-v {
+    font-size: .52rem; letter-spacing: .1em;
+    color: var(--charcoal); font-weight: 500;
+    text-align: right;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  /* ── GALLERY ── */
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: var(--charcoal);
+    padding: 2px 0;
+  }
+
+  .gallery-frame {
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .9s cubic-bezier(.16,1,.3,1),
+                transform .9s cubic-bezier(.16,1,.3,1);
+  }
+  .gallery-frame.revealed { opacity: 1; transform: none; }
+
+  .gallery-img {
+    width: 100%; height: auto;
+    display: block;
+    transition: transform 1.2s cubic-bezier(.4,0,.2,1);
+  }
+  .gallery-frame:hover .gallery-img { transform: scale(1.02); }
+
+  /* ── BODY PROSE ── */
+  .body-wrap {
+    padding: 5rem 5%;
+    border-top: .5px solid var(--cream-dark);
+    background: var(--cream);
+    opacity: 0; transform: translateY(20px);
+    transition: opacity .85s ease, transform .85s ease;
+  }
+  .body-wrap.revealed { opacity: 1; transform: none; }
+
+  .body-inner { max-width: 640px; margin: 0 auto; }
+
+  .prose :global(p) {
+    font-size: .9rem; line-height: 2;
+    color: var(--ink); font-weight: 300;
+    margin-bottom: 1.5rem;
+  }
+
+  .prose :global(h2), .prose :global(h3) {
+    font-family: var(--font-display);
+    font-size: 1rem; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--charcoal);
+    margin: 2.5rem 0 1rem; font-weight: 400;
+  }
+
+  /* ── CTA ── */
+  .project-cta {
+    background: var(--navy-deep, #102448);
+    padding: 5rem 5%;
+    opacity: 0; transform: translateY(24px);
+    transition: opacity .85s ease, transform .85s ease;
+  }
+  .project-cta.revealed { opacity: 1; transform: none; }
+
+  .cta-inner {
+    display: flex; flex-direction: column; gap: 2.5rem;
+    max-width: 1400px; margin: 0 auto;
+  }
+
+  .cta-eyebrow {
+    display: block;
+    font-size: .5rem; letter-spacing: .28em;
+    text-transform: uppercase; color: rgba(244,240,230,.38);
+    font-weight: 600; margin-bottom: .75rem;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .cta-headline {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 5vw, 2.75rem);
+    font-weight: 400; letter-spacing: .05em;
+    text-transform: uppercase; color: var(--warm-white);
+    line-height: 1.05; margin-bottom: .85rem;
+  }
+
+  .cta-body {
+    font-size: .82rem; line-height: 1.85;
+    color: rgba(244,240,230,.42); font-weight: 300;
+    max-width: 400px;
+  }
+
+  .cta-right {
+    display: flex; flex-direction: column;
+    gap: 1rem; align-items: flex-start;
+  }
+
+  .btn-line-lg {
+    display: inline-flex; align-items: center; gap: .65rem;
+    font-family: var(--font-body); font-size: .72rem;
+    font-weight: 500; letter-spacing: .14em;
+    text-transform: uppercase; text-decoration: none;
+    color: #fff; background: #06C755;
+    padding: 1rem 2rem;
+    transition: background .25s, transform .15s;
+    white-space: nowrap;
+  }
+  .btn-line-lg:hover  { background: #05b34c; }
+  .btn-line-lg:active { transform: scale(.98); }
+
+  .back-link {
+    font-size: .58rem; letter-spacing: .18em;
+    text-transform: uppercase; color: rgba(244,240,230,.3);
+    text-decoration: none; transition: color .2s;
+  }
+  .back-link:hover { color: rgba(244,240,230,.75); }
+
+  /* ── FOOTER ── */
+  .footer {
+    background: #0b1220;
+    border-top: .5px solid rgba(244,240,230,.05);
+    padding: 2rem 5%;
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: .5rem;
+  }
+
+  .footer-logo {
+    font-family: var(--font-body); font-size: .8rem;
+    font-weight: 600; letter-spacing: .18em;
+    color: rgba(244,240,230,.28);
+  }
+  .footer-logo em { font-style: normal; color: rgba(244,240,230,.65); }
+
+  .footer-copy {
+    font-size: .48rem; color: rgba(244,240,230,.12);
+    letter-spacing: .1em;
+  }
+
+  /* ── DESKTOP ── */
+  @media (min-width: 768px) {
+    .hero-wrap { aspect-ratio: 21/9; }
+
+    .identity-inner {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 6rem;
+      padding: 5rem 15% 6rem;
+    }
+
+    .identity-lead { flex: 1; }
+    .specs { min-width: 260px; flex-shrink: 0; }
+
+    .hero-nav { left: 15%; }
+
+    /* Two-column gallery on desktop */
+    .gallery {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .gallery-frame {
+      flex: 1 1 calc(50% - 1px);
+      min-width: 300px;
+    }
+    .gallery-frame:first-child:nth-last-child(odd) {
+      flex: 1 1 100%;
+    }
+
+    .body-wrap { padding: 7rem 15%; }
+
+    .cta-inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6rem;
+      padding: 0 15%;
+    }
+
+    .project-cta { padding: 7rem 0; }
+    .cta-left { flex: 1; }
+    .cta-right { flex-shrink: 0; align-items: flex-start; }
+
+    .footer { padding: 2rem 15%; }
+  }
+</style>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('revealed');
+      io.unobserve(entry.target);
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+</script>

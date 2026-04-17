@@ -1,0 +1,190 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import { getCollection } from 'astro:content';
+import contactData from '../content/settings/contact.json';
+import pageData from '../content/pages/about-services.json';
+
+const allServices = await getCollection('services');
+const services = allServices.sort((a, b) => a.data.order - b.data.order);
+---
+
+<Layout title="Studio — TNC.18">
+  <Navbar />
+
+  <main class="main">
+
+    <!-- HERO STRIP -->
+    <section class="hero">
+      {pageData.hero_image
+        ? <img src={pageData.hero_image} alt="" class="hero-img" />
+        : <div class="hero-fallback"></div>
+      }
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <h1 class="hero-title">{pageData.headline.toUpperCase()}</h1>
+      </div>
+    </section>
+
+    <!-- MISSION -->
+    <section class="mission" data-reveal>
+      <p class="mission-text">{pageData.mission}</p>
+    </section>
+
+    <!-- BIO + STATS -->
+    <section class="bio">
+      <div class="bio-inner">
+        <div class="bio-text" data-reveal>
+          <p class="bio-p">{pageData.bio_1}</p>
+          {pageData.bio_2 && <p class="bio-p">{pageData.bio_2}</p>}
+        </div>
+        <div class="bio-aside">
+          {(pageData.owner_photo || pageData.owner_name) && (
+            <div class="owner" data-reveal>
+              {pageData.owner_photo && (
+                <img src={pageData.owner_photo} alt={pageData.owner_name || 'Founding Partner'} class="owner-photo" />
+              )}
+              {pageData.owner_name && <p class="owner-name">{pageData.owner_name}</p>}
+              {pageData.owner_title && <p class="owner-title">{pageData.owner_title}</p>}
+            </div>
+          )}
+          <div class="stats" data-reveal>
+            {pageData.years && (
+              <div class="stat">
+                <span class="stat-n">{pageData.years}</span>
+                <span class="stat-l">Years</span>
+              </div>
+            )}
+            {pageData.projects && (
+              <div class="stat">
+                <span class="stat-n">{pageData.projects}</span>
+                <span class="stat-l">Projects</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services">
+      <header class="svc-header" data-reveal>
+        <span class="section-label">What We Do</span>
+      </header>
+      <div class="svc-list">
+        {services.map((s, i) => (
+          <div class="svc-row" data-reveal>
+            <span class="svc-n">0{s.data.order}</span>
+            <div class="svc-body">
+              <h3 class="svc-title">{s.data.title.toUpperCase()}</h3>
+              {s.data.description && <p class="svc-desc">{s.data.description}</p>}
+            </div>
+          </div>
+        ))}
+        {services.length === 0 && (
+          <p class="empty">Add services in the <a href="/admin">CMS</a>.</p>
+        )}
+      </div>
+    </section>
+
+    <!-- LINE CTA -->
+    <section class="cta" data-reveal>
+      <h2 class="cta-title">Work with us directly.</h2>
+      <p class="cta-sub">Senior partners. Fast turnaround. 24/7 support.</p>
+      {contactData.line && (
+        <a href={contactData.line} target="_blank" rel="noopener" class="btn-line">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19.365 9.89c.5 0 .907.406.907.907s-.407.907-.907.907h-2.724v1.77h2.724c.5 0 .907.406.907.907s-.407.907-.907.907H15.73a.907.907 0 0 1-.907-.907V9.89c0-.5.406-.907.907-.907h3.636zm-5.453 0c.5 0 .907.406.907.907v4.491a.907.907 0 0 1-1.814 0V10.797a.907.907 0 0 1 .907-.907zm-2.198 0a.907.907 0 0 1 .736.378l2.33 3.176V10.8a.907.907 0 1 1 1.814 0v4.49a.907.907 0 0 1-.907.907.907.907 0 0 1-.735-.377l-2.33-3.177v2.647a.907.907 0 1 1-1.814 0v-4.49c0-.5.406-.907.906-.907zm-3.634 0c.5 0 .906.406.906.907v4.491a.907.907 0 0 1-1.813 0V10.797c0-.5.406-.907.907-.907zM12 2C6.477 2 2 6.108 2 11.148c0 4.515 3.564 8.292 8.37 9.006.325.07.77.214.882.49.1.252.065.647.032.9l-.143.855c-.043.253-.2 1-.876.547-.676-.454-3.647-2.146-4.98-3.627C3.576 17.21 2 14.315 2 11.148 2 6.108 6.477 2 12 2z"/>
+          </svg>
+          Message us on Line
+        </a>
+      )}
+    </section>
+
+  </main>
+</Layout>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .main { padding-top: 60px; background: var(--cream); min-height: 100vh; }
+
+  /* Hero */
+  .hero { position: relative; height: 45vw; min-height: 220px; max-height: 480px; overflow: hidden; background: var(--charcoal); }
+  .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: .45; }
+  .hero-fallback { position: absolute; inset: 0; background: linear-gradient(155deg,#3a3530,#1a1612); }
+  .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to top,rgba(20,18,15,.7) 0%,transparent 60%); }
+  .hero-content { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 2rem 1.5rem; }
+  .hero-title { font-family: var(--font-display); font-size: clamp(1.5rem,6vw,3rem); font-weight: 400; letter-spacing: .08em; color: var(--warm-white); line-height: 1.1; }
+
+  /* Mission */
+  .mission { padding: 3rem 1.5rem; border-bottom: .5px solid var(--cream-dark); opacity: 0; transform: translateY(20px); transition: opacity .8s ease,transform .8s ease; }
+  .mission.revealed { opacity: 1; transform: none; }
+  .mission-text { font-family: var(--font-display); font-size: clamp(1rem,3.5vw,1.5rem); font-weight: 400; letter-spacing: .04em; color: var(--charcoal); line-height: 1.55; max-width: 680px; }
+
+  /* Bio */
+  .bio { padding: 3rem 1.5rem; border-bottom: .5px solid var(--cream-dark); }
+  .bio-inner { display: flex; flex-direction: column; gap: 2.5rem; }
+  .bio-text { opacity: 0; transform: translateY(20px); transition: opacity .8s ease,transform .8s ease; }
+  .bio-text.revealed { opacity: 1; transform: none; }
+  .bio-p { font-size: .875rem; line-height: 1.9; color: var(--ink); font-weight: 300; margin-bottom: 1rem; max-width: 560px; }
+  .bio-p:last-child { margin-bottom: 0; }
+
+  /* Owner — deliberately small */
+  .owner { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 2rem; opacity: 0; transform: translateY(16px); transition: opacity .7s ease,transform .7s ease; }
+  .owner.revealed { opacity: 1; transform: none; }
+  .owner-photo { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; filter: grayscale(20%); }
+  .owner-name { font-family: var(--font-display); font-size: .85rem; font-weight: 400; letter-spacing: .06em; color: var(--charcoal); margin-top: .25rem; }
+  .owner-title { font-size: .55rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+
+  /* Stats */
+  .stats { display: flex; gap: 2.5rem; opacity: 0; transform: translateY(16px); transition: opacity .7s .1s ease,transform .7s .1s ease; }
+  .stats.revealed { opacity: 1; transform: none; }
+  .stat { display: flex; flex-direction: column; gap: .15rem; }
+  .stat-n { font-family: var(--font-display); font-size: 2rem; font-weight: 400; color: var(--charcoal); line-height: 1; }
+  .stat-l { font-size: .52rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+
+  /* Services */
+  .services { padding: 3rem 1.5rem; }
+  .svc-header { margin-bottom: 1.5rem; border-bottom: .5px solid var(--cream-dark); padding-bottom: .75rem; opacity: 0; transform: translateY(16px); transition: opacity .6s ease,transform .6s ease; }
+  .svc-header.revealed { opacity: 1; transform: none; }
+  .section-label { font-family: var(--font-body); font-size: .55rem; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+  .svc-list { border-top: .5px solid var(--cream-dark); }
+  .svc-row { display: flex; gap: 1.25rem; padding: 1.25rem 0; border-bottom: .5px solid var(--cream-mid); align-items: flex-start; opacity: 0; transform: translateY(16px); transition: opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1); }
+  .svc-row.revealed { opacity: 1; transform: none; }
+  .svc-n { font-size: .52rem; color: var(--gold); font-weight: 500; letter-spacing: .14em; flex-shrink: 0; padding-top: .2rem; }
+  .svc-title { font-family: var(--font-display); font-size: clamp(.9rem,3vw,1.15rem); font-weight: 400; letter-spacing: .06em; color: var(--charcoal); margin-bottom: .35rem; }
+  .svc-desc { font-size: .78rem; line-height: 1.75; color: var(--ink); font-weight: 300; max-width: 480px; }
+  .empty { font-size: .8rem; color: var(--muted); padding: 2rem 0; }
+  .empty a { color: var(--gold); text-decoration: none; }
+
+  /* CTA */
+  .cta { padding: 4rem 1.5rem; background: var(--charcoal); display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; opacity: 0; transform: translateY(24px); transition: opacity .8s ease,transform .8s ease; }
+  .cta.revealed { opacity: 1; transform: none; }
+  .cta-title { font-family: var(--font-display); font-size: clamp(1.25rem,5vw,2rem); font-weight: 400; letter-spacing: .06em; text-transform: uppercase; color: var(--warm-white); }
+  .cta-sub { font-size: .78rem; color: rgba(244,240,230,.42); font-weight: 300; line-height: 1.7; }
+  .btn-line { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--font-body); font-size: .65rem; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: #1a1a1a; background: #06C755; padding: .75rem 1.4rem; transition: background .3s; margin-top: .5rem; }
+  .btn-line:hover { background: #05b34c; }
+
+  @media (min-width: 768px) {
+    .hero-content { padding: 3rem 4rem; }
+    .mission { padding: 4rem; }
+    .bio { padding: 4rem; }
+    .bio-inner { flex-direction: row; gap: 5rem; align-items: flex-start; }
+    .bio-text { flex: 1; }
+    .bio-aside { width: 200px; flex-shrink: 0; }
+    .services { padding: 4rem; }
+    .cta { padding: 5rem 4rem; }
+  }
+</style>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('revealed');
+      io.unobserve(entry.target);
+    });
+  }, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+</script>

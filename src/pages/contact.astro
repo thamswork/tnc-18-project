@@ -1,133 +1,143 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
-import contact from '../content/settings/contact.json';
+import contactData from '../content/settings/contact.json';
+import pageData    from '../content/pages/contact.json';
 ---
-<Layout title="Contact — Start a Conversation">
+
+<Layout title="Contact — TNC.18">
   <Navbar />
 
-  <section class="contact-hero">
-    <div class="contact-hero-inner">
-      <span class="page-label" data-anim="rise" data-en="Get in Touch" data-th="ติดต่อเรา">Get in Touch</span>
-      <h1 data-split data-en="Let's talk about what you're building." data-th="มาพูดคุยเกี่ยวกับสิ่งที่คุณกำลังสร้าง">
-        Let's talk about<br/>what you're building.
-      </h1>
-    </div>
-  </section>
+  <main class="main">
 
-  <section class="contact-body">
-    <div class="contact-grid">
+    <!-- HEADLINE -->
+    <section class="hero-text" data-reveal>
+      <h1 class="headline">{pageData.headline.toUpperCase()}</h1>
+      {pageData.subtext && <p class="subtext">{pageData.subtext}</p>}
+      {pageData.promise && (
+        <p class="promise">
+          <span class="promise-dot"></span>
+          {pageData.promise}
+        </p>
+      )}
+    </section>
 
-      <div class="contact-form-col">
-        <form class="contact-form" id="contact-form">
-          <div class="form-group">
-            <label data-en="Your Name" data-th="ชื่อของคุณ">Your Name</label>
-            <input type="text" name="name" required placeholder="—" />
-          </div>
-          <div class="form-group">
-            <label data-en="Email Address" data-th="ที่อยู่อีเมล">Email Address</label>
-            <input type="email" name="email" required placeholder="—" />
-          </div>
-          <div class="form-group">
-            <label data-en="Project Type" data-th="ประเภทโครงการ">Project Type</label>
-            <select name="type">
-              <option value="" data-en="Select one" data-th="เลือกหนึ่ง">Select one</option>
-              <option value="residential" data-en="Residential" data-th="ที่พักอาศัย">Residential</option>
-              <option value="commercial" data-en="Commercial" data-th="เชิงพาณิชย์">Commercial</option>
-              <option value="interior" data-en="Interior" data-th="การออกแบบภายใน">Interior</option>
-              <option value="other" data-en="Other" data-th="อื่นๆ">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label data-en="Tell us about your project" data-th="เล่าให้เราฟังเกี่ยวกับโครงการของคุณ">Tell us about your project</label>
-            <textarea name="message" rows="5" placeholder="—"></textarea>
-          </div>
-          <button type="submit" class="form-submit" data-en="Send Message" data-th="ส่งข้อความ">Send Message</button>
-        </form>
+    <!-- PRIMARY: LINE OA -->
+    {contactData.line && (
+      <section class="primary-cta" data-reveal>
+        <span class="cta-eyebrow">Primary Contact</span>
+        <a href={contactData.line} target="_blank" rel="noopener" class="btn-line">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M19.365 9.89c.5 0 .907.406.907.907s-.407.907-.907.907h-2.724v1.77h2.724c.5 0 .907.406.907.907s-.407.907-.907.907H15.73a.907.907 0 0 1-.907-.907V9.89c0-.5.406-.907.907-.907h3.636zm-5.453 0c.5 0 .907.406.907.907v4.491a.907.907 0 0 1-1.814 0V10.797a.907.907 0 0 1 .907-.907zm-2.198 0a.907.907 0 0 1 .736.378l2.33 3.176V10.8a.907.907 0 1 1 1.814 0v4.49a.907.907 0 0 1-.907.907.907.907 0 0 1-.735-.377l-2.33-3.177v2.647a.907.907 0 1 1-1.814 0v-4.49c0-.5.406-.907.906-.907zm-3.634 0c.5 0 .906.406.906.907v4.491a.907.907 0 0 1-1.813 0V10.797c0-.5.406-.907.907-.907zM12 2C6.477 2 2 6.108 2 11.148c0 4.515 3.564 8.292 8.37 9.006.325.07.77.214.882.49.1.252.065.647.032.9l-.143.855c-.043.253-.2 1-.876.547-.676-.454-3.647-2.146-4.98-3.627C3.576 17.21 2 14.315 2 11.148 2 6.108 6.477 2 12 2z"/>
+          </svg>
+          {pageData.line_label || 'Message us on Line'}
+        </a>
+        <p class="line-note">Tap to open Line — fastest response guaranteed.</p>
+      </section>
+    )}
+
+    <!-- SECONDARY LINKS -->
+    <section class="secondary" data-reveal>
+      <span class="cta-eyebrow">Also Find Us</span>
+      <div class="social-grid">
+        {contactData.instagram && (
+          <a href={contactData.instagram} target="_blank" rel="noopener" class="social-card">
+            <span class="social-platform">Instagram</span>
+            <span class="social-handle">{contactData.instagram.replace('https://instagram.com/', '@').replace('https://www.instagram.com/', '@')}</span>
+            <span class="social-arrow">→</span>
+          </a>
+        )}
+        {contactData.tiktok && (
+          <a href={contactData.tiktok} target="_blank" rel="noopener" class="social-card">
+            <span class="social-platform">TikTok</span>
+            <span class="social-handle">{contactData.tiktok.replace('https://tiktok.com/', '').replace('https://www.tiktok.com/', '')}</span>
+            <span class="social-arrow">→</span>
+          </a>
+        )}
+        {contactData.email && (
+          <a href={`mailto:${contactData.email}`} class="social-card">
+            <span class="social-platform">Email</span>
+            <span class="social-handle">{contactData.email}</span>
+            <span class="social-arrow">→</span>
+          </a>
+        )}
+        {contactData.phone && (
+          <a href={`tel:${contactData.phone.replace(/\s/g, '')}`} class="social-card">
+            <span class="social-platform">Phone</span>
+            <span class="social-handle">{contactData.phone}</span>
+            <span class="social-arrow">→</span>
+          </a>
+        )}
       </div>
+    </section>
 
-      <div class="contact-info-col">
-        <div class="contact-info-block" data-anim="rise">
-          <span class="info-label" data-en="Direct Contact" data-th="ติดต่อโดยตรง">Direct Contact</span>
-          <a href={`tel:${contact.phone}`} class="info-link">{contact.phone}</a>
-          <a href={`mailto:${contact.email}`} class="info-link">{contact.email}</a>
-        </div>
-
-        <div class="contact-info-block" data-anim="rise" data-delay="1">
-          <span class="info-label" data-en="Social & Messaging" data-th="โซเชียลและการส่งข้อความ">Social & Messaging</span>
-          {contact.line && <a href={contact.line} target="_blank" rel="noopener" class="info-link">Line OA</a>}
-          {contact.instagram && <a href={contact.instagram} target="_blank" rel="noopener" class="info-link">Instagram</a>}
-          {contact.tiktok && <a href={contact.tiktok} target="_blank" rel="noopener" class="info-link">TikTok</a>}
-        </div>
-
-        <div class="contact-info-block" data-anim="rise" data-delay="2">
-          <span class="info-label" data-en="Location" data-th="ที่ตั้ง">Location</span>
-          <p class="info-addr" data-en={contact.address} data-th={contact.address_th}>{contact.address}</p>
-        </div>
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <span class="footer-logo">TNC<em>.</em>18</span>
+        <p class="footer-copy">© {new Date().getFullYear()} TNC.18 · Bangkok, Thailand</p>
       </div>
+    </footer>
 
-    </div>
-  </section>
-
-  <footer class="footer">
-    <div class="footer-inner">
-      <div><span class="footer-logo">TNC<em>.</em>18</span></div>
-      <nav class="footer-nav">
-        <a href="/projects" data-en="Projects" data-th="ผลงาน">Projects</a>
-        <a href="/about" data-en="About" data-th="เกี่ยวกับ">About</a>
-        <a href="/services" data-en="Services" data-th="บริการ">Services</a>
-      </nav>
-      <p class="footer-copy">© 2024 TNC.18</p>
-    </div>
-  </footer>
+  </main>
 </Layout>
 
 <style>
-  .contact-hero { background:var(--charcoal); padding:10rem 5rem 5rem; min-height:50vh; display:flex; align-items:flex-end; }
-  .contact-hero-inner { max-width:700px; }
-  .page-label { font-size:0.62rem; font-weight:500; letter-spacing:0.22em; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:1.5rem; }
-  .contact-hero h1 { font-family:var(--font-serif); font-size:clamp(2.5rem,6vw,5rem); font-weight:300; color:var(--stone); line-height:1.1; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .contact-body { background:var(--stone); padding:5rem; border-bottom:1px solid var(--stone-mid); }
-  .contact-grid { display:grid; grid-template-columns:1fr 320px; gap:6rem; max-width:1050px; margin:0 auto; align-items:start; }
+  .main { padding-top: 60px; background: var(--cream); min-height: 100vh; display: flex; flex-direction: column; }
 
-  .form-group { display:flex; flex-direction:column; gap:0.5rem; margin-bottom:1.75rem; }
-  .form-group label { font-size:0.62rem; font-weight:500; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); }
-  .form-group input,.form-group select,.form-group textarea { background:none; border:none; border-bottom:1px solid var(--stone-dark); padding:0.75rem 0; font-family:var(--font-sans); font-size:0.88rem; font-weight:300; color:var(--charcoal); outline:none; transition:border-color 0.3s; width:100%; }
-  .form-group input:focus,.form-group select:focus,.form-group textarea:focus { border-bottom-color:var(--charcoal); }
-  .form-group textarea { resize:none; }
-  .form-submit { background:var(--charcoal); color:var(--stone); border:none; padding:0.9rem 2.5rem; font-family:var(--font-sans); font-size:0.68rem; font-weight:500; letter-spacing:0.18em; text-transform:uppercase; cursor:pointer; position:relative; overflow:hidden; transition:background 0.3s; margin-top:0.5rem; }
-  .form-submit::before { content:''; position:absolute; inset:0; background:var(--blue); transform:translateX(-101%); transition:transform 0.4s cubic-bezier(0.4,0,0.2,1); }
-  .form-submit:hover::before { transform:translateX(0); }
-  .form-submit span,.form-submit { position:relative; z-index:1; }
+  /* Headline */
+  .hero-text { padding: 4rem 1.5rem 2.5rem; border-bottom: .5px solid var(--cream-dark); opacity: 0; transform: translateY(24px); transition: opacity .8s ease,transform .8s ease; }
+  .hero-text.revealed { opacity: 1; transform: none; }
+  .headline { font-family: var(--font-display); font-size: clamp(2.5rem,10vw,6rem); font-weight: 400; letter-spacing: .06em; color: var(--charcoal); line-height: 1.0; margin-bottom: 1.25rem; }
+  .subtext { font-size: .875rem; color: var(--ink); line-height: 1.85; font-weight: 300; max-width: 480px; margin-bottom: 1rem; }
+  .promise { display: flex; align-items: center; gap: .5rem; font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .promise-dot { display: block; width: 5px; height: 5px; border-radius: 50%; background: #06C755; flex-shrink: 0; }
 
-  .contact-info-col { display:flex; flex-direction:column; gap:2.5rem; padding-top:0.5rem; }
-  .contact-info-block { display:flex; flex-direction:column; gap:0.5rem; border-top:1px solid var(--stone-dark); padding-top:1.25rem; }
-  .info-label { font-size:0.58rem; font-weight:500; letter-spacing:0.2em; text-transform:uppercase; color:var(--muted); margin-bottom:0.25rem; }
-  .info-link { font-size:0.88rem; color:var(--charcoal); text-decoration:none; font-weight:300; transition:color 0.3s; }
-  .info-link:hover { color:var(--blue); }
-  .info-addr { font-size:0.85rem; color:var(--ink); font-weight:300; line-height:1.6; }
+  /* Primary CTA */
+  .primary-cta { padding: 3rem 1.5rem; border-bottom: .5px solid var(--cream-dark); display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; opacity: 0; transform: translateY(20px); transition: opacity .8s .1s ease,transform .8s .1s ease; }
+  .primary-cta.revealed { opacity: 1; transform: none; }
+  .cta-eyebrow { font-family: var(--font-body); font-size: .52rem; font-weight: 500; letter-spacing: .26em; text-transform: uppercase; color: var(--muted); }
+  .btn-line { display: inline-flex; align-items: center; gap: .65rem; font-family: var(--font-body); font-size: .75rem; font-weight: 500; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: #1a1a1a; background: #06C755; padding: 1rem 2rem; transition: background .3s,transform .2s; }
+  .btn-line:hover { background: #05b34c; transform: translateY(-1px); }
+  .line-note { font-size: .58rem; color: var(--muted); letter-spacing: .08em; }
 
-  .footer { background:#0F0E0C; padding:1.75rem 5rem; border-top:1px solid rgba(247,244,239,0.05); }
-  .footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; }
-  .footer-logo { font-family:var(--font-sans); font-size:0.85rem; font-weight:500; letter-spacing:0.1em; color:rgba(247,244,239,0.4); }
-  .footer-logo em { font-style:normal; color:var(--gold); }
-  .footer-nav { display:flex; gap:2rem; }
-  .footer-nav a { font-size:0.58rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(247,244,239,0.2); text-decoration:none; transition:color 0.3s; }
-  .footer-nav a:hover { color:rgba(247,244,239,0.65); }
-  .footer-copy { font-size:0.55rem; color:rgba(247,244,239,0.12); }
+  /* Social grid */
+  .secondary { padding: 3rem 1.5rem; border-bottom: .5px solid var(--cream-dark); display: flex; flex-direction: column; gap: 1.5rem; opacity: 0; transform: translateY(20px); transition: opacity .8s .15s ease,transform .8s .15s ease; }
+  .secondary.revealed { opacity: 1; transform: none; }
+  .social-grid { display: flex; flex-direction: column; gap: 0; border-top: .5px solid var(--cream-dark); }
+  .social-card { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: .5px solid var(--cream-mid); text-decoration: none; color: inherit; transition: padding-left .25s; }
+  .social-card:hover { padding-left: .5rem; }
+  .social-platform { font-size: .55rem; font-weight: 500; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); width: 80px; flex-shrink: 0; }
+  .social-handle { font-family: var(--font-display); font-size: .9rem; color: var(--charcoal); flex: 1; transition: color .25s; }
+  .social-card:hover .social-handle { color: var(--gold); }
+  .social-arrow { color: var(--gold); font-size: .85rem; flex-shrink: 0; transition: transform .25s; }
+  .social-card:hover .social-arrow { transform: translateX(4px); }
 
-  @media (max-width:900px) {
-    .contact-hero,.contact-body,.footer { padding-left:1.75rem; padding-right:1.75rem; }
-    .contact-grid { grid-template-columns:1fr; gap:3rem; }
-    .footer-inner { flex-direction:column; align-items:flex-start; }
+  /* Footer */
+  .footer { padding: 2rem 1.5rem; margin-top: auto; background: #191714; }
+  .footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .75rem; }
+  .footer-logo { font-family: var(--font-body); font-size: .78rem; font-weight: 500; letter-spacing: .14em; color: rgba(244,240,230,.3); }
+  .footer-logo em { font-style: normal; color: var(--gold); }
+  .footer-copy { font-size: .5rem; color: rgba(244,240,230,.12); letter-spacing: .1em; }
+
+  @media (min-width: 768px) {
+    .hero-text { padding: 6rem 4rem 3rem; }
+    .primary-cta { padding: 4rem; flex-direction: row; align-items: center; gap: 3rem; flex-wrap: wrap; }
+    .secondary { padding: 4rem; }
+    .social-grid { display: grid; grid-template-columns: repeat(2,1fr); }
+    .footer { padding: 2rem 4rem; }
   }
 </style>
+
 <script>
-  const io=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(!entry.isIntersecting)return;const el=entry.target as HTMLElement;if(el.dataset.anim==='rise'){el.style.opacity='1';el.style.transform='translateY(0)';}io.unobserve(el);});},{threshold:0.12});
-  document.querySelectorAll('[data-anim="rise"]').forEach((el:any)=>{el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition=`opacity 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s,transform 0.8s cubic-bezier(0.16,1,0.3,1) ${(+(el.dataset.delay||0))*0.12}s`;io.observe(el);});
-  document.querySelectorAll('[data-split]').forEach(el=>{const text=el.textContent?.trim()||'';el.innerHTML=text.split(' ').map((w,i)=>`<span style="display:inline-block;overflow:hidden"><span class="word" style="display:inline-block;transform:translateY(105%);opacity:0;transition:transform 0.75s cubic-bezier(0.16,1,0.3,1) ${i*0.055}s,opacity 0.5s ease ${i*0.055}s">${w}</span></span>`).join(' ');io.observe(el);});
-  function applyLang(lang:string){localStorage.setItem('tnc-lang',lang);document.querySelectorAll('[data-en][data-th]').forEach(el=>{el.textContent=lang==='th'?el.getAttribute('data-th')||'':el.getAttribute('data-en')||'';});}
-  applyLang(localStorage.getItem('tnc-lang')||'en');
-  document.getElementById('lang-toggle')?.addEventListener('click',()=>{applyLang((document.documentElement.getAttribute('data-lang')||'en')==='en'?'th':'en');});
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('revealed');
+      io.unobserve(entry.target);
+    });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
 </script>

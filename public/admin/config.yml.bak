@@ -1,0 +1,157 @@
+backend:
+  name: github
+  repo: thamswork/tnc-18-project
+  branch: main
+  base_url: https://tnc-18-auth.tyme-sak.workers.dev
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+
+  - name: projects
+    label: Projects
+    label_singular: Project
+    folder: src/content/projects
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: title
+    fields:
+      - { label: "Title (EN)",           name: title,          widget: string }
+      - { label: "Title (TH)",           name: title_th,       widget: string,   required: false }
+      - { label: "Year",                 name: year,           widget: number,   value_type: int }
+      - label: "Category"
+        name: category
+        widget: select
+        options: [Residential, Commercial, Interior, Mixed-Use, Hospitality]
+      - { label: "Category (TH)",        name: category_th,    widget: string,   required: false }
+      - { label: "Cover Image",          name: cover,          widget: image }
+      - { label: "Description (EN)",     name: description,    widget: text,     required: false }
+      - { label: "Description (TH)",     name: description_th, widget: text,     required: false }
+      - label: "Gallery Images"
+        name: gallery
+        widget: list
+        required: false
+        field: { label: Image, name: image, widget: image }
+      - { label: "Client",               name: client,         widget: string,   required: false }
+      - { label: "Location",             name: location,       widget: string,   required: false }
+      - { label: "Area (sqm)",           name: area,           widget: number,   required: false }
+      - { label: "Featured on homepage", name: featured,       widget: boolean,  default: false }
+      - { label: "Body Content",         name: body,           widget: markdown, required: false }
+
+  - name: services
+    label: Services
+    folder: src/content/services
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Order",            name: order,          widget: number, value_type: int }
+      - { label: "Title (EN)",       name: title,          widget: string }
+      - { label: "Title (TH)",       name: title_th,       widget: string, required: false }
+      - { label: "Description (EN)", name: description,    widget: text,   required: false }
+      - { label: "Description (TH)", name: description_th, widget: text,   required: false }
+
+  - name: news
+    label: "News & Updates"
+    folder: src/content/news
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{slug}}"
+    fields:
+      - { label: "Title (EN)",   name: title,      widget: string }
+      - { label: "Title (TH)",   name: title_th,   widget: string,   required: false }
+      - { label: "Date",         name: date,       widget: datetime, date_format: YYYY-MM-DD, time_format: false }
+      - { label: "Cover Image",  name: cover,      widget: image,    required: false }
+      - { label: "Excerpt (EN)", name: excerpt,    widget: text,     required: false }
+      - { label: "Body",         name: body,       widget: markdown }
+
+  - name: pages
+    label: "Page Content"
+    delete: false
+    editor: { preview: false }
+    files:
+
+      - name: about
+        label: "About Page"
+        file: src/content/pages/about.json
+        fields:
+          - { label: "Hero Headline (EN)", name: hero_headline_en, widget: string }
+          - { label: "Hero Headline (TH)", name: hero_headline_th, widget: string }
+          - label: "Hero Background Photo (top section)"
+            name: hero_bg_photo
+            widget: image
+            required: false
+            hint: "Fills the dark hero area at the top of the About page"
+          - label: "Split Section Photo (below hero, left side)"
+            name: split_photo
+            widget: image
+            required: false
+            hint: "Appears on the left side of the biography section"
+          - label: "Office Photo (upload)"
+            name: office_photo
+            widget: image
+            required: false
+            hint: "Upload a photo — it appears on the left side of the About page"
+          - label: "Office Photo (paste URL from Cloudinary etc.)"
+            name: office_photo_url
+            widget: string
+            required: false
+            hint: "Alternative: paste a direct image URL if not uploading"
+          - { label: "Bio Paragraph 1 (EN)", name: bio_1_en, widget: text }
+          - { label: "Bio Paragraph 1 (TH)", name: bio_1_th, widget: text }
+          - { label: "Bio Paragraph 2 (EN)", name: bio_2_en, widget: text }
+          - { label: "Bio Paragraph 2 (TH)", name: bio_2_th, widget: text }
+          - { label: "Bio Paragraph 3 (EN)", name: bio_3_en, widget: text }
+          - { label: "Bio Paragraph 3 (TH)", name: bio_3_th, widget: text }
+          - { label: "Photo Caption (EN)",   name: office_caption_en, widget: string }
+          - { label: "Photo Caption (TH)",   name: office_caption_th, widget: string }
+          - { label: "Team Statement (EN)",  name: team_en, widget: text }
+          - { label: "Team Statement (TH)",  name: team_th, widget: text }
+
+      - name: homepage
+        label: "Homepage"
+        file: src/content/pages/homepage.json
+        fields:
+          - { label: "Hero Line 1 (EN)", name: hero_line1_en, widget: string }
+          - { label: "Hero Line 1 (TH)", name: hero_line1_th, widget: string }
+          - { label: "Hero Line 2 (EN)", name: hero_line2_en, widget: string }
+          - { label: "Hero Line 2 (TH)", name: hero_line2_th, widget: string }
+          - { label: "Statement Quote (EN)", name: statement_en, widget: text }
+          - { label: "Statement Quote (TH)", name: statement_th, widget: text }
+          - { label: "About Headline (EN)", name: about_headline_en, widget: string }
+          - { label: "About Headline (TH)", name: about_headline_th, widget: string }
+          - { label: "About Body (EN)", name: about_body_en, widget: text }
+          - { label: "About Body (TH)", name: about_body_th, widget: text }
+          - { label: "Years stat", name: stats_years, widget: string }
+          - { label: "Projects stat", name: stats_projects, widget: string }
+          - { label: "Specialists stat", name: stats_specialists, widget: string }
+          - { label: "Contact Headline (EN)", name: contact_headline_en, widget: string }
+          - { label: "Contact Headline (TH)", name: contact_headline_th, widget: string }
+          - { label: "Contact Body (EN)", name: contact_body_en, widget: text }
+          - { label: "Contact Body (TH)", name: contact_body_th, widget: text }
+
+  - name: settings
+    label: "Global Settings"
+    delete: false
+    editor: { preview: false }
+    files:
+      - name: contact
+        label: "Contact & Social"
+        file: src/content/settings/contact.json
+        fields:
+          - { label: Phone,          name: phone,      widget: string }
+          - { label: Email,          name: email,      widget: string }
+          - { label: "Address (EN)", name: address,    widget: text,   required: false }
+          - { label: "Address (TH)", name: address_th, widget: text,   required: false }
+          - { label: "Line OA URL",  name: line,       widget: string, required: false }
+          - { label: Instagram,      name: instagram,  widget: string, required: false }
+          - { label: TikTok,         name: tiktok,     widget: string, required: false }
+      - name: siteinfo
+        label: "Site Info"
+        file: src/content/settings/siteinfo.json
+        fields:
+          - { label: "Site Name",        name: site_name, widget: string }
+          - { label: "Tagline (EN)",     name: tagline,   widget: string }
+          - { label: "Meta Description", name: meta_desc, widget: text }
