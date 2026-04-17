@@ -294,6 +294,7 @@ const { Content } = await render(project);
 
   /* ── GALLERY ── */
   .gallery {
+    gap: 0 !important;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -302,7 +303,7 @@ const { Content } = await render(project);
   }
 
   .gallery-frame {
-    aspect-ratio: 4/3; overflow: hidden; background: var(--bg-dark, #E0DDD8);
+    aspect-ratio: 4/3; overflow: hidden; background: #000; margin: 0; padding: 0;
     overflow: hidden;
     opacity: 0;
     transform: translateY(24px);
@@ -443,11 +444,12 @@ const { Content } = await render(project);
 
     /* Two-column gallery on desktop */
     .gallery {
+    gap: 0 !important;
       flex-direction: row;
       flex-wrap: wrap;
     }
     .gallery-frame {
-    aspect-ratio: 4/3; overflow: hidden; background: var(--bg-dark, #E0DDD8);
+    aspect-ratio: 4/3; overflow: hidden; background: #000; margin: 0; padding: 0;
       flex: 1 1 calc(50% - 1px);
       min-width: 300px;
     }
