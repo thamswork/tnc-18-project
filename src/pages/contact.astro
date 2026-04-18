@@ -2,8 +2,17 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
 import contactData from '../content/settings/contact.json';
 import pageData    from '../content/pages/contact.json';
+
+const allProjects = await getCollection('projects');
+const projects = allProjects.sort((a, b) => b.data.year - a.data.year);
+const featured = projects[0] || null;
+
+function slug(t: string) {
+  return t.toLowerCase().replace(/[\u2018\u2019'']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+}
 
 const igHandle = (contactData.instagram || '')
   .replace('https://www.instagram.com/','@')
@@ -12,6 +21,8 @@ const igHandle = (contactData.instagram || '')
 const ttHandle = (contactData.tiktok || '')
   .replace('https://www.tiktok.com/','')
   .replace('https://tiktok.com/','');
+
+const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320/LINE_Brand_icon_2_ytuls0.png';
 ---
 
 <Layout title="Contact — TNC.18">
@@ -19,20 +30,41 @@ const ttHandle = (contactData.tiktok || '')
 
   <main class="contact-main">
 
+    <!-- ── FEATURED PROJECT — full bleed ── -->
+    {featured && (
+      <a href={`/portfolio/${slug(featured.data.title)}`} class="feat-wrap">
+        {featured.data.cover
+          ? <img src={featured.data.cover} alt={featured.data.title} class="feat-img" loading="eager" />
+          : <div class="feat-ph"></div>
+        }
+        <div class="feat-veil"></div>
+        <div class="feat-content">
+          <div class="feat-top">
+            <span class="feat-cat">{featured.data.category}</span>
+            {featured.data.year && <span class="feat-yr">{featured.data.year}</span>}
+          </div>
+          <div class="feat-bot">
+            {featured.data.location && <p class="feat-loc">{featured.data.location}</p>}
+            <h2 class="feat-title">{featured.data.title}</h2>
+            <span class="feat-cta">View Project →</span>
+          </div>
+        </div>
+      </a>
+    )}
+
+    <!-- ── CONTACT SPLIT ── -->
     <div class="contact-grid">
 
-      <!-- LEFT: headline + Line CTA -->
+      <!-- LEFT -->
       <div class="contact-left">
         <div class="contact-left-inner" data-reveal>
           <p class="contact-eyebrow">Get In Touch</p>
           <h1 class="contact-title">{pageData.headline.toUpperCase()}</h1>
-          {pageData.subtext && (
-            <p class="contact-sub">{pageData.subtext}</p>
-          )}
+          {pageData.subtext && <p class="contact-sub">{pageData.subtext}</p>}
 
           {contactData.line && (
             <a href={contactData.line} target="_blank" rel="noopener" class="btn-line">
-              <img src="https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320/LINE_Brand_icon_2_ytuls0.png" alt="LINE" class="line-icon" />
+              <img src={LINE_ICON} alt="LINE" class="line-icon" />
               {pageData.line_label || 'Message us on Line'}
             </a>
           )}
@@ -46,14 +78,11 @@ const ttHandle = (contactData.tiktok || '')
         </div>
       </div>
 
-      <!-- RIGHT: dark navy contact channels -->
+      <!-- RIGHT -->
       <div class="contact-right">
         <div class="contact-right-inner" data-reveal-fade>
-
           <p class="right-label">Also Find Us</p>
-
           <div class="channel-list">
-
             {contactData.instagram && (
               <a href={contactData.instagram} target="_blank" rel="noopener" class="channel-row">
                 <div class="channel-meta">
@@ -63,7 +92,6 @@ const ttHandle = (contactData.tiktok || '')
                 <span class="channel-arr">→</span>
               </a>
             )}
-
             {contactData.tiktok && (
               <a href={contactData.tiktok} target="_blank" rel="noopener" class="channel-row">
                 <div class="channel-meta">
@@ -73,7 +101,6 @@ const ttHandle = (contactData.tiktok || '')
                 <span class="channel-arr">→</span>
               </a>
             )}
-
             {contactData.facebook && (
               <a href={contactData.facebook} target="_blank" rel="noopener" class="channel-row">
                 <div class="channel-meta">
@@ -83,7 +110,6 @@ const ttHandle = (contactData.tiktok || '')
                 <span class="channel-arr">→</span>
               </a>
             )}
-
             {contactData.email && (
               <a href={`mailto:${contactData.email}`} class="channel-row">
                 <div class="channel-meta">
@@ -93,7 +119,6 @@ const ttHandle = (contactData.tiktok || '')
                 <span class="channel-arr">→</span>
               </a>
             )}
-
             {contactData.phone && (
               <a href={`tel:${contactData.phone.replace(/\s/g,'')}`} class="channel-row">
                 <div class="channel-meta">
@@ -103,16 +128,13 @@ const ttHandle = (contactData.tiktok || '')
                 <span class="channel-arr">→</span>
               </a>
             )}
-
           </div>
 
-          <!-- Studio address block -->
           <div class="studio-block">
             <p class="studio-label">Studio</p>
             <p class="studio-address">Bangkok, Thailand</p>
             <p class="studio-hours">Mon – Sat · 09:00 – 18:00</p>
           </div>
-
         </div>
       </div>
 
@@ -127,24 +149,114 @@ const ttHandle = (contactData.tiktok || '')
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   .contact-main {
-    padding-top: 64px;
-    min-height: calc(100vh - 64px);
+    padding-top: 72px;
     background: var(--bg, #F8F7F4);
   }
+
+  /* ── FEATURED PROJECT ── */
+  .feat-wrap {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 60vh;
+    overflow: hidden;
+    text-decoration: none;
+    background: #0a0e18;
+  }
+
+  .feat-img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 1.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .feat-wrap:hover .feat-img { transform: scale(1.03); }
+
+  .feat-ph { width: 100%; height: 100%; background: #1a2a3e; }
+
+  .feat-veil {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(to top, rgba(4,6,10,0.88) 0%, rgba(4,6,10,0.3) 50%, rgba(4,6,10,0.25) 100%);
+  }
+
+  .feat-content {
+    position: absolute; inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2rem var(--pad-x, 5vw);
+  }
+
+  .feat-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .feat-cat {
+    font-family: 'Courier New', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: rgba(248,247,244,0.6);
+    background: rgba(4,6,10,0.45);
+    padding: 0.3rem 0.75rem;
+  }
+
+  .feat-yr {
+    font-family: 'Courier New', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+    color: rgba(248,247,244,0.35);
+  }
+
+  .feat-bot {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .feat-loc {
+    font-family: 'Courier New', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(248,247,244,0.45);
+  }
+
+  .feat-title {
+    font-family: var(--font-display, 'Tenor Sans', serif);
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #F8F7F4;
+    line-height: 1.05;
+    max-width: 700px;
+  }
+
+  .feat-cta {
+    font-family: 'Courier New', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(248,247,244,0.5);
+    transition: color 0.2s;
+  }
+  .feat-wrap:hover .feat-cta { color: #F8F7F4; }
 
   /* ── SPLIT GRID ── */
   .contact-grid {
     display: flex;
     flex-direction: column;
-    min-height: calc(100vh - 64px);
   }
 
-  /* ── LEFT ── */
   .contact-left {
     background: var(--bg, #F8F7F4);
     display: flex;
     align-items: center;
-    padding: 5rem var(--pad-x, 5vw);
+    padding: 4rem var(--pad-x, 5vw);
   }
 
   .contact-left-inner {
@@ -164,7 +276,7 @@ const ttHandle = (contactData.tiktok || '')
 
   .contact-title {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-size: clamp(2.5rem, 7vw, 5rem);
     font-weight: 400;
     letter-spacing: 0.03em;
     color: var(--ink, #1A1A1A);
@@ -172,7 +284,7 @@ const ttHandle = (contactData.tiktok || '')
   }
 
   .contact-sub {
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     line-height: 1.9;
     color: var(--ink-mid, #4A4A4A);
     font-weight: 300;
@@ -198,11 +310,10 @@ const ttHandle = (contactData.tiktok || '')
   }
   .btn-line:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; }
 
-  .line-dot {
-    display: block;
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    background: #06C755;
+  .line-icon {
+    width: 22px; height: 22px;
+    object-fit: contain;
+    border-radius: 4px;
     flex-shrink: 0;
   }
 
@@ -225,167 +336,139 @@ const ttHandle = (contactData.tiktok || '')
     flex-shrink: 0;
   }
 
-  /* ── RIGHT ── */
   .contact-right {
     background: var(--navy-deep, #0E2140);
     display: flex;
     align-items: flex-start;
-    padding: 5rem var(--pad-x, 5vw);
+    padding: 4rem var(--pad-x, 5vw);
   }
 
   .contact-right-inner {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 2rem;
   }
 
   .right-label {
     font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(248,247,244,0.45);
+    color: rgba(248,247,244,0.4);
     font-weight: 500;
   }
 
-  /* Channel rows */
-  .channel-list {
-    display: flex;
-    flex-direction: column;
-  }
+  .channel-list { display: flex; flex-direction: column; }
 
   .channel-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.25rem 0;
+    padding: 1.1rem 0;
     border-bottom: 0.5px solid rgba(248,247,244,0.08);
     text-decoration: none;
     color: inherit;
-    transition: padding-left 0.2s;
+    opacity: 0;
+    transform: translateX(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease, padding-left 0.2s;
   }
   .channel-row:first-child { border-top: 0.5px solid rgba(248,247,244,0.08); }
+  .channel-row.visible { opacity: 1; transform: translateX(0); }
   .channel-row:hover { padding-left: 0.5rem; }
 
-  .channel-meta {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
+  .channel-meta { display: flex; flex-direction: column; gap: 0.25rem; }
 
   .channel-platform {
     font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: rgba(248,247,244,0.5);
+    color: rgba(248,247,244,0.45);
     font-weight: 500;
   }
 
   .channel-handle {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+    font-size: clamp(1.1rem, 2.2vw, 1.45rem);
     color: #F8F7F4;
     font-weight: 400;
-    letter-spacing: 0.02em;
     transition: color 0.2s;
   }
-  .channel-row:hover .channel-handle { color: #F8F7F4; }
 
   .channel-arr {
     font-size: 1rem;
-    color: rgba(248,247,244,0.25);
+    color: rgba(248,247,244,0.2);
     transition: transform 0.2s, color 0.2s;
     flex-shrink: 0;
   }
-  .channel-row:hover .channel-arr { transform: translateX(5px); color: rgba(248,247,244,0.7); }
+  .channel-row:hover .channel-arr { transform: translateX(5px); color: rgba(248,247,244,0.65); }
 
-  /* Studio block */
   .studio-block {
-    padding-top: 1rem;
+    border-top: 0.5px solid rgba(248,247,244,0.08);
+    padding-top: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    gap: 0.35rem;
   }
 
   .studio-label {
     font-family: 'Courier New', monospace;
-    font-size: 0.48rem;
+    font-size: 0.5rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: rgba(248,247,244,0.3);
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.2rem;
   }
 
   .studio-address {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: 1.1rem;
-    color: rgba(248,247,244,0.85);
+    font-size: 1.05rem;
+    color: rgba(248,247,244,0.8);
   }
 
   .studio-hours {
     font-family: 'Courier New', monospace;
-    font-size: 0.52rem;
+    font-size: 0.5rem;
     letter-spacing: 0.14em;
     color: rgba(248,247,244,0.25);
   }
 
+  /* ── ANIMATIONS ── */
+  [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  [data-reveal].revealed { opacity: 1; transform: none; }
+  [data-reveal-fade] { opacity: 0; transition: opacity 0.9s ease; }
+  [data-reveal-fade].revealed { opacity: 1; }
 
-
-  /* ── DESKTOP: true split ── */
+  /* ── DESKTOP ── */
   @media (min-width: 768px) {
+    .feat-wrap { height: 75vh; }
+    .feat-content { padding: 3rem 8vw; }
+
     .contact-grid {
       flex-direction: row;
-      min-height: calc(100vh - 64px);
+      min-height: 55vh;
     }
     .contact-left {
       flex: 1;
-      padding: 8rem 6vw 8rem 8vw;
+      padding: 6rem 6vw 6rem 8vw;
       align-items: center;
     }
     .contact-right {
       width: 42%;
       flex-shrink: 0;
-      padding: 8rem 6vw 8rem 5vw;
-      align-items: flex-start;
-      min-height: 100%;
+      padding: 6rem 8vw 6rem 5vw;
     }
   }
 
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(28px); }
-    to   { opacity: 1; transform: translateY(0); }
+  @media (min-width: 1200px) {
+    .feat-wrap { height: 85vh; }
+    .contact-left { padding: 7rem 6vw 7rem 10vw; }
+    .contact-right { padding: 7rem 10vw 7rem 5vw; }
   }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-
-  [data-reveal] { opacity: 0; transform: translateY(28px); }
-  [data-reveal].revealed {
-    animation: fadeUp 0.75s cubic-bezier(0.4,0,0.2,1) forwards;
-  }
-  [data-reveal-fade] { opacity: 0; }
-  [data-reveal-fade].revealed {
-    animation: fadeIn 0.9s ease forwards;
-  }
-
-  .channel-row {
-    opacity: 0;
-    transform: translateX(16px);
-    transition: opacity 0.5s ease, transform 0.5s ease, padding-left 0.2s;
-  }
-  .channel-row.visible {
-    opacity: 1;
-    transform: translateX(0);
-  }
-
 </style>
 
 <script>
-  // Reveal blocks
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
@@ -395,13 +478,12 @@ const ttHandle = (contactData.tiktok || '')
   }, { threshold: 0.06 });
   document.querySelectorAll('[data-reveal], [data-reveal-fade]').forEach(el => io.observe(el));
 
-  // Stagger channel rows
   const rows = document.querySelectorAll('.channel-row');
   const rowObs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       const i = Array.from(rows).indexOf(e.target);
-      setTimeout(() => e.target.classList.add('visible'), i * 90);
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
       rowObs.unobserve(e.target);
     });
   }, { threshold: 0.1 });
