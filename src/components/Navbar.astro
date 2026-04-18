@@ -39,8 +39,10 @@ const path = Astro.url.pathname;
     display: flex;
     align-items: center;
     background: transparent;
-    border: none;
-    box-shadow: none;
+    border: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    outline: none;
     transition: background 0.3s;
   }
 
