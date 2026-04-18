@@ -300,7 +300,10 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   }
   .hero-content {
     position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
-    padding: 8vh var(--pad-x,5vw) 5rem; display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: flex-end; max-width: 680px; margin-left: auto; margin-right: auto;
+    padding: 8vh var(--pad-x,5vw) 6rem;
+    display: flex; flex-direction: column;
+    align-items: center; text-align: center; justify-content: flex-end;
+    width: 100%; max-width: 100%; margin: 0;
   }
   .hero-loc {
     font-family: 'Courier New',monospace; font-size: 0.58rem;
@@ -310,13 +313,14 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   .hero-content-wrap { background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%); }
   .hero-title {
     font-family: var(--font-display,'Tenor Sans',serif);
-    font-size: clamp(1.4rem,3.5vw,2.6rem); font-weight: 400;
+    font-size: clamp(2.2rem,5.5vw,5rem); font-weight: 400;
     letter-spacing: 0.03em; text-transform: uppercase;
-    line-height: 1.15; display: flex; flex-direction: column; margin-bottom: 2rem; align-items: center; text-align: center; max-width: 580px; margin-left: auto; margin-right: auto;
-    white-space: nowrap;
+    line-height: 1.08; display: flex; flex-direction: column;
+    margin-bottom: 2rem; align-items: center; text-align: center;
+    width: 100%;
   }
-  .ht-1 { color: #F8F7F4; text-shadow: 0 2px 40px rgba(0,0,0,0.95), 0 1px 8px rgba(0,0,0,1), 0 0 80px rgba(0,0,0,0.8); }
-  .ht-2 { color: rgba(248,247,244,0.55); text-shadow: 0 2px 40px rgba(0,0,0,0.95), 0 1px 8px rgba(0,0,0,1); }
+  .ht-1 { color: #F8F7F4; text-shadow: 0 2px 40px rgba(0,0,0,0.95), 0 1px 8px rgba(0,0,0,1); display:block; }
+  .ht-2 { color: rgba(248,247,244,0.5); text-shadow: 0 2px 40px rgba(0,0,0,0.95), 0 1px 8px rgba(0,0,0,1); display:block; }
   .hero-more {
     display: inline-flex; align-items: center; gap: 0.75rem;
     font-family: 'Courier New',monospace; font-size: 0.62rem;

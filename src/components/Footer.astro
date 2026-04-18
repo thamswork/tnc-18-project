@@ -6,19 +6,20 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
 interface Props {
   ctaTitle?: string;
   ctaSub?: string;
+  hideCta?: boolean;
 }
 const {
   ctaTitle = "Ready to Start?",
-  ctaSub   = "Senior partners only. Fast turnaround. We reply within 2 hours."
+  ctaSub   = "Senior partners only. Fast turnaround. We reply within 2 hours.",
+  hideCta  = false,
 } = Astro.props;
 ---
 
 <div class="footer-wrap">
 
-  <!-- ── CTA + FOOTER merged block ── -->
   <div class="cta-footer">
 
-    <!-- CTA row -->
+    {!hideCta && (
     <div class="cf-cta">
       <div class="cf-cta-left">
         <p class="cf-eyebrow">Get In Touch</p>
@@ -41,8 +42,10 @@ const {
       </div>
     </div>
 
+    )}
+
     <!-- Divider -->
-    <div class="cf-divider"></div>
+    {!hideCta && <div class="cf-divider"></div>}
 
     <!-- Footer nav row -->
     <div class="cf-foot">
