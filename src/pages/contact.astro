@@ -139,7 +139,6 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   .contact-main {
-    padding-top: 72px;
     background: var(--bg, #F8F7F4);
   }
 
@@ -148,8 +147,10 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
     position: relative;
     width: 100%;
     height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
     background: #0a0e18;
+    margin-top: -72px;
   }
 
   .feat-img {
@@ -173,7 +174,7 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 1.75rem var(--pad-x, 5vw) 2.5rem;
+    padding: 5.5rem var(--pad-x, 5vw) 3rem;
   }
 
   .feat-brand {
