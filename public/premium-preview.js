@@ -3,26 +3,7 @@
   var isHome = document.body.classList.contains('page-home');
   var isSlug = document.body.classList.contains('page-slug');
 
-  /* Images — wait for load, then reveal */
-  function revealImgs(selector) {
-    document.querySelectorAll(selector).forEach(function(img) {
-      var wrap = img.parentElement;
-      if (!wrap) return;
-      if (img.complete && img.naturalWidth > 0) {
-        wrap.classList.add('img-ready');
-      } else {
-        img.addEventListener('load', function() {
-          wrap.classList.add('img-ready');
-        });
-        img.addEventListener('error', function() {
-          wrap.classList.add('img-ready'); // still show on error
-        });
-      }
-    });
-  }
-  revealImgs('.works-img');
-  revealImgs('.proj-img');
-  revealImgs('.gallery-img');
+  
 
   /* Generic fade-up observer */
   function fadeUp(selector, delay) {

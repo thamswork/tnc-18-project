@@ -34,25 +34,10 @@
 }
 
 /* 4. Images — simple fade + subtle scale, NO clip-path */
-.works-img,
-.proj-img,
-.gallery-img {
-  opacity: 0;
-  transform: scale(1.03);
-  transition:
-    opacity 0.9s ease,
-    transform 1.2s cubic-bezier(0.4,0,0.2,1),
-    filter 1s ease;
-  will-change: opacity, transform;
-  filter: saturate(0.4);
-}
+
 .img-ready .works-img,
 .img-ready .proj-img,
-.img-ready .gallery-img {
-  opacity: 1;
-  transform: scale(1);
-  filter: saturate(1);
-}
+
 
 /* 5. Section fade-up */
 .pillar {
