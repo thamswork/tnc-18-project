@@ -1,143 +1,239 @@
 ---
 import contactData from '../content/settings/contact.json';
 const year = new Date().getFullYear();
+const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320/LINE_Brand_icon_2_ytuls0.png';
+
+interface Props {
+  ctaTitle?: string;
+  ctaSub?: string;
+}
+const {
+  ctaTitle = "Ready to Start?",
+  ctaSub   = "Senior partners only. Fast turnaround. We reply within 2 hours."
+} = Astro.props;
 ---
 
-<footer class="site-footer">
-  <div class="footer-inner">
+<div class="footer-wrap">
 
-    <div class="footer-brand">
-      <a href="/" class="footer-logo">TNC<em>.</em>18</a>
-      <p class="footer-tagline">Retail & Interior Design · Bangkok</p>
+  <!-- ── CTA + FOOTER merged block ── -->
+  <div class="cta-footer">
+
+    <!-- CTA row -->
+    <div class="cf-cta">
+      <div class="cf-cta-left">
+        <p class="cf-eyebrow">Get In Touch</p>
+        <h2 class="cf-title">{ctaTitle}</h2>
+        <p class="cf-sub">{ctaSub}</p>
+      </div>
+      <div class="cf-cta-right">
+        {contactData.line && (
+          <a href={contactData.line} target="_blank" rel="noopener" class="cf-line-btn">
+            <img src={LINE_ICON} alt="LINE" class="cf-line-icon" />
+            Message on Line
+          </a>
+        )}
+        <div class="cf-socials">
+          {contactData.instagram && <a href={contactData.instagram} target="_blank" rel="noopener" class="cf-social">Instagram</a>}
+          {contactData.tiktok    && <a href={contactData.tiktok}    target="_blank" rel="noopener" class="cf-social">TikTok</a>}
+          {contactData.facebook  && <a href={contactData.facebook}  target="_blank" rel="noopener" class="cf-social">Facebook</a>}
+          {contactData.email     && <a href={`mailto:${contactData.email}`} class="cf-social">{contactData.email}</a>}
+        </div>
+      </div>
     </div>
 
-    <nav class="footer-nav" aria-label="Footer navigation">
-      <p class="footer-col-label">Pages</p>
-      <a href="/">Home</a>
-      <a href="/portfolio">Work</a>
-      <a href="/about-services">Studio</a>
-      <a href="/contact">Contact</a>
-    </nav>
+    <!-- Divider -->
+    <div class="cf-divider"></div>
 
-    <div class="footer-connect">
-      <p class="footer-col-label">Connect</p>
-      {contactData.instagram && <a href={contactData.instagram} target="_blank" rel="noopener">Instagram</a>}
-      {contactData.tiktok    && <a href={contactData.tiktok}    target="_blank" rel="noopener">TikTok</a>}
-      {contactData.facebook  && <a href={contactData.facebook}  target="_blank" rel="noopener">Facebook</a>}
-      {contactData.line      && <a href={contactData.line}      target="_blank" rel="noopener">Line OA</a>}
-      {contactData.email     && <a href={`mailto:${contactData.email}`}>{contactData.email}</a>}
+    <!-- Footer nav row -->
+    <div class="cf-foot">
+      <a href="/" class="cf-logo">TNC<em>.</em>18</a>
+      <nav class="cf-nav">
+        <a href="/">Home</a>
+        <a href="/portfolio">Work</a>
+        <a href="/about-services">Studio</a>
+        <a href="/contact">Contact</a>
+      </nav>
+      <p class="cf-copy">© {year} TNC.18. All rights reserved.</p>
     </div>
 
   </div>
-
-  <div class="footer-bottom">
-    <p class="footer-copy">© {year} TNC.18. All rights reserved.</p>
-    <p class="footer-copy">Senior partners only. No junior hand-offs.</p>
-  </div>
-</footer>
+</div>
 
 <style>
-  .site-footer {
-    background: var(--navy-deep, #0E2140);
-    padding: 1.5rem var(--pad-x, 5vw) 0;
-    border-top: 0.5px solid rgba(255,255,255,0.06);
+  .footer-wrap { background: var(--navy-deep, #0E2140); }
+
+  .cta-footer {
+    padding: 5rem var(--pad-x, 5vw) 2.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
   }
 
-  .footer-inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0;
-    padding-bottom: 1rem;
-    border-bottom: 0.5px solid rgba(255,255,255,0.07);
-  }
-
-  .footer-logo {
-    font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: rgba(255,255,255,0.5);
-    display: block;
-    margin-bottom: 0.3rem;
-    transition: color 0.2s;
-  }
-  .footer-logo:hover { color: #fff; }
-  .footer-logo em { font-style: normal; color: #fff; }
-
-  .footer-tagline {
-    font-size: 0.72rem;
-    font-weight: 300;
-    color: rgba(255,255,255,0.25);
-    letter-spacing: 0.04em;
-  }
-
-  /* Mobile: hide nav/connect cols */
-  .footer-nav,
-  .footer-connect { display: none; }
-
-  .footer-col-label {
-    font-size: 0.52rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.2);
-    margin-bottom: 0.2rem;
-  }
-
-  .footer-nav a,
-  .footer-connect a {
-    font-size: 0.82rem;
-    font-weight: 400;
-    color: rgba(255,255,255,0.45);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .footer-nav a:hover,
-  .footer-connect a:hover { color: #fff; }
-
-  /* Mobile: brand hidden, only bottom bar shows */
-  .footer-brand { display: none; }
-  .footer-tagline { display: none; }
-
-  .footer-bottom {
+  /* ── CTA ROW ── */
+  .cf-cta {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 2.5rem;
+    padding-bottom: 4rem;
+    text-align: center;
     align-items: center;
-    gap: 0.3rem;
-    padding: 1.25rem 0 1.5rem;
+  }
+
+  .cf-cta-left { display: flex; flex-direction: column; gap: 1rem; }
+
+  .cf-eyebrow {
+    font-family: 'Courier New', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(248,247,244,0.3);
+  }
+
+  .cf-title {
+    font-family: var(--font-display, 'Tenor Sans', serif);
+    font-size: clamp(2rem, 7vw, 4.5rem);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #F8F7F4;
+    line-height: 1.0;
+  }
+
+  .cf-sub {
+    font-size: 0.9rem;
+    color: rgba(248,247,244,0.5);
+    line-height: 1.85;
+    font-weight: 300;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  .cf-cta-right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .cf-line-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: #fff;
+    background: transparent;
+    padding: 1rem 2.5rem;
+    border: 1.5px solid rgba(248,247,244,0.45);
+    transition: background 0.25s, border-color 0.25s;
+    white-space: nowrap;
+  }
+  .cf-line-btn:hover {
+    background: rgba(248,247,244,0.1);
+    border-color: #fff;
+  }
+
+  .cf-line-icon {
+    width: 22px; height: 22px;
+    object-fit: contain;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+
+  .cf-socials {
+    display: flex;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .cf-social {
+    font-family: 'Courier New', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(248,247,244,0.3);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .cf-social:hover { color: rgba(248,247,244,0.8); }
+
+  /* ── DIVIDER ── */
+  .cf-divider {
+    height: 0.5px;
+    background: rgba(248,247,244,0.08);
+    margin-bottom: 2rem;
+  }
+
+  /* ── FOOTER ROW ── */
+  .cf-foot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
     text-align: center;
   }
 
-  .footer-copy {
-    font-size: 0.65rem;
+  .cf-logo {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgba(255,255,255,0.4);
+    transition: color 0.2s;
+  }
+  .cf-logo:hover { color: #fff; }
+  .cf-logo em { font-style: normal; color: rgba(255,255,255,0.7); }
+
+  .cf-nav {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .cf-nav a {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.75rem;
     font-weight: 400;
-    color: rgba(255,255,255,0.35);
-    letter-spacing: 0.03em;
+    color: rgba(255,255,255,0.4);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .cf-nav a:hover { color: #fff; }
+
+  .cf-copy {
+    font-size: 0.62rem;
+    color: rgba(255,255,255,0.18);
+    letter-spacing: 0.04em;
   }
 
-  /* Desktop: restore full 3-col layout */
+  /* ── DESKTOP ── */
   @media (min-width: 768px) {
-    .footer-inner {
-      grid-template-columns: 1.6fr 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
+    .cf-cta {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      gap: 6rem;
     }
-    .footer-nav,
-    .footer-connect { display: flex; flex-direction: column; gap: 0.55rem; }
-    .footer-brand {
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
-    }
-    .footer-tagline { display: block; }
-    .footer-bottom {
+    .cf-cta-left { flex: 1; }
+    .cf-sub { margin: 0; }
+    .cf-cta-right { align-items: flex-start; flex-shrink: 0; min-width: 260px; }
+    .cf-socials { justify-content: flex-start; }
+
+    .cf-foot {
       flex-direction: row;
       justify-content: space-between;
       align-items: center;
-      padding: 1.25rem 0 1.75rem;
+      text-align: left;
     }
+    .cf-nav { justify-content: flex-start; }
   }
 </style>

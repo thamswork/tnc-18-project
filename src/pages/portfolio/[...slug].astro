@@ -114,31 +114,9 @@ const { Content } = await render(project);
       </div>
     )}
 
-    <!-- ── LINE OA CTA — dominant conversion ── -->
-    <section class="project-cta" data-reveal aria-label="Contact">
-      <div class="cta-inner">
-        <div class="cta-left">
-          <span class="cta-eyebrow">Start a Project</span>
-          <h2 class="cta-headline">Like what you see?</h2>
-          <p class="cta-body">
-            Message us directly on Line. Senior partners respond within 2 hours —
-            no forms, no waiting rooms.
-          </p>
-        </div>
-        <div class="cta-right">
-          {contactData.line && (
-            <a href={contactData.line} target="_blank" rel="noopener" class="btn-line-lg">
-              <img src="https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320/LINE_Brand_icon_2_ytuls0.png" alt="LINE" class="line-icon" />
-              Message on Line
-            </a>
-          )}
-          <a href="/portfolio" class="back-link">← All Projects</a>
-        </div>
-      </div>
-    </section>
 
     <!-- Footer -->
-    <Footer />
+    <Footer ctaTitle="Like What You See?" ctaSub="Message us directly. Senior partners respond within 2 hours — no forms, no waiting." />
 
   </main>
 </Layout>

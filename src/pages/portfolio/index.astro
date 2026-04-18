@@ -84,20 +84,11 @@ const categories = ['All', ...new Set(projects.map(p => p.data.category).filter(
       )}
     </div>
 
-    <!-- Bottom CTA -->
-    {contactData.line && (
-      <div class="page-cta" data-reveal>
-        <h2 class="cta-q">Have a project in mind?</h2>
-        <a href={contactData.line} target="_blank" rel="noopener" class="cta-line-btn">
-          <span class="cta-dot"></span>
-          Message on Line
-        </a>
-      </div>
     )}
 
   </main>
 
-  <Footer />
+  <Footer ctaTitle="Have a Project in Mind?" ctaSub="Every project handled by founding partners. No junior hand-offs." />
 </Layout>
 
 <style>

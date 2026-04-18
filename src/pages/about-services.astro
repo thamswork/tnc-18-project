@@ -98,24 +98,11 @@ const services = allServices.sort((a, b) => a.data.order - b.data.order);
 
 
     <!-- CTA -->
-    <section class="cta" data-reveal>
-      <div class="cta-inner">
-        <div class="cta-left">
-          <h2 class="cta-title">Work with us<br/>directly.</h2>
-          <p class="cta-sub">Senior partners only. Fast turnaround. 24/7 support.</p>
-        </div>
-        {contactData.line && (
-          <a href={contactData.line} target="_blank" rel="noopener" class="cta-line-btn">
-            <span class="line-dot"></span>
-            Message on Line
-          </a>
-        )}
-      </div>
-    </section>
+
 
   </main>
 
-  <Footer />
+  <Footer ctaTitle="Work With Us Directly." ctaSub="Senior partners only. Fast turnaround. 24/7 support." />
 </Layout>
 
 <style>
