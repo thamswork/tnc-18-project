@@ -14,25 +14,28 @@ const igHandle = (contactData.instagram || '').replace('https://www.instagram.co
 const ttHandle = (contactData.tiktok || '').replace('https://www.tiktok.com/','').replace('https://tiktok.com/','');
 const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320/LINE_Brand_icon_2_ytuls0.png';
 
-// Hero source — priority: uploaded photo > portfolio pick > latest project
+// Hero priority: video > hero_images list > hero_image single > portfolio pick > latest project
 const pd = pageData as any;
-const heroSection = pd.hero_section || {};
-const heroVideo   = heroSection.hero_video || null;
-const heroImages  = heroSection.hero_images || [];
-const firstPhoto  = heroImages.length > 0
-  ? (typeof heroImages[0] === 'string' ? heroImages[0] : heroImages[0]?.image)
+const heroVideo = pd.hero_video || null;
+
+const heroImages = pd.hero_images || [];
+const firstPhoto = heroImages.length > 0
+  ? (typeof heroImages[0] === 'string' ? heroImages[0] : heroImages[0]?.image || null)
   : null;
+
 const singlePhoto = pd.hero_image || null;
-const pickedProject = heroSection.hero_project
-  ? allProjects.find(p => p.data.title === heroSection.hero_project) || null
+
+const pickedProject = pd.hero_project
+  ? allProjects.find(p => p.data.title === pd.hero_project) || null
   : null;
 
 let heroSrc: string | null = null;
-if (heroVideo)       { heroSrc = null; }
-else if (firstPhoto) { heroSrc = firstPhoto; }
-else if (singlePhoto){ heroSrc = singlePhoto; }
-else if (pickedProject?.data?.cover) { heroSrc = pickedProject.data.cover; }
-else if (featured?.data?.cover)      { heroSrc = featured.data.cover; }
+if (!heroVideo) {
+  if (firstPhoto)                      heroSrc = firstPhoto;
+  else if (singlePhoto)                heroSrc = singlePhoto;
+  else if (pickedProject?.data?.cover) heroSrc = pickedProject.data.cover;
+  else if (featured?.data?.cover)      heroSrc = featured.data.cover;
+}
 ---
 
 <Layout title="Contact — TNC.18">

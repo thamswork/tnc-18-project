@@ -122,18 +122,43 @@ collections:
         label: "Contact Page"
         file: src/content/pages/contact.json
         fields:
-          - { label: "Headline",          name: headline,  widget: string }
-          - { label: "Subtext",           name: subtext,   widget: text, required: false }
-          - { label: "Line CTA Label",    name: line_label, widget: string, default: "Message us on Line" }
-          - { label: "Response Promise",  name: promise,   widget: string, required: false,
+          - { label: "Headline", name: headline, widget: string }
+          - { label: "Subtext",  name: subtext,  widget: text,   required: false }
+          - { label: "Line CTA Label", name: line_label, widget: string, default: "Message us on Line" }
+          - { label: "Response Promise", name: promise, widget: string, required: false,
               hint: "e.g. We reply within 2 hours" }
 
-  # ── GLOBAL SETTINGS ──────────────────────────────────────────────────────────
-  - name: settings
-    label: "Global Settings"
-    delete: false
-    editor: { preview: false }
-    files:
+          - label: "Background Photo (upload your own)"
+            name: hero_image
+            widget: image
+            required: false
+            hint: "Upload any photo to use as the full-page background on the Contact page."
+
+          - label: "Background Photos (multiple — first is used)"
+            name: hero_images
+            widget: list
+            required: false
+            hint: "Upload multiple photos. The first one will be used as background."
+            field:
+              label: "Photo"
+              name: image
+              widget: image
+
+          - label: "Select Background from Portfolio"
+            name: hero_project
+            widget: relation
+            collection: projects
+            search_fields: [title, location, category]
+            value_field: title
+            display_fields: [title]
+            required: false
+            hint: "Pick a project — its cover photo becomes the background. Overridden by uploaded photos above."
+
+          - label: "Background Video URL"
+            name: hero_video
+            widget: string
+            required: false
+            hint: "Paste a direct .mp4 URL. Highest priority — overrides all photos."
 
       - name: contact
         label: "Contact & Social Links"
