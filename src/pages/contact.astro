@@ -9,191 +9,186 @@ import pageData    from '../content/pages/contact.json';
 const allProjects = await getCollection('projects');
 const projects = allProjects.sort((a, b) => b.data.year - a.data.year);
 const featured = projects[0] || null;
-
-function slug(t: string) {
-  return t.toLowerCase().replace(/['']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-}
+const heroSrc = pageData.hero_image || featured?.data?.cover || null;
 
 const igHandle = (contactData.instagram || '').replace('https://www.instagram.com/','@').replace('https://instagram.com/','@');
 const ttHandle = (contactData.tiktok || '').replace('https://www.tiktok.com/','').replace('https://tiktok.com/','');
 const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320/LINE_Brand_icon_2_ytuls0.png';
-const heroSrc = pageData.hero_image || featured?.data?.cover || null;
 ---
 
 <Layout title="Contact — TNC.18">
   <Navbar />
-  <main>
 
-    <!-- HERO: true full viewport -->
-    {heroSrc && (
-      <section class="hero">
-        <img src={heroSrc} alt="" class="hero-img" />
-        <div class="hero-veil"></div>
-        <div class="hero-ui">
-          <span class="hero-brand">TNC<em>.</em>18</span>
-          <p class="hero-tag">Retail & Interior Design · Bangkok</p>
-        </div>
-      </section>
-    )}
+  <main class="contact-page">
 
-    <!-- CONTACT BODY -->
-    <section class="body">
-      <div class="body-left">
-        <p class="eyebrow">Get In Touch</p>
-        <h1 class="title">{pageData.headline.toUpperCase()}</h1>
-        <p class="sub">{pageData.subtext}</p>
-        {contactData.line && (
-          <a href={contactData.line} target="_blank" rel="noopener" class="line-btn">
-            <img src={LINE_ICON} alt="LINE" class="line-ico" />
-            {pageData.line_label || 'Message us on Line'}
-          </a>
-        )}
-        <p class="promise"><span class="dot"></span>{pageData.promise}</p>
+    <!-- Background image covers entire page -->
+    {heroSrc && <img src={heroSrc} alt="" class="bg-img" loading="eager" />}
+    <div class="bg-veil"></div>
+
+    <!-- All content floats on top -->
+    <div class="page-content">
+
+      <!-- TOP: brand -->
+      <div class="top-bar">
+        <span class="brand">TNC<em>.</em>18</span>
+        <span class="brand-tag">Retail & Interior Design · Bangkok</span>
       </div>
 
-      <div class="body-right">
-        <p class="also">Also Find Us</p>
-        <div class="channels">
+      <!-- BOTTOM: contact info -->
+      <div class="bottom-content">
+        <div class="contact-left">
+          <h1 class="contact-title">{pageData.headline.toUpperCase()}</h1>
+          <p class="contact-sub">{pageData.subtext}</p>
+          {contactData.line && (
+            <a href={contactData.line} target="_blank" rel="noopener" class="line-btn">
+              <img src={LINE_ICON} alt="LINE" class="line-ico" />
+              {pageData.line_label || 'Message us on Line'}
+            </a>
+          )}
+          {pageData.promise && (
+            <p class="promise"><span class="dot"></span>{pageData.promise}</p>
+          )}
+        </div>
+
+        <div class="contact-right">
           {contactData.instagram && (
             <a href={contactData.instagram} target="_blank" rel="noopener" class="ch">
-              <span class="ch-left"><span class="ch-plat">Instagram</span><span class="ch-handle">{igHandle}</span></span>
-              <span class="ch-arr">→</span>
+              <span class="ch-plat">Instagram</span>
+              <span class="ch-handle">{igHandle}</span>
             </a>
           )}
           {contactData.tiktok && (
             <a href={contactData.tiktok} target="_blank" rel="noopener" class="ch">
-              <span class="ch-left"><span class="ch-plat">TikTok</span><span class="ch-handle">{ttHandle}</span></span>
-              <span class="ch-arr">→</span>
+              <span class="ch-plat">TikTok</span>
+              <span class="ch-handle">{ttHandle}</span>
             </a>
           )}
           {contactData.facebook && (
             <a href={contactData.facebook} target="_blank" rel="noopener" class="ch">
-              <span class="ch-left"><span class="ch-plat">Facebook</span><span class="ch-handle">TNC.18</span></span>
-              <span class="ch-arr">→</span>
+              <span class="ch-plat">Facebook</span>
+              <span class="ch-handle">TNC.18</span>
             </a>
           )}
           {contactData.email && (
             <a href={`mailto:${contactData.email}`} class="ch">
-              <span class="ch-left"><span class="ch-plat">Email</span><span class="ch-handle">{contactData.email}</span></span>
-              <span class="ch-arr">→</span>
+              <span class="ch-plat">Email</span>
+              <span class="ch-handle">{contactData.email}</span>
             </a>
           )}
           {contactData.phone && (
             <a href={`tel:${contactData.phone.replace(/\s/g,'')}`} class="ch">
-              <span class="ch-left"><span class="ch-plat">Phone</span><span class="ch-handle">{contactData.phone}</span></span>
-              <span class="ch-arr">→</span>
+              <span class="ch-plat">Phone</span>
+              <span class="ch-handle">{contactData.phone}</span>
             </a>
           )}
-        </div>
-        <div class="studio">
-          <p class="studio-lbl">Studio</p>
-          <p class="studio-city">Bangkok, Thailand</p>
-          <p class="studio-hrs">Mon – Sat · 09:00 – 18:00</p>
+          <div class="studio">
+            <span class="ch-plat">Studio</span>
+            <span class="ch-handle">Bangkok, Thailand</span>
+            <span class="studio-hrs">Mon – Sat · 09:00 – 18:00</span>
+          </div>
         </div>
       </div>
-    </section>
 
+    </div>
   </main>
+
   <Footer hideCta={true} />
 </Layout>
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* HERO */
-  .hero {
+  /* Full page container */
+  .contact-page {
     position: relative;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     overflow: hidden;
     background: #0a0e18;
   }
 
-  .hero-img {
-    position: absolute;
+  /* Background image — covers entire page */
+  .bg-img {
+    position: fixed;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    object-position: center;
     display: block;
+    z-index: 0;
   }
 
-  .hero-veil {
-    position: absolute;
+  /* Veil — subtle, keeps text readable */
+  .bg-veil {
+    position: fixed;
     inset: 0;
-    background: linear-gradient(
-      to bottom,
-      rgba(4,6,10,0.38) 0%,
-      rgba(4,6,10,0.0) 40%,
-      rgba(4,6,10,0.0) 70%,
-      rgba(4,6,10,0.32) 100%
-    );
+    z-index: 1;
+    background: rgba(6, 8, 14, 0.52);
   }
 
-  .hero-ui {
-    position: absolute;
-    inset: 0;
+  /* All content above image */
+  .page-content {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 5.5rem var(--pad-x, 5vw) 2.5rem;
+    padding: 5.5rem var(--pad-x, 5vw) 4rem;
   }
 
-  .hero-brand {
+  /* TOP BAR */
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .brand {
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 1.05rem;
     font-weight: 800;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #fff;
-    text-shadow: 0 1px 16px rgba(0,0,0,0.4);
   }
-  .hero-brand em { font-style: normal; }
+  .brand em { font-style: normal; }
 
-  .hero-tag {
+  .brand-tag {
     font-family: 'Courier New', monospace;
-    font-size: 0.58rem;
-    letter-spacing: 0.22em;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
-    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+    color: rgba(255,255,255,0.45);
   }
 
-  /* CONTACT BODY */
-  .body {
+  /* BOTTOM: left + right */
+  .bottom-content {
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    padding: 4rem var(--pad-x, 5vw);
-    background: var(--bg, #F8F7F4);
   }
 
-  .eyebrow {
-    font-family: 'Courier New', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.28em;
-    text-transform: uppercase;
-    color: var(--navy, #1A3A6B);
-    margin-bottom: 0.5rem;
-  }
-
-  .title {
+  /* LEFT: headline + CTA */
+  .contact-title {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
     font-weight: 400;
-    letter-spacing: 0.03em;
-    color: var(--ink, #1A1A1A);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #fff;
     line-height: 0.95;
     margin-bottom: 1.25rem;
   }
 
-  .sub {
-    font-size: 0.92rem;
-    line-height: 1.9;
-    color: var(--ink-mid, #4A4A4A);
+  .contact-sub {
+    font-size: 0.9rem;
+    line-height: 1.85;
+    color: rgba(255,255,255,0.65);
     font-weight: 300;
     max-width: 420px;
-    margin-bottom: 1.75rem;
+    margin-bottom: 2rem;
   }
 
   .line-btn {
@@ -206,90 +201,84 @@ const heroSrc = pageData.hero_image || featured?.data?.cover || null;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--navy, #1A3A6B);
+    color: #fff;
     padding: 1rem 2rem;
-    border: 1.5px solid var(--navy, #1A3A6B);
-    transition: background 0.25s, color 0.25s;
+    border: 1.5px solid rgba(255,255,255,0.55);
+    transition: background 0.25s, border-color 0.25s;
     margin-bottom: 1rem;
+    display: inline-flex;
   }
-  .line-btn:hover { background: var(--navy, #1A3A6B); color: #fff; }
+  .line-btn:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
   .line-ico { width: 22px; height: 22px; object-fit: contain; border-radius: 4px; }
 
   .promise {
     display: flex; align-items: center; gap: 0.5rem;
     font-family: 'Courier New', monospace;
     font-size: 0.52rem; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--ink-light, #6B6B6B);
+    text-transform: uppercase; color: rgba(255,255,255,0.45);
   }
-  .dot {
-    display: block; width: 5px; height: 5px;
-    border-radius: 50%; background: #06C755; flex-shrink: 0;
-  }
+  .dot { display: block; width: 5px; height: 5px; border-radius: 50%; background: #06C755; flex-shrink: 0; }
 
-  .also {
-    font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.62rem; letter-spacing: 0.2em;
-    text-transform: uppercase; color: var(--ink-light, #6B6B6B);
-    font-weight: 500; margin-bottom: 0.5rem;
+  /* RIGHT: channels */
+  .contact-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
   }
-
-  .channels { display: flex; flex-direction: column; margin-bottom: 1.5rem; }
 
   .ch {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1rem 0;
-    border-bottom: 0.5px solid rgba(26,26,26,0.08);
-    text-decoration: none; color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.85rem 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.12);
+    text-decoration: none;
+    color: inherit;
     transition: padding-left 0.2s;
   }
-  .ch:first-child { border-top: 0.5px solid rgba(26,26,26,0.08); }
-  .ch:hover { padding-left: 0.35rem; }
-  .ch-left { display: flex; flex-direction: column; gap: 0.2rem; }
+  .ch:first-child { border-top: 0.5px solid rgba(255,255,255,0.12); }
+  .ch:hover { padding-left: 0.4rem; }
+
   .ch-plat {
     font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.58rem; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--ink-light, #6B6B6B); font-weight: 500;
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    font-weight: 500;
   }
+
   .ch-handle {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(1rem, 2vw, 1.35rem);
-    color: var(--ink, #1A1A1A); transition: color 0.2s;
+    font-size: clamp(0.95rem, 1.8vw, 1.25rem);
+    color: rgba(255,255,255,0.88);
+    transition: color 0.2s;
   }
-  .ch:hover .ch-handle { color: var(--navy, #1A3A6B); }
-  .ch-arr {
-    font-size: 0.9rem; color: rgba(26,26,26,0.2);
-    transition: transform 0.2s, color 0.2s;
-  }
-  .ch:hover .ch-arr { transform: translateX(4px); color: var(--navy, #1A3A6B); }
+  .ch:hover .ch-handle { color: #fff; }
 
-  .studio { border-top: 0.5px solid rgba(26,26,26,0.08); padding-top: 1.25rem; }
-  .studio-lbl {
-    font-family: 'Courier New', monospace; font-size: 0.5rem;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--ink-light, #6B6B6B); margin-bottom: 0.35rem;
-  }
-  .studio-city {
-    font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: 1rem; color: var(--ink, #1A1A1A); margin-bottom: 0.2rem;
-  }
+  .studio { display: flex; flex-direction: column; gap: 0.15rem; padding-top: 1rem; }
   .studio-hrs {
-    font-family: 'Courier New', monospace; font-size: 0.5rem;
-    letter-spacing: 0.14em; color: var(--ink-light, #6B6B6B);
+    font-family: 'Courier New', monospace;
+    font-size: 0.5rem; letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.28);
   }
 
   /* DESKTOP */
   @media (min-width: 768px) {
-    .body {
+    .brand-tag { display: block; }
+
+    .bottom-content {
       flex-direction: row;
-      align-items: flex-start;
-      padding: 6rem 8vw;
-      gap: 7rem;
+      align-items: flex-end;
+      gap: 8rem;
     }
-    .body-left { flex: 1; }
-    .body-right { width: 40%; flex-shrink: 0; }
+
+    .contact-left { flex: 1; }
+    .contact-right { width: 36%; flex-shrink: 0; }
   }
 
   @media (min-width: 1200px) {
-    .body { padding: 7rem 10vw; gap: 9rem; }
+    .page-content { padding: 6rem 10vw 5rem; }
+    .bottom-content { gap: 10rem; }
   }
 </style>
