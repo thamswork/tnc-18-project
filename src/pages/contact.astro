@@ -11,243 +11,192 @@ const projects = allProjects.sort((a, b) => b.data.year - a.data.year);
 const featured = projects[0] || null;
 
 function slug(t: string) {
-  return t.toLowerCase().replace(/[\u2018\u2019'']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return t.toLowerCase().replace(/['']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
-const igHandle = (contactData.instagram || '')
-  .replace('https://www.instagram.com/','@')
-  .replace('https://instagram.com/','@');
-
-const ttHandle = (contactData.tiktok || '')
-  .replace('https://www.tiktok.com/','')
-  .replace('https://tiktok.com/','');
-
+const igHandle = (contactData.instagram || '').replace('https://www.instagram.com/','@').replace('https://instagram.com/','@');
+const ttHandle = (contactData.tiktok || '').replace('https://www.tiktok.com/','').replace('https://tiktok.com/','');
 const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320/LINE_Brand_icon_2_ytuls0.png';
+const heroSrc = pageData.hero_image || featured?.data?.cover || null;
 ---
 
 <Layout title="Contact — TNC.18">
   <Navbar />
+  <main>
 
-  <main class="contact-main">
-
-    <!-- ── HERO — full viewport, brand only, no project name ── -->
-    {featured?.data?.cover && (
-      <div class="feat-wrap">
-        <img src={featured.data.cover} alt="" class="feat-img" loading="eager" />
-        <div class="feat-veil"></div>
-        <div class="feat-content">
-          <span class="feat-brand">TNC<em>.</em>18</span>
-          <p class="feat-tagline">Retail & Interior Design · Bangkok</p>
+    <!-- HERO: true full viewport -->
+    {heroSrc && (
+      <section class="hero">
+        <img src={heroSrc} alt="" class="hero-img" />
+        <div class="hero-veil"></div>
+        <div class="hero-ui">
+          <span class="hero-brand">TNC<em>.</em>18</span>
+          <p class="hero-tag">Retail & Interior Design · Bangkok</p>
         </div>
-      </div>
+      </section>
     )}
 
-    <!-- ── CONTACT SPLIT ── -->
-    <div class="contact-grid">
+    <!-- CONTACT BODY -->
+    <section class="body">
+      <div class="body-left">
+        <p class="eyebrow">Get In Touch</p>
+        <h1 class="title">{pageData.headline.toUpperCase()}</h1>
+        <p class="sub">{pageData.subtext}</p>
+        {contactData.line && (
+          <a href={contactData.line} target="_blank" rel="noopener" class="line-btn">
+            <img src={LINE_ICON} alt="LINE" class="line-ico" />
+            {pageData.line_label || 'Message us on Line'}
+          </a>
+        )}
+        <p class="promise"><span class="dot"></span>{pageData.promise}</p>
+      </div>
 
-      <!-- LEFT -->
-      <div class="contact-left">
-        <div class="contact-left-inner" data-reveal>
-          <p class="contact-eyebrow">Get In Touch</p>
-          <h1 class="contact-title">{pageData.headline.toUpperCase()}</h1>
-          {pageData.subtext && <p class="contact-sub">{pageData.subtext}</p>}
-
-          {contactData.line && (
-            <a href={contactData.line} target="_blank" rel="noopener" class="btn-line">
-              <img src={LINE_ICON} alt="LINE" class="line-icon" />
-              {pageData.line_label || 'Message us on Line'}
+      <div class="body-right">
+        <p class="also">Also Find Us</p>
+        <div class="channels">
+          {contactData.instagram && (
+            <a href={contactData.instagram} target="_blank" rel="noopener" class="ch">
+              <span class="ch-left"><span class="ch-plat">Instagram</span><span class="ch-handle">{igHandle}</span></span>
+              <span class="ch-arr">→</span>
             </a>
           )}
-
-          {pageData.promise && (
-            <p class="contact-promise">
-              <span class="promise-dot"></span>
-              {pageData.promise}
-            </p>
+          {contactData.tiktok && (
+            <a href={contactData.tiktok} target="_blank" rel="noopener" class="ch">
+              <span class="ch-left"><span class="ch-plat">TikTok</span><span class="ch-handle">{ttHandle}</span></span>
+              <span class="ch-arr">→</span>
+            </a>
+          )}
+          {contactData.facebook && (
+            <a href={contactData.facebook} target="_blank" rel="noopener" class="ch">
+              <span class="ch-left"><span class="ch-plat">Facebook</span><span class="ch-handle">TNC.18</span></span>
+              <span class="ch-arr">→</span>
+            </a>
+          )}
+          {contactData.email && (
+            <a href={`mailto:${contactData.email}`} class="ch">
+              <span class="ch-left"><span class="ch-plat">Email</span><span class="ch-handle">{contactData.email}</span></span>
+              <span class="ch-arr">→</span>
+            </a>
+          )}
+          {contactData.phone && (
+            <a href={`tel:${contactData.phone.replace(/\s/g,'')}`} class="ch">
+              <span class="ch-left"><span class="ch-plat">Phone</span><span class="ch-handle">{contactData.phone}</span></span>
+              <span class="ch-arr">→</span>
+            </a>
           )}
         </div>
-      </div>
-
-      <!-- RIGHT -->
-      <div class="contact-right">
-        <div class="contact-right-inner" data-reveal-fade>
-          <p class="right-label">Also Find Us</p>
-          <div class="channel-list">
-            {contactData.instagram && (
-              <a href={contactData.instagram} target="_blank" rel="noopener" class="channel-row">
-                <div class="channel-meta">
-                  <span class="channel-platform">Instagram</span>
-                  <span class="channel-handle">{igHandle}</span>
-                </div>
-                <span class="channel-arr">→</span>
-              </a>
-            )}
-            {contactData.tiktok && (
-              <a href={contactData.tiktok} target="_blank" rel="noopener" class="channel-row">
-                <div class="channel-meta">
-                  <span class="channel-platform">TikTok</span>
-                  <span class="channel-handle">{ttHandle}</span>
-                </div>
-                <span class="channel-arr">→</span>
-              </a>
-            )}
-            {contactData.facebook && (
-              <a href={contactData.facebook} target="_blank" rel="noopener" class="channel-row">
-                <div class="channel-meta">
-                  <span class="channel-platform">Facebook</span>
-                  <span class="channel-handle">TNC.18</span>
-                </div>
-                <span class="channel-arr">→</span>
-              </a>
-            )}
-            {contactData.email && (
-              <a href={`mailto:${contactData.email}`} class="channel-row">
-                <div class="channel-meta">
-                  <span class="channel-platform">Email</span>
-                  <span class="channel-handle">{contactData.email}</span>
-                </div>
-                <span class="channel-arr">→</span>
-              </a>
-            )}
-            {contactData.phone && (
-              <a href={`tel:${contactData.phone.replace(/\s/g,'')}`} class="channel-row">
-                <div class="channel-meta">
-                  <span class="channel-platform">Phone</span>
-                  <span class="channel-handle">{contactData.phone}</span>
-                </div>
-                <span class="channel-arr">→</span>
-              </a>
-            )}
-          </div>
-
-          <div class="studio-block">
-            <p class="studio-label">Studio</p>
-            <p class="studio-address">Bangkok, Thailand</p>
-            <p class="studio-hours">Mon – Sat · 09:00 – 18:00</p>
-          </div>
+        <div class="studio">
+          <p class="studio-lbl">Studio</p>
+          <p class="studio-city">Bangkok, Thailand</p>
+          <p class="studio-hrs">Mon – Sat · 09:00 – 18:00</p>
         </div>
       </div>
-
-    </div>
+    </section>
 
   </main>
-
   <Footer hideCta={true} />
 </Layout>
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .contact-main {
-    background: var(--bg, #F8F7F4);
-    overflow-x: hidden;
-  }
-
-  /* ── HERO ── */
-  .feat-wrap {
+  /* HERO */
+  .hero {
     position: relative;
     width: 100%;
     height: 100vh;
-    min-height: 100vh;
     overflow: hidden;
     background: #0a0e18;
-    margin-top: -72px;
   }
 
-  .feat-img {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
+  .hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 
-  .feat-veil {
-    position: absolute; inset: 0;
-    background:
-      linear-gradient(to bottom,
-        rgba(4,6,10,0.45) 0%,
-        rgba(4,6,10,0.0) 35%,
-        rgba(4,6,10,0.0) 65%,
-        rgba(4,6,10,0.4) 100%
-      );
+  .hero-veil {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(4,6,10,0.38) 0%,
+      rgba(4,6,10,0.0) 40%,
+      rgba(4,6,10,0.0) 70%,
+      rgba(4,6,10,0.32) 100%
+    );
   }
 
-  .feat-content {
-    position: absolute; inset: 0;
+  .hero-ui {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 5.5rem var(--pad-x, 5vw) 3rem;
+    padding: 5.5rem var(--pad-x, 5vw) 2.5rem;
   }
 
-  .feat-brand {
+  .hero-brand {
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 1.05rem;
     font-weight: 800;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: #fff;
-    text-shadow: 0 1px 12px rgba(0,0,0,0.45);
-    text-decoration: none;
-    align-self: flex-start;
+    text-shadow: 0 1px 16px rgba(0,0,0,0.4);
   }
-  .feat-brand em { font-style: normal; }
+  .hero-brand em { font-style: normal; }
 
-  .feat-tagline {
+  .hero-tag {
     font-family: 'Courier New', monospace;
     font-size: 0.58rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: rgba(248,247,244,0.55);
+    color: rgba(255,255,255,0.55);
     text-shadow: 0 1px 8px rgba(0,0,0,0.5);
-    align-self: flex-start;
   }
 
-  /* ── CONTACT PANEL ── */
-  .contact-panel {
+  /* CONTACT BODY */
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    padding: 4rem var(--pad-x, 5vw);
     background: var(--bg, #F8F7F4);
   }
 
-  .contact-grid {
-    display: flex;
-    flex-direction: column;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 4rem var(--pad-x, 5vw);
-    gap: 3rem;
-  }
-
-  .contact-left {
-    display: flex;
-    flex-direction: column;
-    gap: 1.75rem;
-    flex: 1;
-  }
-
-  .contact-eyebrow {
+  .eyebrow {
     font-family: 'Courier New', monospace;
     font-size: 0.55rem;
     letter-spacing: 0.28em;
     text-transform: uppercase;
     color: var(--navy, #1A3A6B);
+    margin-bottom: 0.5rem;
   }
 
-  .contact-title {
+  .title {
     font-family: var(--font-display, 'Tenor Sans', serif);
     font-size: clamp(2.5rem, 7vw, 5rem);
     font-weight: 400;
     letter-spacing: 0.03em;
     color: var(--ink, #1A1A1A);
     line-height: 0.95;
+    margin-bottom: 1.25rem;
   }
 
-  .contact-sub {
+  .sub {
     font-size: 0.92rem;
     line-height: 1.9;
     color: var(--ink-mid, #4A4A4A);
     font-weight: 300;
     max-width: 420px;
+    margin-bottom: 1.75rem;
   }
 
-  .btn-line {
+  .line-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.65rem;
@@ -258,147 +207,89 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
     text-transform: uppercase;
     text-decoration: none;
     color: var(--navy, #1A3A6B);
-    background: transparent;
     padding: 1rem 2rem;
     border: 1.5px solid var(--navy, #1A3A6B);
     transition: background 0.25s, color 0.25s;
-    align-self: flex-start;
+    margin-bottom: 1rem;
   }
-  .btn-line:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; }
+  .line-btn:hover { background: var(--navy, #1A3A6B); color: #fff; }
+  .line-ico { width: 22px; height: 22px; object-fit: contain; border-radius: 4px; }
 
-  .line-icon {
-    width: 22px; height: 22px;
-    object-fit: contain; border-radius: 4px; flex-shrink: 0;
-  }
-
-  .contact-promise {
+  .promise {
     display: flex; align-items: center; gap: 0.5rem;
     font-family: 'Courier New', monospace;
     font-size: 0.52rem; letter-spacing: 0.18em;
     text-transform: uppercase; color: var(--ink-light, #6B6B6B);
   }
-  .promise-dot {
+  .dot {
     display: block; width: 5px; height: 5px;
     border-radius: 50%; background: #06C755; flex-shrink: 0;
   }
 
-  /* Right channels */
-  .contact-right {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    flex-shrink: 0;
-  }
-
-  .right-label {
+  .also {
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.62rem; letter-spacing: 0.2em;
     text-transform: uppercase; color: var(--ink-light, #6B6B6B);
-    font-weight: 500;
+    font-weight: 500; margin-bottom: 0.5rem;
   }
 
-  .channel-list { display: flex; flex-direction: column; }
+  .channels { display: flex; flex-direction: column; margin-bottom: 1.5rem; }
 
-  .channel-row {
-    display: flex; align-items: center;
-    justify-content: space-between;
+  .ch {
+    display: flex; align-items: center; justify-content: space-between;
     padding: 1rem 0;
     border-bottom: 0.5px solid rgba(26,26,26,0.08);
     text-decoration: none; color: inherit;
-    opacity: 0; transform: translateY(12px);
-    transition: opacity 0.5s ease, transform 0.5s ease, padding-left 0.2s;
+    transition: padding-left 0.2s;
   }
-  .channel-row:first-child { border-top: 0.5px solid rgba(26,26,26,0.08); }
-  .channel-row.visible { opacity: 1; transform: none; }
-  .channel-row:hover { padding-left: 0.35rem; }
-
-  .channel-meta { display: flex; flex-direction: column; gap: 0.2rem; }
-
-  .channel-platform {
+  .ch:first-child { border-top: 0.5px solid rgba(26,26,26,0.08); }
+  .ch:hover { padding-left: 0.35rem; }
+  .ch-left { display: flex; flex-direction: column; gap: 0.2rem; }
+  .ch-plat {
     font-family: var(--font-body, 'Inter', sans-serif);
     font-size: 0.58rem; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--ink-light, #6B6B6B);
-    font-weight: 500;
+    text-transform: uppercase; color: var(--ink-light, #6B6B6B); font-weight: 500;
   }
-
-  .channel-handle {
+  .ch-handle {
     font-family: var(--font-display, 'Tenor Sans', serif);
     font-size: clamp(1rem, 2vw, 1.35rem);
-    color: var(--ink, #1A1A1A); font-weight: 400;
-    transition: color 0.2s;
+    color: var(--ink, #1A1A1A); transition: color 0.2s;
   }
-  .channel-row:hover .channel-handle { color: var(--navy, #1A3A6B); }
-
-  .channel-arr {
+  .ch:hover .ch-handle { color: var(--navy, #1A3A6B); }
+  .ch-arr {
     font-size: 0.9rem; color: rgba(26,26,26,0.2);
-    transition: transform 0.2s, color 0.2s; flex-shrink: 0;
+    transition: transform 0.2s, color 0.2s;
   }
-  .channel-row:hover .channel-arr { transform: translateX(4px); color: var(--navy, #1A3A6B); }
+  .ch:hover .ch-arr { transform: translateX(4px); color: var(--navy, #1A3A6B); }
 
-  .studio-block {
-    border-top: 0.5px solid rgba(26,26,26,0.08);
-    padding-top: 1.25rem;
-    display: flex; flex-direction: column; gap: 0.3rem;
-  }
-  .studio-label {
+  .studio { border-top: 0.5px solid rgba(26,26,26,0.08); padding-top: 1.25rem; }
+  .studio-lbl {
     font-family: 'Courier New', monospace; font-size: 0.5rem;
     letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--ink-light, #6B6B6B); margin-bottom: 0.2rem;
+    color: var(--ink-light, #6B6B6B); margin-bottom: 0.35rem;
   }
-  .studio-address {
+  .studio-city {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: 1rem; color: var(--ink, #1A1A1A);
+    font-size: 1rem; color: var(--ink, #1A1A1A); margin-bottom: 0.2rem;
   }
-  .studio-hours {
+  .studio-hrs {
     font-family: 'Courier New', monospace; font-size: 0.5rem;
     letter-spacing: 0.14em; color: var(--ink-light, #6B6B6B);
   }
 
-  /* ── ANIMATIONS ── */
-  [data-reveal] { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16,1,0.3,1); }
-  [data-reveal].revealed { opacity: 1; transform: none; }
-  [data-reveal-fade] { opacity: 0; transition: opacity 0.9s ease; }
-  [data-reveal-fade].revealed { opacity: 1; }
-
-  /* ── DESKTOP ── */
+  /* DESKTOP */
   @media (min-width: 768px) {
-    .feat-wrap { height: 100vh; }
-    .feat-content { padding: 2rem 8vw 3rem; }
-
-    .contact-grid {
+    .body {
       flex-direction: row;
       align-items: flex-start;
-      padding: 5rem 8vw;
-      gap: 6rem;
+      padding: 6rem 8vw;
+      gap: 7rem;
     }
-    .contact-left { flex: 1; }
-    .contact-right { width: 42%; }
+    .body-left { flex: 1; }
+    .body-right { width: 40%; flex-shrink: 0; }
   }
 
   @media (min-width: 1200px) {
-    .feat-wrap { height: 100vh; }
-    .contact-grid { padding: 6rem 10vw; gap: 8rem; }
+    .body { padding: 7rem 10vw; gap: 9rem; }
   }
 </style>
-
-<script>
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      e.target.classList.add('revealed');
-      io.unobserve(e.target);
-    });
-  }, { threshold: 0.06 });
-  document.querySelectorAll('[data-reveal], [data-reveal-fade]').forEach(el => io.observe(el));
-
-  const rows = document.querySelectorAll('.channel-row');
-  const rowObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const i = Array.from(rows).indexOf(e.target);
-      setTimeout(() => e.target.classList.add('visible'), i * 80);
-      rowObs.unobserve(e.target);
-    });
-  }, { threshold: 0.1 });
-  rows.forEach(r => rowObs.observe(r));
-</script>
