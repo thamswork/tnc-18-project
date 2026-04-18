@@ -6,5 +6,10 @@
   "hero_image": "",
   "hero_video": "",
   "hero_caption": "",
-  "hero_project_slug": ""
+  "hero_project_slug": "",
+  "hero_section": {
+    "hero_images": [],
+    "hero_project": "",
+    "hero_video": ""
+  }
 }

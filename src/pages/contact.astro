@@ -9,7 +9,25 @@ import pageData    from '../content/pages/contact.json';
 const allProjects = await getCollection('projects');
 const projects = allProjects.sort((a, b) => b.data.year - a.data.year);
 const featured = projects[0] || null;
-const heroSrc = pageData.hero_image || featured?.data?.cover || null;
+// Hero priority: video > uploaded photos > portfolio project > latest project
+const heroSection = (pageData as any).hero_section || {};
+const heroVideo = heroSection.hero_video || null;
+
+// Multiple uploaded photos — use first one
+const heroImages = heroSection.hero_images || [];
+const heroPhoto = heroImages.length > 0
+  ? (typeof heroImages[0] === 'string' ? heroImages[0] : heroImages[0]?.image)
+  : (pageData.hero_image || null);
+
+// Portfolio project selection
+const selectedProject = heroSection.hero_project
+  ? allProjects.find((p: any) => p.data.title === heroSection.hero_project) || null
+  : null;
+
+const heroSrc = heroVideo ? null
+  : heroPhoto ? heroPhoto
+  : selectedProject?.data?.cover
+  : featured?.data?.cover || null;
 
 const igHandle = (contactData.instagram || '').replace('https://www.instagram.com/','@').replace('https://instagram.com/','@');
 const ttHandle = (contactData.tiktok || '').replace('https://www.tiktok.com/','').replace('https://tiktok.com/','');
@@ -22,7 +40,12 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
   <main class="contact-page">
 
     <!-- Background image covers entire page -->
-    {heroSrc && <img src={heroSrc} alt="" class="bg-img" loading="eager" />}
+    {heroVideo
+      ? <video autoplay muted loop playsinline class="bg-img"><source src={heroVideo} type="video/mp4" /></video>
+      : heroSrc
+        ? <img src={heroSrc} alt="" class="bg-img" loading="eager" />
+        : null
+    }
     <div class="bg-veil"></div>
 
     <!-- All content floats on top -->
