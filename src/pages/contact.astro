@@ -14,23 +14,28 @@ const igHandle = (contactData.instagram || '').replace('https://www.instagram.co
 const ttHandle = (contactData.tiktok || '').replace('https://www.tiktok.com/','').replace('https://tiktok.com/','');
 const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320/LINE_Brand_icon_2_ytuls0.png';
 
-// Hero priority: video > hero_images list > hero_image single > portfolio pick > latest project
+// Hero priority: video > hero_images list > hero_image single > slideshow > portfolio pick > latest
 const pd = pageData as any;
-const heroVideo = pd.hero_video || null;
+const heroVideo     = pd.hero_video || null;
+const heroSlideshow = pd.hero_slideshow === true;
 
 const heroImages = pd.hero_images || [];
 const firstPhoto = heroImages.length > 0
   ? (typeof heroImages[0] === 'string' ? heroImages[0] : heroImages[0]?.image || null)
   : null;
-
 const singlePhoto = pd.hero_image || null;
 
 const pickedProject = pd.hero_project
   ? allProjects.find(p => p.data.title === pd.hero_project) || null
   : null;
 
+// Build slideshow frames — all project covers sorted by year
+const slideshowFrames = heroSlideshow
+  ? projects.map(p => p.data.cover).filter(Boolean)
+  : [];
+
 let heroSrc: string | null = null;
-if (!heroVideo) {
+if (!heroVideo && !heroSlideshow) {
   if (firstPhoto)                      heroSrc = firstPhoto;
   else if (singlePhoto)                heroSrc = singlePhoto;
   else if (pickedProject?.data?.cover) heroSrc = pickedProject.data.cover;
@@ -45,9 +50,20 @@ if (!heroVideo) {
 
     {heroVideo
       ? <video autoplay muted loop playsinline class="bg-img"><source src={heroVideo} type="video/mp4" /></video>
-      : heroSrc
-        ? <img src={heroSrc} alt="" class="bg-img" loading="eager" />
-        : null
+      : heroSlideshow && slideshowFrames.length > 0
+        ? <div class="bg-slideshow" id="bg-slideshow">
+            {slideshowFrames.map((src, i) => (
+              <img
+                src={src}
+                alt=""
+                class={`bg-slide${i === 0 ? ' active' : ''}`}
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
+            ))}
+          </div>
+        : heroSrc
+          ? <img src={heroSrc} alt="" class="bg-img" loading="eager" />
+          : null
     }
     <div class="bg-veil"></div>
 
@@ -113,6 +129,19 @@ if (!heroVideo) {
 
     </div>
   </main>
+
+  <script is:inline>
+    (function() {
+      const slides = document.querySelectorAll('.bg-slide');
+      if (!slides.length) return;
+      let cur = 0;
+      setInterval(function() {
+        slides[cur].classList.remove('active');
+        cur = (cur + 1) % slides.length;
+        slides[cur].classList.add('active');
+      }, 4000);
+    })();
+  </script>
 
   <Footer hideCta={true} />
 </Layout>
@@ -254,6 +283,27 @@ if (!heroVideo) {
     font-family: 'Courier New', monospace;
     font-size: 0.5rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.4);
   }
+
+  /* SLIDESHOW */
+  .bg-slideshow {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .bg-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    opacity: 0;
+    transition: opacity 1.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .bg-slide.active { opacity: 1; }
 
   /* MOBILE */
   @media (max-width: 767px) {

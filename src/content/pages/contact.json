@@ -13,5 +13,6 @@
     "hero_video": ""
   },
   "hero_images": [],
-  "hero_project": ""
+  "hero_project": "",
+  "hero_slideshow": false
 }

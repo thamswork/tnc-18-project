@@ -152,7 +152,14 @@ collections:
             value_field: title
             display_fields: [title]
             required: false
-            hint: "Pick a project — its cover photo becomes the background. Overridden by uploaded photos above."
+            hint: "Pick one project — its cover photo becomes the background."
+
+          - label: "Slideshow All Portfolio Photos"
+            name: hero_slideshow
+            widget: boolean
+            default: false
+            required: false
+            hint: "Turn ON to cycle through ALL portfolio project covers as an animated background slideshow. Overrides single project selection above."
 
           - label: "Background Video URL"
             name: hero_video
