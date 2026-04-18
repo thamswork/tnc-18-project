@@ -64,8 +64,6 @@ const {
 
   .cta-footer {
     padding: 5rem var(--pad-x, 5vw) 2.5rem;
-    max-width: 1400px;
-    margin: 0 auto;
   }
 
   /* ── CTA ROW ── */
@@ -90,12 +88,12 @@ const {
 
   .cf-title {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(2rem, 7vw, 4.5rem);
+    font-size: clamp(2rem, 6vw, 5.5rem);
     font-weight: 400;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #F8F7F4;
-    line-height: 1.0;
+    line-height: 0.95;
   }
 
   .cf-sub {
@@ -216,17 +214,25 @@ const {
 
   /* ── DESKTOP ── */
   @media (min-width: 768px) {
+    .cta-footer { padding: 6rem 8% 3rem; }
+
     .cf-cta {
       flex-direction: row;
       align-items: center;
       justify-content: space-between;
       text-align: left;
-      gap: 6rem;
+      gap: 5rem;
     }
-    .cf-cta-left { flex: 1; }
-    .cf-sub { margin: 0; }
-    .cf-cta-right { align-items: flex-start; flex-shrink: 0; min-width: 260px; }
-    .cf-socials { justify-content: flex-start; }
+    .cf-cta-left { flex: 1.2; }
+    .cf-sub { margin: 0; max-width: 460px; }
+    .cf-cta-right {
+      align-items: flex-start;
+      flex-shrink: 0;
+      width: 38%;
+      gap: 2rem;
+    }
+    .cf-socials { justify-content: flex-start; gap: 2.5rem; }
+    .cf-line-btn { width: 100%; justify-content: center; padding: 1.1rem 2rem; }
 
     .cf-foot {
       flex-direction: row;
@@ -234,6 +240,19 @@ const {
       align-items: center;
       text-align: left;
     }
-    .cf-nav { justify-content: flex-start; }
+    .cf-nav { justify-content: center; gap: 3rem; }
+    .cf-copy { text-align: right; }
+  }
+
+  @media (min-width: 1200px) {
+    .cta-footer { padding: 7rem 10% 3.5rem; }
+    .cf-cta { gap: 8rem; }
+    .cf-cta-left { flex: 1.4; }
+    .cf-cta-right { width: 34%; }
+    .cf-title { letter-spacing: 0.08em; }
+  }
+
+  @media (min-width: 1600px) {
+    .cta-footer { padding: 8rem 12% 4rem; }
   }
 </style>
