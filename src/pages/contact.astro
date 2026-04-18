@@ -9,29 +9,30 @@ import pageData    from '../content/pages/contact.json';
 const allProjects = await getCollection('projects');
 const projects = allProjects.sort((a, b) => b.data.year - a.data.year);
 const featured = projects[0] || null;
-// Hero priority: video > uploaded photos > portfolio project > latest project
-const heroSection = (pageData as any).hero_section || {};
-const heroVideo = heroSection.hero_video || null;
-
-// Multiple uploaded photos — use first one
-const heroImages = heroSection.hero_images || [];
-const heroPhoto = heroImages.length > 0
-  ? (typeof heroImages[0] === 'string' ? heroImages[0] : heroImages[0]?.image)
-  : (pageData.hero_image || null);
-
-// Portfolio project selection
-const selectedProject = heroSection.hero_project
-  ? allProjects.find((p: any) => p.data.title === heroSection.hero_project) || null
-  : null;
-
-const heroSrc = heroVideo ? null
-  : heroPhoto ? heroPhoto
-  : selectedProject?.data?.cover
-  : featured?.data?.cover || null;
 
 const igHandle = (contactData.instagram || '').replace('https://www.instagram.com/','@').replace('https://instagram.com/','@');
 const ttHandle = (contactData.tiktok || '').replace('https://www.tiktok.com/','').replace('https://tiktok.com/','');
 const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320/LINE_Brand_icon_2_ytuls0.png';
+
+// Hero source — priority: uploaded photo > portfolio pick > latest project
+const pd = pageData as any;
+const heroSection = pd.hero_section || {};
+const heroVideo   = heroSection.hero_video || null;
+const heroImages  = heroSection.hero_images || [];
+const firstPhoto  = heroImages.length > 0
+  ? (typeof heroImages[0] === 'string' ? heroImages[0] : heroImages[0]?.image)
+  : null;
+const singlePhoto = pd.hero_image || null;
+const pickedProject = heroSection.hero_project
+  ? allProjects.find(p => p.data.title === heroSection.hero_project) || null
+  : null;
+
+let heroSrc: string | null = null;
+if (heroVideo)       { heroSrc = null; }
+else if (firstPhoto) { heroSrc = firstPhoto; }
+else if (singlePhoto){ heroSrc = singlePhoto; }
+else if (pickedProject?.data?.cover) { heroSrc = pickedProject.data.cover; }
+else if (featured?.data?.cover)      { heroSrc = featured.data.cover; }
 ---
 
 <Layout title="Contact — TNC.18">
@@ -39,7 +40,6 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
 
   <main class="contact-page">
 
-    <!-- Background image covers entire page -->
     {heroVideo
       ? <video autoplay muted loop playsinline class="bg-img"><source src={heroVideo} type="video/mp4" /></video>
       : heroSrc
@@ -48,15 +48,12 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
     }
     <div class="bg-veil"></div>
 
-    <!-- All content floats on top -->
     <div class="page-content">
 
-      <!-- TOP: tagline only — brand is in navbar -->
       <div class="top-bar">
         <span class="brand-tag">Retail & Interior Design · Bangkok</span>
       </div>
 
-      <!-- BOTTOM: contact info -->
       <div class="bottom-content">
         <div class="contact-left">
           <h1 class="contact-title">{pageData.headline.toUpperCase()}</h1>
@@ -120,7 +117,6 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* Full page container */
   .contact-page {
     position: relative;
     width: 100%;
@@ -129,7 +125,6 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
     background: #0a0e18;
   }
 
-  /* Background image — covers entire page */
   .bg-img {
     position: fixed;
     inset: 0;
@@ -141,15 +136,13 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
     z-index: 0;
   }
 
-  /* Veil — subtle, keeps text readable */
   .bg-veil {
     position: fixed;
     inset: 0;
     z-index: 1;
-    background: rgba(6, 8, 14, 0.62);
+    background: rgba(6,8,14,0.6);
   }
 
-  /* All content above image */
   .page-content {
     position: relative;
     z-index: 2;
@@ -160,39 +153,25 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
     padding: 5.5rem var(--pad-x, 5vw) 4rem;
   }
 
-  /* TOP BAR */
   .top-bar {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: flex-end;
   }
-
-  .brand {
-    font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 1.05rem;
-    font-weight: 800;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #fff;
-  }
-  .brand em { font-style: normal; }
 
   .brand-tag {
     font-family: 'Courier New', monospace;
     font-size: 0.55rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.45);
   }
 
-  /* BOTTOM: left + right */
   .bottom-content {
     display: flex;
     flex-direction: column;
     gap: 3rem;
   }
 
-  /* LEFT: headline + CTA */
   .contact-title {
     font-family: var(--font-display, 'Tenor Sans', serif);
     font-size: clamp(2.5rem, 7vw, 5.5rem);
@@ -229,7 +208,6 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
     border: 1.5px solid rgba(255,255,255,0.55);
     transition: background 0.25s, border-color 0.25s;
     margin-bottom: 1rem;
-    display: inline-flex;
   }
   .line-btn:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
   .line-ico { width: 22px; height: 22px; object-fit: contain; border-radius: 4px; }
@@ -238,25 +216,17 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
     display: flex; align-items: center; gap: 0.5rem;
     font-family: 'Courier New', monospace;
     font-size: 0.52rem; letter-spacing: 0.18em;
-    text-transform: uppercase; color: rgba(255,255,255,0.45);
+    text-transform: uppercase; color: rgba(255,255,255,0.6);
   }
   .dot { display: block; width: 5px; height: 5px; border-radius: 50%; background: #06C755; flex-shrink: 0; }
 
-  /* RIGHT: channels */
-  .contact-right {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
+  .contact-right { display: flex; flex-direction: column; gap: 0; }
 
   .ch {
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
+    display: flex; flex-direction: column; gap: 0.15rem;
     padding: 0.85rem 0;
     border-bottom: 0.5px solid rgba(255,255,255,0.12);
-    text-decoration: none;
-    color: inherit;
+    text-decoration: none; color: inherit;
     transition: padding-left 0.2s;
   }
   .ch:first-child { border-top: 0.5px solid rgba(255,255,255,0.12); }
@@ -264,11 +234,8 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
 
   .ch-plat {
     font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.55rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.55);
-    font-weight: 500;
+    font-size: 0.55rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(255,255,255,0.55); font-weight: 500;
   }
 
   .ch-handle {
@@ -282,111 +249,25 @@ const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320
   .studio { display: flex; flex-direction: column; gap: 0.15rem; padding-top: 1rem; }
   .studio-hrs {
     font-family: 'Courier New', monospace;
-    font-size: 0.5rem; letter-spacing: 0.14em;
-    color: rgba(255,255,255,0.4);
+    font-size: 0.5rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.4);
   }
 
-  /* MOBILE OPTIMIZATIONS */
+  /* MOBILE */
   @media (max-width: 767px) {
-    .page-content {
-      padding: 5rem 6vw 3rem;
-      gap: 0;
-      justify-content: space-between;
-    }
-
-    .top-bar {
-      margin-bottom: 0;
-    }
-
-    .bottom-content {
-      gap: 1.5rem;
-    }
-
-    .contact-title {
-      font-size: 2.2rem;
-      margin-bottom: 0.85rem;
-    }
-
-    .contact-sub {
-      font-size: 0.82rem;
-      margin-bottom: 1.25rem;
-      color: rgba(255,255,255,0.75);
-    }
-
-    .line-btn {
-      width: 100%;
-      justify-content: center;
-      margin-bottom: 0.75rem;
-    }
-
-    .bottom-content {
-      gap: 1.75rem;
-    }
-
-    /* 2-col channel grid */
-    .contact-right {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-
-    .ch {
-      padding: 0.75rem 0.5rem 0.75rem 0;
-      border-bottom: 0.5px solid rgba(255,255,255,0.1);
-      border-right: none;
-    }
-    .ch:first-child {
-      border-top: 0.5px solid rgba(255,255,255,0.1);
-    }
-    /* Make second column items also have top border */
-    .ch:nth-child(2) {
-      border-top: 0.5px solid rgba(255,255,255,0.1);
-    }
-
-    .ch-plat {
-      font-size: 0.48rem;
-      letter-spacing: 0.16em;
-    }
-
-    .ch-handle {
-      font-size: 0.88rem;
-    }
-
-    /* Studio spans full width */
-    .studio {
-      grid-column: 1 / -1;
-      border-top: 0.5px solid rgba(255,255,255,0.1);
-      padding-top: 0.85rem;
-      padding-bottom: 0.5rem;
-    }
-
-    .studio-hrs {
-      font-size: 0.48rem;
-    }
-
-    .promise {
-      font-size: 0.48rem;
-    }
-
-    .brand-tag {
-      font-size: 0.48rem;
-    }
-
-    .top-bar {
-      margin-bottom: 1.5rem;
-    }
+    .page-content { padding: 5rem 6vw 3rem; justify-content: space-between; }
+    .contact-title { font-size: 2.2rem; margin-bottom: 0.85rem; }
+    .contact-sub { font-size: 0.82rem; margin-bottom: 1.25rem; }
+    .line-btn { width: 100%; justify-content: center; margin-bottom: 0.75rem; }
+    .bottom-content { gap: 1.5rem; }
+    .contact-right { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+    .ch { padding: 0.75rem 0.5rem 0.75rem 0; }
+    .ch:nth-child(2) { border-top: 0.5px solid rgba(255,255,255,0.12); }
+    .studio { grid-column: 1 / -1; border-top: 0.5px solid rgba(255,255,255,0.12); padding-top: 0.85rem; }
   }
 
   /* DESKTOP */
   @media (min-width: 768px) {
-    .brand-tag { display: block; }
-
-    .bottom-content {
-      flex-direction: row;
-      align-items: flex-end;
-      gap: 8rem;
-    }
-
+    .bottom-content { flex-direction: row; align-items: flex-end; gap: 8rem; }
     .contact-left { flex: 1; }
     .contact-right { width: 36%; flex-shrink: 0; }
   }
