@@ -6,6 +6,17 @@ import { getCollection } from 'astro:content';
 import homepageData from '../content/pages/homepage.json';
 import contactData  from '../content/settings/contact.json';
 
+let latestSpecbook: any = null;
+try {
+  const { getCollection } = await import('astro:content');
+  const sbAll = await getCollection('specbook');
+  if (sbAll.length > 0) {
+    latestSpecbook = sbAll.sort((a: any, b: any) =>
+      new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+    )[0];
+  }
+} catch(e) { latestSpecbook = null; }
+
 const allProjects = await getCollection('projects');
 const projects = allProjects.sort((a, b) => b.data.year - a.data.year);
 
@@ -159,13 +170,23 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   <!-- ── SPECBOOK TEASER ── -->
   <section class="specbook-strip" data-reveal>
     <a href="/specbook" class="specbook-inner">
+      {latestSpecbook?.data?.cover && (
+        <div class="specbook-thumb">
+          <img src={latestSpecbook.data.cover} alt="" class="specbook-thumb-img" loading="lazy" />
+        </div>
+      )}
       <div class="specbook-left">
-        <span class="specbook-dot"></span>
-        <span class="specbook-label">Specbook</span>
-        <span class="specbook-sep">—</span>
-        <span class="specbook-title">Design Updates & Project Insights</span>
+        <div class="specbook-meta">
+          <span class="specbook-dot"></span>
+          <span class="specbook-label">Specbook</span>
+          {latestSpecbook?.data?.category && <span class="specbook-sep">·</span>}
+          {latestSpecbook?.data?.category && <span class="specbook-cat">{latestSpecbook.data.category}</span>}
+        </div>
+        <span class="specbook-title">
+          {latestSpecbook?.data?.title || 'Design Updates & Project Insights'}
+        </span>
       </div>
-      <span class="specbook-cta">Read Now →</span>
+      <span class="specbook-cta">Read →</span>
     </a>
   </section>
 
@@ -684,47 +705,55 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.25rem var(--pad-x, 5vw);
+    padding: 0.85rem var(--pad-x, 5vw);
     text-decoration: none;
     gap: 1rem;
     transition: background 0.2s;
   }
   .specbook-inner:hover { background: var(--bg-dark, #EFEDE8); }
+  .specbook-thumb {
+    width: 56px; height: 40px;
+    flex-shrink: 0; overflow: hidden;
+    background: var(--bg-dark, #EFEDE8);
+  }
+  .specbook-thumb-img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    transition: transform 0.6s ease;
+  }
+  .specbook-inner:hover .specbook-thumb-img { transform: scale(1.05); }
   .specbook-left {
-    display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    flex-wrap: wrap;
+    display: flex; flex-direction: column;
+    gap: 0.25rem; flex: 1; min-width: 0;
+  }
+  .specbook-meta {
+    display: flex; align-items: center; gap: 0.5rem;
   }
   .specbook-dot {
-    display: block;
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: #06C755;
-    flex-shrink: 0;
+    display: block; width: 5px; height: 5px;
+    border-radius: 50%; background: #06C755; flex-shrink: 0;
   }
   .specbook-label {
     font-family: 'Courier New', monospace;
-    font-size: 0.5rem; letter-spacing: 0.22em;
-    text-transform: uppercase; color: var(--navy, #1A3A6B);
-    font-weight: 600;
+    font-size: 0.48rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--navy, #1A3A6B); font-weight: 600;
   }
-  .specbook-sep {
-    font-size: 0.6rem; color: rgba(26,26,26,0.2);
+  .specbook-sep { font-size: 0.5rem; color: rgba(26,26,26,0.2); }
+  .specbook-cat {
+    font-family: 'Courier New', monospace;
+    font-size: 0.48rem; letter-spacing: 0.16em;
+    text-transform: uppercase; color: rgba(26,26,26,0.4);
   }
   .specbook-title {
     font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.75rem; font-weight: 400;
-    color: var(--ink-mid, #3D3D3D);
-    letter-spacing: 0.02em;
+    font-size: 0.78rem; font-weight: 400;
+    color: var(--ink, #1A1A1A); letter-spacing: 0.01em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .specbook-cta {
     font-family: 'Courier New', monospace;
-    font-size: 0.5rem; letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--navy, #1A3A6B);
+    font-size: 0.48rem; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--navy, #1A3A6B);
     white-space: nowrap; flex-shrink: 0;
-    text-decoration: none;
     transition: opacity 0.2s;
   }
   .specbook-inner:hover .specbook-cta { opacity: 0.6; }

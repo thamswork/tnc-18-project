@@ -46,7 +46,7 @@ if (posts.length === 0) {
       </div>
     </header>
 
-    <section class="sb-feed">
+    <section class="sb-feed sb-grid">
       {posts.map((post: any, i: number) => (
         <article class="sb-card" data-reveal>
           <a href={`/specbook/${post.id}`} class="sb-card-link">
@@ -92,10 +92,11 @@ if (posts.length === 0) {
   .sb-title { font-family: var(--font-display, 'Tenor Sans', serif); font-size: clamp(2.5rem,7vw,5rem); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink, #1A1A1A); line-height: 0.95; margin-bottom: 1.25rem; }
   .sb-sub { font-size: 0.9rem; line-height: 1.85; color: var(--ink-light, #6B6B6B); font-weight: 300; }
   .sb-feed { display: flex; flex-direction: column; }
-  .sb-card { border-bottom: 0.5px solid rgba(26,26,26,0.07); opacity: 0; transform: translateY(24px); transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1); }
+  .sb-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: rgba(26,26,26,0.06); }
+  .sb-card { background: var(--bg, #F8F7F4); opacity: 0; transform: translateY(24px); transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1); }
   .sb-card.revealed { opacity: 1; transform: none; }
-  .sb-card-link { display: block; text-decoration: none; color: inherit; padding: 2.5rem var(--pad-x, 5vw); }
-  .sb-thumb { position: relative; width: 100%; aspect-ratio: 16/7; overflow: hidden; background: var(--bg-dark, #EFEDE8); margin-bottom: 1.5rem; }
+  .sb-card-link { display: block; text-decoration: none; color: inherit; padding: 1.5rem; }
+  .sb-thumb { position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden; background: var(--bg-dark, #EFEDE8); margin-bottom: 1rem; }
   .sb-thumb-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s cubic-bezier(0.4,0,0.2,1); }
   .sb-card-link:hover .sb-thumb-img { transform: scale(1.03); }
   .sb-thumb-ph { width: 100%; height: 100%; background: var(--bg-dark, #EFEDE8); }
@@ -114,12 +115,14 @@ if (posts.length === 0) {
   .sb-empty a { color: var(--navy, #1A3A6B); text-decoration: none; }
   @media (min-width: 768px) {
     .sb-header { padding: 7rem 8vw 4rem; }
-    .sb-card-link { padding: 3rem 8vw; }
-    .sb-thumb { aspect-ratio: 21/8; }
+    .sb-grid { grid-template-columns: repeat(2, 1fr); }
+    .sb-card-link { padding: 1.5rem; }
+  }
+  @media (min-width: 1024px) {
+    .sb-grid { grid-template-columns: repeat(3, 1fr); }
   }
   @media (min-width: 1200px) {
     .sb-header { padding: 8rem 10vw 5rem; }
-    .sb-card-link { padding: 3.5rem 10vw; }
   }
 </style>
 
