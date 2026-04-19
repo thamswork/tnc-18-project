@@ -383,12 +383,17 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
     padding: 4rem var(--pad-x,5vw) 0;
     gap: 2.5rem;
   }
+
+  .pillar { display: flex; flex-direction: column; gap: 0.75rem; }
+
   @media (min-width: 768px) {
-    .pillars { grid-template-columns: repeat(3,1fr) !important; gap: 0 !important; }
+    .pillars {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 0 !important;
+    }
     .pillar { padding-right: 3rem; }
     .pillar:last-child { padding-right: 0; }
   }
-  .pillar { display: flex; flex-direction: column; gap: 0.75rem; }
   .pillar-n { font-family:'Courier New',monospace; font-size:0.54rem; letter-spacing:0.28em; color:var(--navy,#1A3A6B); margin-bottom:0.35rem; }
   .pillar-title { font-family:var(--font-display,'Tenor Sans',serif); font-size:1.3rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink,#1A1A1A); line-height:1.15; }
   .pillar-body { font-size:0.95rem; line-height:1.9; color:var(--ink-light,#6B6B6B); font-weight:400; max-width:300px; }

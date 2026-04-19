@@ -86,7 +86,7 @@ const { title, description = 'TNC.18 — Retail & Interior Design, Bangkok Thail
 
   body {
     font-family: var(--font-body);
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 1.7;
     -webkit-font-smoothing: antialiased;
@@ -101,6 +101,11 @@ const { title, description = 'TNC.18 — Retail & Interior Design, Bangkok Thail
     font-weight: 400;
     line-height: 1.05;
     color: var(--ink);
+  }
+
+  /* Global scale reduction for large screens */
+  @media (min-width: 1400px) {
+    html { font-size: 15px; }
   }
 
   p { line-height: 1.8; color: var(--ink-mid); }

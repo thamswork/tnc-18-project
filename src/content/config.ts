@@ -44,42 +44,10 @@ const news = defineCollection({
 });
 
 // ── SPECBOOK ──────────────────────────────────────────────────────
-const blockSchema = z.discriminatedUnion('type', [
-  z.object({
-    type:    z.literal('text'),
-    heading: z.string().optional(),
-    body:    z.string(),
-    align:   z.enum(['left', 'center', 'right']).optional().default('left'),
-  }),
-  z.object({
-    type:         z.literal('full-image'),
-    src:          z.string(),
-    alt:          z.string().optional().default(''),
-    layout_style: z.enum(['portrait', 'landscape', 'full-bleed']).optional().default('full-bleed'),
-    caption:      z.string().optional(),
-  }),
-  z.object({
-    type:         z.literal('split-gallery'),
-    images: z.array(z.object({
-      src:          z.string(),
-      alt:          z.string().optional().default(''),
-      layout_style: z.enum(['portrait', 'landscape', 'square']).optional().default('landscape'),
-    })),
-    caption: z.string().optional(),
-  }),
-  z.object({
-    type:       z.literal('quote'),
-    text:       z.string(),
-    author:     z.string().optional(),
-    highlight:  z.boolean().optional().default(false),
-  }),
-]);
-
 const specbook = defineCollection({
   type: 'content',
   schema: z.object({
     title:           z.string(),
-    slug_label:      z.string().optional(),
     date:            z.string(),
     category:        z.string().optional(),
     tags:            z.array(z.string()).optional().default([]),
@@ -89,7 +57,7 @@ const specbook = defineCollection({
     seo_description: z.string().optional(),
     canonical:       z.string().optional(),
     featured:        z.boolean().optional().default(false),
-    blocks:          z.array(blockSchema).optional().default([]),
+    blocks:          z.array(z.any()).optional().default([]),
   }),
 });
 
