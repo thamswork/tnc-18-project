@@ -156,6 +156,18 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
     </div>
   </section>
 
+  <!-- ── SPECBOOK TEASER ── -->
+  <section class="specbook-strip" data-reveal>
+    <a href="/specbook" class="specbook-strip-inner">
+      <div class="specbook-left">
+        <p class="specbook-label">New</p>
+        <h3 class="specbook-title">Specbook — Design Updates</h3>
+        <p class="specbook-sub">Weekly insights, project perspectives, and retail design thinking from TNC.18.</p>
+      </div>
+      <span class="specbook-cta">Read Now →</span>
+    </a>
+  </section>
+
   <!-- ── STATEMENT ─────────────────────────────────────────────── -->
   <section class="statement">
     <div class="statement-bg">
@@ -313,7 +325,7 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   .hero-content-wrap { background: linear-gradient(to top, rgba(0,0,0,0.65) 0%, transparent 100%); }
   .hero-title {
     font-family: var(--font-display,'Tenor Sans',serif);
-    font-size: clamp(2.2rem,5.5vw,5rem); font-weight: 400;
+    font-size: clamp(1.6rem,3.2vw,3rem); font-weight: 400;
     letter-spacing: 0.03em; text-transform: uppercase;
     line-height: 1.08; display: flex; flex-direction: column;
     margin-bottom: 2rem; align-items: center; text-align: center;
@@ -358,8 +370,9 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
 
   /* ── PILLARS ── */
   .pillars {
-    display: grid; grid-template-columns: 1fr;
-    background: var(--bg,#F8F7F4); padding: 6rem var(--pad-x,5vw) 0; gap: 3rem;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg,#F8F7F4); padding: 4rem var(--pad-x,5vw) 0; gap: 2.5rem;
   }
   .pillar { display: flex; flex-direction: column; gap: 0.75rem; }
   .pillar-n { font-family:'Courier New',monospace; font-size:0.54rem; letter-spacing:0.28em; color:var(--navy,#1A3A6B); margin-bottom:0.35rem; }
