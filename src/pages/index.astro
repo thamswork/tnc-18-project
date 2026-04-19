@@ -159,19 +159,19 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   <!-- ── SPECBOOK TEASER ── -->
   <section class="specbook-strip" data-reveal>
     <div class="specbook-inner">
-      <div class="specbook-label-wrap">
-        <span class="specbook-dot"></span>
-        <span class="specbook-label">New</span>
-      </div>
-      <div class="specbook-content">
-        <p class="specbook-eyebrow">Specbook</p>
+      <div class="specbook-text">
+        <div class="specbook-top">
+          <span class="specbook-dot"></span>
+          <span class="specbook-new">New</span>
+          <span class="specbook-divider">·</span>
+          <span class="specbook-eyebrow">Specbook</span>
+        </div>
         <h3 class="specbook-title">Design Updates & Project Insights</h3>
         <p class="specbook-sub">Weekly perspectives on retail interior design, material choices, and project thinking from TNC.18 Bangkok.</p>
-        <a href="/specbook" class="specbook-cta">
-          <span>Explore Specbook</span>
-          <span class="specbook-arr">→</span>
-        </a>
       </div>
+      <a href="/specbook" class="specbook-cta">
+        Explore Specbook <span class="specbook-arr">→</span>
+      </a>
     </div>
   </section>
 
@@ -390,9 +390,11 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
     .pillars {
       grid-template-columns: repeat(3, 1fr) !important;
       gap: 0 !important;
+      padding-bottom: 2rem;
     }
-    .pillar { padding-right: 3rem; }
+    .pillar { padding-right: 3rem; max-width: none; }
     .pillar:last-child { padding-right: 0; }
+    .pillar-body { max-width: none; }
   }
   .pillar-n { font-family:'Courier New',monospace; font-size:0.54rem; letter-spacing:0.28em; color:var(--navy,#1A3A6B); margin-bottom:0.35rem; }
   .pillar-title { font-family:var(--font-display,'Tenor Sans',serif); font-size:1.3rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink,#1A1A1A); line-height:1.15; }
