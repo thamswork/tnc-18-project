@@ -159,18 +159,19 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   <!-- ── SPECBOOK TEASER ── -->
   <section class="specbook-strip" data-reveal>
     <div class="specbook-inner">
-      <div class="specbook-text">
-        <div class="specbook-top">
-          <span class="specbook-dot"></span>
-          <span class="specbook-new">New</span>
-          <span class="specbook-divider">·</span>
-          <span class="specbook-eyebrow">Specbook</span>
-        </div>
-        <h3 class="specbook-title">Design Updates & Project Insights</h3>
+      <div class="specbook-badge">
+        <span class="specbook-dot"></span>
+        <span class="specbook-new">New</span>
+        <span class="specbook-sep">·</span>
+        <span class="specbook-label">Specbook</span>
+      </div>
+      <div class="specbook-body">
+        <h3 class="specbook-title">Design Updates &amp; Project Insights</h3>
         <p class="specbook-sub">Weekly perspectives on retail interior design, material choices, and project thinking from TNC.18 Bangkok.</p>
       </div>
       <a href="/specbook" class="specbook-cta">
-        Explore Specbook <span class="specbook-arr">→</span>
+        <span>Explore Specbook</span>
+        <span class="specbook-arr">→</span>
       </a>
     </div>
   </section>
@@ -280,6 +281,7 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   <Footer />
 </Layout>
 
+<!-- Cache-bust: 1776611205 -->
 <!-- Facebook SDK — loads async after page -->
 <script is:inline>
   window.fbAsyncInit = function() {
