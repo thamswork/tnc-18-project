@@ -38,7 +38,7 @@ function slug(t: string) {
     <section class="sb-feed">
       {posts.map((post, i) => (
         <article class="sb-card" data-reveal>
-          <a href={`/specbook/${slug(post.data.title)}`} class="sb-card-link">
+          <a href={`/specbook/${post.id.replace('.md','')}`} class="sb-card-link">
 
             <!-- Thumbnail -->
             <div class="sb-thumb">

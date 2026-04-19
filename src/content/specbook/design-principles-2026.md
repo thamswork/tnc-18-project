@@ -2,10 +2,7 @@
 title: "Design Principles for Retail Spaces 2026"
 date: "2026-04-19"
 category: "Retail Design"
-tags:
-  - retail
-  - interior
-  - bangkok
+tags: ["retail", "interior", "bangkok"]
 excerpt: "How we approach retail space design — materiality, flow, and brand alignment."
 featured: true
 blocks: []

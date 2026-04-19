@@ -1,4 +1,5 @@
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const projects = defineCollection({
   type: 'content',
@@ -45,19 +46,16 @@ const news = defineCollection({
 
 // ── SPECBOOK ──────────────────────────────────────────────────────
 const specbook = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**\/*.md', base: './src/content/specbook' }),
   schema: z.object({
-    title:           z.string(),
-    date:            z.string(),
-    category:        z.string().optional(),
-    tags:            z.array(z.string()).optional().default([]),
-    cover:           z.string().optional(),
-    excerpt:         z.string().optional(),
-    seo_title:       z.string().optional(),
-    seo_description: z.string().optional(),
-    canonical:       z.string().optional(),
-    featured:        z.boolean().optional().default(false),
-    blocks:          z.array(z.any()).optional().default([]),
+    title:    z.string(),
+    date:     z.string(),
+    category: z.string().optional(),
+    tags:     z.array(z.string()).optional(),
+    cover:    z.string().optional(),
+    excerpt:  z.string().optional(),
+    featured: z.boolean().optional(),
+    blocks:   z.array(z.any()).optional(),
   }),
 });
 
