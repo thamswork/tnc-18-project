@@ -66,15 +66,15 @@ const {
   .footer-wrap { background: var(--navy-deep, #0E2140); }
 
   .cta-footer {
-    padding: 5rem var(--pad-x, 5vw) 2.5rem;
+    padding: 3.5rem var(--pad-x, 5vw) 2rem;
   }
 
   /* ── CTA ROW ── */
   .cf-cta {
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
-    padding-bottom: 4rem;
+    gap: 2rem;
+    padding-bottom: 2.5rem;
     text-align: center;
     align-items: center;
   }
@@ -91,12 +91,12 @@ const {
 
   .cf-title {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(2rem, 6vw, 5.5rem);
+    font-size: clamp(1.75rem, 4vw, 3.5rem);
     font-weight: 400;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: #F8F7F4;
-    line-height: 0.95;
+    line-height: 1.0;
   }
 
   .cf-sub {
@@ -217,7 +217,7 @@ const {
 
   /* ── DESKTOP ── */
   @media (min-width: 768px) {
-    .cta-footer { padding: 6rem 8% 3rem; }
+    .cta-footer { padding: 4rem 8% 2rem; }
 
     .cf-cta {
       flex-direction: row;
@@ -248,14 +248,13 @@ const {
   }
 
   @media (min-width: 1200px) {
-    .cta-footer { padding: 7rem 10% 3.5rem; }
-    .cf-cta { gap: 8rem; }
+    .cta-footer { padding: 4.5rem 10% 2.5rem; }
+    .cf-cta { gap: 6rem; }
     .cf-cta-left { flex: 1.4; }
     .cf-cta-right { width: 34%; }
-    .cf-title { letter-spacing: 0.08em; }
   }
 
   @media (min-width: 1600px) {
-    .cta-footer { padding: 8rem 12% 4rem; }
+    .cta-footer { padding: 5rem 12% 2.5rem; }
   }
 </style>
