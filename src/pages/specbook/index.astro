@@ -4,16 +4,14 @@ import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
 
-const all = await getCollection('specbook');
-const posts = all.sort((a, b) =>
-  new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-);
-
-function slug(t: string) {
-  return t.toLowerCase()
-    .replace(/[\u2018\u2019'']/g, '')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-|-$/g, '');
+let posts: any[] = [];
+try {
+  const all = await getCollection('specbook');
+  posts = all.sort((a: any, b: any) =>
+    new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+  );
+} catch(e) {
+  posts = [];
 }
 ---
 
@@ -22,10 +20,7 @@ function slug(t: string) {
   description="Weekly design updates, project insights, and retail interior perspectives from TNC.18 Bangkok."
 >
   <Navbar />
-
   <main class="sb-main">
-
-    <!-- Header -->
     <header class="sb-header">
       <div class="sb-header-inner">
         <p class="sb-eyebrow">Activity Feed</p>
@@ -34,13 +29,10 @@ function slug(t: string) {
       </div>
     </header>
 
-    <!-- Feed -->
     <section class="sb-feed">
-      {posts.map((post, i) => (
+      {posts.map((post: any, i: number) => (
         <article class="sb-card" data-reveal>
-          <a href={`/specbook/${post.id.replace('.md','')}`} class="sb-card-link">
-
-            <!-- Thumbnail -->
+          <a href={`/specbook/${post.id}`} class="sb-card-link">
             <div class="sb-thumb">
               {post.data.cover
                 ? <img src={post.data.cover} alt={post.data.title} loading={i < 2 ? 'eager' : 'lazy'} class="sb-thumb-img" />
@@ -50,8 +42,6 @@ function slug(t: string) {
                 <span class="sb-read">Read →</span>
               </div>
             </div>
-
-            <!-- Info -->
             <div class="sb-info">
               <div class="sb-meta">
                 {post.data.category && <span class="sb-cat">{post.data.category}</span>}
@@ -63,154 +53,53 @@ function slug(t: string) {
               <h2 class="sb-card-title">{post.data.title}</h2>
               {post.data.excerpt && <p class="sb-excerpt">{post.data.excerpt}</p>}
             </div>
-
           </a>
         </article>
       ))}
-
       {posts.length === 0 && (
         <div class="sb-empty">
           <p>No specbook entries yet. <a href="/admin">Add in CMS →</a></p>
         </div>
       )}
     </section>
-
   </main>
-
   <Footer ctaTitle="Want to Work Together?" ctaSub="Senior partners only. We reply within 2 hours." />
 </Layout>
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   .sb-main { padding-top: 72px; background: var(--bg, #F8F7F4); min-height: 100vh; }
-
-  /* Header */
-  .sb-header {
-    padding: 5rem var(--pad-x, 5vw) 3rem;
-    border-bottom: 0.5px solid rgba(26,26,26,0.08);
-  }
+  .sb-header { padding: 5rem var(--pad-x, 5vw) 3rem; border-bottom: 0.5px solid rgba(26,26,26,0.08); }
   .sb-header-inner { max-width: 640px; }
-
-  .sb-eyebrow {
-    font-family: 'Courier New', monospace;
-    font-size: 0.55rem; letter-spacing: 0.28em;
-    text-transform: uppercase; color: var(--navy, #1A3A6B);
-    margin-bottom: 0.75rem;
-  }
-
-  .sb-title {
-    font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(2.5rem, 7vw, 5rem);
-    font-weight: 400; letter-spacing: 0.04em;
-    text-transform: uppercase; color: var(--ink, #1A1A1A);
-    line-height: 0.95; margin-bottom: 1.25rem;
-  }
-
-  .sb-sub {
-    font-size: 0.9rem; line-height: 1.85;
-    color: var(--ink-light, #6B6B6B); font-weight: 300;
-  }
-
-  /* Feed */
+  .sb-eyebrow { font-family: 'Courier New', monospace; font-size: 0.55rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--navy, #1A3A6B); margin-bottom: 0.75rem; }
+  .sb-title { font-family: var(--font-display, 'Tenor Sans', serif); font-size: clamp(2.5rem,7vw,5rem); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink, #1A1A1A); line-height: 0.95; margin-bottom: 1.25rem; }
+  .sb-sub { font-size: 0.9rem; line-height: 1.85; color: var(--ink-light, #6B6B6B); font-weight: 300; }
   .sb-feed { display: flex; flex-direction: column; }
-
-  .sb-card {
-    border-bottom: 0.5px solid rgba(26,26,26,0.07);
-    opacity: 0; transform: translateY(24px);
-    transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1);
-  }
+  .sb-card { border-bottom: 0.5px solid rgba(26,26,26,0.07); opacity: 0; transform: translateY(24px); transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1); }
   .sb-card.revealed { opacity: 1; transform: none; }
-
-  .sb-card-link {
-    display: block; text-decoration: none; color: inherit;
-    padding: 2.5rem var(--pad-x, 5vw);
-  }
-
-  .sb-thumb {
-    position: relative; width: 100%;
-    aspect-ratio: 16/7; overflow: hidden;
-    background: var(--bg-dark, #EFEDE8);
-    margin-bottom: 1.5rem;
-  }
-
-  .sb-thumb-img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    transition: transform 1.2s cubic-bezier(0.4,0,0.2,1);
-  }
+  .sb-card-link { display: block; text-decoration: none; color: inherit; padding: 2.5rem var(--pad-x, 5vw); }
+  .sb-thumb { position: relative; width: 100%; aspect-ratio: 16/7; overflow: hidden; background: var(--bg-dark, #EFEDE8); margin-bottom: 1.5rem; }
+  .sb-thumb-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s cubic-bezier(0.4,0,0.2,1); }
   .sb-card-link:hover .sb-thumb-img { transform: scale(1.03); }
-
   .sb-thumb-ph { width: 100%; height: 100%; background: var(--bg-dark, #EFEDE8); }
-
-  .sb-thumb-overlay {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(14,33,64,0);
-    transition: background 0.4s;
-  }
+  .sb-thumb-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(14,33,64,0); transition: background 0.4s; }
   .sb-card-link:hover .sb-thumb-overlay { background: rgba(14,33,64,0.4); }
-
-  .sb-read {
-    font-family: 'Courier New', monospace; font-size: 0.62rem;
-    letter-spacing: 0.26em; text-transform: uppercase; color: #fff;
-    opacity: 0; transform: translateY(6px);
-    transition: opacity 0.3s, transform 0.3s;
-  }
+  .sb-read { font-family: 'Courier New', monospace; font-size: 0.62rem; letter-spacing: 0.26em; text-transform: uppercase; color: #fff; opacity: 0; transform: translateY(6px); transition: opacity 0.3s, transform 0.3s; }
   .sb-card-link:hover .sb-read { opacity: 1; transform: none; }
-
-  /* Info */
-  .sb-meta {
-    display: flex; align-items: center; gap: 0.75rem;
-    flex-wrap: wrap; margin-bottom: 0.65rem;
-  }
-
-  .sb-cat {
-    font-family: 'Courier New', monospace; font-size: 0.5rem;
-    letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--navy, #1A3A6B); font-weight: 600;
-  }
-
-  .sb-date {
-    font-family: 'Courier New', monospace; font-size: 0.5rem;
-    letter-spacing: 0.14em; color: rgba(26,26,26,0.35);
-  }
-
-  .sb-tag {
-    font-family: 'Courier New', monospace; font-size: 0.46rem;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: rgba(26,26,26,0.35);
-    border: 0.5px solid rgba(26,26,26,0.15);
-    padding: 0.15rem 0.5rem;
-  }
-
-  .sb-card-title {
-    font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(1.15rem, 2.5vw, 1.65rem);
-    font-weight: 400; letter-spacing: 0.04em;
-    text-transform: uppercase; color: var(--ink, #1A1A1A);
-    line-height: 1.1; margin-bottom: 0.65rem;
-    transition: color 0.2s;
-  }
+  .sb-meta { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.65rem; }
+  .sb-cat { font-family: 'Courier New', monospace; font-size: 0.5rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--navy, #1A3A6B); font-weight: 600; }
+  .sb-date { font-family: 'Courier New', monospace; font-size: 0.5rem; letter-spacing: 0.14em; color: rgba(26,26,26,0.35); }
+  .sb-tag { font-family: 'Courier New', monospace; font-size: 0.46rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.35); border: 0.5px solid rgba(26,26,26,0.15); padding: 0.15rem 0.5rem; }
+  .sb-card-title { font-family: var(--font-display, 'Tenor Sans', serif); font-size: clamp(1.15rem,2.5vw,1.65rem); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink, #1A1A1A); line-height: 1.1; margin-bottom: 0.65rem; transition: color 0.2s; }
   .sb-card-link:hover .sb-card-title { color: var(--navy, #1A3A6B); }
-
-  .sb-excerpt {
-    font-size: 0.85rem; line-height: 1.85;
-    color: var(--ink-light, #6B6B6B); font-weight: 300;
-    max-width: 640px;
-  }
-
-  .sb-empty {
-    padding: 5rem var(--pad-x, 5vw);
-    font-size: 0.875rem; color: var(--ink-light, #6B6B6B);
-  }
+  .sb-excerpt { font-size: 0.85rem; line-height: 1.85; color: var(--ink-light, #6B6B6B); font-weight: 300; max-width: 640px; }
+  .sb-empty { padding: 5rem var(--pad-x, 5vw); font-size: 0.875rem; color: var(--ink-light, #6B6B6B); }
   .sb-empty a { color: var(--navy, #1A3A6B); text-decoration: none; }
-
   @media (min-width: 768px) {
     .sb-header { padding: 7rem 8vw 4rem; }
     .sb-card-link { padding: 3rem 8vw; }
     .sb-thumb { aspect-ratio: 21/8; }
   }
-
   @media (min-width: 1200px) {
     .sb-header { padding: 8rem 10vw 5rem; }
     .sb-card-link { padding: 3.5rem 10vw; }
