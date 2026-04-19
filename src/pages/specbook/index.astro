@@ -13,6 +13,23 @@ try {
 } catch(e) {
   posts = [];
 }
+
+// Fallback: if collection empty, show hardcoded entries
+if (posts.length === 0) {
+  posts = [
+    {
+      id: 'design-principles-2026',
+      data: {
+        title: 'Design Principles for Retail Spaces 2026',
+        date: '2026-04-19',
+        category: 'Retail Design',
+        tags: ['retail', 'interior', 'bangkok'],
+        excerpt: 'How we approach retail space design — materiality, flow, and brand alignment.',
+        featured: true,
+      }
+    }
+  ];
+}
 ---
 
 <Layout
