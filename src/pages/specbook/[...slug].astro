@@ -2,7 +2,6 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
-import BlockRenderer from '../../components/specbook/BlockRenderer.astro';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -15,97 +14,73 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const d = post.data;
-const { Content } = await render(post);
+let Content: any = null;
+try {
+  const rendered = await render(post);
+  Content = rendered.Content;
+} catch(e) { Content = null; }
 
 const seoTitle       = d.seo_title || d.title;
 const seoDescription = d.seo_description || d.excerpt || `${d.title} — TNC.18 Bangkok`;
-const canonical      = d.canonical || `https://tnc-18-project.pages.dev/specbook/${post.id}`;
+const canonical      = d.canonical || `https://tnc-18-project.pages.dev/specbook/${post.id.replace('.md','')}`;
 const publishDate    = new Date(d.date).toISOString();
-
-const jsonLd = {
+const jsonLd = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "headline": seoTitle,
   "description": seoDescription,
   "image": d.cover || "",
   "datePublished": publishDate,
-  "dateModified": publishDate,
-  "author": {
-    "@type": "Organization",
-    "name": "TNC.18",
-    "url": "https://tnc-18-project.pages.dev"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "TNC.18",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://tnc-18-project.pages.dev/favicon.svg"
-    }
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": canonical
-  }
-};
+  "author": { "@type": "Organization", "name": "TNC.18" },
+  "publisher": { "@type": "Organization", "name": "TNC.18" }
+});
 ---
 
-<Layout
-  title={seoTitle}
-  description={seoDescription}
-  bodyClass="page-specbook"
->
-  <!-- Canonical + JSON-LD injected into head -->
-  <link rel="canonical" href={canonical} slot="head" />
-  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
-
+<Layout title={seoTitle} description={seoDescription}>
+  <script type="application/ld+json" set:html={jsonLd} slot="head" />
   <Navbar />
 
-  <main class="sp-main">
+  <main class="art-main">
 
     <!-- Hero -->
-    <header class="sp-hero">
+    <header class="art-hero">
       {d.cover
-        ? <img src={d.cover} alt={d.title} class="sp-hero-img" loading="eager" />
-        : <div class="sp-hero-ph"></div>
+        ? <img src={d.cover} alt={d.title} class="art-hero-img" loading="eager" />
+        : <div class="art-hero-ph"></div>
       }
-      <div class="sp-hero-veil"></div>
-      <div class="sp-hero-content">
-        <nav class="sp-breadcrumb">
-          <a href="/specbook" class="sp-back">← Specbook</a>
-          {d.category && <span class="sp-bc-cat">{d.category}</span>}
+      <div class="art-hero-veil"></div>
+      <div class="art-hero-ui">
+        <nav class="art-breadcrumb">
+          <a href="/specbook" class="art-back">← Specbook</a>
+          {d.category && <span class="art-bc-sep">/</span>}
+          {d.category && <span class="art-bc-cat">{d.category}</span>}
         </nav>
-        <div class="sp-hero-bot">
-          <h1 class="sp-title">{d.title}</h1>
-          <p class="sp-date">
+        <div class="art-hero-bot">
+          <h1 class="art-title">{d.title}</h1>
+          <p class="art-date">
             {new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
         </div>
       </div>
     </header>
 
-    <!-- Excerpt -->
+    <!-- Lede -->
     {d.excerpt && (
-      <div class="sp-lede" data-reveal>
-        <p class="sp-lede-text">{d.excerpt}</p>
+      <div class="art-lede" data-reveal>
+        <p class="art-lede-text">{d.excerpt}</p>
       </div>
     )}
 
     <!-- Tags -->
     {d.tags && d.tags.length > 0 && (
-      <div class="sp-tags">
-        {d.tags.map((tag: string) => <span class="sp-tag">{tag}</span>)}
+      <div class="art-tags">
+        {d.tags.map((tag: string) => <span class="art-tag">{tag}</span>)}
       </div>
     )}
 
-    <!-- Flexible blocks -->
-    <div class="sp-blocks">
-      <BlockRenderer blocks={d.blocks || []} />
-    </div>
-
-    <!-- Markdown body -->
-    {post.body && post.body.trim() && (
-      <div class="sp-prose" data-reveal>
+    <!-- Body content -->
+    {Content && (
+      <div class="art-prose" data-reveal>
         <Content />
       </div>
     )}
@@ -117,59 +92,38 @@ const jsonLd = {
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  .sp-main { padding-top: 72px; background: var(--bg, #F8F7F4); min-height: 100vh; }
+  .art-main { padding-top: 72px; background: var(--bg, #F8F7F4); min-height: 100vh; }
 
   /* Hero */
-  .sp-hero {
-    position: relative; width: 100%;
-    height: 65vh; overflow: hidden;
-    background: #0a0e18;
-  }
-
-  .sp-hero-img {
-    width: 100%; height: 100%;
-    object-fit: cover; display: block;
-  }
-  .sp-hero-ph { width: 100%; height: 100%; background: linear-gradient(135deg, #1a2a3e, #0a0e18); }
-
-  .sp-hero-veil {
+  .art-hero { position: relative; width: 100%; height: 60vh; overflow: hidden; background: #0a0e18; }
+  .art-hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .art-hero-ph { width: 100%; height: 100%; background: linear-gradient(135deg, #1a2a3e, #0a0e18); }
+  .art-hero-veil {
     position: absolute; inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(4,6,10,0.85) 0%,
-      rgba(4,6,10,0.2) 50%,
-      rgba(4,6,10,0.25) 100%
-    );
+    background: linear-gradient(to top, rgba(4,6,10,0.85) 0%, rgba(4,6,10,0.2) 50%, rgba(4,6,10,0.3) 100%);
   }
-
-  .sp-hero-content {
+  .art-hero-ui {
     position: absolute; inset: 0;
     display: flex; flex-direction: column;
     justify-content: space-between;
     padding: 2rem var(--pad-x, 5vw) 2.5rem;
   }
-
-  .sp-breadcrumb { display: flex; align-items: center; gap: 1rem; }
-
-  .sp-back {
+  .art-breadcrumb { display: flex; align-items: center; gap: 0.75rem; }
+  .art-back {
     font-family: 'Courier New', monospace; font-size: 0.58rem;
     letter-spacing: 0.18em; text-transform: uppercase;
-    color: rgba(248,247,244,0.65); text-decoration: none;
+    color: rgba(248,247,244,0.7); text-decoration: none;
     transition: color 0.2s;
   }
-  .sp-back:hover { color: #F8F7F4; }
-
-  .sp-bc-cat {
+  .art-back:hover { color: #F8F7F4; }
+  .art-bc-sep { color: rgba(248,247,244,0.25); font-size: 0.6rem; }
+  .art-bc-cat {
     font-family: 'Courier New', monospace; font-size: 0.52rem;
     letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(248,247,244,0.4);
-    background: rgba(4,6,10,0.4); padding: 0.25rem 0.65rem;
+    color: rgba(248,247,244,0.45);
   }
-
-  .sp-hero-bot { display: flex; flex-direction: column; gap: 0.5rem; }
-
-  .sp-title {
+  .art-hero-bot { display: flex; flex-direction: column; gap: 0.5rem; }
+  .art-title {
     font-family: var(--font-display, 'Tenor Sans', serif);
     font-size: clamp(1.75rem, 5vw, 3.5rem);
     font-weight: 400; letter-spacing: 0.04em;
@@ -177,36 +131,31 @@ const jsonLd = {
     line-height: 1.05; max-width: 800px;
     text-shadow: 0 2px 20px rgba(0,0,0,0.4);
   }
-
-  .sp-date {
+  .art-date {
     font-family: 'Courier New', monospace; font-size: 0.52rem;
-    letter-spacing: 0.18em; color: rgba(248,247,244,0.45);
-    text-transform: uppercase;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(248,247,244,0.45);
   }
 
   /* Lede */
-  .sp-lede {
+  .art-lede {
     padding: 3rem var(--pad-x, 5vw);
     border-bottom: 0.5px solid rgba(26,26,26,0.08);
     opacity: 0; transform: translateY(20px);
-    transition: opacity 0.85s ease, transform 0.85s cubic-bezier(0.16,1,0.3,1);
+    transition: opacity 0.85s ease, transform 0.85s ease;
   }
-  .sp-lede.revealed { opacity: 1; transform: none; }
-
-  .sp-lede-text {
+  .art-lede.revealed { opacity: 1; transform: none; }
+  .art-lede-text {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    font-weight: 400; line-height: 1.7;
+    font-size: clamp(1rem, 2.5vw, 1.4rem);
+    font-weight: 400; line-height: 1.75;
     color: var(--ink-mid, #3D3D3D);
     max-width: 720px; font-style: italic;
   }
 
   /* Tags */
-  .sp-tags {
-    display: flex; gap: 0.5rem; flex-wrap: wrap;
-    padding: 1.5rem var(--pad-x, 5vw);
-  }
-  .sp-tag {
+  .art-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 1.5rem var(--pad-x, 5vw); }
+  .art-tag {
     font-family: 'Courier New', monospace; font-size: 0.48rem;
     letter-spacing: 0.16em; text-transform: uppercase;
     color: var(--navy, #1A3A6B);
@@ -214,24 +163,20 @@ const jsonLd = {
     padding: 0.25rem 0.65rem;
   }
 
-  /* Blocks */
-  .sp-blocks { display: flex; flex-direction: column; gap: 2rem; padding: 1rem 0; }
-
   /* Prose */
-  .sp-prose {
-    padding: 3rem var(--pad-x, 5vw) 5rem;
+  .art-prose {
+    padding: 3rem var(--pad-x, 5vw) 6rem;
     max-width: 720px;
     opacity: 0; transform: translateY(20px);
-    transition: opacity 0.85s ease, transform 0.85s cubic-bezier(0.16,1,0.3,1);
+    transition: opacity 0.85s ease, transform 0.85s ease;
   }
-  .sp-prose.revealed { opacity: 1; transform: none; }
-
-  .sp-prose :global(p) {
+  .art-prose.revealed { opacity: 1; transform: none; }
+  .art-prose :global(p) {
     font-size: 0.95rem; line-height: 2;
     color: var(--ink-mid, #3D3D3D); font-weight: 300;
     margin-bottom: 1.5rem;
   }
-  .sp-prose :global(h2), .sp-prose :global(h3) {
+  .art-prose :global(h2), .art-prose :global(h3) {
     font-family: var(--font-display, 'Tenor Sans', serif);
     font-size: 1.1rem; letter-spacing: 0.08em;
     text-transform: uppercase; color: var(--ink, #1A1A1A);
@@ -239,17 +184,16 @@ const jsonLd = {
   }
 
   @media (min-width: 768px) {
-    .sp-hero { height: 78vh; }
-    .sp-hero-content { padding: 2.5rem 8vw 3rem; }
-    .sp-lede { padding: 4rem 8vw; }
-    .sp-prose { padding: 4rem 8vw 7rem; }
-    .sp-tags { padding: 1.5rem 8vw; }
+    .art-hero { height: 75vh; }
+    .art-hero-ui { padding: 2.5rem 8vw 3rem; }
+    .art-lede { padding: 4rem 8vw; }
+    .art-prose { padding: 4rem 8vw 8rem; }
+    .art-tags { padding: 1.5rem 8vw; }
   }
-
   @media (min-width: 1200px) {
-    .sp-lede { padding: 5rem 10vw; }
-    .sp-prose { padding: 5rem 10vw 8rem; }
-    .sp-tags { padding: 1.5rem 10vw; }
+    .art-lede { padding: 5rem 10vw; }
+    .art-prose { padding: 5rem 10vw 10rem; }
+    .art-tags { padding: 1.5rem 10vw; }
   }
 </style>
 

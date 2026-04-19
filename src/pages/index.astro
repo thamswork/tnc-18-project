@@ -5,12 +5,12 @@ import Footer from '../components/Footer.astro';
 import { getCollection } from 'astro:content';
 import homepageData from '../content/pages/homepage.json';
 import contactData  from '../content/settings/contact.json';
+import { getCollection } from 'astro:content';
 
 let latestSpecbook: any = null;
 try {
-  const { getCollection } = await import('astro:content');
   const sbAll = await getCollection('specbook');
-  if (sbAll.length > 0) {
+  if (sbAll && sbAll.length > 0) {
     latestSpecbook = sbAll.sort((a: any, b: any) =>
       new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
     )[0];
