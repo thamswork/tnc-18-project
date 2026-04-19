@@ -2,38 +2,40 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar.astro';
 import Footer from '../../components/Footer.astro';
-import { getCollection, render } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
+import matter from 'gray-matter';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('specbook');
-  return posts.map(p => ({
-    params: { slug: p.id },
-    props: { post: p }
+  const dir = path.join(process.cwd(), 'src/content/specbook');
+  const files = fs.readdirSync(dir).filter(f => f.endsWith('.md'));
+  return files.map(filename => ({
+    params: { slug: filename.replace('.md', '') },
+    props: { filename }
   }));
 }
 
-const { post } = Astro.props;
-const d = post.data;
-let Content: any = null;
-try {
-  const rendered = await render(post);
-  Content = rendered.Content;
-} catch(e) { Content = null; }
+const { filename } = Astro.props;
+const { slug } = Astro.params;
+const dir = path.join(process.cwd(), 'src/content/specbook');
+const raw = fs.readFileSync(path.join(dir, `${filename}`), 'utf8');
+const { data: d, content: body } = matter(raw);
 
-const seoTitle       = d.seo_title || d.title;
+const seoTitle = d.seo_title || d.title;
 const seoDescription = d.seo_description || d.excerpt || `${d.title} — TNC.18 Bangkok`;
-const canonical      = d.canonical || `https://tnc-18-project.pages.dev/specbook/${post.id.replace('.md','')}`;
-const publishDate    = new Date(d.date).toISOString();
+const canonical = `https://tnc-18-project.pages.dev/specbook/${slug}`;
+const publishDate = new Date(d.date).toISOString();
 const jsonLd = JSON.stringify({
   "@context": "https://schema.org",
   "@type": "BlogPosting",
   "headline": seoTitle,
   "description": seoDescription,
-  "image": d.cover || "",
   "datePublished": publishDate,
-  "author": { "@type": "Organization", "name": "TNC.18" },
-  "publisher": { "@type": "Organization", "name": "TNC.18" }
+  "author": { "@type": "Organization", "name": "TNC.18" }
 });
+
+// Convert markdown body to simple HTML paragraphs
+const paragraphs = body.trim().split(/\n\n+/).filter(Boolean);
 ---
 
 <Layout title={seoTitle} description={seoDescription}>
@@ -41,8 +43,6 @@ const jsonLd = JSON.stringify({
   <Navbar />
 
   <main class="art-main">
-
-    <!-- Hero -->
     <header class="art-hero">
       {d.cover
         ? <img src={d.cover} alt={d.title} class="art-hero-img" loading="eager" />
@@ -64,27 +64,25 @@ const jsonLd = JSON.stringify({
       </div>
     </header>
 
-    <!-- Lede -->
     {d.excerpt && (
       <div class="art-lede" data-reveal>
         <p class="art-lede-text">{d.excerpt}</p>
       </div>
     )}
 
-    <!-- Tags -->
     {d.tags && d.tags.length > 0 && (
       <div class="art-tags">
         {d.tags.map((tag: string) => <span class="art-tag">{tag}</span>)}
       </div>
     )}
 
-    <!-- Body content -->
-    {Content && (
-      <div class="art-prose" data-reveal>
-        <Content />
-      </div>
-    )}
-
+    <div class="art-prose" data-reveal>
+      {paragraphs.map((p: string) => (
+        p.startsWith('#') 
+          ? <h2 class="art-heading">{p.replace(/^#+\s*/, '')}</h2>
+          : <p class="art-p">{p}</p>
+      ))}
+    </div>
   </main>
 
   <Footer ctaTitle="Start a Project" ctaSub="Senior partners only. We reply within 2 hours." />
@@ -93,8 +91,6 @@ const jsonLd = JSON.stringify({
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   .art-main { padding-top: 72px; background: var(--bg, #F8F7F4); min-height: 100vh; }
-
-  /* Hero */
   .art-hero { position: relative; width: 100%; height: 60vh; overflow: hidden; background: #0a0e18; }
   .art-hero-img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .art-hero-ph { width: 100%; height: 100%; background: linear-gradient(135deg, #1a2a3e, #0a0e18); }
@@ -103,97 +99,69 @@ const jsonLd = JSON.stringify({
     background: linear-gradient(to top, rgba(4,6,10,0.85) 0%, rgba(4,6,10,0.2) 50%, rgba(4,6,10,0.3) 100%);
   }
   .art-hero-ui {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    justify-content: space-between;
-    padding: 2rem var(--pad-x, 5vw) 2.5rem;
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    justify-content: space-between; padding: 2rem var(--pad-x, 5vw) 2.5rem;
   }
   .art-breadcrumb { display: flex; align-items: center; gap: 0.75rem; }
   .art-back {
     font-family: 'Courier New', monospace; font-size: 0.58rem;
     letter-spacing: 0.18em; text-transform: uppercase;
-    color: rgba(248,247,244,0.7); text-decoration: none;
-    transition: color 0.2s;
+    color: rgba(248,247,244,0.7); text-decoration: none; transition: color 0.2s;
   }
   .art-back:hover { color: #F8F7F4; }
   .art-bc-sep { color: rgba(248,247,244,0.25); font-size: 0.6rem; }
   .art-bc-cat {
     font-family: 'Courier New', monospace; font-size: 0.52rem;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: rgba(248,247,244,0.45);
+    letter-spacing: 0.2em; text-transform: uppercase; color: rgba(248,247,244,0.45);
   }
   .art-hero-bot { display: flex; flex-direction: column; gap: 0.5rem; }
   .art-title {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(1.75rem, 5vw, 3.5rem);
-    font-weight: 400; letter-spacing: 0.04em;
-    text-transform: uppercase; color: #F8F7F4;
-    line-height: 1.05; max-width: 800px;
-    text-shadow: 0 2px 20px rgba(0,0,0,0.4);
+    font-size: clamp(1.75rem, 5vw, 3.5rem); font-weight: 400;
+    letter-spacing: 0.04em; text-transform: uppercase; color: #F8F7F4;
+    line-height: 1.05; max-width: 800px; text-shadow: 0 2px 20px rgba(0,0,0,0.4);
   }
   .art-date {
     font-family: 'Courier New', monospace; font-size: 0.52rem;
-    letter-spacing: 0.18em; text-transform: uppercase;
-    color: rgba(248,247,244,0.45);
+    letter-spacing: 0.18em; text-transform: uppercase; color: rgba(248,247,244,0.45);
   }
-
-  /* Lede */
   .art-lede {
-    padding: 3rem var(--pad-x, 5vw);
-    border-bottom: 0.5px solid rgba(26,26,26,0.08);
+    padding: 3rem var(--pad-x, 5vw); border-bottom: 0.5px solid rgba(26,26,26,0.08);
     opacity: 0; transform: translateY(20px);
     transition: opacity 0.85s ease, transform 0.85s ease;
   }
   .art-lede.revealed { opacity: 1; transform: none; }
   .art-lede-text {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(1rem, 2.5vw, 1.4rem);
-    font-weight: 400; line-height: 1.75;
-    color: var(--ink-mid, #3D3D3D);
+    font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 400;
+    line-height: 1.75; color: var(--ink-mid, #3D3D3D);
     max-width: 720px; font-style: italic;
   }
-
-  /* Tags */
   .art-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 1.5rem var(--pad-x, 5vw); }
   .art-tag {
     font-family: 'Courier New', monospace; font-size: 0.48rem;
     letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--navy, #1A3A6B);
-    border: 0.5px solid var(--navy, #1A3A6B);
+    color: var(--navy, #1A3A6B); border: 0.5px solid var(--navy, #1A3A6B);
     padding: 0.25rem 0.65rem;
   }
-
-  /* Prose */
   .art-prose {
-    padding: 3rem var(--pad-x, 5vw) 6rem;
-    max-width: 720px;
+    padding: 3rem var(--pad-x, 5vw) 6rem; max-width: 720px;
     opacity: 0; transform: translateY(20px);
     transition: opacity 0.85s ease, transform 0.85s ease;
   }
   .art-prose.revealed { opacity: 1; transform: none; }
-  .art-prose :global(p) {
-    font-size: 0.95rem; line-height: 2;
-    color: var(--ink-mid, #3D3D3D); font-weight: 300;
-    margin-bottom: 1.5rem;
-  }
-  .art-prose :global(h2), .art-prose :global(h3) {
-    font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: 1.1rem; letter-spacing: 0.08em;
-    text-transform: uppercase; color: var(--ink, #1A1A1A);
+  .art-p { font-size: 0.95rem; line-height: 2; color: var(--ink-mid, #3D3D3D); font-weight: 300; margin-bottom: 1.5rem; }
+  .art-heading {
+    font-family: var(--font-display, 'Tenor Sans', serif); font-size: 1.1rem;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink, #1A1A1A);
     margin: 2.5rem 0 1rem; font-weight: 400;
   }
-
   @media (min-width: 768px) {
     .art-hero { height: 75vh; }
     .art-hero-ui { padding: 2.5rem 8vw 3rem; }
     .art-lede { padding: 4rem 8vw; }
     .art-prose { padding: 4rem 8vw 8rem; }
     .art-tags { padding: 1.5rem 8vw; }
-  }
-  @media (min-width: 1200px) {
-    .art-lede { padding: 5rem 10vw; }
-    .art-prose { padding: 5rem 10vw 10rem; }
-    .art-tags { padding: 1.5rem 10vw; }
   }
 </style>
 

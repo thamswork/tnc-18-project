@@ -1,8 +1,12 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const projects = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/projects' }),
+  loader: glob({ pattern: '*.md', base: join(__dirname, 'projects') }),
   schema: z.object({
     title:          z.string(),
     title_th:       z.string().optional(),
@@ -23,7 +27,7 @@ const projects = defineCollection({
 });
 
 const services = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/services' }),
+  loader: glob({ pattern: '*.md', base: join(__dirname, 'services') }),
   schema: z.object({
     order:       z.number(),
     title:       z.string(),
@@ -34,7 +38,7 @@ const services = defineCollection({
 });
 
 const news = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/news' }),
+  loader: glob({ pattern: '*.md', base: join(__dirname, 'news') }),
   schema: z.object({
     title:    z.string(),
     title_th: z.string().optional(),
@@ -45,7 +49,7 @@ const news = defineCollection({
 });
 
 const specbook = defineCollection({
-  loader: glob({ pattern: '*.md', base: './src/content/specbook' }),
+  loader: glob({ pattern: '*.md', base: join(__dirname, 'specbook') }),
   schema: z.object({
     title:    z.string(),
     date:     z.string(),
