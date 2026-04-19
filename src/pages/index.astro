@@ -677,6 +677,67 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   @media (min-width: 1200px) {
     .works-card { width: 38vw; }
   }
+
+  /* ── SPECBOOK STRIP ── */
+  .specbook-strip {
+    background: var(--bg-dark, #EFEDE8);
+    border-top: 0.5px solid rgba(26,26,26,0.08);
+    border-bottom: 0.5px solid rgba(26,26,26,0.08);
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.85s ease, transform 0.85s cubic-bezier(0.16,1,0.3,1);
+  }
+  .specbook-strip.revealed { opacity: 1; transform: none; }
+  .specbook-inner {
+    display: flex; flex-direction: column; gap: 1.25rem;
+    padding: 2.5rem var(--pad-x, 5vw);
+  }
+  .specbook-badge { display: flex; align-items: center; gap: 0.5rem; }
+  .specbook-dot {
+    display: block; width: 6px; height: 6px;
+    border-radius: 50%; background: #06C755; flex-shrink: 0;
+  }
+  .specbook-new {
+    font-family: 'Courier New', monospace; font-size: 0.5rem;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    color: #06C755; font-weight: 600;
+  }
+  .specbook-sep { color: rgba(26,26,26,0.25); font-size: 0.65rem; }
+  .specbook-label {
+    font-family: 'Courier New', monospace; font-size: 0.5rem;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--navy, #1A3A6B); font-weight: 600;
+  }
+  .specbook-body { display: flex; flex-direction: column; gap: 0.5rem; }
+  .specbook-title {
+    font-family: var(--font-display, 'Tenor Sans', serif);
+    font-size: clamp(1.15rem, 2.5vw, 1.65rem);
+    font-weight: 400; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--ink, #1A1A1A); line-height: 1.1;
+  }
+  .specbook-sub {
+    font-size: 0.82rem; line-height: 1.8;
+    color: var(--ink-light, #6B6B6B); font-weight: 300; max-width: 600px;
+  }
+  .specbook-cta {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    text-decoration: none; color: var(--navy, #1A3A6B);
+    padding: 0.8rem 1.75rem; border: 1.5px solid var(--navy, #1A3A6B);
+    transition: background 0.25s, color 0.25s; align-self: flex-start;
+  }
+  .specbook-cta:hover { background: var(--navy, #1A3A6B); color: #fff; }
+  .specbook-arr { transition: transform 0.2s; }
+  .specbook-cta:hover .specbook-arr { transform: translateX(3px); }
+  @media (min-width: 768px) {
+    .specbook-inner {
+      flex-direction: row; align-items: center;
+      justify-content: space-between; padding: 2.5rem 8%; gap: 3rem;
+    }
+    .specbook-body { flex: 1; }
+    .specbook-cta { flex-shrink: 0; }
+  }
 </style>
 
 <script>
