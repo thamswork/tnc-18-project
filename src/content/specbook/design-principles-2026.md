@@ -3,7 +3,6 @@ title: "Design Principles for Retail Spaces 2026"
 date: "2026-04-19"
 category: "Retail Design"
 tags: ["retail", "interior", "bangkok", "2026"]
-cover: ""
 excerpt: "How we approach retail space design — materiality, flow, and brand alignment."
 seo_title: "Retail Space Design Principles 2026 — TNC.18 Bangkok"
 seo_description: "TNC.18 shares its approach to retail interior design in Bangkok — materiality, customer flow, and brand-aligned environments."

@@ -10,7 +10,10 @@ const posts = all.sort((a, b) =>
 );
 
 function slug(t: string) {
-  return t.toLowerCase().replace(/['']/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  return t.toLowerCase()
+    .replace(/[\u2018\u2019'']/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 }
 ---
 
