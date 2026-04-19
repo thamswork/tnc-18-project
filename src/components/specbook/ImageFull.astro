@@ -1,0 +1,61 @@
+---
+interface Props {
+  src: string;
+  alt?: string;
+  layout_style?: 'portrait' | 'landscape' | 'full-bleed';
+  caption?: string;
+}
+const { src, alt = '', layout_style = 'full-bleed', caption } = Astro.props;
+---
+<figure class={`sb-img sb-img--${layout_style}`} data-reveal>
+  <img src={src} alt={alt} loading="lazy" class="sb-img-el" />
+  {caption && <figcaption class="sb-img-cap">{caption}</figcaption>}
+</figure>
+
+<style>
+  .sb-img { margin: 0; width: 100%; }
+
+  .sb-img--full-bleed .sb-img-el {
+    width: 100%;
+    height: 70vh;
+    object-fit: cover;
+    display: block;
+  }
+
+  .sb-img--landscape {
+    padding: 0 var(--pad-x, 5vw);
+  }
+  .sb-img--landscape .sb-img-el {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    display: block;
+  }
+
+  .sb-img--portrait {
+    padding: 0 var(--pad-x, 5vw);
+    max-width: 560px;
+    margin: 0 auto;
+  }
+  .sb-img--portrait .sb-img-el {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+  }
+
+  .sb-img-cap {
+    font-family: 'Courier New', monospace;
+    font-size: 0.52rem;
+    letter-spacing: 0.16em;
+    color: var(--ink-light, #6B6B6B);
+    padding: 0.65rem var(--pad-x, 5vw) 0;
+    text-transform: uppercase;
+  }
+
+  @media (min-width: 768px) {
+    .sb-img--full-bleed .sb-img-el { height: 85vh; }
+    .sb-img--landscape { padding: 0 8%; }
+    .sb-img--portrait  { padding: 0 8%; }
+  }
+</style>

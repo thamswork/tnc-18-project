@@ -1,0 +1,62 @@
+---
+interface Props {
+  text: string;
+  author?: string;
+  highlight?: boolean;
+}
+const { text, author, highlight = false } = Astro.props;
+---
+<blockquote class={`sb-quote${highlight ? ' sb-quote--highlight' : ''}`} data-reveal>
+  <p class="sb-quote-text">"{text}"</p>
+  {author && <cite class="sb-quote-author">— {author}</cite>}
+</blockquote>
+
+<style>
+  .sb-quote {
+    padding: 3rem var(--pad-x, 5vw);
+    border-left: 2px solid var(--navy, #1A3A6B);
+    margin: 0;
+  }
+
+  .sb-quote--highlight {
+    background: var(--navy-deep, #0E2140);
+    border-left: none;
+    padding: 5rem var(--pad-x, 5vw);
+    text-align: center;
+  }
+
+  .sb-quote-text {
+    font-family: var(--font-display, 'Tenor Sans', serif);
+    font-size: clamp(1.15rem, 3vw, 1.75rem);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    line-height: 1.65;
+    color: var(--ink, #1A1A1A);
+    font-style: italic;
+  }
+
+  .sb-quote--highlight .sb-quote-text {
+    color: #F8F7F4;
+    font-style: normal;
+  }
+
+  .sb-quote-author {
+    display: block;
+    margin-top: 1rem;
+    font-family: 'Courier New', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-light, #6B6B6B);
+    font-style: normal;
+  }
+
+  .sb-quote--highlight .sb-quote-author {
+    color: rgba(248,247,244,0.45);
+  }
+
+  @media (min-width: 768px) {
+    .sb-quote { padding: 4rem 10%; }
+    .sb-quote--highlight { padding: 7rem 15%; }
+  }
+</style>

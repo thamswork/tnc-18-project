@@ -20,6 +20,7 @@ const { title, description = 'TNC.18 — Retail & Interior Design, Bangkok Thail
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <title>{title} — TNC.18</title>
+    <slot name="head" />
       <link rel="stylesheet" href="/src/styles/premium-preview.css" />
   </head>
   <body class={`${Astro.url.pathname === "/" ? "page-home" : "page-inner"}${bodyClass ? " " + bodyClass : ""}`}>

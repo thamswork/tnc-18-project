@@ -1,0 +1,42 @@
+---
+interface Props {
+  heading?: string;
+  body: string;
+  align?: 'left' | 'center' | 'right';
+}
+const { heading, body, align = 'left' } = Astro.props;
+---
+<div class={`sb-text sb-text--${align}`} data-reveal>
+  {heading && <h2 class="sb-text-heading">{heading}</h2>}
+  <p class="sb-text-body">{body}</p>
+</div>
+
+<style>
+  .sb-text {
+    padding: 3rem var(--pad-x, 5vw);
+    max-width: 780px;
+  }
+  .sb-text--center { margin: 0 auto; text-align: center; }
+  .sb-text--right  { margin-left: auto; text-align: right; }
+
+  .sb-text-heading {
+    font-family: var(--font-display, 'Tenor Sans', serif);
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink, #1A1A1A);
+    margin-bottom: 1rem;
+  }
+
+  .sb-text-body {
+    font-size: 0.95rem;
+    line-height: 2;
+    color: var(--ink-mid, #3D3D3D);
+    font-weight: 300;
+  }
+
+  @media (min-width: 768px) {
+    .sb-text { padding: 4rem 10%; }
+  }
+</style>

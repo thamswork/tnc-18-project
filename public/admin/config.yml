@@ -200,3 +200,77 @@ collections:
           - { label: "Meta Description",  name: meta_desc,  widget: text }
           - { label: "Google Analytics ID", name: ga_id,   widget: string, required: false,
               hint: "e.g. G-XXXXXXXXXX" }
+
+  # ── SPECBOOK ─────────────────────────────────────────────────────
+  - name: specbook
+    label: "Specbook"
+    label_singular: "Specbook Entry"
+    folder: src/content/specbook
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: title
+    fields:
+      - { label: "Title",           name: title,           widget: string }
+      - { label: "Date",            name: date,            widget: datetime, format: "YYYY-MM-DD" }
+      - { label: "Category",        name: category,        widget: string,   required: false }
+      - { label: "Tags",            name: tags,            widget: list,     required: false }
+      - { label: "Cover Image",     name: cover,           widget: image,    required: false }
+      - { label: "Excerpt",         name: excerpt,         widget: text,     required: false }
+      - { label: "SEO Title",       name: seo_title,       widget: string,   required: false }
+      - { label: "SEO Description", name: seo_description, widget: text,     required: false }
+      - { label: "Featured",        name: featured,        widget: boolean,  default: false }
+      - label: "Content Blocks"
+        name: blocks
+        widget: list
+        required: false
+        types:
+          - label: "Text Block"
+            name: text
+            widget: object
+            fields:
+              - { label: "Heading",   name: heading, widget: string,  required: false }
+              - { label: "Body Text", name: body,    widget: text }
+              - label: "Alignment"
+                name: align
+                widget: select
+                options: [left, center, right]
+                default: left
+
+          - label: "Full Image"
+            name: full-image
+            widget: object
+            fields:
+              - { label: "Image",        name: src,          widget: image }
+              - { label: "Alt Text",     name: alt,          widget: string,  required: false }
+              - { label: "Caption",      name: caption,      widget: string,  required: false }
+              - label: "Layout Style"
+                name: layout_style
+                widget: select
+                options: [full-bleed, landscape, portrait]
+                default: full-bleed
+
+          - label: "Split Gallery"
+            name: split-gallery
+            widget: object
+            fields:
+              - label: "Images"
+                name: images
+                widget: list
+                fields:
+                  - { label: "Image",        name: src,          widget: image }
+                  - { label: "Alt Text",     name: alt,          widget: string,  required: false }
+                  - label: "Layout Style"
+                    name: layout_style
+                    widget: select
+                    options: [landscape, portrait, square]
+                    default: landscape
+              - { label: "Caption", name: caption, widget: string, required: false }
+
+          - label: "Quote"
+            name: quote
+            widget: object
+            fields:
+              - { label: "Quote Text",  name: text,      widget: text }
+              - { label: "Author",      name: author,    widget: string,  required: false }
+              - { label: "Highlighted (dark background)", name: highlight, widget: boolean, default: false }

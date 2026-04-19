@@ -1,0 +1,26 @@
+---
+import TextContent  from './TextContent.astro';
+import ImageFull    from './ImageFull.astro';
+import ImageGrid    from './ImageGrid.astro';
+import Quote        from './Quote.astro';
+
+interface Props {
+  blocks: any[];
+}
+const { blocks } = Astro.props;
+---
+
+{blocks.map((block: any) => {
+  switch (block.type) {
+    case 'text':
+      return <TextContent heading={block.heading} body={block.body} align={block.align} />;
+    case 'full-image':
+      return <ImageFull src={block.src} alt={block.alt} layout_style={block.layout_style} caption={block.caption} />;
+    case 'split-gallery':
+      return <ImageGrid images={block.images} caption={block.caption} />;
+    case 'quote':
+      return <Quote text={block.text} author={block.author} highlight={block.highlight} />;
+    default:
+      return null;
+  }
+})}
