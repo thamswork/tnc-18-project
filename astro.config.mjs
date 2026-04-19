@@ -7,7 +7,5 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   site: 'https://tnc-18-project.pages.dev',
   integrations: [react(), sitemap()],
-  vite: {
-    plugins: [tailwindcss()],
-  },
+  vite: { plugins: [tailwindcss()] },
 });
