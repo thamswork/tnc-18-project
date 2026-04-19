@@ -2,7 +2,7 @@ import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const projects = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
     title:          z.string(),
     title_th:       z.string().optional(),
@@ -23,7 +23,7 @@ const projects = defineCollection({
 });
 
 const services = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/services' }),
   schema: z.object({
     order:       z.number(),
     title:       z.string(),
@@ -34,7 +34,7 @@ const services = defineCollection({
 });
 
 const news = defineCollection({
-  type: 'content',
+  loader: glob({ pattern: '**/*.md', base: './src/content/news' }),
   schema: z.object({
     title:    z.string(),
     title_th: z.string().optional(),
@@ -44,9 +44,8 @@ const news = defineCollection({
   }),
 });
 
-// ── SPECBOOK ──────────────────────────────────────────────────────
 const specbook = defineCollection({
-  loader: glob({ pattern: '**\/*.md', base: './src/content/specbook' }),
+  loader: glob({ pattern: '**/*.md', base: './src/content/specbook' }),
   schema: z.object({
     title:    z.string(),
     date:     z.string(),
