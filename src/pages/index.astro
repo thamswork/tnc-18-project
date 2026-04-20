@@ -181,9 +181,9 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
         <div class="specbook-track" id="sb-track">
           {sbAll.length > 0 ? sbAll.map((entry: any) => (
             <a href={`/specbook/${entry.id}`} class="specbook-item">
-              {entry.data.cover && (
+              {(entry.data.cover || projects[0]?.data?.cover) && (
                 <div class="specbook-thumb">
-                  <img src={entry.data.cover} alt="" class="specbook-thumb-img" loading="lazy" />
+                  <img src={entry.data.cover || projects[0]?.data?.cover} alt="" class="specbook-thumb-img" loading="lazy" />
                   {entry.data.category && (
                     <span class="specbook-thumb-tag">{entry.data.category}</span>
                   )}

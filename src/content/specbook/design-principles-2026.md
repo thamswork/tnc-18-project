@@ -5,6 +5,7 @@ category: "Retail Design"
 tags: ["retail", "interior", "bangkok"]
 excerpt: "How we approach retail space design — materiality, flow, and brand alignment."
 featured: true
+cover: ""
 blocks: []
 ---
 
