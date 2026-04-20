@@ -179,63 +179,6 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   <!-- ── SPECBOOK TEASER ── -->
   <section class="specbook-strip">
     <div class="specbook-inner">
-
-      <div class="specbook-brand">
-        <div class="specbook-meta">
-          <span class="specbook-dot"></span>
-          <span class="specbook-label">Specbook</span>
-        </div>
-        <span class="specbook-vol">Vol. 2026</span>
-      </div>
-
-      <div class="specbook-vdiv"></div>
-
-      <div class="specbook-viewport">
-        <div class="specbook-track" id="sb-track">
-
-          <a href="/specbook/design-principles-2026" class="specbook-item">
-            <div class="specbook-thumb">
-              <img src="https://res.cloudinary.com/dynjnftnu/image/upload/v1776436591/FenderFoto-04363_tv6wjd.jpg" alt="" loading="lazy" />
-              <span class="specbook-thumb-tag">Retail Design</span>
-            </div>
-            <div class="specbook-text">
-              <span class="specbook-item-meta">Retail Design · Apr 2026</span>
-              <span class="specbook-item-title">Design Principles for Retail Spaces 2026</span>
-              <span class="specbook-item-excerpt">How we approach retail space design — materiality, flow, and brand alignment.</span>
-            </div>
-          </a>
-
-          <a href="/specbook/test-entry" class="specbook-item">
-            <div class="specbook-thumb">
-              <img src="https://res.cloudinary.com/dynjnftnu/image/upload/v1776437277/FenderFoto-09282_lpd0hl.jpg" alt="" loading="lazy" />
-              <span class="specbook-thumb-tag">Design</span>
-            </div>
-            <div class="specbook-text">
-              <span class="specbook-item-meta">Design · Apr 2026</span>
-              <span class="specbook-item-title">Design Updates & Project Insights</span>
-              <span class="specbook-item-excerpt">Weekly perspectives on retail interior design, material choices, and project thinking.</span>
-            </div>
-          </a>
-
-        </div>
-      </div>
-
-      <div class="specbook-controls">
-        <button class="sb-arrow" id="sb-up" aria-label="Previous" disabled>▲</button>
-        <span class="sb-counter" id="sb-counter">1 / 2</span>
-        <button class="sb-arrow" id="sb-down" aria-label="Next">▼</button>
-      </div>
-
-      <div class="specbook-vdiv"></div>
-
-      <a href="/specbook" class="specbook-cta-btn">Read →</a>
-
-    </div>
-  </section>
-
-  <!-- ── SPECBOOK TEASER ── -->
-  <section class="specbook-strip">
-    <div class="specbook-inner">
       <div class="specbook-brand">
         <div class="specbook-meta">
           <span class="specbook-dot"></span>
@@ -1051,7 +994,7 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
     entries.forEach(e => {
       if (!e.isIntersecting) return;
       const strip = e.target as HTMLElement;
-      strip.style.transition = 'opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1)';
+      strip.style.transition = 'opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1)';
       strip.style.opacity = '1';
       strip.style.transform = 'none';
       sbIo.unobserve(e.target);
