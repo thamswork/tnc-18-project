@@ -189,37 +189,28 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
       <div class="specbook-vdiv"></div>
       <div class="specbook-viewport">
         <div class="specbook-track" id="sb-track">
-          {sbAll.length > 0 ? sbAll.map((entry: any) => (
-            <a href={`/specbook/${entry.id}`} class="specbook-item">
+          {sbAll.map((entry: any) => (
+            <a href={`/specbook/${entry.slug}`} class="specbook-item">
               <div class="specbook-thumb">
-                <img src={sbCovers[entry.id]} alt="" class="specbook-thumb-img" loading="lazy" />
-                {entry.data.category && (
-                  <span class="specbook-thumb-tag">{entry.data.category}</span>
-                )}
+                <img src={entry.cover} alt="" class="specbook-thumb-img" loading="lazy" />
+                <span class="specbook-thumb-tag">{entry.category}</span>
               </div>
               <div class="specbook-text">
                 <span class="specbook-item-meta">
-                  {entry.data.category || 'Design'}&nbsp;·&nbsp;{entry.data.date ? new Date(entry.data.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '2026'}
+                  {entry.category}&nbsp;·&nbsp;{new Date(entry.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
                 </span>
-                <span class="specbook-item-title">{entry.data.title || 'Design Updates & Project Insights'}</span>
-                {entry.data.excerpt && (
-                  <span class="specbook-item-excerpt">{entry.data.excerpt}</span>
+                <span class="specbook-item-title">{entry.title}</span>
+                {entry.excerpt && (
+                  <span class="specbook-item-excerpt">{entry.excerpt}</span>
                 )}
               </div>
             </a>
-          )) : (
-            <a href="/specbook" class="specbook-item">
-              <div class="specbook-text">
-                <span class="specbook-item-meta">Design · 2026</span>
-                <span class="specbook-item-title">Design Updates & Project Insights</span>
-              </div>
-            </a>
-          )}
+          ))}
         </div>
       </div>
       <div class="specbook-controls">
         <button class="sb-arrow" id="sb-up" aria-label="Previous" disabled>▲</button>
-        <span class="sb-counter" id="sb-counter">1 / {sbAll.length || 1}</span>
+        <span class="sb-counter" id="sb-counter">1 / {sbAll.length}</span>
         <button class="sb-arrow" id="sb-down" aria-label="Next">▼</button>
       </div>
       <div class="specbook-vdiv"></div>
