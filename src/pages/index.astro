@@ -840,18 +840,66 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   }
   .specbook-cta-btn:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; }
   @media (max-width: 767px) {
-    .specbook-inner { height: auto; padding: 1.5rem 5vw; flex-wrap: wrap; gap: 0; }
-    .specbook-brand { flex-direction: row; align-items: center; gap: 1rem; padding-right: 0; width: 100%; margin-bottom: 1rem; }
+    .specbook-inner {
+      height: auto;
+      padding: 1.25rem 5vw 1.5rem;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      overflow: visible;
+    }
+    .specbook-brand {
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      padding-right: 0;
+      width: 100%;
+    }
     .specbook-vol { margin-left: auto; }
     .specbook-vdiv { display: none; }
-    .specbook-viewport { width: 100%; height: 90px; }
-    .specbook-item { height: 90px; min-height: 90px; gap: 1rem; }
-    .specbook-thumb { width: 72px; height: 56px; }
+    .specbook-viewport {
+      width: 100%;
+      height: 100px;
+      overflow: hidden;
+    }
+    .specbook-item {
+      height: 100px;
+      min-height: 100px;
+      gap: 1rem;
+      width: 100%;
+    }
+    .specbook-thumb {
+      width: 80px;
+      height: 72px;
+      flex-shrink: 0;
+    }
+    .specbook-text {
+      flex: 1;
+      min-width: 0;
+      gap: 5px;
+    }
+    .specbook-item-meta { font-size: 0.48rem; }
+    .specbook-item-title {
+      font-size: 0.85rem;
+      white-space: normal;
+      line-height: 1.3;
+    }
     .specbook-item-excerpt { display: none; }
-    .specbook-item-title { font-size: 0.88rem; white-space: normal; }
-    .specbook-controls { flex-direction: row; padding-left: 0; width: 100%; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem; }
-    .sb-counter { padding: 0 6px; }
-    .specbook-cta-btn { display: none; }
+    .specbook-controls {
+      flex-direction: row;
+      padding-left: 0;
+      width: 100%;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .sb-counter { padding: 0 8px; font-size: 0.5rem; }
+    .specbook-cta-btn {
+      display: inline-block;
+      margin-left: 0;
+      padding: 8px 14px;
+      font-size: 0.48rem;
+    }
   }
 
   
