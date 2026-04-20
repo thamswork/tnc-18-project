@@ -1028,7 +1028,39 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
 
   /* ── REVEAL ON SCROLL ── */
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(!e.isIntersecting) return; e.target.classList.add('revealed'); io.unobserve(e.target); });
-  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('revealed');
+      io.unobserve(e.target);
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
   document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
+
+  /* ── WORKS CARDS IN-VIEW ── */
+  const worksIo = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('in-view');
+      worksIo.unobserve(e.target);
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
+  document.querySelectorAll('.works-card').forEach(el => worksIo.observe(el));
+
+  /* ── SPECBOOK STRIP ENTRANCE ── */
+  const sbIo = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const strip = e.target as HTMLElement;
+      strip.style.transition = 'opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1)';
+      strip.style.opacity = '1';
+      strip.style.transform = 'none';
+      sbIo.unobserve(e.target);
+    });
+  }, { threshold: 0.1 });
+  const sbStrip = document.querySelector('.specbook-strip') as HTMLElement;
+  if (sbStrip) {
+    sbStrip.style.opacity = '0';
+    sbStrip.style.transform = 'translateY(24px)';
+    sbIo.observe(sbStrip);
+  }
 </script>
