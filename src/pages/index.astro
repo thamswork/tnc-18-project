@@ -5,17 +5,16 @@ import Footer from '../components/Footer.astro';
 import { getCollection } from 'astro:content';
 import homepageData from '../content/pages/homepage.json';
 import contactData  from '../content/settings/contact.json';
-import { getCollection } from 'astro:content';
 
-let latestSpecbook: any = null;
+let sbAll: any[] = [];
 try {
-  const sbAll = await getCollection('specbook');
-  if (sbAll && sbAll.length > 0) {
-    latestSpecbook = sbAll.sort((a: any, b: any) =>
+  const raw = await getCollection('specbook');
+  if (raw && raw.length > 0) {
+    sbAll = raw.sort((a: any, b: any) =>
       new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
-    )[0];
+    );
   }
-} catch(e) { latestSpecbook = null; }
+} catch(e) { sbAll = []; }
 
 const allProjects = await getCollection('projects');
 const projects = allProjects.sort((a, b) => b.data.year - a.data.year);
@@ -169,25 +168,55 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
 
   <!-- ── SPECBOOK TEASER ── -->
   <section class="specbook-strip" data-reveal>
-    <a href="/specbook" class="specbook-inner">
-      {latestSpecbook?.data?.cover && (
-        <div class="specbook-thumb">
-          <img src={latestSpecbook.data.cover} alt="" class="specbook-thumb-img" loading="lazy" />
-        </div>
-      )}
-      <div class="specbook-left">
+    <div class="specbook-inner">
+      <div class="specbook-brand">
         <div class="specbook-meta">
           <span class="specbook-dot"></span>
           <span class="specbook-label">Specbook</span>
-          {latestSpecbook?.data?.category && <span class="specbook-sep">·</span>}
-          {latestSpecbook?.data?.category && <span class="specbook-cat">{latestSpecbook.data.category}</span>}
         </div>
-        <span class="specbook-title">
-          {latestSpecbook?.data?.title || 'Design Updates & Project Insights'}
-        </span>
+        <span class="specbook-vol">Vol. {new Date().getFullYear()}</span>
       </div>
-      <span class="specbook-cta">Read →</span>
-    </a>
+      <div class="specbook-vdiv"></div>
+      <div class="specbook-viewport">
+        <div class="specbook-track" id="sb-track">
+          {sbAll.length > 0 ? sbAll.map((entry: any) => (
+            <a href={`/specbook/${entry.id}`} class="specbook-item">
+              {entry.data.cover && (
+                <div class="specbook-thumb">
+                  <img src={entry.data.cover} alt="" class="specbook-thumb-img" loading="lazy" />
+                  {entry.data.category && (
+                    <span class="specbook-thumb-tag">{entry.data.category}</span>
+                  )}
+                </div>
+              )}
+              <div class="specbook-text">
+                <span class="specbook-item-meta">
+                  {entry.data.category || 'Design'}&nbsp;·&nbsp;{entry.data.date ? new Date(entry.data.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '2026'}
+                </span>
+                <span class="specbook-item-title">{entry.data.title || 'Design Updates & Project Insights'}</span>
+                {entry.data.excerpt && (
+                  <span class="specbook-item-excerpt">{entry.data.excerpt}</span>
+                )}
+              </div>
+            </a>
+          )) : (
+            <a href="/specbook" class="specbook-item">
+              <div class="specbook-text">
+                <span class="specbook-item-meta">Design · 2026</span>
+                <span class="specbook-item-title">Design Updates & Project Insights</span>
+              </div>
+            </a>
+          )}
+        </div>
+      </div>
+      <div class="specbook-controls">
+        <button class="sb-arrow" id="sb-up" aria-label="Previous" disabled>▲</button>
+        <span class="sb-counter" id="sb-counter">1 / {sbAll.length || 1}</span>
+        <button class="sb-arrow" id="sb-down" aria-label="Next">▼</button>
+      </div>
+      <div class="specbook-vdiv"></div>
+      <a href="/specbook" class="specbook-cta-btn">Read →</a>
+    </div>
   </section>
 
   <!-- ── STATEMENT ─────────────────────────────────────────────── -->
@@ -702,66 +731,147 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
   }
   .specbook-strip.revealed { opacity: 1; transform: none; }
   .specbook-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.85rem var(--pad-x, 5vw);
-    text-decoration: none;
-    gap: 1rem;
-    transition: background 0.2s;
+    display: flex; align-items: center;
+    padding: 0 5vw; height: 130px; overflow: hidden; gap: 0;
   }
-  .specbook-inner:hover { background: var(--bg-dark, #EFEDE8); }
-  .specbook-thumb {
-    width: 56px; height: 40px;
-    flex-shrink: 0; overflow: hidden;
-    background: var(--bg-dark, #EFEDE8);
+  .specbook-brand {
+    display: flex; flex-direction: column; gap: 7px;
+    flex-shrink: 0; padding-right: 2.5rem;
   }
-  .specbook-thumb-img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    transition: transform 0.6s ease;
-  }
-  .specbook-inner:hover .specbook-thumb-img { transform: scale(1.05); }
-  .specbook-left {
-    display: flex; flex-direction: column;
-    gap: 0.25rem; flex: 1; min-width: 0;
-  }
-  .specbook-meta {
-    display: flex; align-items: center; gap: 0.5rem;
-  }
+  .specbook-meta { display: flex; align-items: center; gap: 9px; }
   .specbook-dot {
-    display: block; width: 5px; height: 5px;
+    display: block; width: 6px; height: 6px;
     border-radius: 50%; background: #06C755; flex-shrink: 0;
   }
   .specbook-label {
-    font-family: 'Courier New', monospace;
-    font-size: 0.48rem; letter-spacing: 0.22em;
-    text-transform: uppercase; color: var(--navy, #1A3A6B); font-weight: 600;
+    font-family: 'Courier New', monospace; font-size: 0.6rem;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--navy, #1A3A6B); font-weight: 600;
   }
-  .specbook-sep { font-size: 0.5rem; color: rgba(26,26,26,0.2); }
-  .specbook-cat {
-    font-family: 'Courier New', monospace;
-    font-size: 0.48rem; letter-spacing: 0.16em;
-    text-transform: uppercase; color: rgba(26,26,26,0.4);
+  .specbook-vol {
+    font-family: 'Courier New', monospace; font-size: 0.5rem;
+    letter-spacing: 0.12em; color: rgba(26,26,26,0.3);
   }
-  .specbook-title {
+  .specbook-vdiv {
+    width: 0.5px; height: 56px; background: rgba(26,26,26,0.1);
+    flex-shrink: 0; margin: 0 2.5rem;
+  }
+  .specbook-viewport { flex: 1; height: 130px; overflow: hidden; position: relative; }
+  .specbook-track {
+    display: flex; flex-direction: column;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .specbook-item {
+    height: 130px; min-height: 130px;
+    display: flex; align-items: center; gap: 1.5rem;
+    flex-shrink: 0; text-decoration: none;
+  }
+  .specbook-thumb {
+    width: 100px; height: 76px; flex-shrink: 0;
+    overflow: hidden; border-radius: 2px; position: relative;
+    box-shadow: 0 2px 14px rgba(14,33,64,0.1);
+  }
+  .specbook-thumb-img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    filter: brightness(0.78); transition: transform 0.6s ease;
+  }
+  .specbook-item:hover .specbook-thumb-img { transform: scale(1.05); }
+  .specbook-thumb-tag {
+    position: absolute; bottom: 6px; left: 6px;
+    font-size: 0.42rem; letter-spacing: 0.12em; text-transform: uppercase;
+    color: #fff; font-family: 'Courier New', monospace;
+    background: rgba(14,33,64,0.65); padding: 2px 7px; border-radius: 2px;
+  }
+  .specbook-text {
+    flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0;
+  }
+  .specbook-item-meta {
+    font-family: 'Courier New', monospace; font-size: 0.5rem;
+    letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.38);
+  }
+  .specbook-item-title {
     font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.78rem; font-weight: 400;
-    color: var(--ink, #1A1A1A); letter-spacing: 0.01em;
+    font-size: 1rem; font-weight: 400; color: var(--ink, #1A1A1A);
+    letter-spacing: 0.01em; line-height: 1.35;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .specbook-cta {
-    font-family: 'Courier New', monospace;
-    font-size: 0.48rem; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--navy, #1A3A6B);
-    white-space: nowrap; flex-shrink: 0;
-    transition: opacity 0.2s;
+  .specbook-item-excerpt {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.75rem; color: rgba(26,26,26,0.42); line-height: 1.6;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .specbook-inner:hover .specbook-cta { opacity: 0.6; }
+  .specbook-controls {
+    display: flex; flex-direction: column; align-items: center;
+    flex-shrink: 0; padding-left: 1.5rem; gap: 2px;
+  }
+  .sb-arrow {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    border: 0.5px solid rgba(26,26,26,0.18); background: transparent;
+    cursor: pointer; color: var(--navy, #1A3A6B); font-size: 10px;
+    transition: background 0.15s, color 0.15s, border-color 0.15s;
+  }
+  .sb-arrow:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; border-color: var(--navy, #1A3A6B); }
+  .sb-arrow:disabled { opacity: 0.2; cursor: default; pointer-events: none; }
+  .sb-counter {
+    font-family: 'Courier New', monospace; font-size: 0.44rem;
+    letter-spacing: 0.1em; color: rgba(26,26,26,0.35); padding: 5px 0; text-align: center;
+  }
+  .specbook-cta-btn {
+    flex-shrink: 0; margin-left: 2.5rem;
+    font-family: 'Courier New', monospace; font-size: 0.52rem;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--navy, #1A3A6B); border: 0.5px solid var(--navy, #1A3A6B);
+    padding: 10px 18px; text-decoration: none;
+    transition: background 0.15s, color 0.15s; white-space: nowrap;
+  }
+  .specbook-cta-btn:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; }
+  @media (max-width: 767px) {
+    .specbook-inner { height: auto; padding: 1.5rem 5vw; flex-wrap: wrap; gap: 0; }
+    .specbook-brand { flex-direction: row; align-items: center; gap: 1rem; padding-right: 0; width: 100%; margin-bottom: 1rem; }
+    .specbook-vol { margin-left: auto; }
+    .specbook-vdiv { display: none; }
+    .specbook-viewport { width: 100%; height: 90px; }
+    .specbook-item { height: 90px; min-height: 90px; gap: 1rem; }
+    .specbook-thumb { width: 72px; height: 56px; }
+    .specbook-item-excerpt { display: none; }
+    .specbook-item-title { font-size: 0.88rem; white-space: normal; }
+    .specbook-controls { flex-direction: row; padding-left: 0; width: 100%; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem; }
+    .sb-counter { padding: 0 6px; }
+    .specbook-cta-btn { display: none; }
+  }
 
   
 </style>
 
 <script>
+  /* ── SPECBOOK TICKER ── */
+  (function() {
+    const track = document.getElementById('sb-track') as HTMLElement;
+    const btnUp = document.getElementById('sb-up') as HTMLButtonElement;
+    const btnDown = document.getElementById('sb-down') as HTMLButtonElement;
+    const counterEl = document.getElementById('sb-counter') as HTMLElement;
+    if (!track || !btnUp || !btnDown) return;
+    const items = track.querySelectorAll<HTMLElement>('.specbook-item');
+    const total = items.length;
+    if (total <= 1) { btnUp.disabled = true; btnDown.disabled = true; return; }
+    let cur = 0;
+    const itemH = () => track.parentElement!.clientHeight;
+    function go(dir: number) {
+      const next = cur + dir;
+      if (next < 0 || next >= total) return;
+      cur = next;
+      track.style.transform = `translateY(-${cur * itemH()}px)`;
+      counterEl.textContent = `${cur + 1} / ${total}`;
+      btnUp.disabled = cur === 0;
+      btnDown.disabled = cur === total - 1;
+    }
+    btnUp.disabled = true;
+    btnDown.disabled = total <= 1;
+    btnUp.addEventListener('click', () => go(-1));
+    btnDown.addEventListener('click', () => go(1));
+  })();
+
   /* ── HERO SLIDER ── */
   (function() {
     const slides = document.querySelectorAll<HTMLElement>('.hero-slide');
