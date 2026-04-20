@@ -722,180 +722,130 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
 
   /* ── SPECBOOK STRIP ── */
   .specbook-strip {
-    background: #F0EDE8;
-    border-top: 1px solid rgba(26,26,26,0.12);
-    border-bottom: 1px solid rgba(26,26,26,0.12);
-    opacity: 1;
-    transform: none;
+    background: #EDEAE4;
+    border-top: 1px solid rgba(26,26,26,0.1);
+    border-bottom: 1px solid rgba(26,26,26,0.1);
   }
   .specbook-inner {
-    display: flex; align-items: center;
-    padding: 0 5vw; height: 160px; overflow: hidden; gap: 0;
+    display: flex;
+    align-items: center;
+    padding: 1.75rem 5vw;
+    gap: 2rem;
+    min-height: 140px;
   }
   .specbook-brand {
-    display: flex; flex-direction: column; gap: 7px;
-    flex-shrink: 0; padding-right: 2.5rem;
+    display: flex; flex-direction: column; gap: 6px;
+    flex-shrink: 0; min-width: 100px;
   }
-  .specbook-meta { display: flex; align-items: center; gap: 9px; }
+  .specbook-meta { display: flex; align-items: center; gap: 8px; }
   .specbook-dot {
-    display: block; width: 6px; height: 6px;
+    display: block; width: 7px; height: 7px;
     border-radius: 50%; background: #06C755; flex-shrink: 0;
   }
   .specbook-label {
-    font-family: 'Courier New', monospace; font-size: 0.65rem;
-    letter-spacing: 0.24em; text-transform: uppercase;
+    font-family: 'Courier New', monospace; font-size: 0.62rem;
+    letter-spacing: 0.22em; text-transform: uppercase;
     color: #1A3A6B; font-weight: 700;
   }
   .specbook-vol {
-    font-family: 'Courier New', monospace; font-size: 0.52rem;
+    font-family: 'Courier New', monospace; font-size: 0.5rem;
     letter-spacing: 0.12em; color: #6B6B6B;
   }
   .specbook-vdiv {
-    width: 0.5px; height: 56px; background: rgba(26,26,26,0.1);
-    flex-shrink: 0; margin: 0 2.5rem;
+    width: 1px; height: 60px; background: rgba(26,26,26,0.15);
+    flex-shrink: 0;
   }
-  .specbook-viewport { flex: 1; height: 160px; overflow: hidden; position: relative; }
+  .specbook-viewport {
+    flex: 1;
+    overflow: hidden;
+    height: 110px;
+  }
   .specbook-track {
     display: flex; flex-direction: column;
-    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
   }
   .specbook-item {
-    height: 160px; min-height: 160px;
-    display: flex; align-items: center; gap: 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    height: 110px; min-height: 110px;
     flex-shrink: 0; text-decoration: none;
   }
   .specbook-thumb {
-    width: 130px; height: 100px; flex-shrink: 0;
-    overflow: hidden; border-radius: 2px; position: relative;
-    box-shadow: 0 2px 14px rgba(14,33,64,0.12);
-    background: #E8E4DE;
+    width: 120px; height: 88px; flex-shrink: 0;
+    border-radius: 3px; overflow: hidden;
+    box-shadow: 0 3px 16px rgba(14,33,64,0.14);
+    position: relative;
   }
-  .specbook-thumb-ph {
+  .specbook-thumb img {
     width: 100%; height: 100%;
-    background: linear-gradient(135deg, #E8E4DE, #D4CCBC);
+    object-fit: cover; display: block;
+    transition: transform 0.6s ease;
   }
-  .specbook-thumb-img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    filter: brightness(0.85); transition: transform 0.6s ease;
-    position: absolute; inset: 0;
-  }
-  .specbook-item:hover .specbook-thumb-img { transform: scale(1.05); }
+  .specbook-item:hover .specbook-thumb img { transform: scale(1.05); }
   .specbook-thumb-tag {
     position: absolute; bottom: 6px; left: 6px;
-    font-size: 0.42rem; letter-spacing: 0.12em; text-transform: uppercase;
+    font-size: 0.42rem; letter-spacing: 0.1em; text-transform: uppercase;
     color: #fff; font-family: 'Courier New', monospace;
-    background: rgba(14,33,64,0.65); padding: 2px 7px; border-radius: 2px;
+    background: rgba(14,33,64,0.7); padding: 2px 7px; border-radius: 2px;
   }
   .specbook-text {
-    flex: 1; display: flex; flex-direction: column; gap: 10px; min-width: 0;
+    flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0;
   }
   .specbook-item-meta {
-    font-family: 'Courier New', monospace; font-size: 0.58rem;
-    letter-spacing: 0.16em; text-transform: uppercase; color: #1A3A6B;
-    font-weight: 600;
+    font-family: 'Courier New', monospace; font-size: 0.55rem;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: #1A3A6B; font-weight: 600;
   }
   .specbook-item-title {
     font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: 1.1rem; font-weight: 400; color: #0E2140;
-    letter-spacing: 0.06em; line-height: 1.3; text-transform: uppercase;
+    font-size: 1.05rem; font-weight: 400; color: #0E2140;
+    letter-spacing: 0.05em; line-height: 1.3; text-transform: uppercase;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .specbook-item-excerpt {
     font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.78rem; color: rgba(26,26,26,0.5); line-height: 1.65;
+    font-size: 0.78rem; color: #3D3B38; line-height: 1.55;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    max-width: 520px;
   }
   .specbook-controls {
     display: flex; flex-direction: column; align-items: center;
-    flex-shrink: 0; padding-left: 1.5rem; gap: 2px;
+    flex-shrink: 0; gap: 3px;
   }
   .sb-arrow {
-    width: 32px; height: 32px;
+    width: 30px; height: 30px;
     display: flex; align-items: center; justify-content: center;
-    border: 0.5px solid rgba(26,26,26,0.25); background: transparent;
-    cursor: pointer; color: var(--navy, #1A3A6B); font-size: 11px;
-    transition: background 0.15s, color 0.15s, border-color 0.15s;
+    border: 1px solid rgba(26,26,26,0.2); background: transparent;
+    cursor: pointer; color: #1A3A6B; font-size: 11px;
+    transition: background 0.15s, color 0.15s;
   }
-  .sb-arrow:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; border-color: var(--navy, #1A3A6B); }
+  .sb-arrow:hover { background: #1A3A6B; color: #F8F7F4; border-color: #1A3A6B; }
   .sb-arrow:disabled { opacity: 0.2; cursor: default; pointer-events: none; }
   .sb-counter {
-    font-family: 'Courier New', monospace; font-size: 0.44rem;
-    letter-spacing: 0.1em; color: rgba(26,26,26,0.35); padding: 5px 0; text-align: center;
+    font-family: 'Courier New', monospace; font-size: 0.45rem;
+    letter-spacing: 0.1em; color: #6B6B6B; padding: 4px 0; text-align: center;
   }
   .specbook-cta-btn {
-    flex-shrink: 0; margin-left: 2.5rem;
+    flex-shrink: 0;
     font-family: 'Courier New', monospace; font-size: 0.55rem;
-    letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--navy, #1A3A6B); border: 1px solid var(--navy, #1A3A6B);
-    padding: 12px 22px; text-decoration: none;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: #1A3A6B; border: 1px solid #1A3A6B;
+    padding: 11px 20px; text-decoration: none;
     transition: background 0.15s, color 0.15s; white-space: nowrap;
   }
-  .specbook-cta-btn:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; }
+  .specbook-cta-btn:hover { background: #1A3A6B; color: #F8F7F4; }
   @media (max-width: 767px) {
-    .specbook-inner {
-      height: auto;
-      padding: 1.25rem 5vw 1.5rem;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
-      overflow: visible;
-    }
-    .specbook-brand {
-      flex-direction: row;
-      align-items: center;
-      gap: 1rem;
-      padding-right: 0;
-      width: 100%;
-    }
+    .specbook-inner { flex-direction: column; align-items: flex-start; padding: 1.5rem 5vw; min-height: auto; gap: 1rem; }
+    .specbook-brand { flex-direction: row; align-items: center; width: 100%; }
     .specbook-vol { margin-left: auto; }
     .specbook-vdiv { display: none; }
-    .specbook-viewport {
-      width: 100%;
-      height: 100px;
-      overflow: hidden;
-    }
-    .specbook-item {
-      height: 100px;
-      min-height: 100px;
-      gap: 1rem;
-      width: 100%;
-    }
-    .specbook-thumb {
-      width: 80px;
-      height: 72px;
-      flex-shrink: 0;
-    }
-    .specbook-text {
-      flex: 1;
-      min-width: 0;
-      gap: 5px;
-    }
-    .specbook-item-meta { font-size: 0.48rem; }
-    .specbook-item-title {
-      font-size: 0.85rem;
-      white-space: normal;
-      line-height: 1.3;
-    }
+    .specbook-viewport { width: 100%; height: 96px; }
+    .specbook-item { height: 96px; min-height: 96px; gap: 1rem; }
+    .specbook-thumb { width: 80px; height: 72px; }
     .specbook-item-excerpt { display: none; }
-    .specbook-controls {
-      flex-direction: row;
-      padding-left: 0;
-      width: 100%;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .sb-counter { padding: 0 8px; font-size: 0.5rem; }
-    .specbook-cta-btn {
-      display: inline-block;
-      margin-left: 0;
-      padding: 8px 14px;
-      font-size: 0.48rem;
-    }
+    .specbook-item-title { font-size: 0.88rem; white-space: normal; }
+    .specbook-controls { flex-direction: row; width: 100%; justify-content: flex-end; gap: 0.5rem; }
+    .specbook-cta-btn { display: none; }
   }
 
-  
 </style>
 
 <script>
