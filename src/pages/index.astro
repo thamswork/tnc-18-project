@@ -16,6 +16,16 @@ try {
   }
 } catch(e) { sbAll = []; }
 
+const fallbackCovers = [
+  'https://res.cloudinary.com/dynjnftnu/image/upload/v1776436591/FenderFoto-04363_tv6wjd.jpg',
+  'https://res.cloudinary.com/dynjnftnu/image/upload/v1775660010/the-cleveland-museum-of-art-eGp9lznkGe8-unsplash_lkfarh.jpg',
+  'https://res.cloudinary.com/dynjnftnu/image/upload/v1776437277/FenderFoto-09282_lpd0hl.jpg',
+];
+sbAll = sbAll.map((entry: any, i: number) => ({
+  ...entry,
+  _cover: entry.data.cover || fallbackCovers[i % fallbackCovers.length],
+}));
+
 const allProjects = await getCollection('projects');
 const projects = allProjects.sort((a, b) => b.data.year - a.data.year);
 
@@ -182,12 +192,7 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
           {sbAll.length > 0 ? sbAll.map((entry: any) => (
             <a href={`/specbook/${entry.id}`} class="specbook-item">
               <div class="specbook-thumb">
-                {entry.data.cover
-                  ? <img src={entry.data.cover} alt="" class="specbook-thumb-img" loading="lazy" />
-                  : projects[0]?.data?.cover
-                    ? <img src={projects[0].data.cover} alt="" class="specbook-thumb-img" loading="lazy" />
-                    : <div class="specbook-thumb-ph"></div>
-                }
+                <img src={entry._cover} alt="" class="specbook-thumb-img" loading="lazy" />
                 {entry.data.category && (
                   <span class="specbook-thumb-tag">{entry.data.category}</span>
                 )}
