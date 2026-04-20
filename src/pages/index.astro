@@ -181,14 +181,17 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
         <div class="specbook-track" id="sb-track">
           {sbAll.length > 0 ? sbAll.map((entry: any) => (
             <a href={`/specbook/${entry.id}`} class="specbook-item">
-              {(entry.data.cover || projects[0]?.data?.cover) && (
-                <div class="specbook-thumb">
-                  <img src={entry.data.cover || projects[0]?.data?.cover} alt="" class="specbook-thumb-img" loading="lazy" />
-                  {entry.data.category && (
-                    <span class="specbook-thumb-tag">{entry.data.category}</span>
-                  )}
-                </div>
-              )}
+              <div class="specbook-thumb">
+                {entry.data.cover
+                  ? <img src={entry.data.cover} alt="" class="specbook-thumb-img" loading="lazy" />
+                  : projects[0]?.data?.cover
+                    ? <img src={projects[0].data.cover} alt="" class="specbook-thumb-img" loading="lazy" />
+                    : <div class="specbook-thumb-ph"></div>
+                }
+                {entry.data.category && (
+                  <span class="specbook-thumb-tag">{entry.data.category}</span>
+                )}
+              </div>
               <div class="specbook-text">
                 <span class="specbook-item-meta">
                   {entry.data.category || 'Design'}&nbsp;·&nbsp;{entry.data.date ? new Date(entry.data.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : '2026'}
@@ -770,6 +773,11 @@ const IG_URL        = contactData.instagram || 'https://instagram.com/tnc18';
     width: 130px; height: 100px; flex-shrink: 0;
     overflow: hidden; border-radius: 2px; position: relative;
     box-shadow: 0 2px 14px rgba(14,33,64,0.12);
+    background: #E8E4DE;
+  }
+  .specbook-thumb-ph {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #E8E4DE, #D4CCBC);
   }
   .specbook-thumb-img {
     width: 100%; height: 100%; object-fit: cover; display: block;
