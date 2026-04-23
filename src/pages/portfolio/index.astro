@@ -52,6 +52,11 @@ const categories = ["All", ...new Set(projects.map(p => p.data.category).filter(
                   <span class="proj-arrow">→</span>
                 </div>
               </div>
+              <!-- Always visible on mobile -->
+              <div class="proj-caption">
+                <span class="proj-caption-cat">{p.data.category}</span>
+                <h2 class="proj-caption-title">{p.data.title}</h2>
+              </div>
             </div>
           </a>
         </article>
@@ -83,7 +88,7 @@ const categories = ["All", ...new Set(projects.map(p => p.data.category).filter(
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 2.5rem var(--pad-x) 2rem;
+  padding: 4rem var(--pad-x) 2.5rem;
 }
 
 @media (min-width: 768px) {
@@ -96,7 +101,7 @@ const categories = ["All", ...new Set(projects.map(p => p.data.category).filter(
 }
 
 .page-eyebrow {
-  font-size: 0.575rem; font-weight: 600;
+  font-size: 0.55rem; font-weight: 600;
   letter-spacing: 0.26em; text-transform: uppercase;
   color: var(--navy, #1A3A6B);
   margin-bottom: 0.75rem; display: block;
@@ -105,7 +110,7 @@ const categories = ["All", ...new Set(projects.map(p => p.data.category).filter(
 .page-title {
   font-size: clamp(2rem, 6vw, 4rem);
   font-weight: 800; letter-spacing: -0.04em;
-  line-height: 0.88; color: var(--ink, #111);
+  line-height: 0.92; color: var(--ink, #111);
   text-transform: uppercase;
 }
 
@@ -232,6 +237,31 @@ const categories = ["All", ...new Set(projects.map(p => p.data.category).filter(
   transition: transform 0.25s;
 }
 .proj-link:hover .proj-arrow { transform: translateX(4px); }
+
+/* Always-visible caption — mobile only */
+.proj-caption {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 2rem 1.25rem 1rem;
+  background: linear-gradient(to top, rgba(10,18,36,0.82) 0%, transparent 100%);
+  display: flex; flex-direction: column; gap: 0.3rem;
+  pointer-events: none;
+}
+.proj-caption-cat {
+  font-size: 0.48rem; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(244,243,239,0.55);
+}
+.proj-caption-title {
+  font-size: 0.85rem; font-weight: 700;
+  letter-spacing: -0.01em; color: #F4F3EF;
+  line-height: 1.2;
+}
+
+/* Hide caption on desktop (overlay handles it) */
+@media (hover: hover) and (pointer: fine) {
+  .proj-caption { display: none; }
+}
 
 .proj-empty {
   grid-column: 1 / -1;

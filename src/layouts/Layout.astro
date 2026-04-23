@@ -126,6 +126,25 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
 
   ::selection { background: var(--ink); color: var(--bg); }
   ::-webkit-scrollbar       { width: 1px; }
+
+  /* Force solid navbar on project/slug pages */
+  body.page-solid-nav #nav {
+    background: rgba(244,243,239,0.98) !important;
+    border-bottom: 1px solid rgba(17,17,17,0.08) !important;
+    backdrop-filter: blur(12px) !important;
+  }
+  body.page-solid-nav #nav .nav-logo,
+  body.page-solid-nav #nav .nav-link {
+    color: var(--ink, #111) !important;
+  }
+  body.page-solid-nav #nav .nav-burger span {
+    background: var(--ink, #111) !important;
+  }
+  body.page-solid-nav #nav .nav-enquire {
+    color: #fff !important;
+    background: var(--navy, #1A3A6B) !important;
+    border-color: var(--navy, #1A3A6B) !important;
+  }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--ink); }
 
@@ -147,6 +166,30 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
     text-transform: uppercase;
     color: var(--ink-light);
     display: block;
+  }
+
+  /* ── SHARED PAGE HEADER — used across all pages ── */
+  .page-hero-std {
+    padding: 5rem var(--pad-x) 2.5rem;
+    border-bottom: 1px solid rgba(17,17,17,0.07);
+    background: var(--bg, #F4F3EF);
+  }
+  .page-eyebrow-std {
+    font-size: 0.55rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.26em !important;
+    text-transform: uppercase !important;
+    color: var(--navy, #1A3A6B) !important;
+    display: block !important;
+    margin-bottom: 0.75rem !important;
+  }
+  .page-title-std {
+    font-size: clamp(2rem, 6vw, 4rem) !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.04em !important;
+    line-height: 0.92 !important;
+    color: var(--ink, #111) !important;
+    text-transform: uppercase !important;
   }
 
   .btn-ghost {
