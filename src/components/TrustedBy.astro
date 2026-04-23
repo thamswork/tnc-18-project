@@ -1,0 +1,85 @@
+---
+let logos: any[] = [];
+let sectionLabel = "Trusted By";
+
+try {
+  const { getCollection } = await import("astro:content");
+  const raw = await getCollection("trusted_by" as any);
+  logos = (raw || []) as any[];
+} catch(e) { logos = []; }
+
+try {
+  const fs = await import("fs");
+  const path = await import("path");
+  const settingsPath = path.join(process.cwd(), "src/content/trusted-by/settings.json");
+  if (fs.existsSync(settingsPath)) {
+    const settings = JSON.parse(fs.readFileSync(settingsPath, "utf-8"));
+    if (settings.section_label) sectionLabel = settings.section_label;
+  }
+} catch(e) {}
+
+const placeholders = [
+  "Siam Paragon", "Central World", "ICONSIAM",
+  "EmQuartier", "Gaysorn Village", "Mega Bangna"
+];
+const showPlaceholders = logos.length === 0;
+---
+
+<section class="trusted-by">
+  <p class="tb-label">{sectionLabel}</p>
+  <div class="tb-track">
+    {!showPlaceholders
+      ? logos.map((entry: any) => (
+          entry.data.url
+            ? <a href={entry.data.url} target="_blank" rel="noopener noreferrer" class="tb-item">
+                <img src={entry.data.logo} alt={entry.data.name} class="tb-logo" loading="lazy" />
+              </a>
+            : <div class="tb-item">
+                <img src={entry.data.logo} alt={entry.data.name} class="tb-logo" loading="lazy" />
+              </div>
+        ))
+      : placeholders.map(name => (
+          <div class="tb-item tb-placeholder">
+            <span class="tb-placeholder-name">{name}</span>
+          </div>
+        ))
+    }
+  </div>
+</section>
+
+<style>
+  .trusted-by {
+    background: var(--bg-dark, #ECEAE3);
+    padding: 2.25rem var(--pad-x, 5vw);
+    border-bottom: 0.5px solid rgba(17,17,17,0.06);
+    display: flex; flex-direction: column;
+    align-items: center; gap: 1.5rem;
+  }
+  .tb-label {
+    font-size: 0.55rem; font-weight: 600;
+    letter-spacing: 0.26em; text-transform: uppercase;
+    color: rgba(17,17,17,0.35);
+  }
+  .tb-track {
+    display: flex; align-items: center;
+    justify-content: center; flex-wrap: wrap;
+    gap: 1.75rem 4rem; max-width: 960px; width: 100%;
+  }
+  .tb-item {
+    display: flex; align-items: center;
+    justify-content: center;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .tb-logo {
+    height: 24px; width: auto; display: block;
+    object-fit: contain;
+    filter: grayscale(100%) opacity(0.35);
+    transition: filter 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+  .tb-item:hover .tb-logo { filter: grayscale(0%) opacity(1); }
+  .tb-placeholder-name {
+    font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: rgba(17,17,17,0.25); white-space: nowrap;
+  }
+</style>

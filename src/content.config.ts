@@ -16,6 +16,7 @@ const projects = defineCollection({
     client:         z.string().optional(),
     location:       z.string().optional(),
     area:           z.number().optional(),
+    size:           z.string().optional(),
     featured:       z.boolean().default(false),
   }),
 });
@@ -43,4 +44,29 @@ const news = defineCollection({
   }),
 });
 
-export const collections = { projects, services, news };
+const trusted_by = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/trusted-by' }),
+  schema: z.object({
+    name: z.string(),
+    logo: z.string(),
+    url:  z.string().optional(),
+  }),
+});
+
+const specbook = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/specbook' }),
+  schema: z.object({
+    title:           z.string(),
+    date:            z.string(),
+    category:        z.string().optional(),
+    tags:            z.array(z.string()).optional(),
+    cover:           z.string().optional(),
+    excerpt:         z.string().optional(),
+    seo_title:       z.string().optional(),
+    seo_description: z.string().optional(),
+    featured:        z.boolean().default(false),
+    blocks:          z.any().optional(),
+  }),
+});
+
+export const collections = { projects, services, news, trusted_by, specbook };

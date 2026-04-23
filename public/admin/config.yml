@@ -191,6 +191,16 @@ collections:
           - { label: "Facebook URL",    name: facebook,   widget: string, required: false }
           - { label: "Address",         name: address,    widget: text,   required: false }
 
+      - name: documents
+        label: "Documents & PDF Links"
+        file: src/content/settings/documents.json
+        fields:
+          - label: "DBD Registration PDF URL"
+            name: dbd_pdf
+            widget: string
+            required: false
+            hint: "Paste the full URL of your DBD document PDF (Google Drive, Cloudinary, etc.)"
+
       - name: siteinfo
         label: "Site Info & SEO"
         file: src/content/settings/siteinfo.json
@@ -274,3 +284,44 @@ collections:
               - { label: "Quote Text",  name: text,      widget: text }
               - { label: "Author",      name: author,    widget: string,  required: false }
               - { label: "Highlighted (dark background)", name: highlight, widget: boolean, default: false }
+
+  - name: trusted_by
+    label: "Trusted By"
+    label_singular: "Brand Logo"
+    folder: src/content/trusted-by
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: name
+    fields:
+      - { label: "Brand Name", name: name, widget: string }
+      - { label: "Logo Image", name: logo, widget: image,
+          hint: "Upload a PNG or SVG logo. White or dark versions work best." }
+      - { label: "Website URL", name: url, widget: string, required: false,
+          hint: "Optional — makes the logo a clickable link." }
+
+  - name: trusted_by_settings
+    label: "Trusted By — Section Settings"
+    delete: false
+    editor: { preview: false }
+    files:
+      - name: trusted_by_label
+        label: "Section Label"
+        file: src/content/trusted-by/settings.json
+        fields:
+          - { label: "Section Heading", name: section_label, widget: string,
+              default: "Trusted By",
+              hint: "Change this to rename the Trusted By section e.g. Our Clients, Partners" }
+
+  - name: trusted_by_settings
+    label: "Trusted By — Section Settings"
+    delete: false
+    editor: { preview: false }
+    files:
+      - name: trusted_by_label
+        label: "Section Label"
+        file: src/content/trusted-by/settings.json
+        fields:
+          - { label: "Section Heading", name: section_label, widget: string,
+              default: "Trusted By",
+              hint: "Change this to rename the Trusted By section e.g. Our Clients, Partners" }

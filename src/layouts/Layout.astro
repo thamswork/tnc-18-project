@@ -4,7 +4,7 @@ export interface Props {
   description?: string;
   bodyClass?: string;
 }
-const { title, description = 'TNC.18 — Retail & Interior Design, Bangkok Thailand', bodyClass } = Astro.props;
+const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Bangkok Thailand', bodyClass } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -13,15 +13,15 @@ const { title, description = 'TNC.18 — Retail & Interior Design, Bangkok Thail
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow" />
-    <meta property="og:title" content={`${title} — TNC.18`} />
+    <meta property="og:title" content={`${title} — TNC BUILD STUDIO`} />
     <meta property="og:description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-    <title>{title} — TNC.18</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet" />
+    <title>{title} — TNC BUILD STUDIO</title>
     <slot name="head" />
-      <link rel="stylesheet" href="/src/styles/premium-preview.css" />
+    <link rel="stylesheet" href="/src/styles/premium-preview.css" />
   </head>
   <body class={`${Astro.url.pathname === "/" ? "page-home" : "page-inner"}${bodyClass ? " " + bodyClass : ""}`}>
     <slot />
@@ -35,44 +35,44 @@ const { title, description = 'TNC.18 — Retail & Interior Design, Bangkok Thail
 
 <style is:global>
   :root {
-    /* ── Core palette ── */
-    --bg:           #F8F7F4;
-    --bg-dark:      #EFEDE8;
-    --ink:          #1A1A1A;
-    --ink-mid:      #3D3D3D;
-    --ink-light:    #6B6B6B;
+    --bg:           #F5F4F0;
+    --bg-dark:      #ECEAE4;
+    --bg-ink:       #0D0D0D;
+    --ink:          #0D0D0D;
+    --ink-mid:      #2A2A2A;
+    --ink-light:    #767676;
+    --ink-ghost:    #ABABAB;
     --navy:         #1A3A6B;
     --navy-mid:     #254E8F;
     --navy-deep:    #0E2140;
     --line-green:   #06C755;
 
-    /* ── Legacy aliases (keeps old pages from breaking) ── */
-    --cream:        #F8F7F4;
-    --cream-mid:    #EFEDE8;
-    --cream-dark:   #D8D5CE;
+    --cream:        #F5F4F0;
+    --cream-mid:    #ECEAE4;
+    --cream-dark:   #D6D3CB;
     --warm-white:   #FFFFFF;
-    --charcoal:     #1A1A1A;
-    --charcoal-mid: #3D3D3D;
-    --muted:        #6B6B6B;
+    --charcoal:     #0D0D0D;
+    --charcoal-mid: #2A2A2A;
+    --muted:        #767676;
     --gold:         #1A3A6B;
     --gold-light:   #254E8F;
     --blue:         #1A3A6B;
     --blue-mid:     #254E8F;
     --blue-pale:    #EDF2FA;
-    --stone:        #F8F7F4;
-    --stone-mid:    #EFEDE8;
-    --stone-dark:   #D8D5CE;
+    --stone:        #F5F4F0;
+    --stone-mid:    #ECEAE4;
+    --stone-dark:   #D6D3CB;
 
-    /* ── Typography ── */
-    --font-display: 'Tenor Sans', Georgia, serif;
-    --font-body:    'Inter', system-ui, sans-serif;
-    --font-mono:    'Courier New', Courier, monospace;
-    --font-sans:    'Inter', system-ui, sans-serif;
-    --font-serif:   'Tenor Sans', Georgia, serif;
+    --font-display: "Plus Jakarta Sans", system-ui, sans-serif;
+    --font-body:    "Plus Jakarta Sans", system-ui, sans-serif;
+    --font-mono:    "Plus Jakarta Sans", system-ui, sans-serif;
+    --font-sans:    "Plus Jakarta Sans", system-ui, sans-serif;
+    --font-serif:   "Plus Jakarta Sans", system-ui, sans-serif;
 
-    /* ── Spacing ── */
     --pad-x:   5vw;
-    --section: 10rem;
+    --section: 9rem;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -82,156 +82,98 @@ const { title, description = 'TNC.18 — Retail & Interior Design, Bangkok Thail
     color: var(--ink);
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    font-size: 16px;
   }
 
   body {
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.7;
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 300;
+    line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
     background: var(--bg);
     color: var(--ink);
+    letter-spacing: -0.01em;
   }
 
-  h1, h2, h3, h4 {
-    font-family: var(--font-display);
+  h1 {
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-weight: 400;
+    line-height: 1.0;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+  }
+  h2 {
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
     font-weight: 400;
     line-height: 1.05;
     color: var(--ink);
+    letter-spacing: -0.015em;
+  }
+  h3, h4 {
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--ink);
+    letter-spacing: -0.01em;
   }
 
-  /* Global scale reduction for large screens */
-  @media (min-width: 1400px) {
-    html { font-size: 15px; }
-  }
-
-  p { line-height: 1.8; color: var(--ink-mid); }
-  a { color: inherit; }
+  p { line-height: 1.75; color: var(--ink-mid); font-weight: 300; }
+  a { color: inherit; text-decoration: none; }
   img, video { display: block; width: 100%; }
 
-  ::selection        { background: var(--navy); color: #fff; }
-  ::-webkit-scrollbar       { width: 2px; }
+  ::selection { background: var(--ink); color: var(--bg); }
+  ::-webkit-scrollbar       { width: 1px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--navy); }
+  ::-webkit-scrollbar-thumb { background: var(--ink); }
 
-  /* ── Global reveal ── */
   [data-reveal] {
     opacity: 0;
-    transform: translateY(32px);
-    transition:
-      opacity  0.9s cubic-bezier(0.16,1,0.3,1),
-      transform 0.9s cubic-bezier(0.16,1,0.3,1);
+    transform: translateY(24px);
+    transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1);
   }
   [data-reveal].revealed { opacity: 1; transform: none; }
-  [data-reveal][data-delay="1"] { transition-delay: 0.12s; }
-  [data-reveal][data-delay="2"] { transition-delay: 0.24s; }
-  [data-reveal][data-delay="3"] { transition-delay: 0.36s; }
+  [data-reveal][data-delay="1"] { transition-delay: 0.1s; }
+  [data-reveal][data-delay="2"] { transition-delay: 0.2s; }
+  [data-reveal][data-delay="3"] { transition-delay: 0.3s; }
 
-  /* ── Shared section label ── */
   .s-label {
-    font-family: var(--font-mono);
-    font-size: 0.6rem;
-    font-weight: 400;
-    letter-spacing: 0.28em;
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--ink-light);
     display: block;
   }
 
-  /* ── Shared footer ── */
-  .site-footer {
-    background: var(--navy-deep);
-    padding: 4rem var(--pad-x) 3rem;
-    border-top: 0.5px solid rgba(255,255,255,0.06);
-  }
-  .site-footer-inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-  /* Brand col */
-  .site-footer-brand {}
-  .site-footer-logo {
-    font-family: var(--font-body);
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.22em;
-    color: rgba(255,255,255,0.55);
-    display: block;
-    margin-bottom: 0.5rem;
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
-  }
-  .site-footer-logo em { font-style: normal; color: #fff; }
-  .site-footer-sub {
-    font-family: var(--font-body);
-    font-size: 0.78rem;
-    font-weight: 300;
-    letter-spacing: 0.04em;
-    color: rgba(255,255,255,0.35);
-    line-height: 1.6;
-  }
-  /* Nav col */
-  .site-footer-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-  }
-  .site-footer-nav a {
-    font-family: var(--font-body);
-    font-size: 0.82rem;
-    font-weight: 400;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.45);
     text-decoration: none;
-    transition: color 0.2s;
+    color: var(--ink);
+    background: transparent;
+    padding: 0.85rem 1.75rem;
+    border: 0.5px solid var(--ink);
+    transition: background 0.25s, color 0.25s;
     white-space: nowrap;
   }
-  .site-footer-nav a:hover { color: #fff; }
-  /* Legal col */
-  .site-footer-legal {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-  .site-footer-copy {
-    font-family: var(--font-body);
-    font-size: 0.72rem;
-    font-weight: 300;
-    color: rgba(255,255,255,0.25);
-    letter-spacing: 0.04em;
-    line-height: 1.6;
-  }
-  @media (min-width: 768px) {
-    .site-footer-inner {
-      grid-template-columns: 1.5fr 1fr 1fr;
-      align-items: start;
-      gap: 4rem;
-    }
-    .site-footer-nav {
-      flex-direction: column;
-    }
-  }
+  .btn-ghost:hover { background: var(--ink); color: var(--bg); }
 
-  .line-icon {
-    width: 20px; height: 20px;
-    object-fit: contain;
-    display: inline-block;
-    flex-shrink: 0;
-    border-radius: 4px;
-    vertical-align: middle;
-  }
-
-  /* ── Shared Line button ── */
   .btn-line {
     display: inline-flex;
     align-items: center;
     gap: 0.6rem;
-    font-family: var(--font-body);
-    font-size: 0.65rem;
+    font-family: "Plus Jakarta Sans", system-ui, sans-serif;
+    font-size: 0.625rem;
     font-weight: 500;
     letter-spacing: 0.16em;
     text-transform: uppercase;
@@ -242,40 +184,29 @@ const { title, description = 'TNC.18 — Retail & Interior Design, Bangkok Thail
     transition: background 0.25s, transform 0.15s;
     white-space: nowrap;
   }
-  .btn-line:hover { background: var(--navy, #1A3A6B); color: #F8F7F4; }
+  .btn-line:hover { background: var(--ink); color: var(--bg); }
   .btn-line:active { transform: scale(0.98); }
 
   .line-dot {
     display: block;
-    width: 7px; height: 7px;
+    width: 6px; height: 6px;
     border-radius: 50%;
     background: #fff;
     flex-shrink: 0;
   }
 
-  /* ── Shared navy ghost button ── */
-  .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    font-family: var(--font-body);
-    font-size: 0.6rem;
-    font-weight: 500;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: var(--navy);
-    background: transparent;
-    padding: 0.85rem 1.75rem;
-    border: 1px solid var(--navy);
-    transition: background 0.25s, color 0.25s;
-    white-space: nowrap;
+  .site-footer {
+    background: #0D0D0D;
+    padding: 4rem var(--pad-x) 3rem;
   }
-  .btn-ghost:hover { background: var(--navy); color: #fff; }
 
   @media (min-width: 768px) {
-    :root { --pad-x: 8%; --section: 12rem; }
+    :root { --pad-x: 8%; --section: 11rem; }
   }
   @media (min-width: 1200px) {
     :root { --pad-x: 10%; }
+  }
+  @media (min-width: 1600px) {
+    :root { --pad-x: 12%; }
   }
 </style>

@@ -7,10 +7,21 @@ import contactData from '../content/settings/contact.json';
 import pageData from '../content/pages/about-services.json';
 
 const allServices = await getCollection('services');
+import siteinfo from '../content/settings/siteinfo.json';
+let dbd_pdf_url = '';
+try {
+  const fs = await import('fs');
+  const path = await import('path');
+  const p = path.join(process.cwd(), 'src/content/settings/documents.json');
+  if (fs.existsSync(p)) {
+    const doc = JSON.parse(fs.readFileSync(p, 'utf-8'));
+    dbd_pdf_url = doc.dbd_pdf || '';
+  }
+} catch(e) {}
 const services = allServices.sort((a, b) => a.data.order - b.data.order);
 ---
 
-<Layout title="Studio — TNC.18">
+<Layout title="Who We Are — TNC BUILD STUDIO">
   <Navbar />
 
   <main class="main">
@@ -23,7 +34,7 @@ const services = allServices.sort((a, b) => a.data.order - b.data.order);
       }
       <div class="hero-veil"></div>
       <div class="hero-content">
-        <p class="hero-eyebrow">Studio</p>
+        <p class="hero-eyebrow">Who We Are</p>
         <h1 class="hero-title">{pageData.headline.toUpperCase()}</h1>
       </div>
     </section>
@@ -101,6 +112,26 @@ const services = allServices.sort((a, b) => a.data.order - b.data.order);
 
 
   </main>
+
+  <!-- ── DBD DOCUMENT SECTION ── -->
+  <section class="doc-section">
+    <div class="doc-inner">
+      <div class="doc-left">
+        <span class="doc-eyebrow">Official Documents</span>
+        <h2 class="doc-title">Company Registration</h2>
+        <p class="doc-body">Registered with the Department of Business Development (DBD), Ministry of Commerce, Thailand. View our official company registration documents below.</p>
+      </div>
+      <div class="doc-right">
+        {dbd_pdf_url
+          ? <a href={dbd_pdf_url} target="_blank" rel="noopener" class="doc-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+              View DBD Document
+            </a>
+          : <p class="doc-pending">Document link not yet configured. <a href="/admin">Update in CMS →</a></p>
+        }
+      </div>
+    </div>
+  </section>
 
   <Footer ctaTitle="Work With Us Directly." ctaSub="Senior partners only. Fast turnaround. 24/7 support." />
 </Layout>
@@ -194,6 +225,62 @@ const services = allServices.sort((a, b) => a.data.order - b.data.order);
     .stat-item { padding-right: 3rem; }
     .stat-divider { margin-right: 3rem; }
   }
+
+  /* ── DBD DOCUMENT SECTION ── */
+  .doc-section {
+    background: var(--bg-dark, #ECEAE3);
+    padding: 5rem var(--pad-x, 5vw);
+    border-top: 1px solid rgba(17,17,17,0.07);
+  }
+  .doc-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    max-width: 900px;
+  }
+  @media (min-width: 768px) {
+    .doc-inner {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4rem;
+    }
+  }
+  .doc-eyebrow {
+    display: block;
+    font-size: 0.575rem; font-weight: 600;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--navy, #1A3A6B);
+    margin-bottom: 0.75rem;
+  }
+  .doc-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800; letter-spacing: -0.03em;
+    color: var(--ink, #111); margin-bottom: 0.75rem;
+  }
+  .doc-body {
+    font-size: 0.85rem; line-height: 1.75;
+    color: var(--ink-light, #777); font-weight: 400;
+    max-width: 420px;
+  }
+  .doc-right { flex-shrink: 0; }
+  .doc-btn {
+    display: inline-flex; align-items: center; gap: 0.75rem;
+    font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    text-decoration: none; color: var(--ink, #111);
+    border: 1px solid rgba(17,17,17,0.25);
+    padding: 1rem 2rem;
+    transition: background 0.22s, color 0.22s, border-color 0.22s;
+  }
+  .doc-btn:hover {
+    background: var(--navy, #1A3A6B);
+    color: #fff; border-color: var(--navy, #1A3A6B);
+  }
+  .doc-pending {
+    font-size: 0.8rem; color: var(--ink-light, #777);
+  }
+  .doc-pending a { color: var(--navy, #1A3A6B); }
 </style>
 
 <script>
