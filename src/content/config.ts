@@ -62,4 +62,13 @@ const specbook = defineCollection({
   }),
 });
 
-export const collections = { projects, services, news, specbook };
+const trusted_by = defineCollection({
+  loader: glob({ pattern: '*.json', base: join(__dirname, 'trusted-by') }),
+  schema: z.object({
+    name:    z.string(),
+    logo:    z.string(),
+    url:     z.string().optional(),
+    order:   z.number().optional(),
+  }),
+});
+export const collections = { projects, services, news, specbook, trusted_by };

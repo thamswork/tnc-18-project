@@ -1,13 +1,13 @@
 ---
 let logos: any[] = [];
 let sectionLabel = "Trusted By";
-
 try {
   const { getCollection } = await import("astro:content");
   const raw = await getCollection("trusted_by" as any);
-  logos = (raw || []) as any[];
+  logos = (raw || [])
+    .map((e: any) => e.data)
+    .sort((a: any, b: any) => (a.order || 99) - (b.order || 99));
 } catch(e) { logos = []; }
-
 try {
   const fs = await import("fs");
   const path = await import("path");
@@ -18,35 +18,27 @@ try {
   }
 } catch(e) {}
 
-const placeholders = [
-  "Siam Paragon", "Central World", "ICONSIAM",
-  "EmQuartier", "Gaysorn Village", "Mega Bangna"
-];
-const showPlaceholders = logos.length === 0;
+const hasLogos = logos.some((l: any) => l.logo && l.logo.trim() !== "");
 ---
-
 <section class="trusted-by">
   <p class="tb-label">{sectionLabel}</p>
   <div class="tb-track">
-    {!showPlaceholders
-      ? logos.map((entry: any) => (
-          entry.data.url
-            ? <a href={entry.data.url} target="_blank" rel="noopener noreferrer" class="tb-item">
-                <img src={entry.data.logo} alt={entry.data.name} class="tb-logo" loading="lazy" />
+    {logos.map((l: any) => (
+      l.logo && l.logo.trim() !== ""
+        ? (l.url
+            ? <a href={l.url} target="_blank" rel="noopener noreferrer" class="tb-item">
+                <img src={l.logo} alt={l.name} class="tb-logo" loading="lazy" />
               </a>
             : <div class="tb-item">
-                <img src={entry.data.logo} alt={entry.data.name} class="tb-logo" loading="lazy" />
+                <img src={l.logo} alt={l.name} class="tb-logo" loading="lazy" />
               </div>
-        ))
-      : placeholders.map(name => (
-          <div class="tb-item tb-placeholder">
-            <span class="tb-placeholder-name">{name}</span>
+          )
+        : <div class="tb-item tb-placeholder">
+            <span class="tb-placeholder-name">{l.name}</span>
           </div>
-        ))
-    }
+    ))}
   </div>
 </section>
-
 <style>
   .trusted-by {
     background: var(--bg-dark, #ECEAE3);
@@ -71,9 +63,9 @@ const showPlaceholders = logos.length === 0;
     text-decoration: none; flex-shrink: 0;
   }
   .tb-logo {
-    height: 24px; width: auto; display: block;
+    height: 28px; width: auto; display: block;
     object-fit: contain;
-    filter: grayscale(100%) opacity(0.35);
+    filter: grayscale(100%) opacity(0.4);
     transition: filter 0.35s cubic-bezier(0.16,1,0.3,1);
   }
   .tb-item:hover .tb-logo { filter: grayscale(0%) opacity(1); }
