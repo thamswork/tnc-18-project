@@ -315,7 +315,6 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
   transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1);
 }
 .hero-cta-wrap.visible { opacity: 1; }
-.hero-words { transform: none !important; text-align: center !important; align-items: center !important; }
 
 .hero-more {
   display: inline-flex; align-items: center; gap: 0.5rem;
@@ -721,12 +720,42 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 </style>
 
 <script>
-/* ── HERO: centered, reveal only ── */
+/* ── HERO: center on load, animate down on scroll ── */
 (function() {
+  const words = document.querySelector(".hero-words") as HTMLElement;
   const title = document.querySelector(".hero-title") as HTMLElement;
   const cta   = document.querySelector(".hero-cta-wrap") as HTMLElement;
-  if (title) setTimeout(() => { title.classList.add("revealed"); }, 150);
-  if (cta)   setTimeout(() => { cta.classList.add("visible"); }, 900);
+  const hero  = document.getElementById("hero") as HTMLElement;
+  if (!words || !hero) return;
+
+  // Step 1: reveal text lines
+  setTimeout(() => { if (title) title.classList.add("revealed"); }, 150);
+  // Step 2: reveal CTA
+  setTimeout(() => { if (cta) cta.classList.add("visible"); }, 900);
+
+  // Step 3: on scroll, gently move hero content downward only (no left shift)
+  let ticking = false;
+  function update() {
+    const scrolled = window.scrollY;
+    const heroH = hero.offsetHeight;
+    const progress = Math.min(1, scrolled / (heroH * 0.6));
+    // ease out cubic
+    const e = 1 - Math.pow(1 - progress, 3);
+    // move down max 18% of hero height, stay horizontally centered
+    const maxY = heroH * 0.18;
+    words.style.transform = `translateY(${maxY * e}px)`;
+    // fade out slightly as it scrolls
+    words.style.opacity = String(1 - e * 0.35);
+    ticking = false;
+  }
+
+  update();
+  window.addEventListener("scroll", () => {
+    if (ticking) return;
+    requestAnimationFrame(update);
+    ticking = true;
+  }, { passive: true });
+  window.addEventListener("resize", update, { passive: true });
 })();
 
 /* ── HERO: slide auto-play ── */
