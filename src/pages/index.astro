@@ -81,21 +81,6 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 
   <TrustedBy />
 
-  <!-- ── PILLARS ── -->
-  <section class="pillars" id="pillars">
-    <div class="pillars-divider"></div>
-    <div class="pillars-grid">
-      {(homepageData.pillars || []).map((p: any, i: number) => ({...p, n: p.number})).map((p: any, i: number) => (
-        <div class="pillar" data-pillar={i}>
-          <span class="pillar-n" data-count={p.n}>{p.n}</span>
-          <h3 class="pillar-title">{p.title}</h3>
-          <p class="pillar-body">{p.body}</p>
-
-        </div>
-      ))}
-    </div>
-  </section>
-
   <!-- ── WORKS — vertical scroll stack ── -->
   <section class="works" id="works">
     <div class="works-header">
@@ -138,6 +123,21 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
       {projects.length === 0 && (
         <div class="works-empty">No projects yet. <a href="/admin">Add in CMS →</a></div>
       )}
+    </div>
+  </section>
+
+  <!-- ── PILLARS ── -->
+  <section class="pillars" id="pillars">
+    <div class="pillars-divider"></div>
+    <div class="pillars-grid">
+      {(homepageData.pillars || []).map((p: any, i: number) => ({...p, n: p.number})).map((p: any, i: number) => (
+        <div class="pillar" data-pillar={i}>
+          <span class="pillar-n" data-count={p.n}>{p.n}</span>
+          <h3 class="pillar-title">{p.title}</h3>
+          <p class="pillar-body">{p.body}</p>
+
+        </div>
+      ))}
     </div>
   </section>
 
