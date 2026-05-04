@@ -85,11 +85,7 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
   <section class="pillars" id="pillars">
     <div class="pillars-divider"></div>
     <div class="pillars-grid">
-      {[
-        { n: "01", title: "Fast Delivery",  body: "Tight lead times. Built for urgent retail timelines without compromising quality." },
-        { n: "02", title: "Senior Only",    body: "You work directly with founding partners. Zero junior hand-offs, from brief to handover." },
-        { n: "03", title: "24 / 7 Support", body: "Unlimited revisions. Always reachable. Always accountable throughout your project." },
-      ].map((p, i) => (
+      {(homepageData.pillars || []).map((p: any, i: number) => ({...p, n: p.number})).map((p: any, i: number) => (
         <div class="pillar" data-pillar={i}>
           <span class="pillar-n" data-count={p.n}>{p.n}</span>
           <h3 class="pillar-title">{p.title}</h3>
@@ -319,6 +315,7 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
   transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1);
 }
 .hero-cta-wrap.visible { opacity: 1; }
+.hero-words { transform: none !important; text-align: center !important; align-items: center !important; }
 
 .hero-more {
   display: inline-flex; align-items: center; gap: 0.5rem;
@@ -724,48 +721,12 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 </style>
 
 <script>
-/* ── HERO: center → scroll down to bottom-left ── */
+/* ── HERO: centered, reveal only ── */
 (function() {
-  const words = document.querySelector(".hero-words") as HTMLElement;
   const title = document.querySelector(".hero-title") as HTMLElement;
   const cta   = document.querySelector(".hero-cta-wrap") as HTMLElement;
-  const hero  = document.getElementById("hero") as HTMLElement;
-  if (!words || !hero) return;
-
-  // Reveal lines
-  setTimeout(() => { if (title) title.classList.add("revealed"); }, 150);
-
-  let ticking = false;
-  function update() {
-    const progress = Math.min(1, window.scrollY / (hero.offsetHeight * 0.55));
-    // ease-in-out cubic
-    const e = progress < 0.5
-      ? 4 * progress * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-
-    // CSS custom props drive the transform — no absolute positioning
-    words.style.setProperty("--hero-progress", String(e));
-
-    // translateX: 0 → negative (move left from center)
-    const maxX = -(hero.offsetWidth / 2 - words.offsetWidth / 2 - (window.innerWidth * 0.05));
-    // translateY: 0 → positive (move down from center)
-    const maxY = hero.offsetHeight / 2 - words.offsetHeight / 2 - (window.innerHeight * 0.08);
-
-    words.style.transform = `translateX(${maxX * e}px) translateY(${maxY * e}px)`;
-    words.style.textAlign = e > 0.5 ? "left" : "center";
-    (words as any).style.alignItems = e > 0.5 ? "flex-start" : "center";
-
-    if (cta) cta.classList.toggle("visible", e > 0.7);
-    ticking = false;
-  }
-
-  update();
-  window.addEventListener("scroll", () => {
-    if (ticking) return;
-    requestAnimationFrame(update);
-    ticking = true;
-  }, { passive: true });
-  window.addEventListener("resize", update, { passive: true });
+  if (title) setTimeout(() => { title.classList.add("revealed"); }, 150);
+  if (cta)   setTimeout(() => { cta.classList.add("visible"); }, 900);
 })();
 
 /* ── HERO: slide auto-play ── */

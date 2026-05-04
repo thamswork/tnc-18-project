@@ -8,5 +8,22 @@
   "hero_video": "",
   "hero_line1": "We Build",
   "hero_line2": "What Lasts.",
-  "hero_sub": "Architecture · Retail Design · Interior"
+  "hero_sub": "Architecture · Retail Design · Interior",
+  "pillars": [
+    {
+      "number": "01",
+      "title": "Fast Delivery",
+      "body": "Tight lead times. Built for urgent retail timelines without compromising quality."
+    },
+    {
+      "number": "02",
+      "title": "Senior Only",
+      "body": "You work directly with founding partners. Zero junior hand-offs, from brief to handover."
+    },
+    {
+      "number": "03",
+      "title": "24 / 7 Support",
+      "body": "Unlimited revisions. Always reachable. Always accountable throughout your project."
+    }
+  ]
 }
