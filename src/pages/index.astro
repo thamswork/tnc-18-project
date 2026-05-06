@@ -195,15 +195,8 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
         <a href={IG_URL} target="_blank" rel="noopener" class="ig-handle">{IG_HANDLE}</a>
       </div>
     </div>
-    <div class="ig-grid">
-      {Array.from({length: 9}).map((_, i) => (
-        <a href={IG_URL} target="_blank" rel="noopener" class="ig-item">
-          <div class="ig-ph"></div>
-          <div class="ig-item-overlay">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1.5" fill="white" stroke="none"/></svg>
-          </div>
-        </a>
-      ))}
+    <div class="ig-behold-wrap">
+      <behold-widget feed-id="WqVxXDtPRYUKrw8GMcXy"></behold-widget>
     </div>
     <div class="ig-foot">
       <a href={IG_URL} target="_blank" rel="noopener" class="ig-view-btn">View on Instagram</a>
@@ -214,7 +207,14 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 </Layout>
 
 <script is:inline>
-  window.fbAsyncInit = function() { FB.init({ xfbml: true, version: "v19.0" }); };
+  (() => {
+    const d=document,s=d.createElement("script");s.type="module";
+    s.src="https://w.behold.so/widget.js";d.head.append(s);
+  })();
+</script>
+
+<script is:inline>
+  window.fbAsyncInit = function() { FB.init({ appId: "1373549214608806", xfbml: true, version: "v19.0" }); };
   (function(d,s,id){ var js,fjs=d.getElementsByTagName(s)[0]; if(d.getElementById(id))return;
     js=d.createElement(s); js.id=id; js.src="https://connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js,fjs); }(document,"script","facebook-jssdk"));
@@ -697,6 +697,23 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 .news-foot { margin-top: 2rem; }
 .btn-ghost { display: inline-flex; align-items: center; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: var(--ink,#111); background: transparent; padding: 0.85rem 1.75rem; border: 1px solid rgba(17,17,17,0.3); transition: background 0.22s, color 0.22s; }
 .btn-ghost:hover { background: var(--ink,#111); color: var(--bg,#F4F3EF); }
+
+/* ══ INSTAGRAM BEHOLD ══════════════════════════════════════════════ */
+.ig-behold-wrap {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+behold-widget {
+  --behold-columns: 3;
+  --behold-gap: 3px;
+  --behold-border-radius: 0px;
+  width: 100%;
+  display: block;
+}
+@media (max-width: 768px) {
+  behold-widget { --behold-columns: 3; }
+}
 
 /* ══ INSTAGRAM ══════════════════════════════════════════════════════ */
 .instagram { padding: 6rem var(--pad-x,5vw); background: var(--bg,#F4F3EF); }
