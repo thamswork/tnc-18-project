@@ -706,13 +706,17 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 }
 behold-widget {
   --behold-columns: 3;
-  --behold-gap: 3px;
+  --behold-gap: 4px;
   --behold-border-radius: 0px;
+  --behold-post-count: 9;
   width: 100%;
   display: block;
 }
 @media (max-width: 768px) {
-  behold-widget { --behold-columns: 3; }
+  behold-widget {
+    --behold-columns: 3;
+    --behold-post-count: 9;
+  }
 }
 
 /* ══ INSTAGRAM ══════════════════════════════════════════════════════ */
