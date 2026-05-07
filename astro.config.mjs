@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  site: 'https://tnc-18-project.pages.dev',
+  site: 'https://tncbuildstudio.com',
   integrations: [react(), sitemap()],
   vite: { plugins: [tailwindcss()] },
 });

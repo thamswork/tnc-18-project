@@ -708,14 +708,22 @@ behold-widget {
   --behold-columns: 3;
   --behold-gap: 4px;
   --behold-border-radius: 0px;
-  --behold-post-count: 9;
+  --behold-post-count: 6;
+  --behold-aspect-ratio: 4/5;
   width: 100%;
   display: block;
+}
+@media (min-width: 1024px) {
+  .ig-behold-wrap { padding: 0; }
+  behold-widget {
+    --behold-columns: 3;
+    --behold-gap: 6px;
+  }
 }
 @media (max-width: 768px) {
   behold-widget {
     --behold-columns: 3;
-    --behold-post-count: 9;
+    --behold-post-count: 6;
   }
 }
 
