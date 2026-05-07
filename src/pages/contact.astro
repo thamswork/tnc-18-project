@@ -89,14 +89,7 @@ if (!heroVideo && !heroSlideshow) {
           {pageData.promise && (
             <p class="promise"><span class="dot"></span>{pageData.promise}</p>
           )}
-          {lineQr && (
-            <div class="line-qr-wrap">
-              <p class="line-qr-label">หรือสแกน QR เพื่อเพิ่มเพื่อน</p>
-              <a href={lineUrl} target="_blank" rel="noopener">
-                <img src={lineQr} alt="LINE QR Code TNC Build Studio" class="line-qr-img" />
-              </a>
-            </div>
-          )}
+
         </div>
 
         <div class="contact-right">
@@ -125,10 +118,10 @@ if (!heroVideo && !heroSlideshow) {
             </a>
           )}
           {contactData.phone && (
-            <a href={`tel:${contactData.phone.replace(/\s/g,'')}`} class="ch ch-phone">
-              <span class="ch-plat">Phone · กดเลยเพื่อโทร</span>
+            <a href={`tel:${contactData.phone.replace(/\s/g,'')}`} class="ch">
+              <span class="ch-plat">Phone</span>
               <span class="ch-handle">{contactData.phone}</span>
-              <span class="ch-cta">Tap to call →</span>
+
             </a>
           )}
           <div class="studio">
@@ -290,52 +283,13 @@ if (!heroVideo && !heroSlideshow) {
   }
   .ch:hover .ch-handle { color: #fff; }
 
-  .ch-cta {
-    font-size: 0.5rem; letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.4);
-    font-family: 'Courier New', monospace;
-    opacity: 0;
-    transform: translateX(-6px);
-    transition: opacity 0.2s, transform 0.2s;
-  }
-  .ch:hover .ch-cta { opacity: 1; transform: none; }
 
-  .ch-phone { cursor: pointer; }
-  .ch-phone:hover { background: rgba(255,255,255,0.05); padding-left: 0.6rem; }
-
-  /* Arrow indicator on all social links */
-  .ch-handle::after {
-    content: " ↗";
-    font-size: 0.7em;
-    opacity: 0;
-    transition: opacity 0.2s;
-  }
-  .ch:hover .ch-handle::after { opacity: 0.5; }
 
   .studio { display: flex; flex-direction: column; gap: 0.15rem; padding-top: 1rem; }
   .studio-hrs {
     font-family: 'Courier New', monospace;
     font-size: 0.5rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.4);
   }
-
-  /* LINE QR */
-  .line-qr-wrap {
-    margin-top: 1.5rem;
-    display: flex; flex-direction: column; gap: 0.5rem;
-  }
-  .line-qr-label {
-    font-size: 0.52rem; letter-spacing: 0.16em;
-    text-transform: uppercase; color: rgba(255,255,255,0.45);
-    font-family: 'Courier New', monospace;
-  }
-  .line-qr-img {
-    width: 100px; height: 100px;
-    border: 1px solid rgba(255,255,255,0.15);
-    transition: transform 0.3s, border-color 0.3s;
-    display: block;
-  }
-  .line-qr-img:hover { transform: scale(1.05); border-color: rgba(255,255,255,0.4); }
 
   /* SLIDESHOW */
   .bg-slideshow {
