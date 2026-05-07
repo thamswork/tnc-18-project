@@ -317,17 +317,30 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 .hero-cta-wrap.visible { opacity: 1; }
 
 .hero-more {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  font-size: 0.7rem; font-weight: 600;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(244,243,239,0.8); text-decoration: none;
-  border-bottom: 1px solid rgba(244,243,239,0.25);
-  padding-bottom: 2px;
-  transition: color 0.2s, border-color 0.2s;
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: #F4F3EF; text-decoration: none;
+  background: rgba(244,243,239,0.12);
+  border: 1px solid rgba(244,243,239,0.45);
+  padding: 0.75rem 1.5rem;
+  transition: background 0.25s, border-color 0.25s, color 0.25s;
 }
-.hero-more:hover { color: #F4F3EF; border-color: rgba(244,243,239,0.7); }
-.hero-more-sec { color: rgba(244,243,239,0.45); }
-.hero-more-sec:hover { color: rgba(244,243,239,0.8); }
+.hero-more:hover {
+  background: rgba(244,243,239,0.22);
+  border-color: rgba(244,243,239,0.9);
+  color: #fff;
+}
+.hero-more-sec {
+  background: transparent;
+  border-color: rgba(244,243,239,0.25);
+  color: rgba(244,243,239,0.65);
+}
+.hero-more-sec:hover {
+  background: rgba(244,243,239,0.1);
+  border-color: rgba(244,243,239,0.6);
+  color: #F4F3EF;
+}
 
 /* Dots */
 .hero-dots {
@@ -771,7 +784,7 @@ behold-widget {
     // ease out cubic
     const e = 1 - Math.pow(1 - progress, 3);
     // move down max 18% of hero height, stay horizontally centered
-    const maxY = heroH * 0.18;
+    const maxY = heroH * 0.30;
     words.style.transform = `translateY(${maxY * e}px)`;
     // fade out slightly as it scrolls
     words.style.opacity = String(1 - e * 0.35);
