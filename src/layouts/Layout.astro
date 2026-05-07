@@ -7,19 +7,102 @@ export interface Props {
 const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Bangkok Thailand', bodyClass } = Astro.props;
 ---
 <!doctype html>
-<html lang="en">
+<html lang="th">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ── PRIMARY SEO ── -->
+    <title>{title} — TNC Build Studio</title>
     <meta name="description" content={description} />
-    <meta name="robots" content="index, follow" />
-    <meta property="og:title" content={`${title} — TNC BUILD STUDIO`} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href={`https://tncbuildstudio.com${Astro.url.pathname}`} />
+
+    <!-- ── KEYWORDS TH + EN + misspellings ── -->
+    <meta name="keywords" content="ทำบูธขายของในห้าง, ทำบูท, บูธขายของ, บูทขายของ, ออกแบบบูธ, รับทำบูธ, Pop-up Store, ป็อปอัพสโตร์, ป๊อปอัพสโตร์, popupstore, ทำร้านค้าในห้าง, ตกแต่งร้านค้า, ตกแต่งภายใน, ออกแบบตกแต่งภายใน, รับเหมาตกแต่งภายใน, คีออสก์, kiosk, ทำบูธสยามพารากอน, ทำบูธเซ็นทรัล, ทำบูธไอคอนสยาม, ทำบูธเอ็มควอเทียร์, retail design bangkok, interior design bangkok, shop design thailand, booth design bangkok, TNC Build Studio, TNC18" />
+
+    <!-- ── OPEN GRAPH ── -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={`https://tncbuildstudio.com${Astro.url.pathname}`} />
+    <meta property="og:title" content={`${title} — TNC Build Studio`} />
     <meta property="og:description" content={description} />
+    <meta property="og:image" content="https://tncbuildstudio.com/images/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="TNC Build Studio" />
+    <meta property="og:locale" content="th_TH" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- ── TWITTER CARD ── -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={`${title} — TNC Build Studio`} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://tncbuildstudio.com/images/og-image.jpg" />
+
+    <!-- ── GEO TARGETING ── -->
+    <meta name="geo.region" content="TH-10" />
+    <meta name="geo.placename" content="Bangkok, Thailand" />
+    <meta name="geo.position" content="13.7563;100.5018" />
+    <meta name="ICBM" content="13.7563, 100.5018" />
+
+    <!-- ── LOCAL BUSINESS STRUCTURED DATA ── -->
+    <script type="application/ld+json">{`{
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "LocalBusiness",
+          "@id": "https://tncbuildstudio.com/#business",
+          "name": "TNC Build Studio",
+          "alternateName": ["TNC.18", "TNC18", "TNC Build Studio Bangkok"],
+          "description": "รับออกแบบและสร้างบูธขายของในห้าง Pop-up Store ร้านค้า ตกแต่งภายใน กรุงเทพมหานคร | Retail & Interior Design firm in Bangkok Thailand",
+          "url": "https://tncbuildstudio.com",
+          "logo": "https://tncbuildstudio.com/favicon.svg",
+          "telephone": "+6620000000",
+          "email": "hello@tnc18.com",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Bangkok",
+            "addressRegion": "Bangkok",
+            "addressCountry": "TH"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 13.7563,
+            "longitude": 100.5018
+          },
+          "areaServed": ["Bangkok", "Thailand", "กรุงเทพมหานคร", "ประเทศไทย"],
+          "serviceType": [
+            "Retail Design", "Interior Design", "Pop-up Store", "Booth Design", "Kiosk Design",
+            "ออกแบบบูธ", "ทำบูธขายของในห้าง", "ตกแต่งภายใน", "ออกแบบร้านค้า", "คีออสก์"
+          ],
+          "sameAs": [
+            "https://www.facebook.com/profile.php?id=61579055983582",
+            "https://www.instagram.com/tncbuildstudio"
+          ],
+          "priceRange": "฿฿฿",
+          "openingHours": "Mo-Su 09:00-18:00"
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://tncbuildstudio.com/#website",
+          "url": "https://tncbuildstudio.com",
+          "name": "TNC Build Studio",
+          "description": "รับทำบูธขายของในห้าง Pop-up Store ออกแบบตกแต่งภายใน กรุงเทพ",
+          "inLanguage": ["th", "en"]
+        }
+      ]
+    }`}</script>
+
+    <!-- ── FAVICON ── -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" href="/favicon.ico" />
+
+    <!-- ── FONTS ── -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet" />
-    <title>{title} — TNC BUILD STUDIO</title>
+
     <slot name="head" />
     <link rel="stylesheet" href="/src/styles/premium-preview.css" />
   </head>
