@@ -63,6 +63,23 @@ const path = Astro.url.pathname;
     border-color: rgba(244,243,239,0.3);
     background: transparent;
   }
+  /* Dark background pages */
+  :global(body.page-dark-nav) #nav:not(.scrolled) {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+  }
+  :global(body.page-dark-nav) #nav:not(.scrolled) .nav-logo,
+  :global(body.page-dark-nav) #nav:not(.scrolled) .nav-link {
+    color: rgba(244,243,239,0.92) !important;
+  }
+  :global(body.page-dark-nav) #nav:not(.scrolled) .nav-burger span {
+    background: rgba(244,243,239,0.92) !important;
+  }
+  :global(body.page-dark-nav) #nav:not(.scrolled) .nav-enquire {
+    color: rgba(244,243,239,0.9) !important;
+    border-color: rgba(244,243,239,0.3) !important;
+    background: transparent !important;
+  }
 
   /* ── LOGO ── */
   .nav-logo {
