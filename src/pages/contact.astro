@@ -266,7 +266,7 @@ if (!heroVideo && !heroSlideshow) {
     text-decoration: none; color: inherit;
     transition: padding-left 0.2s;
   }
-  .ch:first-child { border-top: 0.5px solid rgba(255,255,255,0.12); }
+  .ch:first-child { border-top: none; }
   .ch:hover { padding-left: 0.4rem; }
 
   .ch-plat {
@@ -285,10 +285,16 @@ if (!heroVideo && !heroSlideshow) {
 
 
 
-  .studio { display: flex; flex-direction: column; gap: 0.15rem; padding-top: 1rem; }
+  .studio {
+    display: flex; flex-direction: column; gap: 0.15rem;
+    padding: 0.85rem 0;
+    border-top: 0.5px solid rgba(255,255,255,0.12);
+    border-bottom: 0.5px solid rgba(255,255,255,0.12);
+  }
   .studio-hrs {
     font-family: 'Courier New', monospace;
     font-size: 0.5rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.4);
+    margin-top: 0.15rem;
   }
 
   /* SLIDESHOW */
