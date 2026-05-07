@@ -73,10 +73,7 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
       </div>
     )}
 
-    <div class="hero-scroll-hint">
-      <span class="scroll-line"></span>
-      <span class="scroll-label">Scroll</span>
-    </div>
+
   </section>
 
   <TrustedBy />
@@ -356,28 +353,7 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 .hero-dot.active { background: #F4F3EF; width: 28px; }
 
 /* Scroll hint */
-.hero-scroll-hint {
-  position: absolute; bottom: 2.5rem; left: var(--pad-x,5vw);
-  z-index: 4; display: flex; flex-direction: column; align-items: center; gap: 8px;
-  opacity: 0; animation: fadeIn 1s 1.4s forwards;
-}
-@keyframes fadeIn { to { opacity: 1; } }
-.scroll-line {
-  width: 1px; height: 40px;
-  background: rgba(244,243,239,0.3);
-  animation: scrollPulse 2s 1.5s infinite;
-}
-@keyframes scrollPulse {
-  0%   { transform: scaleY(1);   opacity: 0.3; }
-  50%  { transform: scaleY(0.5); opacity: 0.8; }
-  100% { transform: scaleY(1);   opacity: 0.3; }
-}
-.scroll-label {
-  font-size: 0.5rem; font-weight: 600;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: rgba(244,243,239,0.3);
-  writing-mode: vertical-rl;
-}
+
 
 /* ══ PILLARS ════════════════════════════════════════════════════════ */
 .pillars {
