@@ -51,7 +51,7 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
     <meta name="ICBM" content="13.7563, 100.5018" />
 
     <!-- ── LOCAL BUSINESS STRUCTURED DATA ── -->
-    <script type="application/ld+json">{`{
+    <script type="application/ld+json" set:html={JSON.stringify({
       "@context": "https://schema.org",
       "@graph": [
         {
@@ -170,7 +170,7 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
           ]
         }
       ]
-    }`}</script>
+    })}></script>
 
     <!-- ── FAVICON ── -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
