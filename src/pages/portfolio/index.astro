@@ -2,10 +2,15 @@
 import Layout from "../../layouts/Layout.astro";
 import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
+import fs from 'node:fs';
 import { getCollection } from "astro:content";
 
 const allProjects = await getCollection("projects");
-const projects = allProjects.filter((p: any) => (p.data as any).draft !== true).sort((a: any, b: any) => {
+const projects = allProjects.filter((p: any) => {
+  if (!p.filePath) return true;
+  const raw = fs.readFileSync(p.filePath, 'utf-8');
+  return !/^draft:\s*true/m.test(raw);
+}).sort((a: any, b: any) => {
   const ao = (a.data as any).order ?? 999;
   const bo = (b.data as any).order ?? 999;
   if (ao !== bo) return ao - bo;
