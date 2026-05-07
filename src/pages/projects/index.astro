@@ -4,7 +4,7 @@ import Navbar from '../../components/Navbar.astro';
 import { getCollection } from 'astro:content';
 
 const allProjects = await getCollection('projects');
-const projects = allProjects.sort((a,b) => b.data.year - a.data.year);
+const projects = allProjects.filter((p: any) => (p.data as any).draft !== true).sort((a,b) => b.data.year - a.data.year);
 const categories = ['All', ...new Set(allProjects.map(p => p.data.category))];
 ---
 <Layout description="โปรเจกต์ TNC Build Studio — ผลงานบูธขายของในห้าง Pop-up Store ตกแต่งภายใน กรุงเทพ | Projects by TNC Build Studio Bangkok retail design firm"

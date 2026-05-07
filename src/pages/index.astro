@@ -7,7 +7,7 @@ import homepageData from "../content/pages/homepage.json";
 import contactData from "../content/settings/contact.json";
 
 const allProjects = await getCollection("projects");
-const projects = allProjects.filter((p: any) => (p.data as any).draft !== "draft").sort((a, b) => b.data.year - a.data.year);
+const projects = allProjects.filter((p: any) => (p.data as any).draft !== true).sort((a, b) => b.data.year - a.data.year);
 
 function slug(t: string) {
   return t.toLowerCase().replace(/[\u2018\u2019'']/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
