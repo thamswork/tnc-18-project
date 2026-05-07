@@ -10,6 +10,6 @@ description: A nostalgic dreamscape designed for cake lovers. This space
   that perfectly complements our signature creamy box cakes and vintage-inspired
   treats.
 featured: false
-draft: false
+draft: true
 title_th: เบบี้เค้กส์ – คาเฟ่ขนมหวานสุดคิ้วท์
 ---
