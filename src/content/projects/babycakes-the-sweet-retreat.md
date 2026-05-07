@@ -9,7 +9,7 @@ description: A nostalgic dreamscape designed for cake lovers. This space
   features pastel palettes and soft curves, creating a "cloud-like" atmosphere
   that perfectly complements our signature creamy box cakes and vintage-inspired
   treats.
-featured: true
-draft: true
+featured: false
+draft: false
 title_th: เบบี้เค้กส์ – คาเฟ่ขนมหวานสุดคิ้วท์
 ---
