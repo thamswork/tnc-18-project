@@ -4,6 +4,8 @@ backend:
   branch: main
   base_url: https://tnc-18-auth.tyme-sak.workers.dev
 
+publish_mode: editorial_workflow
+
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
