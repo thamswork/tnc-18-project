@@ -141,7 +141,9 @@ collections:
             name: hero_image
             widget: image
             required: false
-            hint: "Upload any photo to use as the full-page background on the Contact page."
+            media_folder: "/public/uploads"
+            public_folder: "/uploads"
+            hint: "Upload any photo here to use as the full-page background on the Contact page."
 
           - label: "Background Photos (multiple — first is used)"
             name: hero_images
