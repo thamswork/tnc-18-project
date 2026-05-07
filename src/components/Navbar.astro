@@ -47,6 +47,14 @@ const path = Astro.url.pathname;
     transition: background 0.35s, border-color 0.35s;
     border-bottom: 1px solid transparent;
   }
+  :global(body.page-dark-nav) #nav {
+    border-bottom: 1px solid transparent !important;
+    background: transparent !important;
+  }
+  :global(body.page-dark-nav) #nav.scrolled {
+    background: rgba(10,14,24,0.92) !important;
+    border-bottom-color: rgba(255,255,255,0.08) !important;
+  }
   #nav.scrolled {
     background: rgba(244,243,239,0.97);
     border-bottom-color: rgba(17,17,17,0.07);
