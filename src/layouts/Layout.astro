@@ -298,6 +298,24 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
   ::selection { background: var(--ink); color: var(--bg); }
   ::-webkit-scrollbar       { width: 1px; }
 
+  /* Force dark navbar on dark background pages */
+  body.page-dark-nav #nav:not(.scrolled) {
+    background: transparent !important;
+    border-bottom-color: transparent !important;
+  }
+  body.page-dark-nav #nav:not(.scrolled) .nav-logo,
+  body.page-dark-nav #nav:not(.scrolled) .nav-link {
+    color: rgba(244,243,239,0.92) !important;
+  }
+  body.page-dark-nav #nav:not(.scrolled) .nav-burger span {
+    background: rgba(244,243,239,0.92) !important;
+  }
+  body.page-dark-nav #nav:not(.scrolled) .nav-enquire {
+    color: rgba(244,243,239,0.9) !important;
+    border-color: rgba(244,243,239,0.3) !important;
+    background: transparent !important;
+  }
+
   /* Force solid navbar on project/slug pages */
   body.page-solid-nav #nav {
     background: rgba(244,243,239,0.98) !important;
