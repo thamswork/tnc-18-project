@@ -6,7 +6,8 @@ import { getCollection } from 'astro:content';
 const allNews = await getCollection('news').catch(() => []);
 const articles = allNews.sort((a,b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
 ---
-<Layout title="News — Updates from TNC.18">
+<Layout description="ข่าวสาร TNC Build Studio — อัพเดทผลงานบูธขายของในห้าง Pop-up Store กรุงเทพ | News and updates from TNC Build Studio Bangkok"
+  title="News — Updates from TNC.18">
   <Navbar />
 
   <section class="news-hero">

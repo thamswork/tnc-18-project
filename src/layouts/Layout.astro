@@ -18,8 +18,13 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href={`https://tncbuildstudio.com${Astro.url.pathname}`} />
 
+    <!-- ── HREFLANG TH/EN ── -->
+    <link rel="alternate" hreflang="th" href={`https://tncbuildstudio.com${Astro.url.pathname}`} />
+    <link rel="alternate" hreflang="en" href={`https://tncbuildstudio.com${Astro.url.pathname}`} />
+    <link rel="alternate" hreflang="x-default" href={`https://tncbuildstudio.com${Astro.url.pathname}`} />
+
     <!-- ── KEYWORDS TH + EN + misspellings ── -->
-    <meta name="keywords" content="ทำบูธขายของในห้าง, ทำบูท, บูธขายของ, บูทขายของ, ออกแบบบูธ, รับทำบูธ, Pop-up Store, ป็อปอัพสโตร์, ป๊อปอัพสโตร์, popupstore, ทำร้านค้าในห้าง, ตกแต่งร้านค้า, ตกแต่งภายใน, ออกแบบตกแต่งภายใน, รับเหมาตกแต่งภายใน, คีออสก์, kiosk, ทำบูธสยามพารากอน, ทำบูธเซ็นทรัล, ทำบูธไอคอนสยาม, ทำบูธเอ็มควอเทียร์, retail design bangkok, interior design bangkok, shop design thailand, booth design bangkok, TNC Build Studio, TNC18" />
+    <meta name="keywords" content="ทำบูธขายของในห้าง, ทำบูท, บูธขายของ, บูทขายของ, ออกแบบบูธ, รับทำบูธ, Pop-up Store, ป็อปอัพสโตร์, ป๊อปอัพสโตร์, popupstore, ทำร้านค้าในห้าง, ตกแต่งร้านค้า, ตกแต่งภายใน, ออกแบบตกแต่งภายใน, รับเหมาตกแต่งภายใน, คีออสก์, kiosk, ทำบูธสยามพารากอน, ทำบูธเซ็นทรัล, ทำบูธไอคอนสยาม, ทำบูธเอ็มควอเทียร์, ทำบูธเกษรวิลเลจ, ทำบูธเมกาบางนา, retail design bangkok, interior design bangkok, shop design thailand, booth design bangkok, TNC Build Studio, TNC18, บริษัทออกแบบตกแต่งภายใน, บริษัทรับเหมาตกแต่งร้าน, ผู้รับเหมาตกแต่งร้านค้า, ออกแบบพื้นที่เชิงพาณิชย์, commercial interior design bangkok, retail fit-out bangkok, shop fitting bangkok, mall booth contractor bangkok, pop up store contractor thailand, exhibition booth bangkok, งานนิทรรศการ, บูธงานแฟร์, ออกแบบบูธนิทรรศการ, stand design bangkok, display booth bangkok, brand activation bangkok, brand activation thailand, experiential retail bangkok, ทำบูธแบรนด์, ออกแบบ brand activation, ร้านค้าชั่วคราว, ร้านค้าสำเร็จรูป, modular booth thailand, portable booth bangkok, custom booth design thailand" />
 
     <!-- ── OPEN GRAPH ── -->
     <meta property="og:type" content="website" />
@@ -89,6 +94,80 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
           "name": "TNC Build Studio",
           "description": "รับทำบูธขายของในห้าง Pop-up Store ออกแบบตกแต่งภายใน กรุงเทพ",
           "inLanguage": ["th", "en"]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "รับทำบูธขายของในห้างราคาเท่าไหร่?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "ราคาขึ้นอยู่กับขนาดและความซับซ้อนของงาน TNC Build Studio รับออกแบบและสร้างบูธขายของในห้างทุกประเภท ติดต่อเราเพื่อรับใบเสนอราคา"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "ทำบูธขายของในห้างใช้เวลานานแค่ไหน?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "TNC Build Studio เชี่ยวชาญด้าน Fast Delivery สามารถส่งมอบงานได้ภายในระยะเวลาที่กำหนด ตั้งแต่ออกแบบจนถึงติดตั้งแล้วเสร็จ"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "รับทำ Pop-up Store ในห้างสรรพสินค้าไหนบ้าง?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "TNC Build Studio รับทำบูธและ Pop-up Store ในห้างสรรพสินค้าชั้นนำทั่วกรุงเทพ ได้แก่ สยามพารากอน เซ็นทรัลเวิลด์ ไอคอนสยาม เอ็มควอเทียร์ เกษรวิลเลจ และเมกาบางนา"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "TNC Build Studio รับงานตกแต่งภายในร้านค้าด้วยไหม?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "ใช่ TNC Build Studio รับออกแบบและตกแต่งภายในร้านค้า บูธ Pop-up Store และพื้นที่เชิงพาณิชย์ทุกประเภท โดยทีมงานซีเนียร์โดยตรง"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is TNC Build Studio?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "TNC Build Studio is a Bangkok-based senior-led retail design and construction firm specializing in booth design, Pop-up Stores, kiosks, and interior design for malls and retail spaces across Thailand."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://tncbuildstudio.com"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Portfolio",
+              "item": "https://tncbuildstudio.com/portfolio"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Services",
+              "item": "https://tncbuildstudio.com/about-services"
+            },
+            {
+              "@type": "ListItem",
+              "position": 4,
+              "name": "Contact",
+              "item": "https://tncbuildstudio.com/contact"
+            }
+          ]
         }
       ]
     }`}</script>
@@ -102,6 +181,15 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400&display=swap" rel="stylesheet" />
+
+    <!-- ── GOOGLE ANALYTICS (add GA_ID in CMS siteinfo) ── -->
+    <!-- Replace G-XXXXXXXXXX with your actual GA4 ID -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script> -->
+    <!-- <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","G-XXXXXXXXXX");</script> -->
+
+    <!-- ── GOOGLE SEARCH CONSOLE VERIFICATION ── -->
+    <!-- Add your verification meta tag here once you get it from Search Console -->
+    <!-- <meta name="google-site-verification" content="YOUR_CODE_HERE" /> -->
 
     <slot name="head" />
     <link rel="stylesheet" href="/src/styles/premium-preview.css" />

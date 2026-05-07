@@ -6,7 +6,8 @@ import { getCollection } from 'astro:content';
 const allServices = await getCollection('services');
 const services = allServices.sort((a,b) => a.data.order - b.data.order);
 ---
-<Layout title="Services — What We Do">
+<Layout description="บริการ TNC Build Studio — รับทำบูธ Pop-up Store คีออสก์ ตกแต่งภายใน กรุงเทพ | Booth, Pop-up Store, kiosk and interior design services Bangkok"
+  title="Services — What We Do">
   <Navbar />
 
   <section class="svc-hero">
