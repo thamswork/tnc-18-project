@@ -1,18 +1,18 @@
 {
-  "headline": "Let's Talk.",
-  "subtext": "Fast turnaround. Senior partners only. Message us on Line and we'll respond within 2 hours.",
-  "line_label": "Message us on Line",
-  "promise": "We reply within 2 hours",
-  "hero_image": "",
-  "hero_video": "",
-  "hero_caption": "",
-  "hero_project_slug": "",
   "hero_section": {
     "hero_images": [],
     "hero_project": "",
     "hero_video": ""
   },
-  "hero_images": [],
+  "hero_caption": "",
+  "hero_slideshow": false,
+  "line_label": "Message us on Line",
+  "subtext": "Fast turnaround. Senior partners only. Message us on Line and we'll respond within 2 hours.",
+  "headline": "Let's Talk.",
   "hero_project": "",
-  "hero_slideshow": false
+  "hero_project_slug": "",
+  "hero_image": "/uploads/c913b7eb-584d-4ac0-ab45-cfb103d23d1b.png",
+  "hero_video": "",
+  "promise": "We reply within 2 hours",
+  "hero_images": []
 }
