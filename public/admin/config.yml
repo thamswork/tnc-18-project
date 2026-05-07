@@ -47,6 +47,11 @@ collections:
         field: { label: Image, name: image, widget: image }
       - { label: "Short Description",  name: description, widget: text,    required: false }
       - { label: "Featured on homepage", name: featured,  widget: boolean, default: false }
+      - label: "🙈 Hide from site (Draft)"
+        name: draft
+        widget: boolean
+        default: false
+        hint: "Turn ON to hide this project from the website without deleting it"
       - { label: "Body Content",       name: body,        widget: markdown, required: false }
 
   # ── SERVICES ─────────────────────────────────────────────────────────────────
