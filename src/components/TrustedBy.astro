@@ -55,17 +55,18 @@ const hasLogos = logos.some((l: any) => l.logo && l.logo.trim() !== "");
   .tb-track {
     display: flex; align-items: center;
     justify-content: center; flex-wrap: wrap;
-    gap: 1.75rem 4rem; max-width: 960px; width: 100%;
+    gap: 2rem 5rem; max-width: 1100px; width: 100%;
   }
   .tb-item {
     display: flex; align-items: center;
     justify-content: center;
     text-decoration: none; flex-shrink: 0;
+    cursor: default;
   }
   .tb-logo {
     height: 40px; width: auto; max-width: 140px; display: block;
     object-fit: contain;
-    filter: grayscale(100%) opacity(0.4);
+    filter: grayscale(0%) opacity(1);
     transition: filter 0.35s cubic-bezier(0.16,1,0.3,1);
   }
   .tb-item:hover .tb-logo { filter: grayscale(0%) opacity(1); }
