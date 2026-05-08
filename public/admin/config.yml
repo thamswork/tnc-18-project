@@ -50,6 +50,12 @@ collections:
         widget: boolean
         default: false
         hint: "Turn ON to hide this project from the website without deleting it"
+      - label: "Sort Order (1 = first, 2 = second...)"
+        name: order
+        widget: number
+        value_type: int
+        required: false
+        hint: "Set a number to control order. Leave blank to sort by year."
       - { label: "Body Content",       name: body,        widget: markdown, required: false }
 
   # ── SERVICES ─────────────────────────────────────────────────────────────────
