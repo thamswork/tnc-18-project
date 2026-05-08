@@ -24,7 +24,7 @@ collections:
       - label: "Category"
         name: category
         widget: select
-        options: [Residential, Commercial, Interior, Mixed-Use, Hospitality, Retail, Pop-up]
+        options: [Residential, Commercial, Interior, Mixed-Use, Hospitality, Retail, Pop-up, Exhibition & Event]
       - { label: "Client",             name: client,      widget: string,  required: false }
       - { label: "Location / Mall",    name: location,    widget: string,  required: false,
           hint: "e.g. Siam Paragon — shown in the meta row on the portfolio card" }
