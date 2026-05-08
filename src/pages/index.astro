@@ -176,16 +176,18 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
       <h2 class="news-title">News</h2>
       <a href={FB_PAGE_URL} target="_blank" rel="noopener" class="news-more">View More →</a>
     </div>
-    <div class="news-embed-wrap">
-      <div id="fb-root"></div>
-      <div class="fb-page"
-        data-href={FB_PAGE_URL} data-tabs="timeline" data-width="500"
-        data-height="600" data-small-header="true" data-adapt-container-width="true"
-        data-hide-cover="false" data-show-facepile="false">
-        <div class="fb-fallback">
-          <p class="fb-fallback-text">Loading news from Facebook...</p>
-          <a href={FB_PAGE_URL} target="_blank" rel="noopener" class="fb-fallback-link">View on Facebook →</a>
+    <div class="news-cta-wrap">
+      <div class="news-cta-card">
+        <div class="news-cta-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         </div>
+        <div class="news-cta-text">
+          <h3 class="news-cta-title">Follow us on Facebook</h3>
+          <p class="news-cta-sub">Get the latest updates, project reveals and behind-the-scenes from TNC Build Studio.</p>
+        </div>
+        <a href={FB_PAGE_URL} target="_blank" rel="noopener" class="news-cta-btn">
+          View Page →
+        </a>
       </div>
     </div>
     <div class="news-foot">
@@ -220,12 +222,7 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
   })();
 </script>
 
-<script is:inline>
-  window.fbAsyncInit = function() { FB.init({ appId: "1373549214608806", xfbml: true, version: "v19.0" }); };
-  (function(d,s,id){ var js,fjs=d.getElementsByTagName(s)[0]; if(d.getElementById(id))return;
-    js=d.createElement(s); js.id=id; js.src="https://connect.facebook.net/en_US/sdk.js";
-    fjs.parentNode.insertBefore(js,fjs); }(document,"script","facebook-jssdk"));
-</script>
+
 
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -688,11 +685,34 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 .news-title { font-size: clamp(1.75rem,4vw,2.5rem); font-weight: 800; letter-spacing: -0.03em; text-transform: uppercase; color: var(--ink,#111); }
 .news-more { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light,#777); text-decoration: none; transition: color 0.2s; }
 .news-more:hover { color: var(--ink,#111); }
-.news-embed-wrap { width: 100%; max-width: 540px; min-height: 400px; background: #fff; overflow: hidden; }
-.fb-fallback { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem; gap: 1rem; min-height: 300px; }
-.fb-fallback-text { font-size: 0.85rem; color: var(--ink-light,#777); }
-.fb-fallback-link { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--navy,#1A3A6B); text-decoration: none; border: 1px solid var(--navy,#1A3A6B); padding: 0.65rem 1.25rem; transition: background 0.2s, color 0.2s; }
-.fb-fallback-link:hover { background: var(--navy,#1A3A6B); color: #fff; }
+.news-cta-wrap { width: 100%; max-width: 680px; }
+.news-cta-card {
+  display: flex; align-items: center; gap: 2rem;
+  padding: 2.5rem 3rem;
+  background: #fff;
+  border: 1px solid rgba(17,17,17,0.08);
+  transition: border-color 0.2s;
+}
+.news-cta-card:hover { border-color: rgba(17,17,17,0.2); }
+.news-cta-icon { flex-shrink: 0; }
+.news-cta-text { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
+.news-cta-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink,#111); }
+.news-cta-sub { font-size: 0.78rem; line-height: 1.7; color: var(--ink-light,#777); font-weight: 400; }
+.news-cta-btn {
+  flex-shrink: 0;
+  display: inline-flex; align-items: center;
+  font-size: 0.65rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  text-decoration: none; color: #fff;
+  background: #1877F2;
+  padding: 0.85rem 1.75rem;
+  transition: background 0.22s;
+  white-space: nowrap;
+}
+.news-cta-btn:hover { background: #0d65d9; }
+@media (max-width: 640px) {
+  .news-cta-card { flex-direction: column; align-items: flex-start; padding: 1.75rem; }
+}
 .news-foot { margin-top: 2rem; }
 .btn-ghost { display: inline-flex; align-items: center; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: var(--ink,#111); background: transparent; padding: 0.85rem 1.75rem; border: 1px solid rgba(17,17,17,0.3); transition: background 0.22s, color 0.22s; }
 .btn-ghost:hover { background: var(--ink,#111); color: var(--bg,#F4F3EF); }
