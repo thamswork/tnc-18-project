@@ -180,7 +180,7 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
   <section class="news">
     <div class="news-head">
       <h2 class="news-title">News</h2>
-      <a href={FB_PAGE_URL} target="_blank" rel="noopener" class="news-more">View More →</a>
+      <a href="/specbook" class="news-more">View More →</a>
     </div>
     <div class="news-cards">
       {newsItems.map((item: any) => (
@@ -203,8 +203,13 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
         <p class="news-empty">No news yet. <a href="/admin">Add in CMS →</a></p>
       )}
     </div>
-    <div class="news-foot">
-      <a href={FB_PAGE_URL} target="_blank" rel="noopener" class="btn-ghost">View More →</a>
+    <!-- Facebook CTA -->
+    <div class="news-fb-cta">
+      <div class="news-fb-inner">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        <span class="news-fb-text">Follow us on Facebook for more updates</span>
+        <a href={FB_PAGE_URL} target="_blank" rel="noopener" class="news-fb-btn">TNC Build Studio →</a>
+      </div>
     </div>
   </section>
 
@@ -752,6 +757,29 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
   color: var(--navy, #1A3A6B);
 }
 .news-empty { font-size: 0.85rem; color: var(--ink-light); }
+.news-fb-cta {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(17,17,17,0.08);
+}
+.news-fb-inner {
+  display: flex; align-items: center; gap: 1rem;
+  flex-wrap: wrap;
+}
+.news-fb-text {
+  font-size: 0.78rem; color: var(--ink-light,#777);
+  font-weight: 400; flex: 1;
+}
+.news-fb-btn {
+  font-size: 0.65rem; font-weight: 600;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  text-decoration: none; color: #1877F2;
+  border-bottom: 1px solid #1877F2;
+  padding-bottom: 2px;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+.news-fb-btn:hover { opacity: 0.7; }
 .news-empty a { color: var(--navy); }
 .news-foot { margin-top: 2rem; }
 .btn-ghost { display: inline-flex; align-items: center; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: var(--ink,#111); background: transparent; padding: 0.85rem 1.75rem; border: 1px solid rgba(17,17,17,0.3); transition: background 0.22s, color 0.22s; }
