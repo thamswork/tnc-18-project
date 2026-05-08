@@ -1,7 +1,7 @@
 ---
 title: Alma & Profhilo Exhibition Pavilion
 year: 2026
-category: Pop-up
+category: Exhibition & Event
 client: Alma Lasers / Profhilo
 location: Convention Centre
 size: "80"
