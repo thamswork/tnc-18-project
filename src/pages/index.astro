@@ -5,6 +5,12 @@ import Footer from "../components/Footer.astro";
 import TrustedBy from "../components/TrustedBy.astro";
 import { getCollection } from "astro:content";
 import homepageData from "../content/pages/homepage.json";
+import { getCollection } from "astro:content";
+const allNews = await getCollection("specbook");
+const newsItems = allNews
+  .filter((n: any) => !n.data.draft)
+  .sort((a: any, b: any) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 3);
 import contactData from "../content/settings/contact.json";
 
 const allProjects = await getCollection("projects");
@@ -176,19 +182,26 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
       <h2 class="news-title">News</h2>
       <a href={FB_PAGE_URL} target="_blank" rel="noopener" class="news-more">View More →</a>
     </div>
-    <div class="news-cta-wrap">
-      <div class="news-cta-card">
-        <div class="news-cta-icon">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        </div>
-        <div class="news-cta-text">
-          <h3 class="news-cta-title">Follow us on Facebook</h3>
-          <p class="news-cta-sub">Get the latest updates, project reveals and behind-the-scenes from TNC Build Studio.</p>
-        </div>
-        <a href={FB_PAGE_URL} target="_blank" rel="noopener" class="news-cta-btn">
-          View Page →
+    <div class="news-cards">
+      {newsItems.map((item: any) => (
+        <a href={`/specbook/${item.id}`} class="news-card">
+          {item.data.cover && (
+            <div class="news-card-img-wrap">
+              <img src={item.data.cover} alt={item.data.title} class="news-card-img" loading="lazy" />
+            </div>
+          )}
+          <div class="news-card-body">
+            {item.data.category && <span class="news-card-cat">{item.data.category}</span>}
+            <h3 class="news-card-title">{item.data.title}</h3>
+            {item.data.excerpt && <p class="news-card-excerpt">{item.data.excerpt}</p>}
+            <span class="news-card-date">{new Date(item.data.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+            <span class="news-card-read">Read More →</span>
+          </div>
         </a>
-      </div>
+      ))}
+      {newsItems.length === 0 && (
+        <p class="news-empty">No news yet. <a href="/admin">Add in CMS →</a></p>
+      )}
     </div>
     <div class="news-foot">
       <a href={FB_PAGE_URL} target="_blank" rel="noopener" class="btn-ghost">View More →</a>
@@ -685,34 +698,61 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 .news-title { font-size: clamp(1.75rem,4vw,2.5rem); font-weight: 800; letter-spacing: -0.03em; text-transform: uppercase; color: var(--ink,#111); }
 .news-more { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light,#777); text-decoration: none; transition: color 0.2s; }
 .news-more:hover { color: var(--ink,#111); }
-.news-cta-wrap { width: 100%; max-width: 680px; }
-.news-cta-card {
-  display: flex; align-items: center; gap: 2rem;
-  padding: 2.5rem 3rem;
+.news-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  width: 100%;
+}
+@media (max-width: 900px) { .news-cards { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 600px) { .news-cards { grid-template-columns: 1fr; } }
+
+.news-card {
+  display: flex; flex-direction: column;
   background: #fff;
-  border: 1px solid rgba(17,17,17,0.08);
-  transition: border-color 0.2s;
+  text-decoration: none; color: inherit;
+  border: 1px solid rgba(17,17,17,0.07);
+  transition: border-color 0.2s, transform 0.2s;
+  overflow: hidden;
 }
-.news-cta-card:hover { border-color: rgba(17,17,17,0.2); }
-.news-cta-icon { flex-shrink: 0; }
-.news-cta-text { flex: 1; display: flex; flex-direction: column; gap: 0.5rem; }
-.news-cta-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; color: var(--ink,#111); }
-.news-cta-sub { font-size: 0.78rem; line-height: 1.7; color: var(--ink-light,#777); font-weight: 400; }
-.news-cta-btn {
-  flex-shrink: 0;
-  display: inline-flex; align-items: center;
-  font-size: 0.65rem; font-weight: 600;
+.news-card:hover { border-color: rgba(17,17,17,0.2); transform: translateY(-2px); }
+
+.news-card-img-wrap { width: 100%; aspect-ratio: 16/9; overflow: hidden; }
+.news-card-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.6s; }
+.news-card:hover .news-card-img { transform: scale(1.04); }
+
+.news-card-body {
+  padding: 1.5rem;
+  display: flex; flex-direction: column; gap: 0.5rem;
+  flex: 1;
+}
+.news-card-cat {
+  font-size: 0.55rem; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--navy, #1A3A6B);
+}
+.news-card-title {
+  font-size: 0.95rem; font-weight: 700;
+  letter-spacing: -0.01em; line-height: 1.3;
+  color: var(--ink, #111);
+}
+.news-card-excerpt {
+  font-size: 0.78rem; line-height: 1.7;
+  color: var(--ink-light, #777); font-weight: 400;
+  flex: 1;
+}
+.news-card-date {
+  font-size: 0.6rem; font-weight: 500;
+  letter-spacing: 0.08em; color: var(--ink-light, #999);
+  margin-top: auto;
+}
+.news-card-read {
+  font-size: 0.6rem; font-weight: 600;
   letter-spacing: 0.12em; text-transform: uppercase;
-  text-decoration: none; color: #fff;
-  background: #1877F2;
-  padding: 0.85rem 1.75rem;
-  transition: background 0.22s;
-  white-space: nowrap;
+  color: var(--navy, #1A3A6B);
 }
-.news-cta-btn:hover { background: #0d65d9; }
-@media (max-width: 640px) {
-  .news-cta-card { flex-direction: column; align-items: flex-start; padding: 1.75rem; }
-}
+.news-empty { font-size: 0.85rem; color: var(--ink-light); }
+.news-empty a { color: var(--navy); }
 .news-foot { margin-top: 2rem; }
 .btn-ghost { display: inline-flex; align-items: center; font-size: 0.65rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none; color: var(--ink,#111); background: transparent; padding: 0.85rem 1.75rem; border: 1px solid rgba(17,17,17,0.3); transition: background 0.22s, color 0.22s; }
 .btn-ghost:hover { background: var(--ink,#111); color: var(--bg,#F4F3EF); }
