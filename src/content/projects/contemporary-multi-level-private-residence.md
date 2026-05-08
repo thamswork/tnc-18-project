@@ -1,5 +1,5 @@
 ---
-title: Contemporary Multi-Level Private Residence
+title: Private Mid-Century Modern Residence
 year: 2026
 category: Residential
 client: Confidential
@@ -18,16 +18,18 @@ gallery:
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1778170490/IMG_6038_r9oz2p.jpg
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1778170489/IMG_6044_ly3fnw.jpg
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1778170229/IMG_6047_vohrfx.jpg
-description: A private residential project defined by high-contrast materials,
-  soaring ceilings, and a focus on open-plan, light-filled living.
+description: A multi-level private residence designed with a mid-century modern
+  aesthetic, combining warm teak wood, clean geometric lines, and curated
+  retro-inspired accents.
 featured: true
 draft: false
 ---
-This interior project explores the balance between bold structural elements and a warm, lived-in atmosphere. The design language uses dark wood accents and matte black metalwork to frame the bright, neutral interiors.
+This private residential project updates a spacious multi-level layout with a refined Mid-Century Modern concept. The design focuses on bringing warmth, function, and timeless 1950s design elements into a contemporary home.
 
-Design Highlights:
+**Design Highlights:**
 
-* Open-Concept Living: The ground floor layout maximizes volume with a double-height ceiling and large arched windows that connect the interior to the surrounding greenery.
-* Material Contrast: Polished marble flooring provides a cool, reflective base that contrasts with the deep walnut cabinetry and architectural staircase details.
-* Integrated Lighting: The space utilizes a mix of hidden LED coves, recessed track lighting, and a signature sculptural chandelier to define different zones within the home.
-* The Upper Lounge: A mezzanine level offers a secondary living space, maintaining a visual connection to the main floor while providing a more intimate setting for relaxation.
+* Warm Wood & Earth Tones: The main living areas feature rich walnut paneling, paired with a cozy palette of mustard, teal, and rust accents that anchor the space.
+* Mid-Century Elements: Clean lines, low-profile seating, and iconic geometric shapes define the furniture selection and custom built-ins throughout.
+* Mezzanine Lounge: The upper loft serves as an intimate reading corner, framed by minimalist iron railings, an organic-shaped sofa, and a striking spiral brass light fixture.
+* The Master Bedroom: A masterclass in minimalist warmth, utilizing light oak flooring, retro bedside lighting, and abstract geometric artwork to complete the mid-century look.
+* Indoor-Outdoor Flow: Large arched windows let in abundant natural light, highlighting the natural grain of the wood features and stone flooring.
