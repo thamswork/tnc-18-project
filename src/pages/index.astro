@@ -97,15 +97,15 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
   <!-- ── WORKS — vertical scroll stack ── -->
   <section class="works" id="works">
     <div class="works-header">
-      <div class="works-header-left">
+      <div class="works-title-row">
         <h2 class="works-title">Works</h2>
-        <div class="works-cats" id="works-cats">
-          {categories.map((cat, i) => (
-            <button class={`cat-btn ${i === 0 ? "active" : ""}`} data-cat={cat}>{cat}</button>
-          ))}
-        </div>
+        <a href="/portfolio" class="works-view-all">View All →</a>
       </div>
-      <a href="/portfolio" class="works-view-all">View All <span>→</span></a>
+      <div class="works-cats" id="works-cats">
+        {categories.map((cat, i) => (
+          <button class={`cat-btn ${i === 0 ? "active" : ""}`} data-cat={cat}>{cat}</button>
+        ))}
+      </div>
     </div>
 
     <!-- Vertical scroll stack -->
