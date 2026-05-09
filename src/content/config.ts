@@ -53,14 +53,19 @@ const news = defineCollection({
 const specbook = defineCollection({
   loader: glob({ pattern: '*.md', base: join(__dirname, 'specbook') }),
   schema: z.object({
-    title:    z.string(),
-    date:     z.string(),
-    category: z.string().optional(),
-    tags:     z.array(z.string()).optional(),
-    cover:    z.string().optional(),
-    excerpt:  z.string().optional(),
-    featured: z.boolean().optional(),
-    blocks:   z.array(z.any()).optional(),
+    title:           z.string(),
+    date:            z.string(),
+    category:        z.string().optional(),
+    tags:            z.array(z.string()).optional(),
+    cover:           z.string().optional(),
+    excerpt:         z.string().optional(),
+    featured:        z.boolean().optional(),
+    draft:           z.boolean().optional().default(false),
+    author:          z.string().optional(),
+    lang:            z.string().optional().default('en'),
+    seo_title:       z.string().optional(),
+    seo_description: z.string().optional(),
+    blocks:          z.array(z.any()).optional(),
   }),
 });
 
