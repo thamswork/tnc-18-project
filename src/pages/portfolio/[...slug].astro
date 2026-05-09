@@ -1,11 +1,18 @@
 ---
+import fsSync from "node:fs";
 import Layout from "../../layouts/Layout.astro";
 import Navbar from "../../components/Navbar.astro";
 import Footer from "../../components/Footer.astro";
 import { getCollection, render } from "astro:content";
 
 export async function getStaticPaths() {
-  const projects = await getCollection("projects");
+  const { readFileSync } = await import("node:fs");
+  const allP = await getCollection("projects");
+  const projects = allP.filter((p: any) => {
+    if (!p.filePath) return true;
+    const raw = readFileSync(p.filePath, "utf-8");
+    return !/^draft:\s*true/m.test(raw);
+  });
   return projects.map(p => ({
     params: {
       slug: p.data.title
@@ -22,8 +29,12 @@ const { project } = Astro.props;
 const d = project.data;
 const { Content } = await render(project);
 
-const allProjects = await getCollection("projects");
-const sorted = allProjects.sort((a, b) => b.data.year - a.data.year);
+const allProjects = (await getCollection("projects")).filter((p: any) => {
+  if (!p.filePath) return true;
+  const raw = fsSync.readFileSync(p.filePath, "utf-8");
+  return !/^draft:\s*true/m.test(raw);
+});
+const sorted = allProjects.sort((a: any, b: any) => b.data.year - a.data.year);
 const idx = sorted.findIndex(p => p.id === project.id);
 const next = sorted[(idx + 1) % sorted.length];
 const nextSlug = next?.data.title.toLowerCase().replace(/[\u2018\u2019'']/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
