@@ -235,40 +235,45 @@ const htmlBody = mdToHtml(body);
 }
 
   /* ── PROSE ELEMENTS ── */
+  .art-prose {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 4rem var(--pad-x, 5vw) 6rem;
+  }
   .art-prose h2 {
-    font-size: clamp(1.2rem, 2.8vw, 1.7rem);
+    font-size: clamp(1.3rem, 2.8vw, 1.8rem);
     font-weight: 700; letter-spacing: -0.02em;
-    color: var(--ink, #111); line-height: 1.2;
-    margin: 2.5rem 0 0.9rem;
-    text-transform: uppercase;
+    color: var(--ink, #111); line-height: 1.25;
+    margin: 3rem 0 1rem;
+    padding-top: 0.5rem;
   }
   .art-prose h3 {
-    font-size: clamp(0.95rem, 2vw, 1.2rem);
+    font-size: clamp(1rem, 2vw, 1.2rem);
     font-weight: 600; letter-spacing: -0.01em;
     color: var(--ink, #111); line-height: 1.4;
-    margin: 1.8rem 0 0.6rem;
+    margin: 2rem 0 0.75rem;
   }
   .art-prose p {
-    font-size: 0.95rem; line-height: 1.9;
-    color: var(--ink-mid, #333); font-weight: 300;
-    margin-bottom: 1.25rem;
+    font-size: 1rem; line-height: 1.9;
+    color: #444; font-weight: 300;
+    margin-bottom: 1.5rem;
   }
   .art-prose strong { font-weight: 600; color: var(--ink, #111); }
-  .art-prose a { color: var(--navy, #1A3A6B); text-decoration: underline; text-underline-offset: 3px; }
+  .art-prose a { color: var(--navy, #1A3A6B); text-decoration: underline; text-underline-offset: 3px; transition: opacity 0.2s; }
   .art-prose a:hover { opacity: 0.7; }
-  .art-prose ul { padding-left: 1.25rem; margin-bottom: 1.25rem; }
-  .art-prose li { font-size: 0.95rem; line-height: 1.9; color: var(--ink-mid, #333); font-weight: 300; margin-bottom: 0.4rem; }
-  .art-prose table { width: 100%; border-collapse: collapse; margin: 2rem 0; font-size: 0.85rem; }
-  .art-prose td { padding: 0.75rem 1rem; border-bottom: 1px solid rgba(17,17,17,0.08); color: var(--ink-mid, #333); line-height: 1.6; }
-  .art-prose tr:first-child td { font-weight: 600; color: var(--ink, #111); border-bottom: 2px solid rgba(17,17,17,0.15); }
-  .art-prose hr { border: none; border-top: 1px solid rgba(17,17,17,0.1); margin: 2.5rem 0; }
+  .art-prose ul { padding-left: 1.5rem; margin-bottom: 1.5rem; }
+  .art-prose li { font-size: 1rem; line-height: 1.9; color: #444; font-weight: 300; margin-bottom: 0.5rem; }
+  .art-prose table { width: 100%; border-collapse: collapse; margin: 2.5rem 0; font-size: 0.9rem; }
+  .art-prose td { padding: 0.85rem 1rem; border-bottom: 1px solid rgba(17,17,17,0.08); color: #444; line-height: 1.6; }
+  .art-prose tr:first-child td { font-weight: 600; color: var(--ink, #111); border-bottom: 2px solid rgba(17,17,17,0.15); background: rgba(17,17,17,0.02); }
+  .art-prose hr { border: none; border-top: 1px solid rgba(17,17,17,0.1); margin: 3rem 0; }
   /* Thai overrides */
   .art-prose-th h2, .art-prose-th h3, .art-prose-th p, .art-prose-th li, .art-prose-th td {
     font-family: "Noto Sans Thai", system-ui, sans-serif !important;
     text-transform: none !important; letter-spacing: 0 !important;
     -webkit-font-smoothing: antialiased;
   }
-  .art-prose-th h2 { font-weight: 700; line-height: 1.5; }
-  .art-prose-th h3 { font-weight: 600; line-height: 1.7; }
+  .art-prose-th h2 { font-weight: 700; line-height: 1.5; font-size: clamp(1.2rem, 2.5vw, 1.6rem); }
+  .art-prose-th h3 { font-weight: 600; line-height: 1.7; font-size: clamp(1rem, 2vw, 1.15rem); }
   .art-prose-th p, .art-prose-th li { line-height: 2.2; font-size: 1rem; }
 </style>
