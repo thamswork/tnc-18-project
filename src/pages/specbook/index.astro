@@ -70,11 +70,12 @@ try {
     </section>
 
     {thPosts.length > 0 && (
-      <section class="sb-feed sb-grid sb-thai-section">
+      <section class="sb-thai-section">
         <div class="sb-thai-header">
           <span class="sb-thai-label">ภาษาไทย</span>
           <h2 class="sb-thai-title">บทความภาษาไทย</h2>
         </div>
+        <div class="sb-thai-grid">
         {thPosts.map((post: any, i: number) => (
           <article class="sb-card" data-reveal>
             <a href={`/specbook/${post.id}`} class="sb-card-link">
@@ -96,6 +97,7 @@ try {
             </a>
           </article>
         ))}
+        </div>
       </section>
     )}
   </main>
@@ -128,6 +130,8 @@ try {
   .sb-date { font-family: 'Courier New', monospace; font-size: 0.5rem; letter-spacing: 0.14em; color: rgba(26,26,26,0.35); }
   .sb-tag { font-family: 'Courier New', monospace; font-size: 0.46rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.35); border: 0.5px solid rgba(26,26,26,0.15); padding: 0.15rem 0.5rem; }
   .sb-card-title { font-family: var(--font-display, 'Tenor Sans', serif); font-size: clamp(1.15rem,2.5vw,1.65rem); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink, #1A1A1A); line-height: 1.1; margin-bottom: 0.65rem; transition: color 0.2s; }
+  .sb-card-title-th { font-family: "Noto Sans Thai", system-ui, sans-serif !important; font-weight: 700; text-transform: none !important; letter-spacing: 0 !important; line-height: 1.45; font-size: clamp(1rem, 2.2vw, 1.35rem); }
+  .sb-excerpt-th { font-family: "Noto Sans Thai", system-ui, sans-serif !important; font-weight: 300; line-height: 2; letter-spacing: 0; font-size: 0.875rem; }
   .sb-card-link:hover .sb-card-title { color: var(--navy, #1A3A6B); }
   .sb-excerpt { font-size: 0.85rem; line-height: 1.85; color: var(--ink-light, #6B6B6B); font-weight: 300; max-width: 640px; }
   .sb-empty { padding: 5rem var(--pad-x, 5vw); font-size: 0.875rem; color: var(--ink-light, #6B6B6B); }
