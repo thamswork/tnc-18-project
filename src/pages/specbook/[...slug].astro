@@ -97,6 +97,19 @@ const htmlBody = mdToHtml(body);
   </main>
 
   <Footer ctaTitle="Start a Project" ctaSub="Senior partners only. We reply within 2 hours." />
+<script>
+  const reveals = document.querySelectorAll('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.05 });
+    reveals.forEach(el => io.observe(el));
+  } else {
+    reveals.forEach(el => el.classList.add('revealed'));
+  }
+</script>
 </Layout>
 
 <style>
