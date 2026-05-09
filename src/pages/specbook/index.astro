@@ -102,6 +102,20 @@ try {
     )}
   </main>
   <Footer ctaTitle="Want to Work Together?" ctaSub="Senior partners only. We reply within 2 hours." />
+<script>
+  const cards = document.querySelectorAll('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
+    }, { threshold: 0.08 });
+    cards.forEach((c, i) => {
+      (c as HTMLElement).style.transitionDelay = `${(i % 3) * 0.08}s`;
+      io.observe(c);
+    });
+  } else {
+    cards.forEach(c => c.classList.add('revealed'));
+  }
+</script>
 </Layout>
 
 <style>
