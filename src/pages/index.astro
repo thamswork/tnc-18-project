@@ -482,27 +482,28 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 .works-cats::-webkit-scrollbar { display: none; }
 
 @media (max-width: 768px) {
-  .works-cats { gap: 0.5rem; flex-wrap: wrap; }
-  .works-header { flex-wrap: wrap; gap: 1rem; padding-bottom: 1.5rem; }
+  .works-header { flex-wrap: wrap; gap: 0.75rem; padding-bottom: 1.5rem; align-items: flex-start; }
   .works-header-left { width: 100%; }
-  .works-view-all { align-self: flex-end; }
+  .works-view-all { margin-left: auto; }
+  .works-cats { gap: 0.4rem; flex-wrap: wrap; overflow-x: visible; }
   .cat-btn {
-    font-size: 0.6rem; font-weight: 600;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    padding: 0.45rem 1rem;
-    border: 1px solid rgba(17,17,17,0.15);
-    border-radius: 999px;
-    background: transparent;
-    color: var(--ink-light, #777);
-    white-space: nowrap;
+    font-size: 0.58rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    padding: 0.4rem 0.9rem !important;
+    border: 1px solid rgba(17,17,17,0.2) !important;
+    border-radius: 999px !important;
+    background: transparent !important;
+    color: var(--ink-light, #777) !important;
+    white-space: nowrap !important;
   }
   .cat-btn.active {
-    background: var(--ink, #111);
-    color: #fff;
-    border-color: var(--ink, #111);
-    font-weight: 600;
+    background: var(--ink, #111) !important;
+    color: #fff !important;
+    border-color: var(--ink, #111) !important;
   }
-  .cat-btn::after { display: none; }
+  .cat-btn::after { display: none !important; }
 }
 
 .cat-btn {

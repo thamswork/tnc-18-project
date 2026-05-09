@@ -235,8 +235,8 @@ collections:
 
   # ── SPECBOOK ─────────────────────────────────────────────────────
   - name: specbook
-    label: "Specbook"
-    label_singular: "Specbook Entry"
+    label: "📰 News & Articles"
+    label_singular: "Article"
     folder: src/content/specbook
     create: true
     delete: true
@@ -245,13 +245,26 @@ collections:
     fields:
       - { label: "Title",           name: title,           widget: string }
       - { label: "Date",            name: date,            widget: datetime, format: "YYYY-MM-DD" }
-      - { label: "Category",        name: category,        widget: string,   required: false }
-      - { label: "Tags",            name: tags,            widget: list,     required: false }
-      - { label: "Cover Image",     name: cover,           widget: image,    required: false }
-      - { label: "Excerpt",         name: excerpt,         widget: text,     required: false }
-      - { label: "SEO Title",       name: seo_title,       widget: string,   required: false }
-      - { label: "SEO Description", name: seo_description, widget: text,     required: false }
-      - { label: "Featured",        name: featured,        widget: boolean,  default: false }
+      - label: "Category"
+        name: category
+        widget: select
+        options: [Retail Design, Interior Design, Pop-up Store, Exhibition, Insight, News, Project Reveal]
+        required: false
+      - { label: "Tags",            name: tags,            widget: list,     required: false,
+          hint: "Add tags e.g. Bangkok, Retail, Pop-up" }
+      - { label: "Cover Image",     name: cover,           widget: image,    required: false,
+          hint: "Recommended: 1200x630px for best SEO and sharing" }
+      - { label: "Excerpt / Summary", name: excerpt,       widget: text,     required: false,
+          hint: "Short summary shown on the news card and in Google search results" }
+      - { label: "Author",          name: author,          widget: string,   required: false,
+          default: "TNC Build Studio" }
+      - { label: "SEO Title",       name: seo_title,       widget: string,   required: false,
+          hint: "Leave blank to use article title. Max 60 characters." }
+      - { label: "SEO Description", name: seo_description, widget: text,     required: false,
+          hint: "Leave blank to use excerpt. Max 160 characters." }
+      - { label: "Featured on homepage", name: featured,   widget: boolean,  default: false }
+      - { label: "Hide from site",  name: draft,           widget: boolean,  default: false,
+          hint: "Turn ON to hide this article without deleting it" }
       - label: "Content Blocks"
         name: blocks
         widget: list
