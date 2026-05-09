@@ -120,19 +120,62 @@ try {
 
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  .sb-main { padding-top: 72px; background: var(--bg, #F8F7F4); min-height: 100vh; }
-  .sb-header { padding: 5rem var(--pad-x, 5vw) 3rem; border-bottom: 0.5px solid rgba(26,26,26,0.08); }
-  .sb-header-inner { max-width: 640px; }
-  .sb-eyebrow { font-family: 'Courier New', monospace; font-size: 0.55rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--navy, #1A3A6B); margin-bottom: 0.75rem; }
-  .sb-title { font-family: var(--font-display, 'Tenor Sans', serif); font-size: clamp(2.5rem,7vw,5rem); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink, #1A1A1A); line-height: 0.95; margin-bottom: 1.25rem; }
-  .sb-sub { font-size: 0.9rem; line-height: 1.85; color: var(--ink-light, #6B6B6B); font-weight: 300; }
+  .sb-main { padding-top: 64px; background: var(--bg, #F4F3EF); min-height: 100vh; }
+
+  /* ── HEADER ── */
+  .sb-header {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 4rem var(--pad-x, 5vw) 2.5rem;
+    border-bottom: 0.5px solid rgba(26,26,26,0.08);
+  }
+  @media (min-width: 768px) {
+    .sb-header {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 3rem;
+    }
+  }
+  .sb-header-inner { display: flex; flex-direction: column; }
+  .sb-eyebrow {
+    font-size: 0.55rem; font-weight: 600;
+    letter-spacing: 0.26em; text-transform: uppercase;
+    color: var(--navy, #1A3A6B);
+    margin-bottom: 0.75rem; display: block;
+  }
+  .sb-title {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 800; letter-spacing: -0.04em;
+    line-height: 0.92; color: var(--ink, #111);
+    text-transform: uppercase;
+  }
+  .sb-sub { font-size: 0.85rem; line-height: 1.85; color: var(--ink-light, #6B6B6B); font-weight: 300; margin-top: 1rem; }
+
+  /* ── GRID ── */
   .sb-feed { display: flex; flex-direction: column; }
-  .sb-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: rgba(26,26,26,0.06); margin: 0 var(--pad-x, 5vw); }
-  .sb-card { background: var(--bg, #F8F7F4); opacity: 0; transform: translateY(24px); transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1); }
+  .sb-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 2.5rem var(--pad-x, 5vw) 5rem;
+  }
+  @media (min-width: 600px) { .sb-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .sb-grid { grid-template-columns: repeat(3, 1fr); gap: 1.75rem; } }
+
+  /* ── CARD ── */
+  .sb-card {
+    background: var(--bg, #F4F3EF);
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1);
+  }
   .sb-card.revealed { opacity: 1; transform: none; }
   .sb-card-link { display: block; text-decoration: none; color: inherit; }
-  .sb-info { padding: 1.25rem 1.5rem 1.5rem; background: var(--bg, #F8F7F4); }
-  .sb-thumb { position: relative; width: 100%; aspect-ratio: 4/3; overflow: hidden; background: var(--bg-dark, #EFEDE8); margin-bottom: 1rem; }
+  .sb-thumb {
+    position: relative; width: 100%; aspect-ratio: 4/3;
+    overflow: hidden; background: var(--bg-dark, #EFEDE8); margin-bottom: 1rem;
+  }
   .sb-thumb-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s cubic-bezier(0.4,0,0.2,1); }
   .sb-card-link:hover .sb-thumb-img { transform: scale(1.03); }
   .sb-thumb-ph { width: 100%; height: 100%; background: var(--bg-dark, #EFEDE8); }
@@ -140,89 +183,30 @@ try {
   .sb-card-link:hover .sb-thumb-overlay { background: rgba(14,33,64,0.4); }
   .sb-read { font-family: 'Courier New', monospace; font-size: 0.62rem; letter-spacing: 0.26em; text-transform: uppercase; color: #fff; opacity: 0; transform: translateY(6px); transition: opacity 0.3s, transform 0.3s; }
   .sb-card-link:hover .sb-read { opacity: 1; transform: none; }
-  .sb-meta { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.65rem; }
+  .sb-info { padding: 0 0 1rem; }
+  .sb-meta { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.6rem; }
   .sb-cat { font-family: 'Courier New', monospace; font-size: 0.5rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--navy, #1A3A6B); font-weight: 600; }
   .sb-date { font-family: 'Courier New', monospace; font-size: 0.5rem; letter-spacing: 0.14em; color: rgba(26,26,26,0.35); }
   .sb-tag { font-family: 'Courier New', monospace; font-size: 0.46rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(26,26,26,0.35); border: 0.5px solid rgba(26,26,26,0.15); padding: 0.15rem 0.5rem; }
-  .sb-card-title { font-family: var(--font-display, 'Tenor Sans', serif); font-size: clamp(1.15rem,2.5vw,1.65rem); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink, #1A1A1A); line-height: 1.1; margin-bottom: 0.65rem; transition: color 0.2s; }
+  .sb-card-title { font-size: clamp(1rem, 2.2vw, 1.4rem); font-weight: 700; letter-spacing: -0.02em; text-transform: uppercase; color: var(--ink, #1A1A1A); line-height: 1.15; margin-bottom: 0.6rem; transition: color 0.2s; }
   .sb-card-link:hover .sb-card-title { color: var(--navy, #1A3A6B); }
-  .sb-excerpt { font-size: 0.85rem; line-height: 1.85; color: var(--ink-light, #6B6B6B); font-weight: 300; max-width: 640px; }
+  .sb-excerpt { font-size: 0.82rem; line-height: 1.8; color: var(--ink-light, #6B6B6B); font-weight: 300; }
   .sb-empty { padding: 5rem var(--pad-x, 5vw); font-size: 0.875rem; color: var(--ink-light, #6B6B6B); }
   .sb-empty a { color: var(--navy, #1A3A6B); text-decoration: none; }
-  @media (min-width: 768px) {
-    .sb-header { padding: 7rem 8vw 4rem; }
-    .sb-grid { grid-template-columns: repeat(2, 1fr); margin: 0 8vw; }
-    .sb-card-link { padding: 1.5rem; }
-  }
-  @media (min-width: 1024px) {
-    .sb-grid { grid-template-columns: repeat(3, 1fr); margin: 0 10vw; }
-  }
-  @media (min-width: 1200px) {
-    .sb-header { padding: 8rem 10vw 5rem; }
-  }
 
   /* ── THAI SECTION ── */
   .sb-thai-section {
-    padding: 4rem var(--pad-x, 5vw);
+    padding: 4rem var(--pad-x, 5vw) 6rem;
     border-top: 1px solid rgba(26,26,26,0.08);
-    background: var(--bg, #F8F7F4);
+    background: var(--bg, #F4F3EF);
   }
-  .sb-thai-header {
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-    margin-bottom: 2rem;
-  }
-  .sb-thai-label {
-    font-size: 0.6rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--navy, #1A3A6B);
-    font-family: "Noto Sans Thai", system-ui, sans-serif;
-  }
-  .sb-thai-title {
-    font-family: "Noto Sans Thai", system-ui, sans-serif;
-    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-    font-weight: 800;
-    letter-spacing: -0.01em;
-    line-height: 1.2;
-    color: var(--ink, #111);
-  }
-  .sb-thai-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1px;
-    background: rgba(26,26,26,0.06);
-  }
-  @media (min-width: 768px) {
-    .sb-thai-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  @media (min-width: 1024px) {
-    .sb-thai-grid { grid-template-columns: repeat(3, 1fr); }
-  }
-  .sb-card-title-th {
-    font-family: "Noto Sans Thai", system-ui, sans-serif !important;
-    font-weight: 700;
-    text-transform: none !important;
-    letter-spacing: 0 !important;
-    line-height: 1.5;
-    font-size: clamp(1rem, 2.2vw, 1.3rem);
-    font-feature-settings: "kern" 1;
-    -webkit-font-smoothing: antialiased;
-  }
-  .sb-excerpt-th {
-    font-family: "Noto Sans Thai", system-ui, sans-serif !important;
-    font-weight: 300;
-    line-height: 2;
-    letter-spacing: 0;
-    font-size: 0.875rem;
-    -webkit-font-smoothing: antialiased;
-  }
-  .sb-thai-section .sb-card { background: var(--bg, #F8F7F4); }
-  .sb-thai-section .sb-cat,
-  .sb-thai-section .sb-date {
-    font-family: "Noto Sans Thai", system-ui, sans-serif;
-    letter-spacing: 0.05em;
-  }
+  .sb-thai-header { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 2rem; }
+  .sb-thai-label { font-size: 0.55rem; font-weight: 600; letter-spacing: 0.26em; text-transform: uppercase; color: var(--navy, #1A3A6B); font-family: "Noto Sans Thai", system-ui, sans-serif; }
+  .sb-thai-title { font-family: "Noto Sans Thai", system-ui, sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; letter-spacing: -0.01em; line-height: 1.1; color: var(--ink, #111); }
+  .sb-thai-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+  @media (min-width: 600px) { .sb-thai-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .sb-thai-grid { grid-template-columns: repeat(3, 1fr); gap: 1.75rem; } }
+  .sb-card-title-th { font-family: "Noto Sans Thai", system-ui, sans-serif !important; font-weight: 700; text-transform: none !important; letter-spacing: 0 !important; line-height: 1.5; font-size: clamp(1rem, 2.2vw, 1.25rem); -webkit-font-smoothing: antialiased; }
+  .sb-excerpt-th { font-family: "Noto Sans Thai", system-ui, sans-serif !important; font-weight: 300; line-height: 2; letter-spacing: 0; font-size: 0.82rem; -webkit-font-smoothing: antialiased; }
+  .sb-thai-section .sb-cat, .sb-thai-section .sb-date { letter-spacing: 0.08em; }
 </style>
