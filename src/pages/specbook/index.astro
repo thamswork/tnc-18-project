@@ -127,7 +127,7 @@ try {
   .sb-title { font-family: var(--font-display, 'Tenor Sans', serif); font-size: clamp(2.5rem,7vw,5rem); font-weight: 400; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink, #1A1A1A); line-height: 0.95; margin-bottom: 1.25rem; }
   .sb-sub { font-size: 0.9rem; line-height: 1.85; color: var(--ink-light, #6B6B6B); font-weight: 300; }
   .sb-feed { display: flex; flex-direction: column; }
-  .sb-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: rgba(26,26,26,0.06); }
+  .sb-grid { display: grid; grid-template-columns: 1fr; gap: 1px; background: rgba(26,26,26,0.06); margin: 0 var(--pad-x, 5vw); }
   .sb-card { background: var(--bg, #F8F7F4); opacity: 0; transform: translateY(24px); transition: opacity 0.85s cubic-bezier(0.16,1,0.3,1), transform 0.85s cubic-bezier(0.16,1,0.3,1); }
   .sb-card.revealed { opacity: 1; transform: none; }
   .sb-card-link { display: block; text-decoration: none; color: inherit; }
@@ -151,11 +151,11 @@ try {
   .sb-empty a { color: var(--navy, #1A3A6B); text-decoration: none; }
   @media (min-width: 768px) {
     .sb-header { padding: 7rem 8vw 4rem; }
-    .sb-grid { grid-template-columns: repeat(2, 1fr); }
+    .sb-grid { grid-template-columns: repeat(2, 1fr); margin: 0 8vw; }
     .sb-card-link { padding: 1.5rem; }
   }
   @media (min-width: 1024px) {
-    .sb-grid { grid-template-columns: repeat(3, 1fr); }
+    .sb-grid { grid-template-columns: repeat(3, 1fr); margin: 0 10vw; }
   }
   @media (min-width: 1200px) {
     .sb-header { padding: 8rem 10vw 5rem; }
@@ -195,15 +195,21 @@ try {
     gap: 1px;
     background: rgba(26,26,26,0.06);
   }
-  @media (min-width: 768px) { .sb-thai-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 1024px) { .sb-thai-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 768px) {
+    .sb-thai-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .sb-thai-grid { grid-template-columns: repeat(3, 1fr); }
+  }
   .sb-card-title-th {
     font-family: "Noto Sans Thai", system-ui, sans-serif !important;
     font-weight: 700;
     text-transform: none !important;
     letter-spacing: 0 !important;
-    line-height: 1.45;
-    font-size: clamp(1rem, 2.2vw, 1.35rem);
+    line-height: 1.5;
+    font-size: clamp(1rem, 2.2vw, 1.3rem);
+    font-feature-settings: "kern" 1;
+    -webkit-font-smoothing: antialiased;
   }
   .sb-excerpt-th {
     font-family: "Noto Sans Thai", system-ui, sans-serif !important;
@@ -211,7 +217,9 @@ try {
     line-height: 2;
     letter-spacing: 0;
     font-size: 0.875rem;
+    -webkit-font-smoothing: antialiased;
   }
+  .sb-thai-section .sb-card { background: var(--bg, #F8F7F4); }
   .sb-thai-section .sb-cat,
   .sb-thai-section .sb-date {
     font-family: "Noto Sans Thai", system-ui, sans-serif;
