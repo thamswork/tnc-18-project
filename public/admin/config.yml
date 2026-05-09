@@ -265,6 +265,17 @@ collections:
       - { label: "Featured on homepage", name: featured,   widget: boolean,  default: false }
       - { label: "Hide from site",  name: draft,           widget: boolean,  default: false,
           hint: "Turn ON to hide this article without deleting it" }
+      - label: "Language"
+        name: lang
+        widget: select
+        options:
+          - { label: "English", value: "en" }
+          - { label: "ภาษาไทย (Thai)", value: "th" }
+        default: "en"
+        required: false
+        hint: "Select Thai for Thai-language articles"
+      - { label: "Article Body (Markdown)",  name: body,  widget: markdown, required: false,
+          hint: "Write your article here. Supports headings, bold, links, lists, and tables." }
       - label: "Content Blocks"
         name: blocks
         widget: list

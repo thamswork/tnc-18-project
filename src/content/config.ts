@@ -66,6 +66,7 @@ const specbook = defineCollection({
     seo_title:       z.string().optional(),
     seo_description: z.string().optional(),
     blocks:          z.array(z.any()).optional(),
+    body:            z.string().optional(),
   }),
 });
 
