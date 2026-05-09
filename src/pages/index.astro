@@ -8,9 +8,9 @@ import homepageData from "../content/pages/homepage.json";
 import { getCollection } from "astro:content";
 const allNews = await getCollection("specbook");
 const newsItems = allNews
-  .filter((n: any) => !n.data.draft)
+  .filter((n: any) => !n.data.draft && n.data.lang !== 'th')
   .sort((a: any, b: any) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
-  .slice(0, 3);
+  .slice(0, 6);
 import contactData from "../content/settings/contact.json";
 
 const allProjects = await getCollection("projects");
@@ -182,26 +182,31 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
       <h2 class="news-title">News</h2>
       <a href="/specbook" class="news-more">View More →</a>
     </div>
-    <div class="news-cards">
-      {newsItems.map((item: any) => (
-        <a href={`/specbook/${item.id}`} class="news-card">
-          {item.data.cover && (
-            <div class="news-card-img-wrap">
-              <img src={item.data.cover} alt={item.data.title} class="news-card-img" loading="lazy" />
+    <div class="news-carousel-wrap">
+      <div class="news-cards" id="news-carousel">
+        {newsItems.map((item: any) => (
+          <a href={`/specbook/${item.id}`} class="news-card">
+            {item.data.cover && (
+              <div class="news-card-img-wrap">
+                <img src={item.data.cover} alt={item.data.title} class="news-card-img" loading="lazy" />
+              </div>
+            )}
+            <div class="news-card-body">
+              {item.data.category && <span class="news-card-cat">{item.data.category}</span>}
+              <h3 class="news-card-title">{item.data.title}</h3>
+              {item.data.excerpt && <p class="news-card-excerpt">{item.data.excerpt}</p>}
+              <span class="news-card-date">{new Date(item.data.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
+              <span class="news-card-read">Read More →</span>
             </div>
-          )}
-          <div class="news-card-body">
-            {item.data.category && <span class="news-card-cat">{item.data.category}</span>}
-            <h3 class="news-card-title">{item.data.title}</h3>
-            {item.data.excerpt && <p class="news-card-excerpt">{item.data.excerpt}</p>}
-            <span class="news-card-date">{new Date(item.data.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}</span>
-            <span class="news-card-read">Read More →</span>
-          </div>
-        </a>
-      ))}
-      {newsItems.length === 0 && (
-        <p class="news-empty">No news yet. <a href="/admin">Add in CMS →</a></p>
-      )}
+          </a>
+        ))}
+        {newsItems.length === 0 && (
+          <p class="news-empty">No news yet. <a href="/admin">Add in CMS →</a></p>
+        )}
+      </div>
+      <button class="news-arrow news-arrow-prev" id="news-prev" aria-label="Previous">&#8592;</button>
+      <button class="news-arrow news-arrow-next" id="news-next" aria-label="Next">&#8594;</button>
+      <div class="news-dots" id="news-dots"></div>
     </div>
     <!-- Facebook CTA -->
     <div class="news-fb-cta">
@@ -730,14 +735,60 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 .news-title { font-size: clamp(1.75rem,4vw,2.5rem); font-weight: 800; letter-spacing: -0.03em; text-transform: uppercase; color: var(--ink,#111); }
 .news-more { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-light,#777); text-decoration: none; transition: color 0.2s; }
 .news-more:hover { color: var(--ink,#111); }
+.news-carousel-wrap {
+  position: relative;
+}
 .news-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: calc(33.333% - 1rem);
   gap: 1.5rem;
-  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.5rem;
 }
-@media (max-width: 900px) { .news-cards { grid-template-columns: repeat(2,1fr); } }
-@media (max-width: 600px) { .news-cards { grid-template-columns: 1fr; } }
+.news-cards::-webkit-scrollbar { display: none; }
+.news-card { scroll-snap-align: start; }
+@media (max-width: 900px) { .news-cards { grid-auto-columns: calc(50% - 0.75rem); } }
+@media (max-width: 600px) { .news-cards { grid-auto-columns: 85%; } }
+.news-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(17,17,17,0.1);
+  color: var(--ink,#111);
+  width: 2.4rem; height: 2.4rem;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.2s, background 0.2s;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.news-arrow:hover { background: #fff; }
+.news-arrow.hidden { opacity: 0; pointer-events: none; }
+.news-arrow-prev { left: -1.2rem; }
+.news-arrow-next { right: -1.2rem; }
+@media (max-width: 600px) {
+  .news-arrow-prev { left: 0.25rem; }
+  .news-arrow-next { right: 0.25rem; }
+}
+.news-dots {
+  display: flex; justify-content: center; gap: 0.4rem;
+  margin-top: 1.5rem;
+}
+.news-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: rgba(17,17,17,0.15);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.news-dot.active { background: var(--ink,#111); transform: scale(1.3); }
 
 .news-card {
   display: flex; flex-direction: column;
@@ -921,6 +972,63 @@ behold-widget {
 
 /* ── PILLARS: in-view trigger ── */
 (function() {
+  // ── NEWS CAROUSEL ──
+  const carousel = document.getElementById('news-carousel');
+  const prevBtn = document.getElementById('news-prev');
+  const nextBtn = document.getElementById('news-next');
+  const dotsWrap = document.getElementById('news-dots');
+
+  if (carousel && prevBtn && nextBtn) {
+    const cards = carousel.querySelectorAll('.news-card');
+    const total = cards.length;
+    let current = 0;
+
+    // Build dots
+    if (dotsWrap && total > 1) {
+      for (let i = 0; i < total; i++) {
+        const dot = document.createElement('button');
+        dot.className = 'news-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        dot.addEventListener('click', () => scrollTo(i));
+        dotsWrap.appendChild(dot);
+      }
+    }
+
+    function updateDots(idx: number) {
+      dotsWrap?.querySelectorAll('.news-dot').forEach((d, i) => {
+        d.classList.toggle('active', i === idx);
+      });
+    }
+
+    function scrollTo(idx: number) {
+      const card = cards[idx] as HTMLElement;
+      carousel.scrollTo({ left: card.offsetLeft - carousel.offsetLeft, behavior: 'smooth' });
+      current = idx;
+      updateDots(idx);
+      prevBtn.classList.toggle('hidden', idx === 0);
+      nextBtn.classList.toggle('hidden', idx >= total - getVisible());
+    }
+
+    function getVisible() {
+      const w = window.innerWidth;
+      return w <= 600 ? 1 : w <= 900 ? 2 : 3;
+    }
+
+    prevBtn.classList.add('hidden');
+    if (total <= getVisible()) nextBtn.classList.add('hidden');
+
+    prevBtn.addEventListener('click', () => scrollTo(Math.max(0, current - 1)));
+    nextBtn.addEventListener('click', () => scrollTo(Math.min(total - 1, current + 1)));
+
+    carousel.addEventListener('scroll', () => {
+      const cardW = (cards[0] as HTMLElement).offsetWidth + 24;
+      const idx = Math.round(carousel.scrollLeft / cardW);
+      if (idx !== current) { current = idx; updateDots(idx); }
+      prevBtn.classList.toggle('hidden', carousel.scrollLeft < 10);
+      nextBtn.classList.toggle('hidden', carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 10);
+    });
+  }
+
   const pillars = document.querySelectorAll<HTMLElement>(".pillar");
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {

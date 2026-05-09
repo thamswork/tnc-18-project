@@ -56,7 +56,7 @@ const paragraphs = body.trim().split(/\n\n+/).filter(Boolean);
           {d.category && <span class="art-bc-cat">{d.category}</span>}
         </nav>
         <div class="art-hero-bot">
-          <h1 class="art-title">{d.title}</h1>
+          <h1 class={`art-title${d.lang === "th" ? " art-title-th" : ""}`}>{d.title}</h1>
           <p class="art-date">
             {new Date(d.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
@@ -66,7 +66,7 @@ const paragraphs = body.trim().split(/\n\n+/).filter(Boolean);
 
     {d.excerpt && (
       <div class="art-lede" data-reveal>
-        <p class="art-lede-text">{d.excerpt}</p>
+        <p class={`art-lede-text${d.lang === "th" ? " art-lede-text-th" : ""}`}>{d.excerpt}</p>
       </div>
     )}
 
@@ -76,7 +76,7 @@ const paragraphs = body.trim().split(/\n\n+/).filter(Boolean);
       </div>
     )}
 
-    <div class="art-prose" data-reveal>
+    <div class={`art-prose${d.lang === "th" ? " art-prose-th" : ""}`} data-reveal>
       {paragraphs.map((p: string) => (
         p.startsWith('#') 
           ? <h2 class="art-heading">{p.replace(/^#+\s*/, '')}</h2>
