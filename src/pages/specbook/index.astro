@@ -11,8 +11,8 @@ try {
   const sorted = all
     .filter((p: any) => !p.data.draft)
     .sort((a: any, b: any) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime());
-  posts = sorted.filter((p: any) => p.data.lang !== 'th');
-  thPosts = sorted.filter((p: any) => p.data.lang === 'th');
+  posts = sorted.filter((p: any) => p.data.lang !== 'th' && !p.id.startsWith('th-'));
+  thPosts = sorted.filter((p: any) => p.data.lang === 'th' || p.id.startsWith('th-'));
 } catch(e) {
   posts = [];
   thPosts = [];

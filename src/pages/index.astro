@@ -8,7 +8,7 @@ import homepageData from "../content/pages/homepage.json";
 import { getCollection } from "astro:content";
 const allNews = await getCollection("specbook");
 const newsItems = allNews
-  .filter((n: any) => !n.data.draft && n.data.lang !== 'th')
+  .filter((n: any) => !n.data.draft && n.data.lang !== 'th' && !n.id.startsWith('th-'))
   .sort((a: any, b: any) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 6);
 import contactData from "../content/settings/contact.json";
