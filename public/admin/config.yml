@@ -1,247 +1,237 @@
 backend:
- name: github
- repo: thamswork/tnc-18-project
- branch: main
- base_url: https://tnc-18-auth.tyme-sak.workers.dev
+  name: github
+  repo: thamswork/tnc-18-project
+  branch: main
+  base_url: https://tnc-18-auth.tyme-sak.workers.dev
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
-# 
-# COLLECTIONS
-# 
-
 collections:
 
- # 1. PORTFOLIO 
- - name: projects
- label: " Portfolio"
- label_singular: "Project"
- folder: src/content/projects
- create: true
- delete: true
- slug: "{{slug}}"
- identifier_field: title
- summary: "{{title}} — {{year}}"
- sortable_fields: [order, year, title]
- fields:
- - { label: " Project Title", name: title, widget: string }
- - { label: " Year", name: year, widget: number, value_type: int }
- - label: " Category"
- name: category
- widget: select
- options: [Residential, Commercial, Interior, Mixed-Use, Hospitality, Retail, Pop-up, Exhibition & Event]
- - { label: " Client", name: client, widget: string, required: false }
- - { label: " Location / Mall", name: location, widget: string, required: false,
- hint: "e.g. Siam Paragon — shown on the portfolio card" }
- - { label: " Size (e.g. 120 SQ.M)", name: size, widget: string, required: false }
- - { label: " Cover Image", name: cover, widget: image,
- hint: "Recommended: 1920×1080px minimum. Upload to Cloudinary first." }
- - label: " Media Type"
- name: media_type
- widget: select
- options: [photo, video]
- default: photo
- required: false
- - { label: " Hero Video URL", name: video_url, widget: string, required: false,
- hint: "Paste a direct .mp4 URL (Cloudinary). Leave blank to use Cover Image." }
- - label: " Gallery Images"
- name: gallery
- widget: list
- required: false
- field: { label: Image, name: image, widget: image }
- - { label: " Short Description", name: description, widget: text, required: false }
- - { label: " Featured on Homepage", name: featured, widget: boolean, default: false }
- - label: " Sort Order"
- name: order
- widget: number
- value_type: int
- required: false
- hint: "1 = first. Leave blank to sort by year."
- - label: " Hide from Site"
- name: draft
- widget: boolean
- default: false
- hint: "Turn ON to hide without deleting"
- - { label: " Full Project Description", name: body, widget: markdown, required: false }
+  # ── PORTFOLIO ────────────────────────────────
+  - name: projects
+    label: "Portfolio"
+    label_singular: "Project"
+    folder: src/content/projects
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{title}} — {{year}}"
+    sortable_fields: [order, year, title]
+    fields:
+      - { label: "Project Title",          name: title,       widget: string }
+      - { label: "Year",                   name: year,        widget: number, value_type: int }
+      - label: "Category"
+        name: category
+        widget: select
+        options: [Residential, Commercial, Interior, Mixed-Use, Hospitality, Retail, Pop-up, Exhibition & Event]
+      - { label: "Client",                 name: client,      widget: string,  required: false }
+      - { label: "Location / Mall",        name: location,    widget: string,  required: false,
+          hint: "e.g. Siam Paragon — shown on the portfolio card" }
+      - { label: "Size (e.g. 120 SQ.M)",  name: size,        widget: string,  required: false }
+      - { label: "Cover Image",            name: cover,       widget: image,
+          hint: "Recommended: 1920x1080px minimum. Upload to Cloudinary first." }
+      - label: "Media Type"
+        name: media_type
+        widget: select
+        options: [photo, video]
+        default: photo
+        required: false
+      - { label: "Hero Video URL",         name: video_url,   widget: string,  required: false,
+          hint: "Paste a direct .mp4 URL (Cloudinary). Leave blank to use Cover Image." }
+      - label: "Gallery Images"
+        name: gallery
+        widget: list
+        required: false
+        field: { label: Image, name: image, widget: image }
+      - { label: "Short Description",      name: description, widget: text,    required: false }
+      - { label: "Featured on Homepage",   name: featured,    widget: boolean, default: false }
+      - label: "Sort Order (1 = first)"
+        name: order
+        widget: number
+        value_type: int
+        required: false
+        hint: "Leave blank to sort by year"
+      - label: "Hide from Site"
+        name: draft
+        widget: boolean
+        default: false
+        hint: "Turn ON to hide without deleting"
+      - { label: "Full Project Description", name: body,      widget: markdown, required: false }
 
- # 2. NEWS & ARTICLES 
- - name: specbook
- label: " News & Articles"
- label_singular: "Article"
- folder: src/content/specbook
- create: true
- delete: true
- slug: "{{slug}}"
- identifier_field: title
- summary: "{{title}} — {{date}}"
- sortable_fields: [date, title]
- fields:
- - { label: " Title", name: title, widget: string }
- - { label: " Publish Date", name: date, widget: datetime, format: "YYYY-MM-DD" }
- - label: " Category"
- name: category
- widget: select
- options: [Retail Design, Interior Design, Pop-up Store, Exhibition, Insight, News, Project Reveal]
- required: false
- - label: " Language"
- name: lang
- widget: select
- options:
- - { label: "English", value: "en" }
- - { label: "ภาษาไทย (Thai)", value: "th" }
- default: "en"
- required: false
- - { label: " Cover Image", name: cover, widget: image, required: false,
- hint: "Recommended: 1200×630px" }
- - { label: " Excerpt / Summary", name: excerpt, widget: text, required: false,
- hint: "Shown on news cards and in Google search results" }
- - { label: " Author", name: author, widget: string, required: false,
- default: "TNC Build Studio" }
- - { label: " Article Body", name: body, widget: markdown, required: false,
- hint: "Write your article here. Supports headings, bold, links, lists, tables." }
- - { label: " SEO Title", name: seo_title, widget: string, required: false,
- hint: "Leave blank to use article title. Max 60 characters." }
- - { label: " SEO Description", name: seo_description, widget: text, required: false,
- hint: "Leave blank to use excerpt. Max 160 characters." }
- - { label: " Tags", name: tags, widget: list, required: false,
- hint: "e.g. Bangkok, Retail, Pop-up" }
- - { label: " Featured on Homepage", name: featured, widget: boolean, default: false }
- - { label: " Hide from Site", name: draft, widget: boolean, default: false,
- hint: "Turn ON to hide without deleting" }
+  # ── NEWS & ARTICLES ──────────────────────────
+  - name: specbook
+    label: "News & Articles"
+    label_singular: "Article"
+    folder: src/content/specbook
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: title
+    summary: "{{title}} — {{date}}"
+    sortable_fields: [date, title]
+    fields:
+      - { label: "Title",                  name: title,    widget: string }
+      - { label: "Publish Date",           name: date,     widget: datetime, format: "YYYY-MM-DD" }
+      - label: "Category"
+        name: category
+        widget: select
+        options: [Retail Design, Interior Design, Pop-up Store, Exhibition, Insight, News, Project Reveal]
+        required: false
+      - label: "Language"
+        name: lang
+        widget: select
+        options:
+          - { label: "English", value: "en" }
+          - { label: "Thai", value: "th" }
+        default: "en"
+        required: false
+      - { label: "Cover Image",            name: cover,    widget: image,    required: false,
+          hint: "Recommended: 1200x630px" }
+      - { label: "Excerpt / Summary",      name: excerpt,  widget: text,     required: false,
+          hint: "Shown on news cards and in Google search results" }
+      - { label: "Author",                 name: author,   widget: string,   required: false,
+          default: "TNC Build Studio" }
+      - { label: "Article Body",           name: body,     widget: markdown, required: false,
+          hint: "Write your article here. Supports headings, bold, links, lists, tables." }
+      - { label: "SEO Title",              name: seo_title, widget: string,  required: false,
+          hint: "Leave blank to use article title. Max 60 characters." }
+      - { label: "SEO Description",        name: seo_description, widget: text, required: false,
+          hint: "Leave blank to use excerpt. Max 160 characters." }
+      - { label: "Tags",                   name: tags,     widget: list,     required: false,
+          hint: "e.g. Bangkok, Retail, Pop-up" }
+      - { label: "Featured on Homepage",   name: featured, widget: boolean,  default: false }
+      - { label: "Hide from Site",         name: draft,    widget: boolean,  default: false,
+          hint: "Turn ON to hide without deleting" }
 
- # 3. TRUSTED BY 
- - name: trusted_by
- label: " Trusted By — Logos"
- label_singular: "Brand Logo"
- folder: src/content/trusted-by
- create: true
- delete: true
- slug: "{{slug}}"
- identifier_field: name
- fields:
- - { label: " Brand Name", name: name, widget: string }
- - { label: " Logo Image", name: logo, widget: image,
- hint: "PNG or SVG, 400×120px, transparent background, dark color" }
- - { label: " Website URL", name: url, widget: string, required: false }
+  # ── TRUSTED BY ───────────────────────────────
+  - name: trusted_by
+    label: "Trusted By — Logos"
+    label_singular: "Brand Logo"
+    folder: src/content/trusted-by
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    identifier_field: name
+    fields:
+      - { label: "Brand Name",  name: name, widget: string }
+      - { label: "Logo Image",  name: logo, widget: image,
+          hint: "PNG or SVG, 400x120px, transparent background, dark color" }
+      - { label: "Website URL", name: url,  widget: string, required: false }
 
- - name: trusted_by_settings
- label: " Trusted By — Settings"
- delete: false
- editor: { preview: false }
- files:
- - name: trusted_by_label
- label: "Section Label"
- file: src/content/trusted-by/settings.json
- fields:
- - { label: "Section Heading", name: section_label, widget: string,
- default: "Trusted By",
- hint: "e.g. Our Clients, Partners, Trusted By" }
+  - name: trusted_by_settings
+    label: "Trusted By — Settings"
+    delete: false
+    editor: { preview: false }
+    files:
+      - name: trusted_by_label
+        label: "Section Label"
+        file: src/content/trusted-by/settings.json
+        fields:
+          - { label: "Section Heading", name: section_label, widget: string,
+              default: "Trusted By",
+              hint: "e.g. Our Clients, Partners, Trusted By" }
 
- # 4. PAGE CONTENT 
- - name: pages
- label: " Page Content"
- delete: false
- editor: { preview: false }
- files:
+  # ── PAGE CONTENT ─────────────────────────────
+  - name: pages
+    label: "Page Content"
+    delete: false
+    editor: { preview: false }
+    files:
 
- - name: homepage
- label: " Homepage"
- file: src/content/pages/homepage.json
- fields:
- - label: "Hero Slideshow Images"
- name: hero_slides
- widget: list
- required: false
- hint: "Upload 3–6 images for the hero slideshow"
- field: { label: "Slide Image", name: image, widget: image }
- - label: "Hero Header Image (single)"
- name: hero_image
- widget: image
- required: false
- - { label: "Hero Video URL (.mp4)", name: hero_video, widget: string, required: false }
- - { label: "Hero Headline Line 1", name: hero_line1, widget: string }
- - { label: "Hero Headline Line 2", name: hero_line2, widget: string }
- - { label: "Hero Subline", name: hero_sub, widget: string, required: false }
- - { label: "Statement / Tagline", name: statement, widget: text }
- - label: "Statement Background Image"
- name: statement_image
- widget: image
- required: false
- - { label: "About Headline", name: about_headline, widget: string }
- - { label: "About Body", name: about_body, widget: text }
- - label: "Pillars (01 / 02 / 03)"
- name: pillars
- widget: list
- required: false
- fields:
- - { label: "Number", name: number, widget: string, hint: "e.g. 01" }
- - { label: "Title", name: title, widget: string }
- - { label: "Body", name: body, widget: text }
+      - name: homepage
+        label: "Homepage"
+        file: src/content/pages/homepage.json
+        fields:
+          - label: "Hero Slideshow Images"
+            name: hero_slides
+            widget: list
+            required: false
+            hint: "Upload 3-6 images for the hero slideshow"
+            field: { label: "Slide Image", name: image, widget: image }
+          - label: "Hero Header Image (single)"
+            name: hero_image
+            widget: image
+            required: false
+          - { label: "Hero Video URL (.mp4)", name: hero_video, widget: string, required: false }
+          - { label: "Hero Headline Line 1",  name: hero_line1, widget: string }
+          - { label: "Hero Headline Line 2",  name: hero_line2, widget: string }
+          - { label: "Hero Subline",          name: hero_sub,   widget: string, required: false }
+          - { label: "Statement / Tagline",   name: statement,  widget: text }
+          - label: "Statement Background Image"
+            name: statement_image
+            widget: image
+            required: false
+          - { label: "About Headline",        name: about_headline, widget: string }
+          - { label: "About Body",            name: about_body,     widget: text }
+          - label: "Pillars (01 / 02 / 03)"
+            name: pillars
+            widget: list
+            required: false
+            fields:
+              - { label: "Number", name: number, widget: string, hint: "e.g. 01" }
+              - { label: "Title",  name: title,  widget: string }
+              - { label: "Body",   name: body,   widget: text }
 
- - name: about_services
- label: "ℹ About & Services Page"
- file: src/content/pages/about-services.json
- fields:
- - label: "Header Image"
- name: hero_image
- widget: image
- required: false
- - { label: "Page Headline", name: headline, widget: string }
- - { label: "Mission Statement", name: mission, widget: text }
- - { label: "Bio Paragraph 1", name: bio_1, widget: text }
- - { label: "Bio Paragraph 2", name: bio_2, widget: text, required: false }
- - { label: "Owner Name", name: owner_name, widget: string, required: false }
- - { label: "Owner Title", name: owner_title, widget: string, required: false }
- - { label: "Owner Photo", name: owner_photo, widget: image, required: false }
- - { label: "Years Experience", name: years, widget: string, required: false }
- - { label: "Projects Completed", name: projects, widget: string, required: false }
+      - name: about_services
+        label: "About & Services Page"
+        file: src/content/pages/about-services.json
+        fields:
+          - label: "Header Image"
+            name: hero_image
+            widget: image
+            required: false
+          - { label: "Page Headline",      name: headline,    widget: string }
+          - { label: "Mission Statement",  name: mission,     widget: text }
+          - { label: "Bio Paragraph 1",    name: bio_1,       widget: text }
+          - { label: "Bio Paragraph 2",    name: bio_2,       widget: text,   required: false }
+          - { label: "Owner Name",         name: owner_name,  widget: string, required: false }
+          - { label: "Owner Title",        name: owner_title, widget: string, required: false }
+          - { label: "Owner Photo",        name: owner_photo, widget: image,  required: false }
+          - { label: "Years Experience",   name: years,       widget: string, required: false }
+          - { label: "Projects Completed", name: projects,    widget: string, required: false }
 
- - name: contact_page
- label: " Contact Page"
- file: src/content/pages/contact.json
- fields:
- - { label: "Page Headline", name: headline, widget: string }
- - { label: "Subtext", name: subtext, widget: text, required: false }
- - { label: "LINE CTA Label", name: line_label, widget: string, default: "Message us on Line" }
- - { label: "Response Promise", name: promise, widget: string, required: false,
- hint: "e.g. We reply within 2 hours" }
- - label: "Background Photo"
- name: hero_image
- widget: image
- required: false
- - label: "Background Video URL (.mp4)"
- name: hero_video
- widget: string
- required: false
- hint: "Highest priority — overrides photos"
+      - name: contact_page
+        label: "Contact Page"
+        file: src/content/pages/contact.json
+        fields:
+          - { label: "Page Headline",          name: headline,   widget: string }
+          - { label: "Subtext",                name: subtext,    widget: text,   required: false }
+          - { label: "LINE CTA Label",         name: line_label, widget: string, default: "Message us on Line" }
+          - { label: "Response Promise",       name: promise,    widget: string, required: false,
+              hint: "e.g. We reply within 2 hours" }
+          - { label: "Background Photo",       name: hero_image, widget: image,  required: false }
+          - { label: "Background Video (.mp4)", name: hero_video, widget: string, required: false,
+              hint: "Overrides photos when set" }
 
- - name: contact
- label: " Contact & Social Links"
- file: src/content/settings/contact.json
- fields:
- - { label: " Phone", name: phone, widget: string, required: false }
- - { label: " Email", name: email, widget: string, required: false }
- - { label: " LINE OA URL", name: line, widget: string, required: false,
- hint: "Full URL e.g. https://line.me/ti/p/~@yourhandle" }
- - { label: " Instagram URL", name: instagram, widget: string, required: false }
- - { label: " TikTok URL", name: tiktok, widget: string, required: false }
- - { label: " Facebook URL", name: facebook, widget: string, required: false }
- - { label: " Address", name: address, widget: text, required: false }
+      - name: contact
+        label: "Contact & Social Links"
+        file: src/content/settings/contact.json
+        fields:
+          - { label: "Phone",        name: phone,     widget: string, required: false }
+          - { label: "Email",        name: email,     widget: string, required: false }
+          - { label: "LINE OA URL",  name: line,      widget: string, required: false,
+              hint: "Full URL e.g. https://line.me/ti/p/~@yourhandle" }
+          - { label: "Instagram URL", name: instagram, widget: string, required: false }
+          - { label: "TikTok URL",   name: tiktok,    widget: string, required: false }
+          - { label: "Facebook URL", name: facebook,  widget: string, required: false }
+          - { label: "Address",      name: address,   widget: text,   required: false }
 
- - name: siteinfo
- label: " Site Info & SEO"
- file: src/content/settings/siteinfo.json
- fields:
- - { label: "Site Name", name: site_name, widget: string }
- - { label: "Tagline", name: tagline, widget: string }
- - { label: "Meta Description", name: meta_desc, widget: text }
- - { label: "Google Analytics ID", name: ga_id, widget: string, required: false,
- hint: "e.g. G-XXXXXXXXXX" }
+      - name: siteinfo
+        label: "Site Info & SEO"
+        file: src/content/settings/siteinfo.json
+        fields:
+          - { label: "Site Name",           name: site_name, widget: string }
+          - { label: "Tagline",             name: tagline,   widget: string }
+          - { label: "Meta Description",    name: meta_desc, widget: text }
+          - { label: "Google Analytics ID", name: ga_id,     widget: string, required: false,
+              hint: "e.g. G-XXXXXXXXXX" }
 
- - name: documents
- label: " Documents & PDF Links"
- file: src/content/settings/documents.json
- fields:
- - { label: "DBD Registration PDF URL", name: dbd_pdf, widget: string, required: false,
- hint: "Paste the full URL of your DBD document (Google Drive, Cloudinary, etc.)" }
+      - name: documents
+        label: "Documents & PDF Links"
+        file: src/content/settings/documents.json
+        fields:
+          - { label: "DBD Registration PDF URL", name: dbd_pdf, widget: string, required: false,
+              hint: "Paste the full URL of your DBD document (Google Drive, Cloudinary, etc.)" }
