@@ -233,5 +233,5 @@ collections:
         label: "Documents & PDF Links"
         file: src/content/settings/documents.json
         fields:
-          - { label: "DBD Registration PDF URL", name: dbd_pdf, widget: string, required: false,
-              hint: "Paste the full URL of your DBD document (Google Drive, Cloudinary, etc.)" }
+          - { label: "DBD Registration Document", name: dbd_pdf, widget: image, required: false,
+              hint: "Upload a PDF or image of your DBD registration document" }
