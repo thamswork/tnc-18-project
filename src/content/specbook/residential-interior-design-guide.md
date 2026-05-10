@@ -1,6 +1,7 @@
 ---
 title: "Residential Interior Design in Bangkok: A Guide for Homeowners"
 date: "2026-04-22"
+cover: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1200&q=80"
 category: "Interior Design"
 tags: ["residential", "interior design", "bangkok", "home", "condominium"]
 excerpt: "Thinking about redesigning your home or condo in Bangkok? Here's what to expect from the process, the costs, and how to choose the right design-build firm."

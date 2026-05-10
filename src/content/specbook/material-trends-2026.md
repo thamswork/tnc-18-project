@@ -1,6 +1,7 @@
 ---
 title: "Interior Material Trends in Thailand for 2026"
 date: "2026-05-01"
+cover: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=1200&q=80"
 category: "Insight"
 tags: ["materials", "trends", "interior design", "thailand", "2026"]
 excerpt: "From fluted oak panels to recycled terrazzo — the materials defining premium interior design in Bangkok and Thailand in 2026."

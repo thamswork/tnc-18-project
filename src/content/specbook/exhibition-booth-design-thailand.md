@@ -1,6 +1,7 @@
 ---
 title: "Exhibition Booth Design in Thailand: How to Stand Out at Trade Shows"
 date: "2026-05-05"
+cover: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80"
 category: "Exhibition & Event"
 tags: ["exhibition", "booth design", "trade show", "bangkok", "event design"]
 excerpt: "From concept to build — how TNC Build Studio designs exhibition booths that attract visitors, communicate brand identity, and perform under tight deadlines."

@@ -1,6 +1,7 @@
 ---
 title: "Commercial Fit-Out in Bangkok: Office and Retail Spaces That Work"
 date: "2026-04-15"
+cover: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200&q=80"
 category: "Interior Design"
 tags: ["commercial", "fit-out", "office design", "retail", "bangkok"]
 excerpt: "A well-designed commercial space reduces staff turnover, increases customer dwell time, and communicates brand values before anyone says a word. Here's how we approach commercial fit-outs in Bangkok."

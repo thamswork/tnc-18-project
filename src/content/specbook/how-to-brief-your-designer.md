@@ -1,6 +1,7 @@
 ---
 title: "How to Brief Your Interior Designer: A Practical Guide"
 date: "2026-05-07"
+cover: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80"
 category: "Insight"
 tags: ["interior design", "brief", "design process", "tips", "bangkok"]
 excerpt: "The quality of your brief determines the quality of your outcome. Here's exactly what to tell your designer before the project starts — and what not to say."

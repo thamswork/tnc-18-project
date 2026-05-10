@@ -1,6 +1,7 @@
 ---
 title: "Pop-Up Store Design in Bangkok: What Makes Them Work"
 date: "2026-04-28"
+cover: "https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=1200&q=80"
 category: "Pop-up Store"
 tags: ["pop-up store", "retail design", "bangkok", "brand activation"]
 excerpt: "Pop-up stores live and die by first impressions. Here's how we design temporary retail spaces that drive foot traffic, social sharing, and real sales."
