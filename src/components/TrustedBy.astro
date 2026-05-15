@@ -6,6 +6,7 @@ try {
   const raw = await getCollection("trusted_by" as any);
   logos = (raw || [])
     .map((e: any) => e.data)
+    .filter((l: any) => l.logo && l.logo.trim() !== "")
     .sort((a: any, b: any) => (a.order || 99) - (b.order || 99));
 } catch(e) { logos = []; }
 try {
@@ -17,69 +18,85 @@ try {
     if (settings.section_label) sectionLabel = settings.section_label;
   }
 } catch(e) {}
-
-const hasLogos = logos.some((l: any) => l.logo && l.logo.trim() !== "");
 ---
+
 <section class="trusted-by">
   <p class="tb-label">{sectionLabel}</p>
   <div class="tb-track">
     {logos.map((l: any) => (
-      l.logo && l.logo.trim() !== ""
-        ? (l.url
-            ? <a href={l.url} target="_blank" rel="noopener noreferrer" class="tb-item">
-                <img src={l.logo} alt={l.name} class="tb-logo" loading="lazy" />
-              </a>
-            : <div class="tb-item">
-                <img src={l.logo} alt={l.name} class="tb-logo" loading="lazy" />
-              </div>
-          )
-        : <div class="tb-item tb-placeholder">
-            <span class="tb-placeholder-name">{l.name}</span>
+      l.url
+        ? <a href={l.url} target="_blank" rel="noopener noreferrer" class="tb-item">
+            <img src={l.logo} alt={l.name} class="tb-logo" loading="lazy" />
+          </a>
+        : <div class="tb-item">
+            <img src={l.logo} alt={l.name} class="tb-logo" loading="lazy" />
           </div>
     ))}
   </div>
 </section>
+
 <style>
   .trusted-by {
     background: var(--bg-dark, #ECEAE3);
-    padding: 2.25rem var(--pad-x, 5vw);
+    padding: 2rem var(--pad-x, 5vw);
     border-bottom: 0.5px solid rgba(17,17,17,0.06);
-    display: flex; flex-direction: column;
-    align-items: center; gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    overflow: hidden;
   }
   .tb-label {
-    font-size: 0.55rem; font-weight: 600;
-    letter-spacing: 0.26em; text-transform: uppercase;
-    color: rgba(17,17,17,0.35);
+    font-size: 0.52rem;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: rgba(17,17,17,0.3);
   }
   .tb-track {
-    display: flex; align-items: center;
-    justify-content: center; flex-wrap: wrap;
-    gap: 1.5rem 3.5rem; max-width: 1200px; width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.75rem 3rem;
+    width: 100%;
+    max-width: 1300px;
   }
   @media (min-width: 1024px) {
     .tb-track {
       flex-wrap: nowrap;
       justify-content: space-between;
-      gap: 2rem;
+      gap: 1.5rem;
     }
   }
   .tb-item {
-    display: flex; align-items: center;
+    display: flex;
+    align-items: center;
     justify-content: center;
-    text-decoration: none; flex-shrink: 0;
-    cursor: default;
+    text-decoration: none;
+    flex-shrink: 0;
   }
   .tb-logo {
-    height: 40px; width: auto; max-width: 140px; display: block;
+    height: 36px;
+    width: auto;
+    max-width: 130px;
+    display: block;
     object-fit: contain;
-    filter: grayscale(0%) opacity(1);
-    transition: filter 0.35s cubic-bezier(0.16,1,0.3,1);
+    opacity: 0.75;
+    transition: opacity 0.3s ease;
+    filter: grayscale(20%);
   }
-  .tb-item:hover .tb-logo { filter: grayscale(0%) opacity(1); }
-  .tb-placeholder-name {
-    font-size: 0.65rem; font-weight: 600;
-    letter-spacing: 0.14em; text-transform: uppercase;
-    color: rgba(17,17,17,0.25); white-space: nowrap;
+  .tb-item:hover .tb-logo {
+    opacity: 1;
+    filter: grayscale(0%);
+  }
+  @media (max-width: 768px) {
+    .tb-track {
+      gap: 1.25rem 2rem;
+    }
+    .tb-logo {
+      height: 28px;
+      max-width: 100px;
+    }
   }
 </style>
