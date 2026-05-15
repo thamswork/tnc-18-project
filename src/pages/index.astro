@@ -923,44 +923,54 @@ behold-widget {
 </style>
 
 <script>
-/* ── HERO: center on load, animate down on scroll ── */
+/* ── HERO: cinematic entrance + sticky parallax ── */
 (function() {
-  const words = document.querySelector(".hero-words") as HTMLElement;
-  const title = document.querySelector(".hero-title") as HTMLElement;
-  const cta   = document.querySelector(".hero-cta-wrap") as HTMLElement;
-  const hero  = document.getElementById("hero") as HTMLElement;
-  if (!words || !hero) return;
+  const title   = document.querySelector(".hero-title") as HTMLElement;
+  const cta     = document.querySelector(".hero-cta-wrap") as HTMLElement;
+  const loc     = document.querySelector(".hero-loc") as HTMLElement;
+  const content = document.querySelector(".hero-content") as HTMLElement;
+  const track   = document.querySelector(".hero-track") as HTMLElement;
+  const hero    = document.getElementById("hero") as HTMLElement;
+  if (!hero) return;
 
-  // Step 1: reveal text lines
-  setTimeout(() => { if (title) title.classList.add("revealed"); }, 150);
-  // Step 2: reveal CTA
-  setTimeout(() => { if (cta) cta.classList.add("visible"); }, 900);
-
-  // Step 3: on scroll, gently move hero content downward only (no left shift)
-  let ticking = false;
-  function update() {
-    const scrolled = window.scrollY;
-    const heroH = hero.offsetHeight;
-    const progress = Math.min(1, scrolled / (heroH * 0.6));
-    // ease out cubic
-    const e = 1 - Math.pow(1 - progress, 3);
-    // move down max 18% of hero height, stay horizontally centered
-    const maxY = heroH * 0.30;
-    words.style.transform = `translateY(${maxY * e}px)`;
-    // fade out slightly as it scrolls
-    words.style.opacity = String(1 - e * 0.35);
-    ticking = false;
+  // entrance: loc fades up first
+  if (loc) {
+    loc.style.cssText += "opacity:0;transform:translateY(10px);transition:opacity 0.9s ease,transform 0.9s ease;";
+    setTimeout(() => { loc.style.opacity="1"; loc.style.transform="translateY(0)"; }, 60);
   }
+  // lines slide+blur in
+  setTimeout(() => { if (title) title.classList.add("revealed"); }, 180);
+  // CTA appears
+  setTimeout(() => { if (cta) cta.classList.add("visible"); }, 1000);
 
+  // scroll: image parallax, text sticks then fades late
+  let raf = false;
+  function update() {
+    const sy = window.scrollY;
+    const hh = hero.offsetHeight;
+    if (sy > hh) { raf = false; return; }
+    // image moves up at 30% scroll speed
+    if (track) track.style.transform = `translateY(${sy * 0.3}px)`;
+    // text: fully pinned until 65% scroll, then fades + lifts gently
+    if (content) {
+      const fadeStart = hh * 0.65;
+      const fadeEnd   = hh * 0.98;
+      if (sy <= fadeStart) {
+        content.style.opacity = "1";
+        content.style.transform = "translateY(0)";
+      } else {
+        const p = Math.min(1, (sy - fadeStart) / (fadeEnd - fadeStart));
+        const e = p * p;
+        content.style.opacity = String(1 - e);
+        content.style.transform = `translateY(-${e * 20}px)`;
+      }
+    }
+    raf = false;
+  }
   update();
-  window.addEventListener("scroll", () => {
-    if (ticking) return;
-    requestAnimationFrame(update);
-    ticking = true;
-  }, { passive: true });
+  window.addEventListener("scroll", () => { if (!raf) { raf = true; requestAnimationFrame(update); } }, { passive: true });
   window.addEventListener("resize", update, { passive: true });
 })();
-
 /* ── HERO: slide auto-play ── */
 (function() {
   const slides = document.querySelectorAll<HTMLElement>(".hero-slide");
