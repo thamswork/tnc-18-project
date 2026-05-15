@@ -4,6 +4,7 @@ year: 2025
 category: Pop-up
 client: Curated and Co.
 location: One Bangkok
+size: "50"
 cover: https://res.cloudinary.com/dynjnftnu/image/upload/v1778684816/2025-10-13_hknxed.jpg
 media_type: photo
 gallery:
