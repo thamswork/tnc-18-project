@@ -71,10 +71,10 @@ const specbook = defineCollection({
 });
 
 const trusted_by = defineCollection({
-  loader: glob({ pattern: '*.json', base: join(__dirname, 'trusted-by') }),
+  loader: glob({ pattern: '*.{json,md}', base: join(__dirname, 'trusted-by') }),
   schema: z.object({
     name:    z.string(),
-    logo:    z.string(),
+    logo:    z.string().optional(),
     url:     z.string().optional(),
     order:   z.number().optional(),
   }),
