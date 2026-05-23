@@ -16,6 +16,8 @@ gallery:
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1779543772/FenderFoto-3_o0d4ki.jpg
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1779543780/FenderFoto-17_lxve52.jpg
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1779543786/FenderFoto-22_wuxqhg.jpg
+  - https://res.cloudinary.com/dynjnftnu/image/upload/v1779543903/FenderFoto-171_wqgedi.jpg
+  - https://res.cloudinary.com/dynjnftnu/image/upload/v1779543905/FenderFoto-170_dhiwui.jpg
 description: A warm, classic-meets-contemporary restaurant storefront featuring
   traditional wood paneling and welcoming lighting.
 featured: true
