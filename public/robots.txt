@@ -1,9 +1,5 @@
 User-agent: *
-Allow: /
+Disallow: /documents/
+Disallow: /documents
 
-# Block admin from indexing
-Disallow: /admin/
-Disallow: /admin
-
-# Sitemap
 Sitemap: https://tncbuildstudio.com/sitemap-index.xml
