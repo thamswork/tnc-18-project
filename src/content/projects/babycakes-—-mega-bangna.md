@@ -11,7 +11,6 @@ gallery:
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1782836238/IMG_8224_qem8lz.jpg
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1782836230/IMG_8271_miwich.jpg
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1782836211/DSC01439_avyc2k.jpg
-  - https://res.cloudinary.com/dynjnftnu/image/upload/v1782836135/3_evpj5c.jpg
 description: " A Dessert kiosk at Mega Bangna featuring an elongated service
   counter, a built-in pastry window, and a separated cozy booth seating area."
 featured: true
