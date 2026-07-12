@@ -6,7 +6,6 @@ location: Mega Bangna, Samut Prakan
 cover: https://res.cloudinary.com/dynjnftnu/image/upload/v1782836255/IMG_8211_bxcrl5.jpg
 media_type: photo
 gallery:
-  - https://res.cloudinary.com/dynjnftnu/image/upload/v1782836259/IMG_8287_yhdiwu.jpg
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1782836257/IMG_8241_cnwyhj.jpg
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1782836255/IMG_8284_gghw4u.jpg
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1782836238/IMG_8224_qem8lz.jpg
