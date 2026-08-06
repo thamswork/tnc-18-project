@@ -192,7 +192,7 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
     <!-- <meta name="google-site-verification" content="YOUR_CODE_HERE" /> -->
 
     <slot name="head" />
-    <link rel="stylesheet" href="/src/styles/premium-preview.css" />
+
   </head>
   <body class={`${Astro.url.pathname === "/" ? "page-home" : "page-inner"}${bodyClass ? " " + bodyClass : ""}`}>
     <slot />
@@ -200,7 +200,7 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
       const saved = localStorage.getItem('tnc-lang') || 'en';
       document.documentElement.setAttribute('data-lang', saved);
     </script>
-    <script src="/premium-preview.js" is:inline></script>
+
   </body>
 </html>
 
