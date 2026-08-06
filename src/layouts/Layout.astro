@@ -192,18 +192,7 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
     <!-- <meta name="google-site-verification" content="YOUR_CODE_HERE" /> -->
 
     <slot name="head" />
-
-  </head>
-  <body class={`${Astro.url.pathname === "/" ? "page-home" : "page-inner"}${bodyClass ? " " + bodyClass : ""}`}>
-    <slot />
-    <script>
-      const saved = localStorage.getItem('tnc-lang') || 'en';
-      document.documentElement.setAttribute('data-lang', saved);
-    </script>
-
-  </body>
-</html>
-
+    
 <style is:global>
   :root {
     --bg:           #F5F4F0;
@@ -424,3 +413,14 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
     :root { --pad-x: 12%; }
   }
 </style>
+  </head>
+  <body class={`${Astro.url.pathname === "/" ? "page-home" : "page-inner"}${bodyClass ? " " + bodyClass : ""}`}>
+    <slot />
+    <script>
+      const saved = localStorage.getItem('tnc-lang') || 'en';
+      document.documentElement.setAttribute('data-lang', saved);
+    </script>
+    
+  </body>
+</html>
+
