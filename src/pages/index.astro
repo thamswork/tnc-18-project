@@ -950,19 +950,19 @@ behold-widget {
     const hh = hero.offsetHeight;
     if (sy > hh) { raf = false; return; }
     // image moves up at 30% scroll speed
-    if (track) track.style.transform = `translateY(${sy * 0.3}px)`;
+    if (track) track.style.transform = `translateY(${sy * 0.25}px)`;
     // text: fully pinned until 65% scroll, then fades + lifts gently
     if (content) {
-      const fadeStart = hh * 0.65;
-      const fadeEnd   = hh * 0.98;
+      const fadeStart = hh * 0.30;
+      const fadeEnd   = hh * 0.70;
       if (sy <= fadeStart) {
         content.style.opacity = "1";
         content.style.transform = "translateY(0)";
       } else {
         const p = Math.min(1, (sy - fadeStart) / (fadeEnd - fadeStart));
-        const e = p * p;
-        content.style.opacity = String(1 - e);
-        content.style.transform = `translateY(-${e * 20}px)`;
+        
+        content.style.opacity = String(1 - p);
+        content.style.transform = `translateY(-${p * 30}px)`;
       }
     }
     raf = false;
