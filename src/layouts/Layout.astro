@@ -412,62 +412,243 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
   @media (min-width: 1600px) {
     :root { --pad-x: 12%; }
   }
-  .line-float {
+
+  /* ══ SPEED DIAL ══════════════════════════════════════════════════ */
+  .sd-wrap {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    width: 56px;
-    height: 56px;
-    background: #06C755;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .sd-wrap.sd-visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Overlay */
+  .sd-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    z-index: -1;
+    pointer-events: none;
+    transition: background 0.3s ease;
+  }
+  .sd-wrap.sd-open .sd-overlay {
+    background: rgba(0,0,0,0.35);
+    pointer-events: all;
+  }
+
+  /* Options container */
+  .sd-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: flex-end;
+  }
+
+  /* Each item row: label + button */
+  .sd-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    transform: translateY(16px) scale(0.85);
+    transition: opacity 0.3s cubic-bezier(0.34,1.56,0.64,1),
+                transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    pointer-events: none;
+  }
+  .sd-wrap.sd-open .sd-item {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: all;
+  }
+  .sd-wrap.sd-open .sd-item[data-index="1"] { transition-delay: 0.05s; }
+  .sd-wrap.sd-open .sd-item[data-index="0"] { transition-delay: 0.10s; }
+
+  /* Labels */
+  .sd-label {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #fff;
+    background: rgba(10,14,24,0.85);
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  /* Secondary buttons */
+  .sd-btn {
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 16px rgba(6,199,85,0.4);
-    z-index: 9999;
-    transition: transform 0.25s cubic-bezier(0.16,1,0.3,1), box-shadow 0.25s;
     text-decoration: none;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
-  .line-float-hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: scale(0.8);
+  .sd-btn:hover { transform: scale(1.08); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+  .sd-btn-line  { background: #06C755; }
+  .sd-btn-call  { background: #1A3A6B; }
+
+  /* Main trigger */
+  .sd-trigger {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #06C755;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(6,199,85,0.45);
+    flex-shrink: 0;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
   }
-  .line-float:hover {
-    transform: scale(1.1);
+  .sd-trigger:hover {
+    transform: scale(1.08);
     box-shadow: 0 6px 24px rgba(6,199,85,0.55);
   }
+  .sd-wrap.sd-open .sd-trigger {
+    background: #0a0e18;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+  }
+
+  /* Icon swap */
+  .sd-icon-line, .sd-icon-close {
+    position: absolute;
+    transition: opacity 0.25s ease, transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .sd-icon-close {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.7);
+  }
+  .sd-wrap.sd-open .sd-icon-line {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.7);
+  }
+  .sd-wrap.sd-open .sd-icon-close {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  @media (max-width: 600px) {
+    .sd-wrap { bottom: 1.5rem; right: 1.25rem; }
+  }
+
 </style>
   </head>
   <body class={`${Astro.url.pathname === "/" ? "page-home" : "page-inner"}${bodyClass ? " " + bodyClass : ""}`}>
     <slot />
-  <!-- LINE OA Floating Button -->
-  <a href="https://lin.ee/RdpRHTR" target="_blank" rel="noopener" class="line-float line-float-hidden" id="line-float" aria-label="Chat with us on LINE">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-  </a>
-  <!-- LINE OA Floating Button -->
-  <a href="https://lin.ee/RdpRHTR" target="_blank" rel="noopener" class="line-float line-float-hidden" id="line-float" aria-label="Chat with us on LINE">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-  </a>
     <script>
       const saved = localStorage.getItem('tnc-lang') || 'en';
       document.documentElement.setAttribute('data-lang', saved);
     </script>
-    
-    <script>
-    (function() {
-      const btn = document.getElementById('line-float');
-      if (!btn) return;
-      function update() {
-        if (window.scrollY > window.innerHeight * 0.8) {
-          btn.classList.remove('line-float-hidden');
-        } else {
-          btn.classList.add('line-float-hidden');
-        }
+
+  <!-- ── SPEED DIAL CONTACT MENU ── -->
+  <div class="sd-wrap" id="sd-wrap" aria-label="Contact menu" role="navigation">
+    <div class="sd-overlay" id="sd-overlay"></div>
+
+    <!-- Options -->
+    <div class="sd-options" id="sd-options">
+
+      <!-- LINE OA -->
+      <div class="sd-item" data-index="0">
+        <span class="sd-label">Chat on LINE</span>
+        <a href="https://lin.ee/RdpRHTR" target="_blank" rel="noopener"
+           class="sd-btn sd-btn-line" aria-label="Chat on LINE OA">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24" height="24">
+            <path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63h2.386c.349 0 .63.285.63.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.627-.63.349 0 .631.285.631.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.281.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Call -->
+      <div class="sd-item" data-index="1">
+        <span class="sd-label">Call Us</span>
+        <a href="tel:+66800064465" class="sd-btn sd-btn-call" aria-label="Call TNC Build Studio">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="22" height="22">
+            <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- Main Trigger -->
+    <button class="sd-trigger" id="sd-trigger"
+            aria-expanded="false" aria-controls="sd-options"
+            aria-label="Open contact menu">
+      <!-- LINE icon (default) -->
+      <svg class="sd-icon-line" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="26" height="26">
+        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/>
+      </svg>
+      <!-- Close icon -->
+      <svg class="sd-icon-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24" height="24">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+      </svg>
+    </button>
+  </div>
+
+  <script>
+  (function() {
+    const wrap    = document.getElementById('sd-wrap');
+    const trigger = document.getElementById('sd-trigger');
+    const overlay = document.getElementById('sd-overlay');
+    if (!wrap || !trigger) return;
+
+    let isOpen = false;
+
+    function showWrap() { wrap.classList.add('sd-visible'); }
+    function hideWrap() { wrap.classList.remove('sd-visible'); close(); }
+
+    function open() {
+      isOpen = true;
+      wrap.classList.add('sd-open');
+      trigger.setAttribute('aria-expanded', 'true');
+    }
+    function close() {
+      isOpen = false;
+      wrap.classList.remove('sd-open');
+      trigger.setAttribute('aria-expanded', 'false');
+    }
+
+    // Show after scrolling past 80% of hero
+    function onScroll() {
+      if (window.scrollY > window.innerHeight * 0.8) {
+        showWrap();
+      } else {
+        hideWrap();
       }
-      update();
-      window.addEventListener('scroll', update, { passive: true });
-    })();
+    }
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Toggle on trigger click
+    trigger.addEventListener('click', () => { isOpen ? close() : open(); });
+
+    // Close on overlay click
+    overlay.addEventListener('click', close);
+
+    // Close on scroll while open
+    window.addEventListener('scroll', () => { if (isOpen) close(); }, { passive: true });
+  })();
   </script>
 </body>
 </html>
