@@ -5,7 +5,9 @@ category: Commercial
 client: Menscape Clinic – Trusted Care
 location: Asoke, Bangkok
 size: "455 "
-cover: https://res.cloudinary.com/dynjnftnu/image/upload/v1790314392/Menscape_-_Asoke_-_2_ynh6rj.jpg
+cover: "
+  https://res.cloudinary.com/dynjnftnu/image/upload/v1790314395/Menscape_-_Asok\
+  e_-_40_yo5qyy.jpg"
 media_type: photo
 gallery:
   - https://res.cloudinary.com/dynjnftnu/image/upload/v1790314395/Menscape_-_Asoke_-_40_yo5qyy.jpg
