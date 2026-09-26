@@ -1,25 +1,67 @@
 {
   "projects": [
-    "Menscape Clinic — Asoke",
-    "Babycakes — Fashion Island",
-    "Mad Creations – The Alchemist’s Atelier",
-    "The Rolling Pinn — ICONSIAM ",
-    "Alma & Profhilo Exhibition Pavilion",
-    "Prada Beauty — Summer Market 2026 Pop-Up",
-    "Babycakes — Mega Bangna",
-    "Alma — Centara Grand Exhibition Pavilion",
-    "Moschino Toy 2 — One Bangkok Launch Event",
-    "Private Mid-Century Modern Residence",
-    "Modern Neoclassical Penthouse – Sukhumvit 39",
-    "The Rolling Pinn — Central Park (5th Floor)",
-    "Curated and Co. — One Bangkok Exhibition",
-    "The Rolling Pinn — Siam Paragon",
-    "The Rolling Pinn — Central World (Beacon Zone)",
-    "The Rolling Pinn — Central Ladprao",
-    "Irvin Thai Kitchen 1976 — Charoen Krung 28",
-    "The Rolling Pinn — Modular Pop-Up Booth",
-    "The Rolling Pinn — EmQuartier Pop-Up",
-    "The Rolling Pinn — Central Chidlom (Public Market)",
-    "The Rolling Pinn at Slow Combo"
+    {
+      "project": "Menscape Clinic — Asoke"
+    },
+    {
+      "project": "Babycakes — Fashion Island"
+    },
+    {
+      "project": "Mad Creations – The Alchemist’s Atelier"
+    },
+    {
+      "project": "The Rolling Pinn — ICONSIAM "
+    },
+    {
+      "project": "Alma & Profhilo Exhibition Pavilion"
+    },
+    {
+      "project": "Prada Beauty — Summer Market 2026 Pop-Up"
+    },
+    {
+      "project": "Babycakes — Mega Bangna"
+    },
+    {
+      "project": "Alma — Centara Grand Exhibition Pavilion"
+    },
+    {
+      "project": "Moschino Toy 2 — One Bangkok Launch Event"
+    },
+    {
+      "project": "Private Mid-Century Modern Residence"
+    },
+    {
+      "project": "Modern Neoclassical Penthouse – Sukhumvit 39"
+    },
+    {
+      "project": "The Rolling Pinn — Central Park (5th Floor)"
+    },
+    {
+      "project": "Curated and Co. — One Bangkok Exhibition"
+    },
+    {
+      "project": "The Rolling Pinn — Siam Paragon"
+    },
+    {
+      "project": "The Rolling Pinn — Central World (Beacon Zone)"
+    },
+    {
+      "project": "The Rolling Pinn — Central Ladprao"
+    },
+    {
+      "project": "Irvin Thai Kitchen 1976 — Charoen Krung 28"
+    },
+    {
+      "project": "The Rolling Pinn — Modular Pop-Up Booth"
+    },
+    {
+      "project": "The Rolling Pinn — EmQuartier Pop-Up"
+    },
+    {
+      "project": "The Rolling Pinn — Central Chidlom (Public Market)"
+    },
+    {
+      "project": "The Rolling Pinn at Slow Combo"
+    }
   ]
 }

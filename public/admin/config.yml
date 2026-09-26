@@ -31,23 +31,26 @@ collections:
         label: "Works — Project Order"
         file: src/data/works-order.json
         fields:
-          - label: "Projects (drag ⋮⋮ to reorder)"
+          - label: "Order on homepage (top = first)"
             name: projects
             widget: list
             required: false
+            collapsed: true
+            label_singular: "project"
+            summary: "{{fields.project}}"
             hint: >-
-              Drag projects into the order you want on the homepage. Projects not in this list
-              still appear after these, sorted by Sort Order then year. Hidden projects never show.
-              If you rename a project, re-pick it here.
-            field:
-              label: "Project"
-              name: project
-              widget: relation
-              collection: projects
-              value_field: title
-              search_fields: [title, client, location]
-              display_fields: ["{{title}} ({{year}})"]
-              options_length: 200
+              Drag the ═ handle on a row to move it. The top row appears first in Works.
+              Projects not listed still appear after these. Hidden projects never show.
+              If you rename a project, remove it here and add it again.
+            fields:
+              - label: "Project"
+                name: project
+                widget: relation
+                collection: projects
+                value_field: title
+                search_fields: [title, client, location]
+                display_fields: ["{{title}} ({{year}})"]
+                options_length: 200
 
       - name: homepage_content
         label: "Homepage Content"
