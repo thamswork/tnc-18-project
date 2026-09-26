@@ -1,3 +1,5 @@
+local_backend: true
+
 backend:
   name: github
   repo: thamswork/tnc-18-project
@@ -7,19 +9,103 @@ backend:
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
+# Clean, ASCII-only file names for new entries (no long dashes or Thai characters in URLs)
+slug:
+  encoding: "ascii"
+  clean_accents: true
+  sanitize_replacement: "-"
+
 collections:
 
-  # ── PORTFOLIO ────────────────────────────────
+  # ═════════════════════════════════════════════
+  #  1. HOMEPAGE
+  # ═════════════════════════════════════════════
+  - name: homepage
+    label: "Homepage"
+    description: "Order of projects in the Works section, plus hero, statement and pillars."
+    delete: false
+    editor: { preview: false }
+    files:
+
+      - name: works_order
+        label: "Works — Project Order"
+        file: src/data/works-order.json
+        fields:
+          - label: "Projects (drag ⋮⋮ to reorder)"
+            name: projects
+            widget: list
+            required: false
+            hint: >-
+              Drag projects into the order you want on the homepage. Projects not in this list
+              still appear after these, sorted by Sort Order then year. Hidden projects never show.
+              If you rename a project, re-pick it here.
+            field:
+              label: "Project"
+              name: project
+              widget: relation
+              collection: projects
+              value_field: title
+              search_fields: [title, client, location]
+              display_fields: ["{{title}} ({{year}})"]
+              options_length: 200
+
+      - name: homepage_content
+        label: "Homepage Content"
+        file: src/content/pages/homepage.json
+        fields:
+          - label: "Hero Slideshow Images"
+            name: hero_slides
+            widget: list
+            required: false
+            hint: "Upload 3–6 images. Drag to change slide order."
+            field: { label: "Slide Image", name: image, widget: image }
+          - label: "Hero Header Image (single)"
+            name: hero_image
+            widget: image
+            required: false
+            hint: "Used only if there are no slideshow images."
+          - { label: "Hero Video URL (.mp4)", name: hero_video, widget: string, required: false }
+          - { label: "Hero Headline Line 1",  name: hero_line1, widget: string }
+          - { label: "Hero Headline Line 2",  name: hero_line2, widget: string }
+          - { label: "Hero Subline",          name: hero_sub,   widget: string, required: false }
+          - { label: "Statement / Tagline",   name: statement,  widget: text }
+          - label: "Statement Background Image"
+            name: statement_image
+            widget: image
+            required: false
+          - { label: "About Headline",        name: about_headline, widget: string }
+          - { label: "About Body",            name: about_body,     widget: text }
+          - label: "Pillars (01 / 02 / 03)"
+            name: pillars
+            widget: list
+            required: false
+            hint: "Drag to reorder."
+            summary: "{{fields.number}} — {{fields.title}}"
+            fields:
+              - { label: "Number", name: number, widget: string, hint: "e.g. 01" }
+              - { label: "Title",  name: title,  widget: string }
+              - { label: "Body",   name: body,   widget: text }
+
+  # ═════════════════════════════════════════════
+  #  2. PORTFOLIO
+  # ═════════════════════════════════════════════
   - name: projects
     label: "Portfolio"
     label_singular: "Project"
+    description: "All projects. To change their order on the homepage, use Homepage → Works — Project Order."
     folder: src/content/projects
     create: true
     delete: true
     slug: "{{slug}}"
     identifier_field: title
-    summary: "{{title}} — {{year}}"
+    summary: "{{title}} — {{category}} · {{year}}"
     sortable_fields: [order, year, title]
+    view_groups:
+      - { label: "Category", field: category }
+      - { label: "Year",     field: year }
+    view_filters:
+      - { label: "Hidden from site", field: draft, pattern: true }
+      - { label: "Video projects",   field: media_type, pattern: "video" }
     fields:
       - { label: "Project Title",          name: title,       widget: string }
       - { label: "Year",                   name: year,        widget: number, value_type: int }
@@ -45,6 +131,7 @@ collections:
         name: gallery
         widget: list
         required: false
+        hint: "Drag to reorder."
         field: { label: Image, name: image, widget: image }
       - { label: "Short Description",      name: description, widget: text,    required: false }
       - { label: "Featured on Homepage",   name: featured,    widget: boolean, default: false }
@@ -53,7 +140,7 @@ collections:
         widget: number
         value_type: int
         required: false
-        hint: "Leave blank to sort by year"
+        hint: "Fallback order. The homepage follows Homepage → Works — Project Order first."
       - label: "Hide from Site"
         name: draft
         widget: boolean
@@ -61,17 +148,27 @@ collections:
         hint: "Turn ON to hide without deleting"
       - { label: "Full Project Description", name: body,      widget: markdown, required: false }
 
-  # ── NEWS & ARTICLES ──────────────────────────
+  # ═════════════════════════════════════════════
+  #  3. NEWS & ARTICLES
+  # ═════════════════════════════════════════════
   - name: specbook
     label: "News & Articles"
     label_singular: "Article"
+    description: "The homepage shows the 6 newest English articles."
     folder: src/content/specbook
     create: true
     delete: true
     slug: "{{slug}}"
     identifier_field: title
-    summary: "{{title}} — {{date}}"
+    summary: "{{title}} — {{date}} · {{lang}}"
     sortable_fields: [date, title]
+    view_groups:
+      - { label: "Year",     field: date, pattern: '\d{4}' }
+      - { label: "Category", field: category }
+    view_filters:
+      - { label: "English",          field: lang,  pattern: "en" }
+      - { label: "Thai",             field: lang,  pattern: "th" }
+      - { label: "Hidden from site", field: draft, pattern: true }
     fields:
       - { label: "Title",                  name: title,    widget: string }
       - { label: "Publish Date",           name: date,     widget: datetime, format: "YYYY-MM-DD" }
@@ -106,15 +203,19 @@ collections:
       - { label: "Hide from Site",         name: draft,    widget: boolean,  default: false,
           hint: "Turn ON to hide without deleting" }
 
-  # ── TRUSTED BY ───────────────────────────────
+  # ═════════════════════════════════════════════
+  #  4. TRUSTED BY
+  # ═════════════════════════════════════════════
   - name: trusted_by
     label: "Trusted By — Logos"
     label_singular: "Brand Logo"
+    description: "Client and partner logos shown under the hero."
     folder: src/content/trusted-by
     create: true
     delete: true
     slug: "{{slug}}"
     identifier_field: name
+    summary: "{{name}}"
     fields:
       - { label: "Brand Name",  name: name, widget: string }
       - { label: "Logo Image",  name: logo, widget: image,
@@ -122,58 +223,28 @@ collections:
       - { label: "Website URL", name: url,  widget: string, required: false }
 
   - name: trusted_by_settings
-    label: "Trusted By — Settings"
+    label: "Trusted By — Heading"
+    description: "The heading above the logo strip."
     delete: false
     editor: { preview: false }
     files:
       - name: trusted_by_label
-        label: "Section Label"
+        label: "Section Heading"
         file: src/content/trusted-by/settings.json
         fields:
           - { label: "Section Heading", name: section_label, widget: string,
               default: "Trusted By",
               hint: "e.g. Our Clients, Partners, Trusted By" }
 
-  # ── PAGE CONTENT ─────────────────────────────
+  # ═════════════════════════════════════════════
+  #  5. OTHER PAGES
+  # ═════════════════════════════════════════════
   - name: pages
-    label: "Page Content"
+    label: "Other Pages"
+    description: "About & Services and Contact page content."
     delete: false
     editor: { preview: false }
     files:
-
-      - name: homepage
-        label: "Homepage"
-        file: src/content/pages/homepage.json
-        fields:
-          - label: "Hero Slideshow Images"
-            name: hero_slides
-            widget: list
-            required: false
-            hint: "Upload 3-6 images for the hero slideshow"
-            field: { label: "Slide Image", name: image, widget: image }
-          - label: "Hero Header Image (single)"
-            name: hero_image
-            widget: image
-            required: false
-          - { label: "Hero Video URL (.mp4)", name: hero_video, widget: string, required: false }
-          - { label: "Hero Headline Line 1",  name: hero_line1, widget: string }
-          - { label: "Hero Headline Line 2",  name: hero_line2, widget: string }
-          - { label: "Hero Subline",          name: hero_sub,   widget: string, required: false }
-          - { label: "Statement / Tagline",   name: statement,  widget: text }
-          - label: "Statement Background Image"
-            name: statement_image
-            widget: image
-            required: false
-          - { label: "About Headline",        name: about_headline, widget: string }
-          - { label: "About Body",            name: about_body,     widget: text }
-          - label: "Pillars (01 / 02 / 03)"
-            name: pillars
-            widget: list
-            required: false
-            fields:
-              - { label: "Number", name: number, widget: string, hint: "e.g. 01" }
-              - { label: "Title",  name: title,  widget: string }
-              - { label: "Body",   name: body,   widget: text }
 
       - name: about_services
         label: "About & Services Page"
@@ -205,6 +276,16 @@ collections:
           - { label: "Background Photo",       name: hero_image, widget: image,  required: false }
           - { label: "Background Video (.mp4)", name: hero_video, widget: string, required: false,
               hint: "Overrides photos when set" }
+
+  # ═════════════════════════════════════════════
+  #  6. SITE SETTINGS
+  # ═════════════════════════════════════════════
+  - name: settings
+    label: "Site Settings"
+    description: "Contact details, social links, SEO and documents."
+    delete: false
+    editor: { preview: false }
+    files:
 
       - name: contact
         label: "Contact & Social Links"

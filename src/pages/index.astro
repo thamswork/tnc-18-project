@@ -12,6 +12,13 @@ const newsItems = allNews
   .sort((a: any, b: any) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
   .slice(0, 6);
 import contactData from "../content/settings/contact.json";
+import worksOrder from "../data/works-order.json";
+const worksList: string[] = ((worksOrder as any).projects ?? [])
+  .map((t: any) => String(typeof t === "string" ? t : t?.project ?? "").trim());
+const worksPos = (p: any) => {
+  const i = worksList.indexOf(String(p.data.title ?? "").trim());
+  return i === -1 ? 9999 : i;
+};
 
 const allProjects = await getCollection("projects");
 const projects = allProjects.filter((p: any) => {
@@ -19,6 +26,8 @@ const projects = allProjects.filter((p: any) => {
   const raw = fs.readFileSync(p.filePath, 'utf-8');
   return !/^draft:\s*true/m.test(raw);
 }).sort((a: any, b: any) => {
+  const wa = worksPos(a), wb = worksPos(b);
+  if (wa !== wb) return wa - wb;
   const ao = (a.data as any).order ?? 999;
   const bo = (b.data as any).order ?? 999;
   if (ao !== bo) return ao - bo;
