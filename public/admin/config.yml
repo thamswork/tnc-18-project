@@ -9,6 +9,20 @@ backend:
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
+# Cloudinary: every image field opens the TNC18 media library (folders included)
+media_library:
+  name: cloudinary
+  output_filename_only: false
+  use_transformations: true
+  config:
+    cloud_name: dynjnftnu
+    api_key: "712915351497695"
+    default_transformations:
+      - - fetch_format: auto
+          quality: auto
+          width: 2000
+          crop: limit
+
 # Clean, ASCII-only file names for new entries (no long dashes or Thai characters in URLs)
 slug:
   encoding: "ascii"
@@ -196,7 +210,7 @@ collections:
           hint: "e.g. Siam Paragon — shown on the portfolio card" }
       - { label: "Size (e.g. 120 SQ.M)",  name: size,        widget: string,  required: false }
       - { label: "Cover Image",            name: cover,       widget: image,
-          hint: "Recommended: 1920x1080px minimum. Upload to Cloudinary first." }
+          hint: "Pick from TNC18 › PROJECT UPLOADS › this project. Min 1920x1080px." }
       - label: "Media Type"
         name: media_type
         widget: select
@@ -207,10 +221,15 @@ collections:
           hint: "Paste a direct .mp4 URL (Cloudinary). Leave blank to use Cover Image." }
       - label: "Gallery Images"
         name: gallery
-        widget: list
+        widget: image
         required: false
-        hint: "Drag to reorder."
-        field: { label: Image, name: image, widget: image }
+        media_library:
+          config:
+            multiple: true
+        hint: >-
+          Click Choose images, open TNC18 › PROJECT UPLOADS › this project's folder,
+          click the first photo then Shift+click the last, and Insert.
+          Photos show in the order selected. To change the set, choose again.
       - { label: "Short Description",      name: description, widget: text,    required: false }
       - { label: "Featured on Homepage",   name: featured,    widget: boolean, default: false }
       - label: "Sort Order (1 = first)"
