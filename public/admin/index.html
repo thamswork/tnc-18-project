@@ -7,5 +7,77 @@
 </head>
 <body>
   <script src="https://unpkg.com/decap-cms@3.3.3/dist/decap-cms.js"></script>
+  <script>
+  (function () {
+    var POS = 'center center';
+    var LABELS = { 'center center':'Center', 'center top':'Top', 'center bottom':'Bottom',
+      'left center':'Left', 'right center':'Right', 'left top':'Top left', 'right top':'Top right',
+      'left bottom':'Bottom left', 'right bottom':'Bottom right' };
+    var FILL = { position:'absolute', top:0, left:0, right:0, bottom:0 };
+    function url(getAsset, v) { if (!v) return ''; try { return String(getAsset(v)); } catch (e) { return v; } }
+    function merge(a, b) { var o = {}, k; for (k in a) o[k] = a[k]; for (k in b) o[k] = b[k]; return o; }
+
+    function frame(o) {
+      return h('div', { style: { display:'inline-block', verticalAlign:'top', marginRight:'24px', marginBottom:'24px' } },
+        h('div', { style: { font:'600 11px/1.4 system-ui,sans-serif', letterSpacing:'.08em', textTransform:'uppercase', color:'#555', marginBottom:'6px' } },
+          o.label + ' · ' + (LABELS[o.pos] || o.pos) + (o.note ? ' · ' + o.note : '')),
+        h('div', { style: { position:'relative', width:o.w + 'px', height:o.h + 'px', overflow:'hidden',
+            borderRadius:o.radius + 'px', background:'#222', boxShadow:'0 2px 12px rgba(0,0,0,.25)', border:o.border || 'none' } },
+          o.src ? h('img', { src:o.src, style: merge(FILL, { width:'100%', height:'100%', objectFit:'cover', objectPosition:o.pos }) }) : null,
+          h('div', { style: merge(FILL, { background:'linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0) 60%)' }) }),
+          h('div', { style: { position:'absolute', left:'8%', right:'8%', bottom:'10%', color:'#fff', font:'700 ' + o.fs + 'px/1.05 system-ui,sans-serif' } },
+            h('div', null, o.l1 || ''), h('div', { style: { opacity:.6 } }, o.l2 || ''))
+        )
+      );
+    }
+
+    var HomePreview = createClass({
+      render: function () {
+        var e = this.props.entry, ga = this.props.getAsset;
+        function d(k) { return e.getIn(['data', k]); }
+        var items = [], slides = d('hero_slides');
+        if (slides && slides.forEach) slides.forEach(function (s) {
+          if (!s) return;
+          var g = function (k) { return typeof s === 'string' ? (k === 'image' ? s : '') : s.get(k); };
+          if (g('image')) items.push({ d:g('image'), m:g('image_mobile'), pd:g('position'), pm:g('position_mobile') });
+        });
+        if (!items.length && d('hero_image')) items.push({ d:d('hero_image'), m:d('hero_image_mobile'),
+          pd:d('hero_position'), pm:d('hero_position_mobile') });
+        var wrap = { padding:'24px', background:'#F5F4F0', minHeight:'100vh', fontFamily:'system-ui,sans-serif' };
+        if (!items.length) return h('div', { style:wrap }, h('p', null, 'Add a Hero Header Image or a slide to see the preview.'));
+        var l1 = d('hero_line1'), l2 = d('hero_line2');
+        return h('div', { style:wrap },
+          h('h2', { style: { font:'700 16px system-ui,sans-serif', margin:'0 0 4px' } }, 'Hero preview'),
+          h('p', { style: { font:'13px system-ui,sans-serif', color:'#666', margin:'0 0 20px' } }, 'Updates as you edit. Click Publish to put it live.'),
+          items.map(function (it, i) {
+            var pd = it.pd || POS, pm = it.pm || it.pd || POS;
+            return h('div', { key:i, style: { marginBottom:'16px' } },
+              items.length > 1 ? h('div', { style: { font:'600 13px system-ui,sans-serif', margin:'0 0 8px' } }, 'Slide ' + (i + 1)) : null,
+              frame({ label:'Desktop', src:url(ga, it.d), pos:pd, w:480, h:270, radius:6, fs:24, l1:l1, l2:l2 }),
+              frame({ label:'Phone', src:url(ga, it.m || it.d), pos:pm, note: it.m ? '' : 'using desktop image',
+                w:200, h:433, radius:24, border:'6px solid #111', fs:16, l1:l1, l2:l2 })
+            );
+          })
+        );
+      }
+    });
+
+    var WorksPreview = createClass({
+      render: function () {
+        var list = this.props.entry.getIn(['data', 'projects']), rows = [];
+        if (list && list.forEach) list.forEach(function (x, i) {
+          var t = typeof x === 'string' ? x : (x && x.get ? x.get('project') : '');
+          rows.push(h('li', { key:i, style: { padding:'6px 0', borderBottom:'1px solid #ddd' } }, t || '(empty)'));
+        });
+        return h('div', { style: { padding:'24px', fontFamily:'system-ui,sans-serif', background:'#F5F4F0', minHeight:'100vh' } },
+          h('h2', { style: { fontSize:'16px', margin:'0 0 12px' } }, 'Works order on homepage'),
+          h('ol', { style: { paddingLeft:'22px', margin:0, fontSize:'14px' } }, rows));
+      }
+    });
+
+    CMS.registerPreviewTemplate('homepage_content', HomePreview);
+    CMS.registerPreviewTemplate('works_order', WorksPreview);
+  })();
+  </script>
 </body>
 </html>

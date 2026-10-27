@@ -24,7 +24,7 @@ collections:
     label: "Homepage"
     description: "Order of projects in the Works section, plus hero, statement and pillars."
     delete: false
-    editor: { preview: false }
+    editor: { preview: true }
     files:
 
       - name: works_order
