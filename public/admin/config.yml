@@ -56,17 +56,92 @@ collections:
         label: "Homepage Content"
         file: src/content/pages/homepage.json
         fields:
-          - label: "Hero Slideshow Images"
+          - label: "Hero Slideshow"
             name: hero_slides
             widget: list
             required: false
-            hint: "Upload 3–6 images. Drag to change slide order."
-            field: { label: "Slide Image", name: image, widget: image }
+            collapsed: true
+            label_singular: "slide"
+            summary: "{{fields.image}}"
+            hint: "3–6 slides. Drag the ═ handle to reorder. Mobile image is optional; if empty, the desktop image is used on phones."
+            fields:
+              - { label: "Desktop image (landscape, 1920×1080)", name: image, widget: image }
+              - { label: "Mobile image (portrait, 1080×1920)", name: image_mobile, widget: image, required: false,
+                  hint: "Shown on phones (screens up to 600px wide)." }
+              - label: "Desktop crop position"
+                name: position
+                widget: select
+                required: false
+                default: "center center"
+                hint: "Which part of the photo stays visible on desktop when it is cropped to fit."
+                options:
+                  - { label: "Center", value: "center center" }
+                  - { label: "Top", value: "center top" }
+                  - { label: "Bottom", value: "center bottom" }
+                  - { label: "Left", value: "left center" }
+                  - { label: "Right", value: "right center" }
+                  - { label: "Top left", value: "left top" }
+                  - { label: "Top right", value: "right top" }
+                  - { label: "Bottom left", value: "left bottom" }
+                  - { label: "Bottom right", value: "right bottom" }
+              - label: "Mobile crop position"
+                name: position_mobile
+                widget: select
+                required: false
+                default: "center center"
+                hint: "Which part stays visible on phones. Leave on Center unless the subject gets cut off."
+                options:
+                  - { label: "Center", value: "center center" }
+                  - { label: "Top", value: "center top" }
+                  - { label: "Bottom", value: "center bottom" }
+                  - { label: "Left", value: "left center" }
+                  - { label: "Right", value: "right center" }
+                  - { label: "Top left", value: "left top" }
+                  - { label: "Top right", value: "right top" }
+                  - { label: "Bottom left", value: "left bottom" }
+                  - { label: "Bottom right", value: "right bottom" }
           - label: "Hero Header Image (single)"
             name: hero_image
             widget: image
             required: false
             hint: "Used only if there are no slideshow images."
+          - label: "Hero Header Image — Mobile"
+            name: hero_image_mobile
+            widget: image
+            required: false
+            hint: "Optional portrait version for phones (1080×1920)."
+          - label: "Hero Header Image — Desktop crop position"
+            name: hero_position
+            widget: select
+            required: false
+            default: "center center"
+            hint: "Which part of the photo stays visible on desktop when it is cropped to fit."
+            options:
+              - { label: "Center", value: "center center" }
+              - { label: "Top", value: "center top" }
+              - { label: "Bottom", value: "center bottom" }
+              - { label: "Left", value: "left center" }
+              - { label: "Right", value: "right center" }
+              - { label: "Top left", value: "left top" }
+              - { label: "Top right", value: "right top" }
+              - { label: "Bottom left", value: "left bottom" }
+              - { label: "Bottom right", value: "right bottom" }
+          - label: "Hero Header Image — Mobile crop position"
+            name: hero_position_mobile
+            widget: select
+            required: false
+            default: "center center"
+            hint: "Which part stays visible on phones. Leave on Center unless the subject gets cut off."
+            options:
+              - { label: "Center", value: "center center" }
+              - { label: "Top", value: "center top" }
+              - { label: "Bottom", value: "center bottom" }
+              - { label: "Left", value: "left center" }
+              - { label: "Right", value: "right center" }
+              - { label: "Top left", value: "left top" }
+              - { label: "Top right", value: "right top" }
+              - { label: "Bottom left", value: "left bottom" }
+              - { label: "Bottom right", value: "right bottom" }
           - { label: "Hero Video URL (.mp4)", name: hero_video, widget: string, required: false }
           - { label: "Hero Headline Line 1",  name: hero_line1, widget: string }
           - { label: "Hero Headline Line 2",  name: hero_line2, widget: string }

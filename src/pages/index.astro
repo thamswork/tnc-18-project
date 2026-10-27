@@ -38,9 +38,13 @@ function slug(t: string) {
   return t.toLowerCase().replace(/[\u2018\u2019'']/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
 
-const slides: string[] = (homepageData.hero_slides && homepageData.hero_slides.length > 0)
-  ? homepageData.hero_slides.map((s: any) => typeof s === "string" ? s : s.image)
-  : homepageData.hero_image ? [homepageData.hero_image] : [];
+const slides: { d: string; m: string; pd: string; pm: string }[] = (homepageData.hero_slides && homepageData.hero_slides.length > 0)
+  ? homepageData.hero_slides
+      .map((s: any) => typeof s === "string" ? { d: s, m: s, pd: "", pm: "" } : { d: s.image, m: s.image_mobile || s.image, pd: s.position || "", pm: s.position_mobile || "" })
+      .filter((s: any) => s.d)
+  : homepageData.hero_image
+    ? [{ d: homepageData.hero_image, m: (homepageData as any).hero_image_mobile || homepageData.hero_image, pd: (homepageData as any).hero_position || "", pm: (homepageData as any).hero_position_mobile || "" }]
+    : [];
 
 const categories = ["All", ...new Set(projects.map(p => p.data.category).filter(Boolean))] as string[];
 const FB_PAGE_URL = contactData.facebook || "https://www.facebook.com/tnc18";
@@ -54,9 +58,12 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
   <section class="hero" id="hero">
     <div class="hero-track" id="hero-track">
       {slides.length > 0
-        ? slides.map((src, i) => (
+        ? slides.map((s, i) => (
             <div class={`hero-slide ${i === 0 ? "active" : ""}`}>
-              <img src={src} alt="" class="slide-img" loading={i === 0 ? "eager" : "lazy"} />
+              <picture class="slide-pic">
+                <source media="(max-width: 600px)" srcset={s.m} />
+                <img src={s.d} alt="" class="slide-img" style={`--pos-d:${s.pd || "center center"};--pos-m:${s.pm || s.pd || "center center"}`} loading={i === 0 ? "eager" : "lazy"} />
+              </picture>
               <div class="slide-veil"></div>
             </div>
           ))
@@ -270,6 +277,9 @@ const IG_URL = contactData.instagram || "https://instagram.com/tnc18";
 .hero-track { position: absolute; inset: 0; z-index: 0; }
 .hero-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s cubic-bezier(0.4,0,0.2,1); }
 .hero-slide.active { opacity: 1; }
+.slide-pic { display: contents; }
+.hero-slide .slide-img { object-fit: cover; object-position: var(--pos-d, center center); }
+@media (max-width: 600px) { .hero-slide .slide-img { object-position: var(--pos-m, center center); } }
 .slide-img, .slide-video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .slide-ph { width: 100%; height: 100%; background: linear-gradient(155deg,#0e1a2e,#060608); }
 
