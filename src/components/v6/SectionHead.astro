@@ -1,0 +1,10 @@
+---
+interface Props { label: string; id?: string; href?: string; linkText?: string; note?: string }
+const { label, id, href, linkText, note } = Astro.props;
+---
+<div class="t-sh">
+  <h2 class="t-sh-label" id={id}>{label}</h2>
+  {href && <a class="t-link" href={href}>{linkText}</a>}
+  {note && <span class="t-meta">{note}</span>}
+  <slot />
+</div>

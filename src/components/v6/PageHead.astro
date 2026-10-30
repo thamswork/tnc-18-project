@@ -1,0 +1,15 @@
+---
+interface Props { title: string; aside?: string }
+const { title, aside } = Astro.props;
+---
+<section class="t-wrap t-pagehead">
+  <slot name="crumb" />
+  <div class="t-pagehead-row">
+    <div class="t-pagehead-main">
+      <h1 class="t-display">{title}</h1>
+      <slot name="sub" />
+    </div>
+    {aside && <p class="t-pagehead-aside">{aside}</p>}
+    <slot name="aside" />
+  </div>
+</section>

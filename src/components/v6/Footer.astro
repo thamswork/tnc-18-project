@@ -1,0 +1,42 @@
+---
+import { site } from "../../data/site";
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+const socials = site.socials.filter((s) => s.href);
+---
+<footer class="t-footer">
+  <div class="t-wrap">
+    {!compact && (
+      <div class="t-footer-cta">
+        <h2 class="t-footer-h">Start a project</h2>
+        <p class="t-footer-lead">Tell us what you are building and when it has to open. LINE is the quickest way to reach us.</p>
+        <div class="t-footer-cols">
+          <div class="t-footer-col">
+            <span class="t-label">LINE</span>
+            <a class="t-footer-v" href={site.lineUrl}>{site.lineId}</a>
+            <a class="t-btn t-btn--line" href={site.lineUrl}>Chat on LINE</a>
+          </div>
+          <div class="t-footer-col">
+            <span class="t-label">Phone</span>
+            <a class="t-footer-v t-num" href={site.phoneHref}>{site.phoneDisplay}</a>
+            <a class="t-btn t-btn--ghost" href={site.phoneHref}>Call the studio</a>
+          </div>
+          <div class="t-footer-col">
+            <span class="t-label">Studio</span>
+            <span class="t-footer-v">{site.hours}</span>
+            <span class="t-footer-social">
+              {socials.map((s) => <a class="t-link" href={s.href} rel="noopener">{s.label}</a>)}
+            </span>
+          </div>
+        </div>
+      </div>
+    )}
+    <div class="t-footer-bar">
+      <span>© {new Date().getFullYear()} TNC.18 Co., Ltd.</span>
+      <nav aria-label="Footer">
+        <a href="/portfolio">Work</a><a href="/about-services">Studio</a><a href="/specbook">Specbook</a><a href="/contact">Contact</a>
+      </nav>
+      <span>{site.city}</span>
+    </div>
+  </div>
+</footer>

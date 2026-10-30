@@ -1,0 +1,27 @@
+---
+import { site } from "../../data/site";
+interface Props { active?: "work" | "studio" | "specbook" | "contact" }
+const { active } = Astro.props;
+const links = [
+  { k: "work", label: "Work", href: "/portfolio" },
+  { k: "studio", label: "Studio", href: "/about-services" },
+  { k: "specbook", label: "Specbook", href: "/specbook" },
+  { k: "contact", label: "Contact", href: "/contact" },
+];
+---
+<header class="t-header">
+  <div class="t-wrap t-header-in">
+    <a class="t-logo" href="/">TNC Build Studio</a>
+    <nav class="t-nav" aria-label="Main">
+      {links.map((l) => <a href={l.href} aria-current={active === l.k ? "page" : undefined}>{l.label}</a>)}
+    </nav>
+    <a class="t-header-line" href={site.lineUrl}><span class="t-dot" aria-hidden="true"></span>Chat on LINE</a>
+    <details class="t-menu">
+      <summary>Menu</summary>
+      <nav aria-label="Mobile">
+        {links.map((l) => <a href={l.href} aria-current={active === l.k ? "page" : undefined}>{l.label}</a>)}
+        <a class="t-btn t-btn--line" href={site.lineUrl}>Chat on LINE</a>
+      </nav>
+    </details>
+  </div>
+</header>
