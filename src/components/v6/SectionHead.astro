@@ -1,10 +1,13 @@
 ---
-interface Props { label: string; id?: string; href?: string; linkText?: string; note?: string }
-const { label, id, href, linkText, note } = Astro.props;
+interface Props { label: string; id?: string; href?: string; linkText?: string; note?: string; sub?: string }
+const { label, id, href, linkText, note, sub } = Astro.props;
 ---
 <div class="t-sh">
-  <h2 class="t-sh-label" id={id}>{label}</h2>
-  {href && <a class="t-link" href={href}>{linkText}</a>}
+  <div class="t-sh-main">
+    <h2 class="t-sh-label" id={id}>{label}</h2>
+    {sub && <p class="t-sh-sub">{sub}</p>}
+  </div>
+  {href && <a class="t-link" href={href}>{linkText} <span aria-hidden="true">→</span></a>}
   {note && <span class="t-meta">{note}</span>}
   <slot />
 </div>

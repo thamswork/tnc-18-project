@@ -7,6 +7,12 @@ export const site = {
   phoneHref: "tel:+66800064465",
   hours: "Mon–Sat, 09:00–18:00",
   city: "Bangkok, Thailand",
+  address: {
+    name: "TNC Build Studio",
+    lines: ["ห้อง 431 ตึก Udomsuk Hub", "55 ซอยสุขุมวิท 101/2 แขวงบางนาเหนือ", "เขตบางนา กรุงเทพมหานคร 10260"],
+  },
+  officeDisplay: "061 356 1422",
+  officeHref: "tel:+66613561422",
   socials: [
     { label: "Instagram", href: "" },
     { label: "TikTok", href: "" },

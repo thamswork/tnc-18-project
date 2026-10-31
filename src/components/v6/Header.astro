@@ -1,7 +1,7 @@
 ---
 import { site } from "../../data/site";
-interface Props { active?: "work" | "studio" | "specbook" | "contact" }
-const { active } = Astro.props;
+interface Props { active?: "work" | "studio" | "specbook" | "contact"; overlay?: boolean }
+const { active, overlay = false } = Astro.props;
 const links = [
   { k: "work", label: "Work", href: "/portfolio" },
   { k: "studio", label: "Studio", href: "/about-services" },
@@ -9,7 +9,7 @@ const links = [
   { k: "contact", label: "Contact", href: "/contact" },
 ];
 ---
-<header class="t-header">
+<header class:list={["t-header", { "t-header--overlay": overlay }]} data-header>
   <div class="t-wrap t-header-in">
     <a class="t-logo" href="/">TNC Build Studio</a>
     <nav class="t-nav" aria-label="Main">
@@ -25,3 +25,31 @@ const links = [
     </details>
   </div>
 </header>
+
+<script>
+  // The menu scrolls away with the page. Further down, it slides back in when
+  // the visitor scrolls up, and slides away again when they scroll down.
+  const h = document.querySelector<HTMLElement>("[data-header]");
+  if (h) {
+    let lastY = window.scrollY;
+    let timer: number | undefined;
+    let ticking = false;
+    const limit = () => (h.classList.contains("t-header--overlay") ? window.innerHeight * 0.8 : 240);
+    const reset = () => { window.clearTimeout(timer); h.classList.remove("is-stuck", "is-leaving"); };
+    const show = () => { window.clearTimeout(timer); h.classList.remove("is-leaving"); h.classList.add("is-stuck"); };
+    const hide = () => {
+      if (!h.classList.contains("is-stuck") || h.classList.contains("is-leaving")) return;
+      h.classList.add("is-leaving");
+      timer = window.setTimeout(() => h.classList.remove("is-stuck", "is-leaving"), 450);
+    };
+    const update = () => {
+      const y = window.scrollY;
+      if (y < 80) reset();
+      else if (y < lastY - 4 && y > limit()) show();
+      else if (y > lastY + 4 && !h.querySelector("details[open]")) hide();
+      lastY = y;
+      ticking = false;
+    };
+    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  }
+</script>

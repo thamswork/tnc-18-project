@@ -4,32 +4,31 @@ interface Props { compact?: boolean }
 const { compact = false } = Astro.props;
 const socials = site.socials.filter((s) => s.href);
 ---
-<footer class="t-footer">
+<footer class:list={["t-footer", { "t-footer--compact": compact }]}>
   <div class="t-wrap">
     {!compact && (
-      <div class="t-footer-cta">
-        <h2 class="t-footer-h">Start a project</h2>
-        <p class="t-footer-lead">Tell us what you are building and when it has to open. LINE is the quickest way to reach us.</p>
-        <div class="t-footer-cols">
-          <div class="t-footer-col">
-            <span class="t-label">LINE</span>
-            <a class="t-footer-v" href={site.lineUrl}>{site.lineId}</a>
-            <a class="t-btn t-btn--line" href={site.lineUrl}>Chat on LINE</a>
+      <>
+        <div class="t-footer-cta">
+          <div>
+            <h2 class="t-footer-h">Start a project</h2>
+            <p class="t-footer-lead">Tell us what you are building and when it has to open.</p>
           </div>
-          <div class="t-footer-col">
-            <span class="t-label">Phone</span>
-            <a class="t-footer-v t-num" href={site.phoneHref}>{site.phoneDisplay}</a>
+          <div class="t-footer-btns">
+            <a class="t-btn t-btn--line" href={site.lineUrl}>Chat on LINE</a>
             <a class="t-btn t-btn--ghost" href={site.phoneHref}>Call the studio</a>
           </div>
-          <div class="t-footer-col">
-            <span class="t-label">Studio</span>
-            <span class="t-footer-v">{site.hours}</span>
-            <span class="t-footer-social">
-              {socials.map((s) => <a class="t-link" href={s.href} rel="noopener">{s.label}</a>)}
-            </span>
-          </div>
         </div>
-      </div>
+        <dl class="t-footer-info">
+          <div><dt>LINE</dt><dd><a href={site.lineUrl}>{site.lineId}</a></dd></div>
+          <div><dt>Phone</dt><dd class="t-footer-stack"><a class="t-num" href={site.phoneHref}>{site.phoneDisplay}</a><a class="t-footer-sub t-num" href={site.officeHref}>Office {site.officeDisplay}</a></dd></div>
+          <div><dt>Hours</dt><dd>{site.hours}</dd></div>
+          <div class="t-footer-addr"><dt>Studio</dt><dd lang="th">
+            <span class="t-footer-addr-name">{site.address.name}</span>
+            {site.address.lines.map((l) => <span>{l}</span>)}
+          </dd></div>
+          {socials.length > 0 && <div><dt>Follow</dt><dd>{socials.map((s) => <a href={s.href} rel="noopener">{s.label}</a>)}</dd></div>}
+        </dl>
+      </>
     )}
     <div class="t-footer-bar">
       <span>© {new Date().getFullYear()} TNC.18 Co., Ltd.</span>
