@@ -2,7 +2,7 @@
 // Works with URLs that already carry transformations (e.g. c_limit,w_2000).
 const RE = /^(https:\/\/res\.cloudinary\.com\/[^/]+\/image\/upload\/)(.+)$/;
 
-export function cld(url: string | undefined, opts: { w?: number; h?: number; crop?: "fill" | "limit" } = {}): string {
+function cldBase(url: string | undefined, opts: { w?: number; h?: number; crop?: "fill" | "limit" } = {}): string {
   if (!url) return "";
   const m = url.match(RE);
   if (!m) return url;
@@ -16,9 +16,13 @@ export function cld(url: string | undefined, opts: { w?: number; h?: number; cro
 }
 
 // srcset for one photo at several widths, keeping an aspect ratio (w/h) when given.
-export function cldSet(url: string | undefined, widths: number[], ratio?: number): string {
+function cldSetBase(url: string | undefined, widths: number[], ratio?: number): string {
   if (!url) return "";
   return widths
     .map((w) => `${cld(url, ratio ? { w, h: Math.round(w / ratio) } : { w })} ${w}w`)
     .join(", ");
 }
+
+// CMS links sometimes carry stray spaces; trim them so Cloudinary resizing still applies.
+export const cld: typeof cldBase = ((url: any, ...rest: any[]) => (cldBase as any)(String(url ?? "").trim(), ...rest)) as any;
+export const cldSet: typeof cldSetBase = ((url: any, ...rest: any[]) => (cldSetBase as any)(String(url ?? "").trim(), ...rest)) as any;

@@ -1,315 +1,95 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import Navbar from "../../components/Navbar.astro";
-import Footer from "../../components/Footer.astro";
-import fs from 'node:fs';
-import { getCollection } from "astro:content";
+import Header from "../../components/v6/Header.astro";
+import Footer from "../../components/v6/Footer.astro";
+import PageHead from "../../components/v6/PageHead.astro";
+import ProjectCard from "../../components/v6/ProjectCard.astro";
+import { getProjects, projectUrl, projectName, projectMeta } from "../../lib/projects";
 
-const allProjects = await getCollection("projects");
-const projects = allProjects.filter((p: any) => {
-  if (!p.filePath) return true;
-  const raw = fs.readFileSync(p.filePath, 'utf-8');
-  return !/^draft:\s*true/m.test(raw);
-}).sort((a: any, b: any) => {
-  const ao = (a.data as any).order ?? 999;
-  const bo = (b.data as any).order ?? 999;
-  if (ao !== bo) return ao - bo;
-  return b.data.year - a.data.year;
-});
+const projects = await getProjects();
+const years = projects.map((p: any) => Number(p.data.year)).filter(Boolean);
+const yearMin = Math.min(...years), yearMax = Math.max(...years);
+const span = yearMin === yearMax ? String(yearMax) : `${yearMin}–${yearMax}`;
 
-function slug(t: string) {
-  return t.toLowerCase().replace(/[\u2018\u2019'']/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+// Types, most projects first (same order as Home)
+const counts = new Map<string, number>();
+for (const p of projects) {
+  const c = String(p.data.category ?? "").trim();
+  if (c) counts.set(c, (counts.get(c) ?? 0) + 1);
 }
-
-const categories = ["All", ...new Set(projects.map(p => p.data.category).filter(Boolean))];
+const cats = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
 ---
+<Layout title="ผลงาน — รับเหมาตกแต่งร้านค้า บูธขายของในห้าง Pop-up Store | TNC Build Studio" description="ผลงานการออกแบบและสร้างบูธขายของในห้าง Pop-up Store ตกแต่งร้านค้า และตกแต่งภายในโดย TNC Build Studio กรุงเทพ | Portfolio of retail booth design and interior fit-out Bangkok" bodyClass="v6">
+  <Header active="work" />
+  <main>
+    <PageHead title="Work" aside={`${projects.length} projects, ${span}. Shops, pop-ups, exhibition pavilions, clinics and homes across Bangkok.`} />
 
-<Layout title="ผลงาน — รับเหมาตกแต่งร้านค้า บูธขายของในห้าง Pop-up Store | TNC Build Studio" description="ผลงานการออกแบบและสร้างบูธขายของในห้าง Pop-up Store ตกแต่งร้านค้า และตกแต่งภายในโดย TNC Build Studio กรุงเทพ | Portfolio of retail booth design and interior fit-out Bangkok">
-  <Navbar />
-
-  <main class="main">
-
-    <header class="page-header">
-      <div class="page-header-left">
-        <p class="page-eyebrow">Selected Projects</p>
-        <h1 class="page-title">Work</h1>
-      </div>
-      <div class="page-filters" id="filters" role="tablist">
-        {categories.map((cat, i) => (
-          <button
-            class={`filter-btn ${i === 0 ? "active" : ""}`}
-            data-cat={cat} role="tab"
-            aria-selected={i === 0 ? "true" : "false"}
-          >{cat}</button>
-        ))}
-      </div>
-    </header>
-
-    <div class="proj-grid" id="proj-grid">
-      {projects.map((p, i) => (
-        <article class="proj-card" data-category={p.data.category} data-index={i}>
-          <a href={`/portfolio/${slug(p.data.title)}`} class="proj-link">
-            <div class="proj-img-wrap">
-              {p.data.cover && !p.data.cover.includes("placeholder")
-                ? <img src={p.data.cover} alt={p.data.title}
-                    loading={i < 4 ? "eager" : "lazy"} class="proj-img" />
-                : <div class="proj-ph"></div>
-              }
-              <div class="proj-overlay">
-                <div class="proj-overlay-inner">
-                  <span class="proj-cat">{p.data.category}</span>
-                  <h2 class="proj-title">{p.data.title}</h2>
-                  <span class="proj-arrow">→</span>
-                </div>
-              </div>
-              <!-- Always visible on mobile -->
-              <div class="proj-caption">
-                <span class="proj-caption-cat">{p.data.category}</span>
-                <h2 class="proj-caption-title">{p.data.title}</h2>
-              </div>
-            </div>
-          </a>
-        </article>
-      ))}
-
-      {projects.length === 0 && (
-        <div class="proj-empty">
-          <p>No projects yet. <a href="/admin">Add in CMS →</a></p>
+    <div class="w-filter" data-filter>
+      <div class="t-wrap">
+        <div class="w-tabs" role="group" aria-label="Filter by type">
+          <button type="button" class="w-tab" data-tab="all" aria-pressed="true">All <span class="w-count t-num">{projects.length}</span></button>
+          {cats.map((c) => (
+            <button type="button" class="w-tab" data-tab={c.name} aria-pressed="false">{c.name} <span class="w-count t-num">{c.count}</span></button>
+          ))}
         </div>
-      )}
+      </div>
     </div>
 
+    <section class="t-wrap w-grid-wrap" aria-label="Projects" data-grid>
+      <ul class="w-grid">
+        {projects.map((p: any, i: number) => (
+          <li data-cat={String(p.data.category ?? "").trim()}>
+            <ProjectCard href={projectUrl(p)} title={projectName(p)} meta={projectMeta(p)} img={p.data.cover} ratio="4/5"
+              sizes="(max-width: 600px) 100vw, (max-width: 1100px) 50vw, 25vw" eager={i < 4} />
+          </li>
+        ))}
+      </ul>
+    </section>
   </main>
-
-  <Footer ctaTitle="Have a Project in Mind?" ctaSub="Every project handled by founding partners. No junior hand-offs." />
+  <Footer />
 </Layout>
 
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-.main {
-  padding-top: 64px;
-  background: var(--bg, #F4F3EF);
-  min-height: 100vh;
-}
-
-/* ── HEADER ── */
-.page-header {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  padding: 4rem var(--pad-x) 2.5rem;
-}
-
-@media (min-width: 768px) {
-  .page-header {
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 3rem;
-  }
-}
-
-.page-eyebrow {
-  font-size: 0.55rem; font-weight: 600;
-  letter-spacing: 0.26em; text-transform: uppercase;
-  color: var(--navy, #1A3A6B);
-  margin-bottom: 0.75rem; display: block;
-}
-
-.page-title {
-  font-size: clamp(2rem, 6vw, 4rem);
-  font-weight: 800; letter-spacing: -0.04em;
-  line-height: 0.92; color: var(--ink, #111);
-  text-transform: uppercase;
-}
-
-/* ── FILTERS ── */
-.page-filters {
-  display: flex; gap: 0;
-  flex-wrap: wrap; overflow-x: auto;
-  scrollbar-width: none;
-  padding-bottom: 2px;
-}
-.page-filters::-webkit-scrollbar { display: none; }
-
-.filter-btn {
-  font-size: 0.6rem; font-weight: 500;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--ink-light, #777);
-  background: none; border: none; cursor: pointer;
-  padding: 0.4rem 1.5rem 0.4rem 0;
-  position: relative; white-space: nowrap;
-  transition: color 0.2s; flex-shrink: 0;
-}
-.filter-btn::after {
-  content: ""; position: absolute;
-  bottom: 0; left: 0; right: 0; height: 1px;
-  background: var(--ink, #111);
-  transform: scaleX(0); transform-origin: left;
-  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
-}
-.filter-btn.active { color: var(--ink, #111); font-weight: 600; }
-.filter-btn.active::after { transform: scaleX(1); }
-.filter-btn:hover { color: var(--ink, #111); }
-
-/* ── GRID ── */
-.proj-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-  padding: 0 var(--pad-x) 5rem;
-}
-
-@media (min-width: 600px) {
-  .proj-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .proj-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.75rem;
-  }
-}
-
-/* ── CARD ── */
-.proj-card {
-  opacity: 0; transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
-              transform 0.7s cubic-bezier(0.16,1,0.3,1);
-}
-.proj-card.in-view { opacity: 1; transform: none; }
-.proj-card.hidden { display: none; }
-
-.proj-link {
-  display: block;
-  text-decoration: none; color: inherit;
-}
-
-/* ── IMAGE ── */
-.proj-img-wrap {
-  position: relative; width: 100%;
-  overflow: hidden;
-  background: var(--bg-dark, #ECEAE3);
-  aspect-ratio: 1/1;
-}
-
-.proj-img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-  transition: transform 1.2s cubic-bezier(0.4,0,0.2,1);
-}
-.proj-ph { width: 100%; height: 100%; background: var(--bg-dark); }
-.proj-link:hover .proj-img { transform: scale(1.05); }
-
-/* ── OVERLAY ── */
-.proj-overlay {
-  position: absolute; inset: 0;
-  background: rgba(10,18,36,0);
-  transition: background 0.45s cubic-bezier(0.4,0,0.2,1);
-  display: flex; align-items: flex-end;
-}
-.proj-link:hover .proj-overlay {
-  background: rgba(10,18,36,0.72);
-}
-
-.proj-overlay-inner {
-  padding: 2rem 1.75rem;
-  display: flex; flex-direction: column;
-  gap: 0.5rem; width: 100%;
-  transform: translateY(12px); opacity: 0;
-  transition:
-    opacity 0.4s 0.05s cubic-bezier(0.16,1,0.3,1),
-    transform 0.4s 0.05s cubic-bezier(0.16,1,0.3,1);
-}
-.proj-link:hover .proj-overlay-inner {
-  opacity: 1; transform: none;
-}
-
-.proj-cat {
-  font-size: 0.55rem; font-weight: 600;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(244,243,239,0.55);
-}
-
-.proj-title {
-  font-size: clamp(1rem, 2.5vw, 1.5rem);
-  font-weight: 700; letter-spacing: -0.02em;
-  color: #F4F3EF; line-height: 1.15;
-}
-
-.proj-arrow {
-  font-size: 1rem; color: rgba(244,243,239,0.6);
-  margin-top: 0.25rem;
-  transition: transform 0.25s;
-}
-.proj-link:hover .proj-arrow { transform: translateX(4px); }
-
-/* Always-visible caption — mobile only */
-.proj-caption {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  padding: 2rem 1.25rem 1rem;
-  background: linear-gradient(to top, rgba(10,18,36,0.82) 0%, transparent 100%);
-  display: flex; flex-direction: column; gap: 0.3rem;
-  pointer-events: none;
-}
-.proj-caption-cat {
-  font-size: 0.48rem; font-weight: 600;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: rgba(244,243,239,0.55);
-}
-.proj-caption-title {
-  font-size: 0.85rem; font-weight: 700;
-  letter-spacing: -0.01em; color: #F4F3EF;
-  line-height: 1.2;
-}
-
-/* Hide caption on desktop (overlay handles it) */
-@media (hover: hover) and (pointer: fine) {
-  .proj-caption { display: none; }
-}
-
-.proj-empty {
-  grid-column: 1 / -1;
-  padding: 5rem 0;
-  font-size: 0.875rem; color: var(--ink-light);
-}
-.proj-empty a { color: var(--navy); }
-</style>
-
 <script>
-(function() {
-  const cards = document.querySelectorAll<HTMLElement>(".proj-card");
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const el = e.target as HTMLElement;
-      const idx = parseInt(el.dataset.index || "0");
-      setTimeout(() => el.classList.add("in-view"), (idx % 3) * 90);
-      io.unobserve(el);
-    });
-  }, { threshold: 0.06 });
-  cards.forEach(c => io.observe(c));
-})();
-
-(function() {
-  document.querySelectorAll(".filter-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      document.querySelectorAll(".filter-btn").forEach(b => {
-        b.classList.remove("active");
-        b.setAttribute("aria-selected", "false");
-      });
-      btn.classList.add("active");
-      btn.setAttribute("aria-selected", "true");
-      const cat = btn.getAttribute("data-cat");
-      document.querySelectorAll<HTMLElement>(".proj-card").forEach(card => {
-        card.classList.toggle("hidden", cat !== "All" && card.dataset.category !== cat);
-      });
-    });
-  });
-})();
+  const bar = document.querySelector<HTMLElement>("[data-filter]");
+  const grid = document.querySelector<HTMLElement>("[data-grid]");
+  if (bar && grid) {
+    const tabs = [...bar.querySelectorAll<HTMLButtonElement>("[data-tab]")];
+    const items = [...grid.querySelectorAll<HTMLElement>("li[data-cat]")];
+    const pick = (cat: string, fromClick: boolean) => {
+      const t = tabs.find((x) => x.dataset.tab === cat) ?? tabs[0];
+      const name = t.dataset.tab || "all";
+      tabs.forEach((x) => x.setAttribute("aria-pressed", String(x === t)));
+      items.forEach((li) => { li.hidden = !(name === "all" || li.dataset.cat === name); });
+      if (!fromClick) { t.scrollIntoView({ block: "nearest", inline: "center" }); return; }
+      const url = new URL(location.href);
+      if (name === "all") url.searchParams.delete("type"); else url.searchParams.set("type", name);
+      history.replaceState(null, "", url);
+      // If the bar is stuck at the top, bring the start of the grid back into view
+      const top = grid.getBoundingClientRect().top + scrollY - bar.offsetHeight - 8;
+      if (scrollY > top) scrollTo({ top });
+    };
+    tabs.forEach((t) => t.addEventListener("click", () => pick(t.dataset.tab || "all", true)));
+    const q = new URLSearchParams(location.search).get("type");
+    if (q) pick(q, false);
+  }
 </script>
+
+<style>
+  .w-filter { position: sticky; top: 0; z-index: 5; background: var(--blue); transition: top .3s ease; }
+  body:has(.t-header.is-stuck) .w-filter { top: 76px; }
+  .w-tabs { display: flex; gap: 0 28px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+  .w-tabs::-webkit-scrollbar { display: none; }
+  .w-tab { flex: 0 0 auto; height: 56px; margin-bottom: -1px; padding: 0; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--mute); font: 400 14px var(--f); white-space: nowrap; cursor: pointer; transition: color .3s ease, border-color .3s ease; }
+  .w-tab:hover, .w-tab[aria-pressed="true"] { color: #fff; }
+  .w-tab[aria-pressed="true"] { border-bottom-color: #fff; }
+  .w-count { margin-left: 4px; font-size: 12px; color: var(--mute); }
+  .w-grid-wrap { padding-top: 40px; padding-bottom: var(--sec); }
+  .w-grid { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 48px 24px; }
+  .w-grid li[hidden] { display: none; }
+  @media (max-width: 1100px) { .w-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) {
+    .w-tabs { gap: 0 22px; margin-inline: calc(var(--m) * -1); padding-inline: var(--m); }
+    .w-grid-wrap { padding-top: 28px; }
+    .w-grid { grid-template-columns: 1fr; gap: 36px; }
+  }
+</style>

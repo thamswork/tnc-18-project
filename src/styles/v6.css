@@ -66,7 +66,7 @@ body.v6 .t-header--overlay + main { padding-top: 0; }
 .v6 .t-menu nav .t-btn { margin-top: 20px; justify-self: stretch; }
 
 /* Page head and section head */
-.v6 .t-pagehead { padding-top: clamp(64px, 8vw, 128px); padding-bottom: clamp(40px, 5vw, 72px); }
+.v6 .t-pagehead { padding-top: calc(76px + clamp(32px, 3.5vw, 56px)); padding-bottom: clamp(40px, 5vw, 72px); }
 .v6 .t-pagehead-row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-end; justify-content: space-between; }
 .v6 .t-pagehead-main { flex: 1 1 560px; }
 .v6 .t-pagehead-aside { margin: 0; flex: 0 1 360px; font-size: 14px; color: var(--mute); }
@@ -143,3 +143,6 @@ body.v6.is-foot .sd-wrap { opacity: 0; pointer-events: none; }
 
 /* Compact section spacing */
 html body.v6 { --sec: clamp(44px, 4.5vw, 72px); }
+
+/* Old site CSS sets body overflow-x: hidden, which breaks position: sticky. clip blocks sideways scroll without that side effect. */
+html body.v6 { overflow-x: clip; }
