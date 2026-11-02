@@ -344,22 +344,15 @@ collections:
     files:
 
       - name: about_services
-        label: "About & Services Page"
+        label: "Studio Page"
         file: src/content/pages/about-services.json
         fields:
-          - label: "Header Image"
-            name: hero_image
-            widget: image
-            required: false
-          - { label: "Page Headline",      name: headline,    widget: string }
-          - { label: "Mission Statement",  name: mission,     widget: text }
-          - { label: "Bio Paragraph 1",    name: bio_1,       widget: text }
-          - { label: "Bio Paragraph 2",    name: bio_2,       widget: text,   required: false }
-          - { label: "Owner Name",         name: owner_name,  widget: string, required: false }
-          - { label: "Owner Title",        name: owner_title, widget: string, required: false }
-          - { label: "Owner Photo",        name: owner_photo, widget: image,  required: false }
-          - { label: "Years Experience",   name: years,       widget: string, required: false }
-          - { label: "Projects Completed", name: projects,    widget: string, required: false }
+          - { label: "Main photo (full width)", name: hero_image, widget: image, required: false, hint: "Wide photo under the STUDIO title. Leave empty to use a project photo." }
+          - { label: "Founding year", name: founded, widget: string, required: false, hint: "e.g. 2006. Shows as: Design and build in Bangkok since 2006. Also sets the Years number automatically." }
+          - { label: "Statement", name: statement, widget: text, hint: "The big sentence under the photo. One or two sentences." }
+          - { label: "Projects", name: projects, widget: string, required: false, hint: "e.g. 200+. Leave empty to hide." }
+          - { label: "Photo left (portrait)", name: photo_2, widget: image, required: false, hint: "Optional. Shown first in the slideshow near the bottom; project photos rotate after it." }
+          - { label: "Photo right (portrait)", name: photo_3, widget: image, required: false, hint: "Optional. Shown first in the slideshow near the bottom; project photos rotate after it." }
 
       - name: contact_page
         label: "Contact Page"
