@@ -8,7 +8,7 @@ import ProjectCard from "../components/v6/ProjectCard.astro";
 import { getCollection } from "astro:content";
 import homepageData from "../content/pages/homepage.json";
 import { cld, cldSet } from "../lib/cld";
-import { getProjects, projectUrl, projectName, projectMeta } from "../lib/projects";
+import { getProjects, projectUrl, projectName, projectMeta, projectPlace } from "../lib/projects";
 
 const home: any = homepageData;
 const projects = await getProjects();
@@ -139,29 +139,30 @@ const two = (n: number) => String(n).padStart(2, "0");
       </div>
     </section>
 
-    <section class="h-feat" aria-labelledby="h-work" data-feat>
+    <section class="h-feat" aria-labelledby="h-build" data-feat>
       <div class="h-feat-bg" aria-hidden="true">
-        {feat.map((p, i) => (
-          <img class:list={["h-feat-img", { "is-on": i === 0 }]} src={cld(p.data.cover, { w: 2400, h: 1350 })}
-            srcset={cldSet(p.data.cover, [1200, 1800, 2400], 16 / 9)} sizes="100vw" alt=""
-            loading={i === 0 ? "eager" : "lazy"} decoding="async" />
-        ))}
+        {cats.map((c, i) => c.cover
+          ? <img class:list={["h-feat-img", { "is-on": i === 0 }]} src={cld(c.cover, { w: 2400, h: 1350 })}
+              srcset={cldSet(c.cover, [1200, 1800, 2400], 16 / 9)} sizes="100vw" alt=""
+              loading={i === 0 ? "eager" : "lazy"} decoding="async" />
+          : <span class:list={["h-feat-img", { "is-on": i === 0 }]}></span>
+        )}
       </div>
       <div class="t-wrap h-feat-in">
         <div class="h-feat-head" data-reveal>
           <div>
-            <h2 class="h-feat-title" id="h-work">Selected work</h2>
-            <p class="h-feat-sub">{projects.length} projects · {yearMin === yearMax ? yearMax : `${yearMin}–${yearMax}`}</p>
+            <h2 class="h-feat-title" id="h-build">What we build</h2>
+            <p class="h-feat-sub">{cats.length === 5 ? "Five" : cats.length} kinds of space, one team from drawing to handover.</p>
           </div>
-          <a class="t-link" href="/portfolio">View all work <span aria-hidden="true">→</span></a>
+          <a class="t-link" href="/portfolio">Browse all work <span aria-hidden="true">→</span></a>
         </div>
         <ol class="h-feat-list">
-          {feat.map((p, i) => (
+          {cats.map((c, i) => (
             <li data-reveal style={`--d:${(0.1 + i * 0.08).toFixed(2)}s`}>
-              <a class:list={["h-feat-row", { "is-on": i === 0 }]} href={projectUrl(p)}>
-                <span class="h-feat-n t-num">{two(i + 1)}</span>
-                <span class="h-feat-name">{projectName(p)}</span>
-                <span class="h-feat-meta">{projectMeta(p)}{facts(p) && <span class="h-feat-facts"> · {facts(p)}</span>}</span>
+              <a class:list={["h-feat-row", { "is-on": i === 0 }]} href={`/portfolio?type=${encodeURIComponent(c.name)}`}>
+                <span class="h-feat-n t-num">{c.n}</span>
+                <span class="h-feat-name">{c.name}</span>
+                <span class="h-feat-meta">{c.count} {c.count === 1 ? "project" : "projects"}</span>
               </a>
             </li>
           ))}
@@ -169,19 +170,46 @@ const two = (n: number) => String(n).padStart(2, "0");
       </div>
     </section>
 
-    <section class="h-build" aria-labelledby="h-build">
+    <section class="h-works" aria-labelledby="h-work" data-works>
       <div class="t-wrap">
-        <SectionHead id="h-build" label="What we build" sub="Five kinds of space, one team from drawing to handover." href="/portfolio" linkText="Browse by type" />
+        <div class="h-works-head">
+          <div>
+            <h2 class="h-feat-title" id="h-work">Selected work</h2>
+            <p class="h-feat-sub">{projects.length} projects · {yearMin === yearMax ? yearMax : `${yearMin}–${yearMax}`}</p>
+          </div>
+          <a class="t-link" href="/portfolio" data-more>View all work <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="h-tabs" role="group" aria-label="Filter by type">
+          <button type="button" class="h-tab" data-tab="all" aria-pressed="true">All</button>
+          {cats.map((c) => <button type="button" class="h-tab" data-tab={c.name} aria-pressed="false">{c.name}</button>)}
+        </div>
       </div>
-      <div class="h-cats" style={`--cols:${cats.length}`}>
-        {cats.map((c) => (
-          <a class="h-cat" href="/portfolio">
-            {c.cover && <img src={cld(c.cover, { w: 700, h: 1100 })} srcset={cldSet(c.cover, [400, 700, 1000], 7 / 11)} sizes="(max-width: 600px) 80vw, 20vw" alt="" loading="lazy" decoding="async" />}
-            <span class="h-cat-top t-num">{c.n}</span>
-            <span class="h-cat-bottom"><span class="h-cat-name">{c.name}</span><span class="h-cat-count">{c.count} {c.count === 1 ? "project" : "projects"}</span></span>
-          </a>
-        ))}
-      </div>
+      <ol class="h-works-list">
+        {projects.map((p, i) => {
+          const cat = String(p.data.category ?? "").trim();
+          const place = String(projectPlace(p) || "");
+          return (
+            <li class:list={["h-work", { "is-hidden": i >= 6 }]} data-cat={cat}>
+              <a class="h-work-a" href={projectUrl(p)}>
+                {p.data.cover && (
+                  <picture>
+                    <source media="(max-width: 600px)" srcset={cldSet(p.data.cover, [600, 900, 1200], 4 / 3)} sizes="100vw" />
+                    <img src={cld(p.data.cover, { w: 2400, h: 1000 })} srcset={cldSet(p.data.cover, [1200, 1800, 2400], 12 / 5)} sizes="100vw" alt={projectName(p)} loading="lazy" decoding="async" />
+                  </picture>
+                )}
+                <span class="t-wrap h-work-cap">
+                  <span class="h-work-n t-num">{two(i + 1)}</span>
+                  <span class="h-work-txt">
+                    <span class="h-work-meta">{[cat, place].filter(Boolean).join(" · ")}</span>
+                    <span class="h-work-name">{projectName(p)}</span>
+                  </span>
+                  {p.data.year && <span class="h-work-year t-num">{p.data.year}</span>}
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ol>
     </section>
 
     {logos.length > 0 && (
@@ -304,6 +332,25 @@ const two = (n: number) => String(n).padStart(2, "0");
     if (!still) window.setInterval(() => { if (!inside) go(k + 1); }, 5000);
   }
 
+  // Selected work: type tabs show up to six projects of that type
+  const works = document.querySelector<HTMLElement>("[data-works]");
+  if (works) {
+    const items = [...works.querySelectorAll<HTMLElement>(".h-work")];
+    const tabs = [...works.querySelectorAll<HTMLButtonElement>("[data-tab]")];
+    const more = works.querySelector<HTMLAnchorElement>("[data-more]");
+    tabs.forEach((t) => t.addEventListener("click", () => {
+      const cat = t.dataset.tab || "all";
+      tabs.forEach((x) => x.setAttribute("aria-pressed", String(x === t)));
+      let n = 0;
+      items.forEach((li) => {
+        const ok = (cat === "all" || li.dataset.cat === cat) && n < 6;
+        if (ok) { n++; const num = li.querySelector(".h-work-n"); if (num) num.textContent = String(n).padStart(2, "0"); }
+        li.classList.toggle("is-hidden", !ok);
+      });
+      if (more) more.href = cat === "all" ? "/portfolio" : `/portfolio?type=${encodeURIComponent(cat)}`;
+    }));
+  }
+
   // Project showcase
   const show = document.querySelector("[data-show]");
   if (show) {
@@ -402,6 +449,28 @@ const two = (n: number) => String(n).padStart(2, "0");
   .h-cat-name { font-size: 28px; font-weight: 500; line-height: 1.1; letter-spacing: -.02em; color: #fff; }
   .h-cat-count { font-size: 13px; color: var(--soft); }
 
+  /* Selected work: old Works style, full-width banners with type tabs */
+  .h-works { padding-top: var(--sec); background: var(--blue); color: #fff; }
+  .h-works-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 32px; }
+  .h-tabs { display: flex; gap: 0 28px; margin: 20px 0 0; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+  .h-tabs::-webkit-scrollbar { display: none; }
+  .h-tab { flex: 0 0 auto; min-height: 48px; margin-bottom: -1px; padding: 0; background: none; border: 0; border-bottom: 1px solid transparent; color: var(--mute); font: 500 12px var(--f); letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: color .3s ease, border-color .3s ease; }
+  .h-tab:hover, .h-tab[aria-pressed="true"] { color: #fff; border-bottom-color: #fff; }
+  .h-works-list { margin: 24px 0 0; padding: 0; list-style: none; }
+  .h-work.is-hidden { display: none; }
+  .h-work + .h-work { border-top: 1px solid var(--deep); }
+  .h-work-a { position: relative; display: block; height: clamp(280px, 32vw, 520px); overflow: hidden; background: var(--tile); color: #fff; }
+  .h-work-a:hover { color: #fff; }
+  .h-work-a picture, .h-work-a img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .h-work-a img { object-fit: cover; transition: transform 1.6s cubic-bezier(.16,1,.3,1); }
+  .h-work-a:hover img { transform: scale(1.03); }
+  .h-work-a::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(8,22,56,0) 40%, rgba(8,22,56,.78) 100%); }
+  .h-work-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; display: flex; align-items: flex-end; gap: 12px 24px; padding-block: 28px; }
+  .h-work-n, .h-work-year { font-size: 13px; color: var(--soft); padding-bottom: 4px; }
+  .h-work-txt { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .h-work-meta { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--soft); }
+  .h-work-name { font-size: clamp(20px, 2vw, 30px); font-weight: 500; line-height: 1.15; letter-spacing: -.02em; }
+
   /* Mall logos: full-bleed light band */
   .h-logos > .t-wrap { padding-block: clamp(48px, 4.5vw, 72px); }
   .h-logos .t-sh { border-top: 0; padding-top: 0; }
@@ -445,8 +514,8 @@ const two = (n: number) => String(n).padStart(2, "0");
   .h-feat-bg { position: absolute; inset: 0; }
   .h-feat-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transform: scale(1.06); transition: opacity 1.1s ease, transform 2.6s cubic-bezier(.16,1,.3,1); }
   .h-feat-img.is-on { opacity: 1; transform: none; }
-  .h-feat-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,22,56,.9) 0%, rgba(8,22,56,.64) 46%, rgba(8,22,56,.22) 100%); }
-  .h-feat-in { position: relative; z-index: 1; min-height: min(86svh, 820px); display: flex; flex-direction: column; justify-content: space-between; gap: 48px; padding-block: var(--sec); }
+  .h-feat-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,22,56,.9) 0%, rgba(8,22,56,.6) 46%, rgba(8,22,56,.58) 100%); }
+  .h-feat-in { position: relative; z-index: 1; min-height: min(64svh, 600px); display: flex; flex-direction: column; justify-content: space-between; gap: 32px; padding-block: var(--sec); }
   .h-feat-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px 24px; }
   .h-feat-title { margin: 0; font-weight: 800; font-size: clamp(28px, 3vw, 48px); line-height: .9; letter-spacing: -.05em; text-transform: uppercase; color: #fff; }
   .h-feat-sub { margin: 12px 0 0; font-size: 14px; color: var(--soft); }
@@ -477,6 +546,17 @@ const two = (n: number) => String(n).padStart(2, "0");
   /* Phone */
   @media (max-width: 600px) {
     .h-hero-stage { height: 100svh; min-height: 560px; }
+    .h-step-d, .h-intro-label, .h-feat-sub { font-size: 15px; }
+    .h-hero-title { font-size: clamp(34px, 10.5vw, 44px); overflow-wrap: anywhere; }
+    .h-show-t { font-size: clamp(30px, 9.5vw, 40px); overflow-wrap: anywhere; }
+    .h-work-a { height: auto; aspect-ratio: 4 / 3; }
+    .h-work-cap { padding-block: 20px; gap: 12px 16px; }
+    .h-work-name { font-size: 20px; }
+    .h-tabs { gap: 0 22px; }
+    .h-feat-img { filter: brightness(.5); }
+    .h-feat-facts { display: none; }
+    .h-cats { scrollbar-width: none; }
+    .h-cats::-webkit-scrollbar { display: none; }
     .h-hero-bar { display: none; }
     .h-hero-btn { height: 52px; padding: 0 20px; }
     .h-hero-slide img { object-position: var(--pm, center center); }

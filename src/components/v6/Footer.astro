@@ -39,3 +39,11 @@ const socials = site.socials.filter((s) => s.href);
     </div>
   </div>
 </footer>
+
+<script>
+  // Hide the floating LINE button while the footer (which has its own LINE and Call buttons) is on screen
+  const foot = document.querySelector(".t-footer-bar")?.closest("footer");
+  if (foot && "IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => document.body.classList.toggle("is-foot", e.isIntersecting), { rootMargin: "0px 0px -15% 0px" }).observe(foot);
+  }
+</script>
