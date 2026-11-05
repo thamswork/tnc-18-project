@@ -358,14 +358,8 @@ collections:
         label: "Contact Page"
         file: src/content/pages/contact.json
         fields:
-          - { label: "Page Headline",          name: headline,   widget: string }
-          - { label: "Subtext",                name: subtext,    widget: text,   required: false }
-          - { label: "LINE CTA Label",         name: line_label, widget: string, default: "Message us on Line" }
-          - { label: "Response Promise",       name: promise,    widget: string, required: false,
-              hint: "e.g. We reply within 2 hours" }
-          - { label: "Background Photo",       name: hero_image, widget: image,  required: false }
-          - { label: "Background Video (.mp4)", name: hero_video, widget: string, required: false,
-              hint: "Overrides photos when set" }
+          - { label: "Intro line", name: intro, widget: text, required: false, hint: "Grey line next to the CONTACT title." }
+          - { label: "Photo", name: hero_image, widget: image, required: false, hint: "Optional. Tall photo on the left. Leave empty to use the Curated and Co. project photo." }
 
   # ═════════════════════════════════════════════
   #  6. SITE SETTINGS
