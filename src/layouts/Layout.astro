@@ -64,12 +64,14 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
           "description": "รับออกแบบและสร้างบูธขายของในห้าง Pop-up Store ร้านค้า ตกแต่งภายใน กรุงเทพมหานคร | Retail & Interior Design firm in Bangkok Thailand",
           "url": "https://tncbuildstudio.com",
           "logo": "https://tncbuildstudio.com/favicon.png",
-          "telephone": "+6620000000",
-          "email": "hello@tnc18.com",
+          "telephone": site.phoneHref.replace("tel:", ""),
+          "email": site.email,
           "address": {
             "@type": "PostalAddress",
-            "addressLocality": "Bangkok",
+            "streetAddress": site.address.lines.slice(0, 2).join(", "),
+            "addressLocality": "Bang Na",
             "addressRegion": "Bangkok",
+            "postalCode": "10260",
             "addressCountry": "TH"
           },
           "geo": {
@@ -82,12 +84,9 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
             "Retail Design", "Interior Design", "Pop-up Store", "Booth Design", "Kiosk Design",
             "ออกแบบบูธ", "ทำบูธขายของในห้าง", "ตกแต่งภายใน", "ออกแบบร้านค้า", "คีออสก์"
           ],
-          "sameAs": [
-            "https://www.facebook.com/profile.php?id=61579055983582",
-            "https://www.instagram.com/tncbuildstudio"
-          ],
+          "sameAs": site.socials.map((s) => s.href).filter(Boolean),
           "priceRange": "฿฿฿",
-          "openingHours": "Mo-Su 09:00-18:00"
+          "openingHours": "Mo-Sa 09:00-18:00"
         },
         {
           "@type": "WebSite",

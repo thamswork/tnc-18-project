@@ -1,0 +1,10 @@
+# Old pages -> new pages (permanent)
+/about            /about-services  301
+/about/           /about-services  301
+/services         /about-services  301
+/services/        /about-services  301
+/news             /specbook        301
+/news/            /specbook        301
+/projects         /portfolio       301
+/projects/        /portfolio       301
+/projects/*       /portfolio       301

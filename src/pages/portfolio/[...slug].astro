@@ -59,7 +59,7 @@ const all = await getProjects();
 const idx = all.findIndex((p: any) => p.id === project.id);
 const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
 ---
-<Layout bodyClass="v6" title={`${d.title} — TNC BUILD STUDIO`} description={d.description || `${d.title} — Retail & Interior Design by TNC BUILD STUDIO Bangkok`}>
+<Layout bodyClass="v6" title={`${d.title}`} description={d.description || `${d.title} — Retail & Interior Design by TNC BUILD STUDIO Bangkok`}>
   <Header active="work" />
   <main class="p-page">
     <PageHead title={name}>
