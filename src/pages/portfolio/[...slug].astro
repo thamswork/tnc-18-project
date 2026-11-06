@@ -88,6 +88,7 @@ const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
       </section>
     )}
 
+    <script is:inline>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("p-js");</script>
     {photos.length > 0 && (
       <section class="p-gallery" aria-label="Photos" data-gallery>
         <ul class="p-grid">
@@ -97,18 +98,12 @@ const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
             const ws = k === "full" ? [1200, 1800, 2400] : [600, 900, 1200, 1600];
             const sz = k === "full" ? "100vw" : k === "half" ? "(max-width: 600px) 100vw, 50vw" : "(max-width: 600px) 100vw, 33vw";
             return (
-              <li class={`p-ph p-ph--${k}`} hidden={i >= FIRST}>
+              <li class={`p-ph p-ph--${k}`}>
                 <img src={cld(u, { w: ws[1], h: Math.round(ws[1] / r) })} srcset={cldSet(u, ws, r)} sizes={sz} alt={`${name}, photo ${i + 1}`} loading="lazy" decoding="async" />
               </li>
             );
           })}
         </ul>
-        {photos.length > FIRST && (
-          <div class="t-wrap p-more">
-            <span class="t-num p-more-n" data-count>{FIRST} of {photos.length} photos</span>
-            <button type="button" class="t-btn t-btn--ghost" data-more>View all photos</button>
-          </div>
-        )}
       </section>
     )}
 
@@ -132,14 +127,21 @@ const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
 </Layout>
 
 <script>
-  const gal = document.querySelector<HTMLElement>("[data-gallery]");
-  const more = gal?.querySelector<HTMLButtonElement>("[data-more]");
-  more?.addEventListener("click", () => {
-    gal!.querySelectorAll<HTMLElement>("li[hidden]").forEach((li) => { li.hidden = false; });
-    const n = gal!.querySelector("[data-count]");
-    if (n) n.textContent = `${gal!.querySelectorAll("li").length} photos`;
-    more.remove();
-  });
+  // Gallery photos fade in as they come into view
+  const imgs = [...document.querySelectorAll<HTMLImageElement>(".p-ph img")];
+  const reveal = (im: HTMLImageElement) => im.classList.add("is-in");
+  if (!document.documentElement.classList.contains("p-js") || !("IntersectionObserver" in window)) {
+    imgs.forEach(reveal);
+  } else {
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const im = e.target as HTMLImageElement;
+      io.unobserve(im);
+      if (im.complete && im.naturalWidth) reveal(im);
+      else { im.addEventListener("load", () => reveal(im), { once: true }); im.addEventListener("error", () => reveal(im), { once: true }); }
+    }), { rootMargin: "0px 0px -6% 0px" });
+    imgs.forEach((im) => io.observe(im));
+  }
   const vid = document.querySelector<HTMLVideoElement>("[data-video]");
   if (vid && matchMedia("(prefers-reduced-motion: reduce)").matches) { vid.removeAttribute("autoplay"); vid.pause(); vid.controls = true; }
 </script>
@@ -162,14 +164,14 @@ const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
   .p-page .p-body p { margin: 0 0 16px; }
   .p-page .p-body > :last-child { margin-bottom: 0; }
   .p-page .p-grid { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
-  .p-page .p-grid li[hidden] { display: none; }
+  .p-page .p-ph { overflow: hidden; }
+  html.p-js .p-page .p-ph img { opacity: 0; transform: scale(1.03); transition: opacity 1s cubic-bezier(.16,1,.3,1), transform 1.4s cubic-bezier(.16,1,.3,1); }
+  html.p-js .p-page .p-ph img.is-in { opacity: 1; transform: none; }
   .p-page .p-ph { position: relative; overflow: hidden; background: var(--tile); }
   .p-page .p-ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .p-page .p-ph--half { grid-column: span 3; aspect-ratio: 4 / 5; }
   .p-page .p-ph--third { grid-column: span 2; aspect-ratio: 4 / 5; }
   .p-page .p-ph--full { grid-column: 1 / -1; aspect-ratio: 16 / 9; max-height: 820px; }
-  .p-page .p-more { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; padding-top: 24px; }
-  .p-page .p-more-n { font-size: 13px; color: var(--mute); }
   .p-page .p-next { padding-block: var(--sec); }
   .p-page .p-next-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px 24px; padding-top: 20px; border-top: 1px solid var(--line); margin-bottom: 32px; }
   .p-page .p-next-label { margin: 0; font-size: 14px; font-weight: 400; color: var(--mute); }
