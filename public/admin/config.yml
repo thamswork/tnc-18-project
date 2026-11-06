@@ -226,7 +226,7 @@ collections:
         widget: string
         required: false
         pattern: ['^\d{4}-\d{2}$', "Write it as year-month, e.g. 2026-10"]
-        hint: "When the project was finished, as year-month, e.g. 2026-10. The homepage shows the newest projects first. Leave empty if unsure: it then sorts by Year."
+        hint: "When the project was finished, as year-month, e.g. 2026-10. Fill this in for every NEW project so it appears at the top. Projects without a month are listed A to Z after the dated ones."
       - label: "Category"
         name: category
         widget: select

@@ -4,9 +4,9 @@ import Header from "../../components/v6/Header.astro";
 import Footer from "../../components/v6/Footer.astro";
 import PageHead from "../../components/v6/PageHead.astro";
 import ProjectCard from "../../components/v6/ProjectCard.astro";
-import { getProjects, projectUrl, projectName, projectMeta } from "../../lib/projects";
+import { getProjects, byNewest, projectUrl, projectName, projectMeta } from "../../lib/projects";
 
-const projects = await getProjects();
+const projects = byNewest(await getProjects());
 const years = projects.map((p: any) => Number(p.data.year)).filter(Boolean);
 const yearMin = Math.min(...years), yearMax = Math.max(...years);
 const span = yearMin === yearMax ? String(yearMax) : `${yearMin}–${yearMax}`;
