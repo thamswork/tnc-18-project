@@ -49,9 +49,11 @@ export function mallsOf(projects: any[]): { name: string; count: number }[] {
   return [...c.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
 }
 
-// Newest first: "Completed" month (YYYY-MM) if set, else the year. Ties keep the existing order.
+// Newest first: projects with a "Completed" month (YYYY-MM) come first, newest month on top.
+// Projects without a month follow, A to Z by name. Same month: A to Z by name.
 const when = (p: any) => {
   const c = String(p.data.completed ?? "").trim();
-  return /^\d{4}-\d{2}$/.test(c) ? c : `${String(p.data.year ?? 0).padStart(4, "0")}-00`;
+  return /^\d{4}-\d{2}$/.test(c) ? c : "";
 };
-export const byNewest = (list: any[]) => [...list].sort((a, b) => when(b).localeCompare(when(a)));
+const nm = (p: any) => String(projectName(p)).toLowerCase();
+export const byNewest = (list: any[]) => [...list].sort((a, b) => when(b).localeCompare(when(a)) || nm(a).localeCompare(nm(b), "en") || String(a.data.title).toLowerCase().localeCompare(String(b.data.title).toLowerCase(), "en"));

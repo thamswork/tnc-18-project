@@ -5,7 +5,7 @@ import Footer from "../../components/v6/Footer.astro";
 import PageHead from "../../components/v6/PageHead.astro";
 import { render } from "astro:content";
 import { cld, cldSet } from "../../lib/cld";
-import { getProjects, projectSlug, projectUrl, projectName, projectMeta } from "../../lib/projects";
+import { getProjects, projectSlug, projectUrl, projectName, projectMeta, byNewest } from "../../lib/projects";
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -55,7 +55,7 @@ for (let i = 0, g = 0; i < photos.length; g++) {
 const FIRST = 6;
 
 // Next project, in the same order as the Work page
-const all = await getProjects();
+const all = byNewest(await getProjects());
 const idx = all.findIndex((p: any) => p.id === project.id);
 const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
 ---
