@@ -1,0 +1,18 @@
+---
+import { cld, cldSet } from "../../lib/cld";
+interface Props { href: string; title: string; meta?: string; img?: string; ratio?: "4/5" | "16/11" | "3/2"; sizes?: string; eager?: boolean }
+const { href, title, meta, img, ratio = "4/5", sizes = "(max-width: 600px) 100vw, 33vw", eager = false } = Astro.props;
+const r = ratio === "16/11" ? 16 / 11 : ratio === "3/2" ? 3 / 2 : 4 / 5;
+---
+<a class="t-card" href={href}>
+  <div class="t-ph" style={`aspect-ratio:${ratio}`}>
+    {img && (
+      <img src={cld(img, { w: 800, h: Math.round(800 / r) })} srcset={cldSet(img, [480, 800, 1200], r)} sizes={sizes}
+        alt={title} loading={eager ? "eager" : "lazy"} decoding="async" />
+    )}
+  </div>
+  <span class="t-card-text">
+    <span class="t-card-t">{title}</span>
+    {meta && <span class="t-meta">{meta}</span>}
+  </span>
+</a>

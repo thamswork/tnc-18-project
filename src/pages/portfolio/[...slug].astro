@@ -1,400 +1,191 @@
 ---
-import fsSync from "node:fs";
 import Layout from "../../layouts/Layout.astro";
-import Navbar from "../../components/Navbar.astro";
-import Footer from "../../components/Footer.astro";
-import { getCollection, render } from "astro:content";
+import Header from "../../components/v6/Header.astro";
+import Footer from "../../components/v6/Footer.astro";
+import PageHead from "../../components/v6/PageHead.astro";
+import { render } from "astro:content";
+import { cld, cldSet } from "../../lib/cld";
+import { getProjects, projectSlug, projectUrl, projectName, projectMeta } from "../../lib/projects";
 
 export async function getStaticPaths() {
-  const { readFileSync } = await import("node:fs");
-  const allP = await getCollection("projects");
-  const projects = allP.filter((p: any) => {
-    if (!p.filePath) return true;
-    const raw = readFileSync(p.filePath, "utf-8");
-    return !/^draft:\s*true/m.test(raw);
-  });
-  return projects.map(p => ({
-    params: {
-      slug: p.data.title
-        .toLowerCase()
-        .replace(/[\u2018\u2019'']/g, "")
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-|-$/g, "")
-    },
-    props: { project: p }
-  }));
+  const projects = await getProjects();
+  return projects.map((p: any) => ({ params: { slug: projectSlug(String(p.data.title)) }, props: { project: p } }));
 }
 
-const { project } = Astro.props;
+const { project } = Astro.props as any;
 const d = project.data;
 const { Content } = await render(project);
+const hasBody = String(project.body ?? "").trim().length > 0;
 
-const allProjects = (await getCollection("projects")).filter((p: any) => {
-  if (!p.filePath) return true;
-  const raw = fsSync.readFileSync(p.filePath, "utf-8");
-  return !/^draft:\s*true/m.test(raw);
+const name = projectName(project);
+const sub = String(d.title).split(/\s+[—–-]\s+/).slice(1).join(" — ").trim();
+const cat = String(d.category ?? "").trim();
+const size = String(d.size ?? "").trim();
+const area = d.area ? `${d.area} m²` : size ? (/^\d+(\.\d+)?$/.test(size) ? `${size} m²` : size) : "";
+const facts = [
+  { k: "Client", v: String(d.client ?? "").trim() },
+  { k: "Location", v: String(d.location ?? "").split(",")[0].trim() },
+  { k: "Year", v: d.year ? String(d.year) : "" },
+  { k: "Area", v: area },
+].filter((x) => x.v);
+
+// Gallery without the cover (and without repeats)
+const key = (u: string) => String(u).trim().split("/").pop() || "";
+const cover = String(d.cover ?? "").trim();
+const seen = new Set<string>(cover ? [key(cover)] : []);
+const photos: string[] = (d.gallery ?? []).map((u: string) => String(u).trim()).filter((u: string) => {
+  const k = key(u);
+  if (!u || seen.has(k)) return false;
+  seen.add(k);
+  return true;
 });
-const sorted = allProjects.sort((a: any, b: any) => b.data.year - a.data.year);
-const idx = sorted.findIndex(p => p.id === project.id);
-const next = sorted[(idx + 1) % sorted.length];
-const nextSlug = next?.data.title.toLowerCase().replace(/[\u2018\u2019'']/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"");
+const hero = cover || photos.shift() || "";
 
-const areaVal = d.area ? `${d.area} SQ.M` : (d.size ? String(d.size) : null);
-const metaRows = [
-  { k: "Client",   v: d.client || null },
-  { k: "Location", v: d.location || null },
-  { k: "Area",     v: areaVal },
-  { k: "Year",     v: d.year ? String(d.year) : null },
-  { k: "Type",     v: d.category || null },
-].filter(r => r.v);
+// Rhythm: two tall, one wide, three tall, repeat; the last group is evened out
+const pattern = [["half", "half"], ["full"], ["third", "third", "third"]];
+const kinds: string[] = [];
+for (let i = 0, g = 0; i < photos.length; g++) {
+  const grp = pattern[g % 3];
+  const n = Math.min(grp.length, photos.length - i);
+  if (n === grp.length) kinds.push(...grp);
+  else if (n === 1) kinds.push("full");
+  else kinds.push("half", "half");
+  i += n;
+}
+const FIRST = 6;
+
+// Next project, in the same order as the Work page
+const all = await getProjects();
+const idx = all.findIndex((p: any) => p.id === project.id);
+const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
 ---
+<Layout bodyClass="v6" title={`${d.title}`} description={d.description || `${d.title} — Retail & Interior Design by TNC BUILD STUDIO Bangkok`}>
+  <Header active="work" />
+  <main class="p-page">
+    <PageHead title={name}>
+      <nav class="t-crumb" slot="crumb" aria-label="Breadcrumb"><a href="/portfolio">Work</a>{cat && <> / <a href={`/portfolio?type=${encodeURIComponent(cat)}`}>{cat}</a></>}</nav>
+      <p class="p-sub" slot="sub">{sub}</p>
+      <dl class="p-facts" slot="aside">{facts.map((x) => <div><dt>{x.k}</dt><dd>{x.v}</dd></div>)}</dl>
+    </PageHead>
 
-<Layout
-  bodyClass="page-slug page-solid-nav"
-  title={`${d.title} — TNC BUILD STUDIO`}
-  description={d.description || `${d.title} — Retail & Interior Design by TNC BUILD STUDIO Bangkok`}
->
-  <Navbar />
-  <main class="proj-main">
-
-    <!-- HERO -->
-    <div class="proj-hero">
-      {d.video_url
-        ? <video autoplay muted loop playsinline class="proj-hero-asset">
-            <source src={d.video_url} type="video/mp4" />
-          </video>
-        : d.cover
-          ? <img src={d.cover} alt={d.title} class="proj-hero-asset" loading="eager" />
-          : <div class="proj-hero-ph"></div>
-      }
-      <div class="proj-hero-veil"></div>
-      <a href="/portfolio" class="proj-back">← All Work</a>
-      <div class="proj-hero-caption">
-        <span class="proj-hero-cat">{d.category}</span>
-        <h1 class="proj-hero-title">{d.title}</h1>
-      </div>
-    </div>
-
-    <!-- META STRIP — scrollable horizontal on mobile -->
-    <div class="proj-meta-strip">
-      {metaRows.map(row => (
-        <div class="proj-meta-cell">
-          <span class="proj-meta-k">{row.k}</span>
-          <span class="proj-meta-v">{row.v}</span>
-        </div>
-      ))}
-    </div>
-
-    <!-- DESCRIPTION -->
-    {d.description && (
-      <section class="proj-desc-section" data-reveal>
-        <p class="proj-desc">{d.description}</p>
-      </section>
-    )}
-
-    <!-- GALLERY -->
-    {d.gallery && d.gallery.length > 0 && (
-      <section class="proj-gallery">
-        {d.gallery.map((img: string, i: number) => (
-          <figure
-            class={`proj-gframe ${i % 5 === 0 || i % 5 === 3 ? "gframe-full" : "gframe-half"}`}
-            data-reveal
-          >
-            <img src={img} alt={`${d.title} — ${i + 1}`} loading="lazy" class="proj-gimg" />
-          </figure>
-        ))}
-      </section>
-    )}
-
-    <!-- BODY COPY -->
-    {project.body && project.body.trim() && (
-      <div class="proj-body" data-reveal>
-        <div class="proj-body-inner prose">
-          <Content />
-        </div>
+    {(d.video_url || hero) && (
+      <div class="p-cover">
+        {d.video_url
+          ? <video class="p-cover-media" autoplay muted loop playsinline poster={hero ? cld(hero, { w: 1800 }) : undefined} data-video><source src={d.video_url} type="video/mp4" /></video>
+          : <picture>
+              <source media="(max-width: 600px)" srcset={cldSet(hero, [600, 900, 1200], 4 / 3)} sizes="100vw" />
+              <img class="p-cover-media" src={cld(hero, { w: 2400, h: 1100 })} srcset={cldSet(hero, [1200, 1800, 2400], 24 / 11)} sizes="100vw" alt={d.title} loading="eager" fetchpriority="high" decoding="async" />
+            </picture>}
       </div>
     )}
 
-    <!-- NEXT PROJECT -->
-    {next && next.id !== project.id && (
-      <a href={`/portfolio/${nextSlug}`} class="proj-next">
-        <div class="proj-next-bg">
-          {next.data.cover && <img src={next.data.cover} alt={next.data.title} class="proj-next-img" loading="lazy" />}
-          <div class="proj-next-veil"></div>
+    {(d.description || hasBody) && (
+      <section class="t-paper p-story" aria-label="About the project">
+        <div class="t-wrap p-story-in">
+          {d.description && <p class="t-lead p-lead">{d.description}</p>}
+          {hasBody && <div class="p-body"><Content /></div>}
         </div>
-        <div class="proj-next-content">
-          <span class="proj-next-label">Next Project</span>
-          <h2 class="proj-next-title">{next.data.title}</h2>
-          <span class="proj-next-arrow">→</span>
-        </div>
-      </a>
+      </section>
     )}
 
-    <Footer ctaTitle="Like What You See?" ctaSub="Message us directly. Senior partners respond within 2 hours." />
+    {photos.length > 0 && (
+      <section class="p-gallery" aria-label="Photos" data-gallery>
+        <ul class="p-grid">
+          {photos.map((u, i) => {
+            const k = kinds[i];
+            const r = k === "full" ? 16 / 9 : 4 / 5;
+            const ws = k === "full" ? [1200, 1800, 2400] : [600, 900, 1200, 1600];
+            const sz = k === "full" ? "100vw" : k === "half" ? "(max-width: 600px) 100vw, 50vw" : "(max-width: 600px) 100vw, 33vw";
+            return (
+              <li class={`p-ph p-ph--${k}`} hidden={i >= FIRST}>
+                <img src={cld(u, { w: ws[1], h: Math.round(ws[1] / r) })} srcset={cldSet(u, ws, r)} sizes={sz} alt={`${name}, photo ${i + 1}`} loading="lazy" decoding="async" />
+              </li>
+            );
+          })}
+        </ul>
+        {photos.length > FIRST && (
+          <div class="t-wrap p-more">
+            <span class="t-num p-more-n" data-count>{FIRST} of {photos.length} photos</span>
+            <button type="button" class="t-btn t-btn--ghost" data-more>View all photos</button>
+          </div>
+        )}
+      </section>
+    )}
+
+    {next && (
+      <section class="t-wrap p-next" aria-labelledby="p-next">
+        <div class="p-next-head">
+          <h2 id="p-next" class="p-next-label">Next project</h2>
+          <a class="t-link" href="/portfolio">All work <span aria-hidden="true">→</span></a>
+        </div>
+        <a class="p-next-a" href={projectUrl(next)}>
+          <span class="p-next-ph">{next.data.cover && <img src={cld(next.data.cover, { w: 900, h: 675 })} srcset={cldSet(next.data.cover, [480, 900, 1200], 4 / 3)} sizes="(max-width: 600px) 100vw, 420px" alt="" loading="lazy" decoding="async" />}</span>
+          <span class="p-next-txt">
+            <span class="p-next-name">{projectName(next)}</span>
+            <span class="t-meta">{projectMeta(next)}</span>
+          </span>
+        </a>
+      </section>
+    )}
   </main>
+  <Footer />
 </Layout>
 
-<style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-.proj-main {
-  background: var(--bg, #F4F3EF);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ══ HERO ══ */
-.proj-hero {
-  position: relative;
-  width: 100%;
-  height: 100svh;
-  overflow: hidden;
-  background: #060608;
-}
-
-.proj-hero-asset {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-}
-.proj-hero-ph {
-  width: 100%; height: 100%;
-  background: linear-gradient(155deg, #0e1a2e, #060608);
-}
-.proj-hero-veil {
-  position: absolute; inset: 0;
-  background:
-    linear-gradient(to top, rgba(4,6,10,0.92) 0%, rgba(4,6,10,0.25) 55%, transparent 80%),
-    linear-gradient(to bottom, rgba(4,6,10,0.55) 0%, transparent 18%);
-}
-
-/* Back */
-.proj-back {
-  position: absolute;
-  top: 76px; left: var(--pad-x, 5vw);
-  z-index: 10;
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  font-size: 0.58rem; font-weight: 600;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: rgba(244,243,239,0.7); text-decoration: none;
-  transition: color 0.2s, gap 0.2s;
-  background: rgba(10,18,36,0.35);
-  backdrop-filter: blur(8px);
-  padding: 0.5rem 1rem;
-  border: 1px solid rgba(244,243,239,0.15);
-}
-.proj-back:hover {
-  color: #F4F3EF;
-  gap: 0.75rem;
-  border-color: rgba(244,243,239,0.35);
-}
-
-/* Caption */
-.proj-hero-caption {
-  position: absolute;
-  bottom: 0; left: 0; right: 0; z-index: 5;
-  padding: 0 var(--pad-x, 5vw) clamp(2rem, 6vh, 4rem);
-  display: flex; flex-direction: column; gap: 0.6rem;
-}
-
-.proj-hero-cat {
-  font-size: 0.55rem; font-weight: 600;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: rgba(244,243,239,0.45);
-}
-
-.proj-hero-title {
-  font-size: clamp(1.75rem, 7vw, 5rem);
-  font-weight: 800; letter-spacing: -0.03em;
-  line-height: 0.95; color: #F4F3EF;
-  text-transform: uppercase;
-  max-width: 90vw;
-}
-
-/* ══ META STRIP ══ */
-.proj-meta-strip {
-  display: flex;
-  flex-wrap: wrap;
-  border-top: 2px solid var(--navy, #1A3A6B);
-  border-bottom: 1px solid rgba(17,17,17,0.08);
-  background: #fff;
-}
-
-.proj-meta-cell {
-  display: flex; flex-direction: column;
-  gap: 0.4rem;
-  padding: 1rem 1.25rem;
-  border-right: 1px solid rgba(17,17,17,0.07);
-  border-bottom: 1px solid rgba(17,17,17,0.07);
-  /* Each cell takes at least 1/3 of row, max 1/5 */
-  flex: 1 1 30%;
-  min-width: 100px;
-}
-.proj-meta-cell:last-child {
-  border-right: none;
-}
-
-@media (min-width: 540px) {
-  .proj-meta-cell {
-    flex: 1 1 18%;
-    border-bottom: none;
-  }
-  .proj-meta-cell:last-child { border-right: none; }
-}
-
-.proj-meta-k {
-  font-size: 0.46rem; font-weight: 600;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--ink-light, #777);
-  white-space: nowrap;
-  display: block;
-}
-
-.proj-meta-v {
-  font-size: 0.8rem; font-weight: 700;
-  letter-spacing: -0.01em; color: var(--ink, #111);
-  white-space: normal;
-  word-break: break-word;
-}
-
-/* ══ DESCRIPTION ══ */
-.proj-desc-section {
-  padding: 2.5rem var(--pad-x, 5vw);
-  background: #fff;
-  border-bottom: 1px solid rgba(17,17,17,0.06);
-  opacity: 0; transform: translateY(16px);
-  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
-}
-.proj-desc-section.revealed { opacity: 1; transform: none; }
-
-.proj-desc {
-  font-size: clamp(0.9rem, 2.5vw, 1.05rem);
-  line-height: 1.85; color: var(--ink-mid, #333);
-  font-weight: 400; max-width: 640px;
-}
-
-/* ══ GALLERY ══ */
-.proj-gallery {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2px;
-  background: rgba(17,17,17,0.06);
-  padding: 2px;
-}
-
-.proj-gframe {
-  overflow: hidden;
-  background: var(--bg-dark, #ECEAE3);
-  opacity: 0; transform: translateY(12px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
-}
-.proj-gframe.revealed { opacity: 1; transform: none; }
-
-.gframe-full {
-  grid-column: span 2;
-  aspect-ratio: 16/9;
-}
-.gframe-half { aspect-ratio: 1/1; }
-
-@media (max-width: 480px) {
-  .gframe-full { aspect-ratio: 4/3; }
-  .gframe-half { aspect-ratio: 4/5; }
-}
-
-.proj-gimg {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-  transition: transform 1.2s cubic-bezier(0.4,0,0.2,1);
-}
-.proj-gframe:hover .proj-gimg { transform: scale(1.03); }
-
-/* ══ BODY COPY ══ */
-.proj-body {
-  padding: 3rem var(--pad-x, 5vw);
-  background: var(--bg, #F4F3EF);
-  border-top: 1px solid rgba(17,17,17,0.07);
-  opacity: 0; transform: translateY(16px);
-  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
-}
-.proj-body.revealed { opacity: 1; transform: none; }
-.proj-body-inner { max-width: 640px; }
-
-.prose :global(p) {
-  font-size: clamp(0.875rem, 2.5vw, 0.95rem);
-  line-height: 1.9; color: var(--ink-mid, #333);
-  margin-bottom: 1.4rem;
-}
-.prose :global(h2), .prose :global(h3) {
-  font-size: 1rem; font-weight: 700;
-  letter-spacing: -0.02em; color: var(--ink, #111);
-  margin: 2rem 0 0.75rem;
-}
-
-/* ══ NEXT PROJECT ══ */
-.proj-next {
-  display: block; position: relative;
-  width: 100%;
-  height: clamp(200px, 45vw, 400px);
-  overflow: hidden; text-decoration: none;
-}
-.proj-next-bg { position: absolute; inset: 0; }
-.proj-next-img {
-  width: 100%; height: 100%;
-  object-fit: cover; display: block;
-  transition: transform 1.2s cubic-bezier(0.4,0,0.2,1);
-}
-.proj-next:hover .proj-next-img { transform: scale(1.04); }
-.proj-next-veil {
-  position: absolute; inset: 0;
-  background: rgba(10,18,36,0.62);
-}
-.proj-next-content {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 0.6rem; z-index: 2; text-align: center;
-  padding: 0 var(--pad-x, 5vw);
-}
-.proj-next-label {
-  font-size: 0.52rem; font-weight: 600;
-  letter-spacing: 0.24em; text-transform: uppercase;
-  color: rgba(244,243,239,0.45);
-}
-.proj-next-title {
-  font-size: clamp(1rem, 5vw, 2.25rem);
-  font-weight: 800; letter-spacing: -0.03em;
-  color: #F4F3EF; text-transform: uppercase;
-  line-height: 1.0;
-}
-.proj-next-arrow {
-  font-size: 1.25rem;
-  color: rgba(244,243,239,0.55);
-  transition: transform 0.3s;
-}
-.proj-next:hover .proj-next-arrow { transform: translateX(5px); }
-
-/* ══ DESKTOP ENHANCEMENTS ══ */
-@media (min-width: 768px) {
-  .proj-hero-title { font-size: clamp(2.5rem, 5vw, 5rem); }
-  .proj-meta-cell { padding: 1.25rem 2rem; flex: 1 1 auto; border-bottom: none; }
-  .proj-desc-section { padding: 4rem 10%; }
-  .proj-body { padding: 5rem 10%; }
-  .proj-gallery { gap: 3px; padding: 3px; }
-  .gframe-half { aspect-ratio: 4/5; }
-}
-
-@media (min-width: 1200px) {
-  .proj-desc-section { padding: 5rem 15%; }
-  .proj-body { padding: 6rem 15%; }
-}
-</style>
-
 <script>
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    e.target.classList.add("revealed");
-    io.unobserve(e.target);
+  const gal = document.querySelector<HTMLElement>("[data-gallery]");
+  const more = gal?.querySelector<HTMLButtonElement>("[data-more]");
+  more?.addEventListener("click", () => {
+    gal!.querySelectorAll<HTMLElement>("li[hidden]").forEach((li) => { li.hidden = false; });
+    const n = gal!.querySelector("[data-count]");
+    if (n) n.textContent = `${gal!.querySelectorAll("li").length} photos`;
+    more.remove();
   });
-}, { threshold: 0.04, rootMargin: "0px 0px -30px 0px" });
-document.querySelectorAll("[data-reveal]").forEach(el => io.observe(el));
+  const vid = document.querySelector<HTMLVideoElement>("[data-video]");
+  if (vid && matchMedia("(prefers-reduced-motion: reduce)").matches) { vid.removeAttribute("autoplay"); vid.pause(); vid.controls = true; }
 </script>
+
+<style is:global>
+  .p-page .t-pagehead .t-display { font-size: clamp(40px, 5.6vw, 88px); overflow-wrap: anywhere; }
+  .p-page .t-crumb a { color: var(--mute); }
+  .p-page .t-crumb a:hover { color: #fff; }
+  .p-page .p-sub { margin: 16px 0 0; font-size: clamp(17px, 1.5vw, 22px); font-weight: 300; letter-spacing: -.01em; color: var(--soft); }
+  .p-page .p-sub:empty, .p-page .p-facts:empty { display: none; }
+  .p-page .p-facts { margin: 0; flex: 0 1 480px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px 24px; }
+  .p-page .p-facts dt { font-size: 13px; color: var(--mute); }
+  .p-page .p-facts dd { margin: 4px 0 0; font-size: 15px; font-weight: 400; }
+  .p-page .p-cover { position: relative; height: clamp(360px, 50vw, 760px); overflow: hidden; background: var(--tile); }
+  .p-page .p-cover picture, .p-page .p-cover-media { display: block; width: 100%; height: 100%; }
+  .p-page .p-cover-media { object-fit: cover; }
+  .p-page .p-story-in { padding-block: var(--sec); display: flex; flex-wrap: wrap; gap: 32px 48px; justify-content: space-between; align-items: flex-start; }
+  .p-page .p-lead { flex: 1 1 480px; max-width: 30ch; }
+  .p-page .p-body { flex: 0 1 460px; font-size: 16px; line-height: 1.7; color: #2B3550; }
+  .p-page .p-body p { margin: 0 0 16px; }
+  .p-page .p-body > :last-child { margin-bottom: 0; }
+  .p-page .p-grid { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+  .p-page .p-grid li[hidden] { display: none; }
+  .p-page .p-ph { position: relative; overflow: hidden; background: var(--tile); }
+  .p-page .p-ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .p-page .p-ph--half { grid-column: span 3; aspect-ratio: 4 / 5; }
+  .p-page .p-ph--third { grid-column: span 2; aspect-ratio: 4 / 5; }
+  .p-page .p-ph--full { grid-column: 1 / -1; aspect-ratio: 16 / 9; max-height: 820px; }
+  .p-page .p-more { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; padding-top: 24px; }
+  .p-page .p-more-n { font-size: 13px; color: var(--mute); }
+  .p-page .p-next { padding-block: var(--sec); }
+  .p-page .p-next-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px 24px; padding-top: 20px; border-top: 1px solid var(--line); margin-bottom: 32px; }
+  .p-page .p-next-label { margin: 0; font-size: 14px; font-weight: 400; color: var(--mute); }
+  .p-page .p-next-a { display: flex; flex-wrap: wrap; gap: 24px 48px; align-items: flex-end; color: #fff; }
+  .p-page .p-next-a:hover { color: #fff; }
+  .p-page .p-next-ph { position: relative; flex: 0 1 420px; aspect-ratio: 4 / 3; overflow: hidden; background: var(--tile); }
+  .p-page .p-next-ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.3,.6,.2,1); }
+  .p-page .p-next-a:hover .p-next-ph img { transform: scale(1.03); }
+  .p-page .p-next-txt { flex: 1 1 360px; display: grid; gap: 12px; }
+  .p-page .p-next-name { font-weight: 800; font-size: clamp(30px, 4vw, 56px); line-height: .92; letter-spacing: -.045em; text-transform: uppercase; overflow-wrap: anywhere; }
+  @media (max-width: 600px) {
+    .p-page .t-pagehead .t-display { font-size: clamp(30px, 9vw, 44px); }
+    .p-page .p-facts { flex-basis: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .p-page .p-cover { height: auto; aspect-ratio: 4 / 3; }
+    .p-page .p-ph--half, .p-page .p-ph--third { grid-column: 1 / -1; }
+    .p-page .p-ph--full { aspect-ratio: 4 / 3; }
+    .p-page .p-next-ph { flex-basis: 100%; }
+  }
+</style>

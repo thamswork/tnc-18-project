@@ -157,9 +157,29 @@ collections:
               - { label: "Bottom left", value: "left bottom" }
               - { label: "Bottom right", value: "right bottom" }
           - { label: "Hero Video URL (.mp4)", name: hero_video, widget: string, required: false }
-          - { label: "Hero Headline Line 1",  name: hero_line1, widget: string }
-          - { label: "Hero Headline Line 2",  name: hero_line2, widget: string }
-          - { label: "Hero Subline",          name: hero_sub,   widget: string, required: false }
+          - { label: "Hero headline — line 1", name: hero_line1, widget: string, required: false, hint: "Big words on the hero photo, first line, e.g. We build. Shown in capitals." }
+          - { label: "Hero headline — line 2", name: hero_line2, widget: string, required: false, hint: "Second line, e.g. what works. Leave both lines empty to use the default." }
+          - { label: "Hero small line (above the headline)", name: hero_sub, widget: string, required: false, hint: "Small spaced text above the headline, e.g. Bangkok · Thailand" }
+          - { label: "Studio intro", name: intro, widget: text, required: false, hint: "The paragraph under The studio on the homepage. The first sentence shows bright, the rest greyer. Leave empty to use the default text." }
+          - label: "Showcase projects (big slideshow near the bottom)"
+            name: showcase
+            widget: list
+            required: false
+            collapsed: true
+            label_singular: "project"
+            summary: "{{fields.project}}"
+            hint: >-
+              Pick up to 8 projects for the full-width slideshow at the bottom of the homepage.
+              Drag the handle to reorder. Leave empty to let the site choose.
+            fields:
+              - label: "Project"
+                name: project
+                widget: relation
+                collection: projects
+                value_field: title
+                search_fields: [title, client, location]
+                display_fields: ["{{title}} ({{year}})"]
+                options_length: 200
           - { label: "Statement / Tagline",   name: statement,  widget: text }
           - label: "Statement Background Image"
             name: statement_image
@@ -344,35 +364,22 @@ collections:
     files:
 
       - name: about_services
-        label: "About & Services Page"
+        label: "Studio Page"
         file: src/content/pages/about-services.json
         fields:
-          - label: "Header Image"
-            name: hero_image
-            widget: image
-            required: false
-          - { label: "Page Headline",      name: headline,    widget: string }
-          - { label: "Mission Statement",  name: mission,     widget: text }
-          - { label: "Bio Paragraph 1",    name: bio_1,       widget: text }
-          - { label: "Bio Paragraph 2",    name: bio_2,       widget: text,   required: false }
-          - { label: "Owner Name",         name: owner_name,  widget: string, required: false }
-          - { label: "Owner Title",        name: owner_title, widget: string, required: false }
-          - { label: "Owner Photo",        name: owner_photo, widget: image,  required: false }
-          - { label: "Years Experience",   name: years,       widget: string, required: false }
-          - { label: "Projects Completed", name: projects,    widget: string, required: false }
+          - { label: "Main photo (full width)", name: hero_image, widget: image, required: false, hint: "Wide photo under the STUDIO title. Leave empty to use a project photo." }
+          - { label: "Founding year", name: founded, widget: string, required: false, hint: "e.g. 2006. Shows as: Design and build in Bangkok since 2006. Also sets the Years number automatically." }
+          - { label: "Statement", name: statement, widget: text, hint: "The big sentence under the photo. One or two sentences." }
+          - { label: "Projects", name: projects, widget: string, required: false, hint: "e.g. 200+. Leave empty to hide." }
+          - { label: "Photo left (portrait)", name: photo_2, widget: image, required: false, hint: "Optional. Shown first in the slideshow near the bottom; project photos rotate after it." }
+          - { label: "Photo right (portrait)", name: photo_3, widget: image, required: false, hint: "Optional. Shown first in the slideshow near the bottom; project photos rotate after it." }
 
       - name: contact_page
         label: "Contact Page"
         file: src/content/pages/contact.json
         fields:
-          - { label: "Page Headline",          name: headline,   widget: string }
-          - { label: "Subtext",                name: subtext,    widget: text,   required: false }
-          - { label: "LINE CTA Label",         name: line_label, widget: string, default: "Message us on Line" }
-          - { label: "Response Promise",       name: promise,    widget: string, required: false,
-              hint: "e.g. We reply within 2 hours" }
-          - { label: "Background Photo",       name: hero_image, widget: image,  required: false }
-          - { label: "Background Video (.mp4)", name: hero_video, widget: string, required: false,
-              hint: "Overrides photos when set" }
+          - { label: "Intro line", name: intro, widget: text, required: false, hint: "Grey line next to the CONTACT title." }
+          - { label: "Photo", name: hero_image, widget: image, required: false, hint: "Optional. Tall photo on the left. Leave empty to use the Curated and Co. project photo." }
 
   # ═════════════════════════════════════════════
   #  6. SITE SETTINGS
@@ -388,14 +395,18 @@ collections:
         label: "Contact & Social Links"
         file: src/content/settings/contact.json
         fields:
-          - { label: "Phone",        name: phone,     widget: string, required: false }
-          - { label: "Email",        name: email,     widget: string, required: false }
-          - { label: "LINE OA URL",  name: line,      widget: string, required: false,
-              hint: "Full URL e.g. https://line.me/ti/p/~@yourhandle" }
-          - { label: "Instagram URL", name: instagram, widget: string, required: false }
-          - { label: "TikTok URL",   name: tiktok,    widget: string, required: false }
-          - { label: "Facebook URL", name: facebook,  widget: string, required: false }
-          - { label: "Address",      name: address,   widget: text,   required: false }
+          - { label: "Main phone", name: phone, widget: string, required: false, hint: "Used by the Call buttons everywhere. Numbers only, e.g. 0800064465. The site adds the spaces." }
+          - { label: "Office phone", name: office_phone, widget: string, required: false, hint: "Shown as Office under the main phone. e.g. 0613561422" }
+          - { label: "Company name", name: company_name, widget: string, required: false, hint: "Registered name, exactly as on the company certificate. Shown in the footer copyright line and on the Studio page." }
+          - { label: "Email", name: email, widget: string, required: false, hint: "e.g. info@tncbuildstudio.com" }
+          - { label: "Opening hours", name: hours, widget: string, required: false, hint: "One line, e.g. Mon–Sat, 09:00–18:00" }
+          - { label: "LINE link", name: line, widget: string, required: false, hint: "Full link for the Chat on LINE buttons, e.g. https://lin.ee/RdpRHTR" }
+          - { label: "LINE ID", name: line_id, widget: string, required: false, hint: "Shown as text, e.g. @tncbuildstudio" }
+          - { label: "Studio address", name: studio_address, widget: text, required: false, hint: "One line per row, exactly as it should appear on the site (Contact page and footer)." }
+          - { label: "Footer city line", name: address, widget: string, required: false, hint: "Short text at the bottom right of every page, e.g. Bangkok, Thailand" }
+          - { label: "Instagram link", name: instagram, widget: string, required: false, hint: "Full link. Leave empty to hide it." }
+          - { label: "TikTok link", name: tiktok, widget: string, required: false, hint: "Full link. Leave empty to hide it." }
+          - { label: "Facebook link", name: facebook, widget: string, required: false, hint: "Full link. Leave empty to hide it." }
 
       - name: siteinfo
         label: "Site Info & SEO"

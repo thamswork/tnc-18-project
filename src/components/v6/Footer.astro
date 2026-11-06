@@ -1,0 +1,50 @@
+---
+import { site } from "../../data/site";
+interface Props { compact?: boolean }
+const { compact = false } = Astro.props;
+const socials = site.socials.filter((s) => s.href);
+---
+<footer class:list={["t-footer", { "t-footer--compact": compact }]}>
+  <div class="t-wrap">
+    {!compact && (
+      <>
+        <div class="t-footer-cta">
+          <div>
+            <h2 class="t-footer-h">Start a project</h2>
+            <p class="t-footer-lead">Tell us what you are building and when it has to open.</p>
+          </div>
+          <div class="t-footer-btns">
+            <a class="t-btn t-btn--line" href={site.lineUrl}>Chat on LINE</a>
+            <a class="t-btn t-btn--ghost" href={site.phoneHref}>Call the studio</a>
+          </div>
+        </div>
+        <dl class="t-footer-info">
+          <div><dt>LINE</dt><dd><a href={site.lineUrl}>{site.lineId}</a></dd></div>
+          <div><dt>Phone</dt><dd class="t-footer-stack"><a class="t-num" href={site.phoneHref}>{site.phoneDisplay}</a><a class="t-footer-sub t-num" href={site.officeHref}>Office {site.officeDisplay}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+          <div><dt>Hours</dt><dd>{site.hours}</dd></div>
+          <div class="t-footer-addr"><dt>Studio</dt><dd lang="th">
+            <span class="t-footer-addr-name">{site.address.name}</span>
+            {site.address.lines.map((l) => <span>{l}</span>)}
+          </dd></div>
+          {socials.length > 0 && <div><dt>Follow</dt><dd>{socials.map((s) => <a href={s.href} target="_blank" rel="noopener">{s.label}</a>)}</dd></div>}
+        </dl>
+      </>
+    )}
+    <div class="t-footer-bar">
+      <span>© {new Date().getFullYear()} {site.company}</span>
+      <nav aria-label="Footer">
+        <a href="/portfolio">Work</a><a href="/about-services">Studio</a><a href="/specbook">Specbook</a><a href="/contact">Contact</a>
+      </nav>
+      <span>{site.city}</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Hide the floating LINE button while the footer (which has its own LINE and Call buttons) is on screen
+  const foot = document.querySelector(".t-footer-bar")?.closest("footer");
+  if (foot && "IntersectionObserver" in window) {
+    new IntersectionObserver(([e]) => document.body.classList.toggle("is-foot", e.isIntersecting), { rootMargin: "0px 0px -15% 0px" }).observe(foot);
+  }
+</script>

@@ -1,335 +1,316 @@
 ---
+import { site } from '../data/site';
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
+import Header from '../components/v6/Header.astro';
+import Footer from '../components/v6/Footer.astro';
+import PageHead from '../components/v6/PageHead.astro';
 import { getCollection } from 'astro:content';
-import contactData from '../content/settings/contact.json';
+import { cld, cldSet } from '../lib/cld';
+import { getProjects, projectName, projectPlace, projectUrl } from '../lib/projects';
 import pageData from '../content/pages/about-services.json';
+import docs from '../content/settings/documents.json';
 
-const allServices = await getCollection('services');
-import siteinfo from '../content/settings/siteinfo.json';
-let dbd_pdf_url = '';
-try {
-  const fs = await import('fs');
-  const path = await import('path');
-  const p = path.join(process.cwd(), 'src/content/settings/documents.json');
-  if (fs.existsSync(p)) {
-    const doc = JSON.parse(fs.readFileSync(p, 'utf-8'));
-    dbd_pdf_url = doc.dbd_pdf || '';
-  }
-} catch(e) {}
-const services = allServices.sort((a, b) => a.data.order - b.data.order);
+const page: any = pageData;
+const services = (await getCollection('services')).sort((a: any, b: any) => a.data.order - b.data.order);
+const projects: any[] = await getProjects();
+const two = (n: number) => String(n).padStart(2, '0');
+const delay = (i: number, step = 0.08) => `--d:${(Math.min(i, 5) * step).toFixed(2)}s`;
+const nameOf = (p: any) => String(projectName(p) || '');
+const placeOf = (p: any) => String(projectPlace(p) || '');
+const coverOf = (p: any) => String(p?.data?.cover || '').trim();
+const named = (s: string) => projects.filter((p) => nameOf(p).toLowerCase().includes(s) && coverOf(p));
+const used = new Set<any>();
+const pick = (...cands: any[]) => {
+  const p = cands.find((x) => x && !used.has(x)) || projects.find((x) => coverOf(x) && !used.has(x));
+  if (p) used.add(p);
+  return p;
+};
+const pinn = named('rolling pinn');
+const pMain = pick(pinn.find((p) => placeOf(p).toLowerCase().includes('central')), pinn[0]);
+const pLeft = pick(...pinn);
+const pRight = pick(...named('irvin'));
+const photo = (own: any, p: any) => {
+  const o = String(own || '').trim();
+  if (o) return { src: o, alt: '', p: null };
+  return p ? { src: coverOf(p), alt: nameOf(p), p } : null;
+};
+const hero = photo(page.hero_image, pMain);
+// Slideshow lanes: own CMS photo first, then the board's project, then other projects split left/right
+const rest = projects.filter((p) => coverOf(p) && p !== pMain && p !== pLeft && p !== pRight).slice(0, 10);
+const lane = (own: any, lead: any, k: number) => {
+  const list: any[] = [];
+  const o = photo(own, null); if (o) list.push(o);
+  if (lead) list.push(photo(null, lead));
+  rest.forEach((p, i) => { if (i % 2 === k) list.push(photo(null, p)); });
+  return list;
+};
+const lanes = [lane(page.photo_2, pLeft, 0), lane(page.photo_3, pRight, 1)].filter((l) => l.length);
+const caption = (p: any) => nameOf(p) + (placeOf(p) ? `, ${placeOf(p)}` : '');
+
+const founded = String(page.founded || '').trim();
+const years = /^\d{4}$/.test(founded) ? String(new Date().getFullYear() - Number(founded)) : page.years;
+const stats = [
+  { l: 'Years', v: years },
+  { l: 'Projects', v: page.projects },
+].filter((s) => String(s.v || '').trim());
+const aside = `${site.company}. Design and build in Bangkok${founded ? ` since ${founded}` : ''}.`;
+const statement = page.statement || 'We design and build interiors that have to open on a fixed date and still last. The people who draw your project are the people who build it.';
+const dbd = String((docs as any).dbd_pdf || '').trim();
+const isPdf = /\.pdf(\?|#|$)/i.test(dbd);
+
+const steps = [
+  { t: 'Brief and site survey', d: 'Scope, budget range and opening date agreed on site.' },
+  { t: 'Design and quotation', d: 'Layout, 3D views and a fixed quote.' },
+  { t: 'Fabrication and build', d: 'Joinery made off-site while the site is prepared.' },
+  { t: 'Handover', d: 'Snag list closed, documents handed over.' },
+];
 ---
+<Layout
+  title="Studio — ออกแบบและรับเหมาตกแต่งภายใน กรุงเทพฯ"
+  description="TNC Build Studio บริษัทออกแบบและรับเหมาตกแต่งภายในร้านค้าและพื้นที่เชิงพาณิชย์ในกรุงเทพฯ | Design and build studio for retail and commercial interiors in Bangkok."
+  bodyClass="v6">
+  <Header active="studio" />
+  <main class="s-page">
+    <PageHead title="Studio" aside={aside} />
 
-<Layout description="TNC Build Studio บริษัทรับเหมาตกแต่งภายในและออกแบบร้านค้าเชิงพาณิชย์กรุงเทพ ทีมซีเนียร์โดยตรง ประสบการณ์กว่า 50 โครงการ | Interior contractor & retail design firm Bangkok Thailand"
-  title="เกี่ยวกับเรา — บริษัทรับเหมาตกแต่งภายในกรุงเทพ | TNC Build Studio">
-  <Navbar />
-
-  <main class="main">
-
-    <!-- Hero -->
-    <section class="hero">
-      {pageData.hero_image
-        ? <img src={pageData.hero_image} alt="" class="hero-img" />
-        : <div class="hero-ph"></div>
-      }
-      <div class="hero-veil"></div>
-      <div class="hero-content">
-        <p class="hero-eyebrow">Who We Are</p>
-        <h1 class="hero-title">{pageData.headline.toUpperCase()}</h1>
-      </div>
-    </section>
-
-    <!-- Mission -->
-    <section class="mission" data-reveal>
-      <p class="mission-text">{pageData.mission}</p>
-    </section>
-
-    <!-- Stats -->
-    {(pageData.years || pageData.projects) && (
-      <section class="stats-band" data-reveal>
-        {pageData.years && (
-          <div class="stat-item">
-            <span class="stat-n">{pageData.years}</span>
-            <span class="stat-l">Years of<br/>Precision Craft</span>
-          </div>
-        )}
-        <div class="stat-divider"></div>
-        {pageData.projects && (
-          <div class="stat-item">
-            <span class="stat-n">{pageData.projects}</span>
-            <span class="stat-l">Projects<br/>Completed</span>
-          </div>
-        )}
-        <div class="stat-divider"></div>
-        <div class="stat-item">
-          <span class="stat-n">0</span>
-          <span class="stat-l">Junior<br/>Hand-offs</span>
-        </div>
-      </section>
+    {hero && (
+      <figure class="s-hero">
+        <picture>
+          <source media="(max-width: 767px)" srcset={cldSet(hero.src, [480, 800, 1200], 4 / 5)} sizes="100vw" />
+          <img src={cld(hero.src, { w: 2400, h: 1134 })} srcset={cldSet(hero.src, [1200, 1800, 2400], 2400 / 1134)} sizes="100vw" alt={hero.alt} fetchpriority="high" />
+        </picture>
+        {hero.p && <figcaption class="s-cap"><a href={projectUrl(hero.p)}>{caption(hero.p)}</a></figcaption>}
+      </figure>
     )}
 
-    <!-- Bio -->
-    <section class="bio">
-      <div class="bio-inner">
-        <div class="bio-text" data-reveal>
-          <p class="bio-p">{pageData.bio_1}</p>
-          {pageData.bio_2 && <p class="bio-p">{pageData.bio_2}</p>}
-          <a href="/portfolio" class="bio-link">View Our Work →</a>
-        </div>
-        {pageData.owner_photo && (
-          <aside class="bio-side" data-reveal>
-            <img src={pageData.owner_photo} alt={pageData.owner_name || ''} class="owner-img" />
-            {pageData.owner_name  && <p class="owner-name">{pageData.owner_name}</p>}
-            {pageData.owner_title && <p class="owner-role">{pageData.owner_title}</p>}
-          </aside>
-        )}
-      </div>
+    <section class="t-wrap s-block s-intro">
+      <p class="s-statement s-rv">{statement}</p>
+      {stats.length > 0 && (
+        <dl class="s-stats">
+          {stats.map((s, i) => (
+            <div class="s-rv" style={delay(i + 1, 0.12)}><dt>{s.l}</dt><dd class="t-num">{s.v}</dd></div>
+          ))}
+        </dl>
+      )}
     </section>
 
-    <!-- Services -->
-    <section class="services">
-      <div class="svc-head" data-reveal>
-        <span class="s-label">What We Do</span>
-      </div>
-      <div class="svc-list">
-        {services.map((s, i) => (
-          <div class="svc-row" data-reveal data-delay={String(i % 3)}>
-            <span class="svc-n">{String(s.data.order).padStart(2,'0')}</span>
-            <div class="svc-body">
-              <h3 class="svc-title">{s.data.title.toUpperCase()}</h3>
-              {s.data.description && <p class="svc-desc">{s.data.description}</p>}
+    <section class="s-paper">
+      <div class="t-wrap s-block">
+        <div class="s-group" aria-labelledby="s-services">
+          <div class="s-head s-rv">
+            <h2 id="s-services">Services</h2>
+            <p>From first drawing to handover.</p>
+          </div>
+          <ol class="s-rows">
+            {services.map((s: any, i: number) => (
+              <li class="s-row s-rv" style={delay(i, 0.06)}>
+                <span class="s-row-main"><span class="s-n t-num">{two(s.data.order || i + 1)}</span><span class="s-row-t">{s.data.title}</span></span>
+                {s.data.description && <span class="s-row-d">{s.data.description}</span>}
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        {dbd && (
+          <div class="s-group" aria-labelledby="s-reg">
+            <div class="s-head s-rv">
+              <h2 id="s-reg">Company registration</h2>
+              <p>Department of Business Development, Ministry of Commerce, Thailand.</p>
+            </div>
+            <div class="s-row s-rv">
+              <span class="s-row-main">
+                <span class="s-n" aria-hidden="true"></span>
+                <a class="s-doc-file" href={dbd} target="_blank" rel="noopener" aria-label="Open the company certificate">
+                  {isPdf ? <span class="s-doc-pdf">PDF</span> : <img src={cld(dbd, { w: 480 })} alt="" loading="lazy" decoding="async" />}
+                </a>
+              </span>
+              <span class="s-row-d s-doc-text">
+                <span class="s-row-t">Company certificate <span lang="th">(หนังสือรับรอง)</span></span>
+                <a class="t-link" href={dbd} target="_blank" rel="noopener">View full document <span aria-hidden="true">→</span></a>
+              </span>
             </div>
           </div>
-        ))}
-        {services.length === 0 && (
-          <p class="svc-empty">Add services in the <a href="/admin">CMS</a>.</p>
         )}
       </div>
     </section>
 
+    <section class="t-wrap s-block" aria-labelledby="s-process">
+      <div class="s-head s-head--dark s-rv">
+        <h2 id="s-process">How a project runs</h2>
+        <p>The same team from the first site visit to handover.</p>
+      </div>
+      <ol class="s-steps">
+        {steps.map((s, i) => (
+          <li class="s-rv" style={delay(i, 0.1)}>
+            <span class="s-n t-num">{two(i + 1)}</span>
+            <span class="s-row-t">{s.t}</span>
+            <span class="s-step-d">{s.d}</span>
+          </li>
+        ))}
+      </ol>
+    </section>
 
-    <!-- CTA -->
-
-
+    {lanes.length > 0 && (
+      <div class="s-pair">
+        {lanes.map((slides, t) => (
+          <div class="s-tile s-rv" style={delay(t, 0.15)} data-rot>
+            {slides.map((ph: any, k: number) => {
+              const set = cldSet(ph.src, [480, 800, 1200], 4 / 5);
+              const one = cld(ph.src, { w: 1200, h: 1500 });
+              return (
+                <figure class:list={["s-slide", { "is-on": k === 0 }]} aria-hidden={k === 0 ? undefined : "true"}>
+                  {k === 0
+                    ? <img src={one} srcset={set} sizes="(min-width: 600px) 50vw, 100vw" alt={ph.alt} loading="lazy" decoding="async" />
+                    : <img data-src={one} data-srcset={set} sizes="(min-width: 600px) 50vw, 100vw" alt={ph.alt} decoding="async" />}
+                  {ph.p && <figcaption class="s-cap s-cap--tile"><a href={projectUrl(ph.p)}>{caption(ph.p)}</a></figcaption>}
+                </figure>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    )}
   </main>
-
-  <!-- ── DBD DOCUMENT SECTION ── -->
-  <section class="doc-section">
-    <div class="doc-inner">
-      <div class="doc-left">
-        <span class="doc-eyebrow">Official Documents</span>
-        <h2 class="doc-title">Company Registration</h2>
-        <p class="doc-body">Registered with the Department of Business Development (DBD), Ministry of Commerce, Thailand. View our official company registration documents below.</p>
-      </div>
-      <div class="doc-right">
-        {dbd_pdf_url
-          ? <div class="doc-preview">
-              {dbd_pdf_url.endsWith('.pdf')
-                ? <iframe src={dbd_pdf_url} class="doc-iframe" title="DBD Registration Document" />
-                : <a href={dbd_pdf_url} target="_blank" rel="noopener" class="doc-img-wrap">
-                    <img src={dbd_pdf_url} alt="DBD Registration Document" class="doc-img" />
-                  </a>
-              }
-              <a href={dbd_pdf_url} target="_blank" rel="noopener" class="doc-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
-                View Full Document
-              </a>
-            </div>
-          : <p class="doc-pending">Document not yet uploaded. <a href="/admin">Update in CMS →</a></p>
+  <Footer />
+  <script is:inline>
+    (function () {
+      var els = document.querySelectorAll('.s-rv');
+      if (!els.length || !('IntersectionObserver' in window)) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      document.documentElement.classList.add('s-js');
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+  <script is:inline>
+    (function () {
+      var tiles = document.querySelectorAll('[data-rot]');
+      if (!tiles.length || !('IntersectionObserver' in window)) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      function load(sl) {
+        var im = sl.querySelector('img[data-src]');
+        if (!im) return;
+        im.srcset = im.getAttribute('data-srcset'); im.src = im.getAttribute('data-src');
+        im.removeAttribute('data-src'); im.removeAttribute('data-srcset');
+      }
+      tiles.forEach(function (tile, t) {
+        var slides = tile.querySelectorAll('.s-slide');
+        if (slides.length < 2) return;
+        var i = 0, visible = false, timer = null, wait = null;
+        function next() {
+          slides[i].classList.remove('is-on'); slides[i].setAttribute('aria-hidden', 'true');
+          i = (i + 1) % slides.length;
+          load(slides[i]);
+          slides[i].classList.add('is-on'); slides[i].removeAttribute('aria-hidden');
+          load(slides[(i + 1) % slides.length]);
         }
-      </div>
-    </div>
-  </section>
-
-  <Footer ctaTitle="Work With Us Directly." ctaSub="Senior partners only. Fast turnaround. 24/7 support." />
+        function start() {
+          if (timer || wait || !visible || document.hidden) return;
+          load(slides[1]);
+          wait = setTimeout(function () { wait = null; if (visible && !document.hidden) timer = setInterval(next, 3000); }, t * 1500);
+        }
+        function stop() { clearInterval(timer); clearTimeout(wait); timer = null; wait = null; }
+        new IntersectionObserver(function (es) {
+          visible = es[0].isIntersecting;
+          visible ? start() : stop();
+        }, { threshold: 0.2 }).observe(tile);
+        document.addEventListener('visibilitychange', function () { document.hidden ? stop() : start(); });
+      });
+    })();
+  </script>
 </Layout>
 
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  .main { padding-top: 64px; background: var(--bg, #F8F7F4); min-height: 100vh; }
+  /* One rhythm for the whole page */
+  .s-page { --s-pad: clamp(64px, 7vw, 112px); --s-group: clamp(72px, 7vw, 112px); --s-row: 24px; --s-num: 48px; --s-rule: #D6D4CC; }
 
-  /* HERO */
-  .hero {
-    position: relative; width: 100%;
-    height: 60vw; min-height: 300px; max-height: 580px;
-    overflow: hidden; background: #0a0c10;
-  }
-  .hero-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.45; display: block; }
-  .hero-ph  { position: absolute; inset: 0; background: linear-gradient(155deg,#1a2a3e,#060810); }
-  .hero-veil { position: absolute; inset: 0; background: linear-gradient(to top,rgba(4,6,10,0.82) 0%,rgba(4,6,10,0.2) 55%,transparent 75%); }
-  .hero-content { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 2.5rem var(--pad-x,5vw); }
-  .hero-eyebrow { font-family: var(--font-mono,'Courier New',monospace); font-size: 0.54rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(248,247,244,0.4); margin-bottom: 0.75rem; }
-  .hero-title { font-family: var(--font-display,'Tenor Sans',serif); font-size: clamp(1.75rem,5.5vw,3.5rem); font-weight: 400; letter-spacing: 0.08em; color: #F8F7F4; line-height: 1.1; }
+  .s-hero, .s-tile { position: relative; margin: 0; background: var(--tile); overflow: hidden; }
+  .s-hero img { display: block; width: 100%; aspect-ratio: 2400 / 1134; max-height: 680px; object-fit: cover; }
+  .s-cap { position: absolute; left: var(--m); bottom: 20px; right: var(--m); font-size: 12px; line-height: 1.4; }
+  .s-cap a { color: #fff; text-shadow: 0 1px 10px rgba(0,0,0,.55); }
+  .s-cap a:hover { color: var(--soft); }
+  .s-cap--tile { left: 16px; right: 16px; bottom: 14px; }
 
-  /* MISSION */
-  .mission { padding: 4rem var(--pad-x,5vw) 0; }
-  .mission-text { font-family: var(--font-display,'Tenor Sans',serif); font-size: clamp(1.15rem,3vw,1.85rem); font-weight: 400; letter-spacing: 0.04em; color: var(--ink,#1A1A1A); line-height: 1.7; max-width: 720px; }
+  .s-block { padding-block: var(--s-pad); }
 
-  /* STATS */
-  .stats-band { display: flex; align-items: center; padding: 3rem var(--pad-x,5vw) 0; flex-wrap: nowrap; gap: 0; overflow-x: auto; }
-  .stat-item { display: flex; flex-direction: column; gap: 0.5rem; flex: 1; min-width: 100px; }
-  .stat-n { font-family: var(--font-display,'Tenor Sans',serif); font-size: clamp(1.75rem,6vw,4rem); font-weight: 400; color: var(--ink,#1A1A1A); line-height: 1; }
-  .stat-l { font-family: var(--font-mono,'Courier New',monospace); font-size: 0.52rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-light,#6B6B6B); line-height: 1.6; }
-  .stat-divider { width: 0.5px; height: 50px; background: rgba(26,26,26,0.15); flex-shrink: 0; align-self: center; }
+  .s-intro { display: flex; flex-wrap: wrap; gap: 40px var(--gap); align-items: flex-end; justify-content: space-between; }
+  .s-statement { margin: 0; flex: 1 1 min(100%, 560px); max-width: 30ch; font-size: clamp(22px, 2.2vw, 32px); line-height: 1.35; font-weight: 300; letter-spacing: -.015em; }
+  .s-stats { margin: 0; flex: 0 1 320px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: var(--gap); }
+  .s-stats div { padding-top: 16px; border-top: 1px solid var(--line-2); }
+  .s-stats dt { font-size: 13px; color: var(--mute); }
+  .s-stats dd { margin: 4px 0 0; font-size: 20px; font-weight: 500; }
 
-  /* BIO */
-  .bio { padding: 4rem var(--pad-x,5vw) 0; }
-  .bio-inner { display: flex; flex-direction: column; gap: 3rem; }
-  .bio-p { font-size: 1rem; line-height: 1.95; color: var(--ink-mid,#3D3D3D); font-weight: 300; margin-bottom: 1.25rem; max-width: 580px; font-size: 0.95rem; }
-  .bio-p:last-of-type { margin-bottom: 1.75rem; }
-  .bio-link { font-family: var(--font-mono,'Courier New',monospace); font-size: 0.58rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--navy,#1A3A6B); text-decoration: none; transition: opacity 0.2s; }
-  .bio-link:hover { opacity: 0.6; }
-  .owner-img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; margin-bottom: 0.75rem; }
-  .owner-name { font-family: var(--font-display,'Tenor Sans',serif); font-size: 0.95rem; letter-spacing: 0.06em; color: var(--ink,#1A1A1A); }
-  .owner-role { font-family: var(--font-mono,'Courier New',monospace); font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-light,#6B6B6B); margin-top: 0.25rem; }
+  /* Section heading: title left, note on the centre line, one solid rule */
+  .s-head { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px var(--gap); align-items: baseline; padding-bottom: 24px; border-bottom: 1px solid var(--blue); }
+  .s-head h2 { margin: 0; font-size: clamp(24px, 2.2vw, 32px); line-height: 1.15; font-weight: 400; letter-spacing: -.02em; }
+  .s-head p { margin: 0; font-size: 15px; line-height: 1.5; color: var(--grey); }
+  .s-head--dark { border-bottom-color: rgba(255,255,255,.35); }
+  .s-head--dark p { color: var(--mute); }
+  .s-group + .s-group { margin-top: var(--s-group); }
 
-  /* SERVICES */
-  .services { padding: 4rem var(--pad-x,5vw) 0; }
-  .svc-head { padding-bottom: 1.25rem; border-bottom: 0.5px solid rgba(26,26,26,0.12); }
-  .s-label { font-family: var(--font-mono,'Courier New',monospace); font-size: 0.58rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--ink-light,#6B6B6B); }
-  .svc-row { display: grid; grid-template-columns: 2.5rem 1fr; gap: 1.5rem; padding: 2rem 0; border-bottom: 0.5px solid rgba(26,26,26,0.07); align-items: flex-start; }
-  .svc-n { font-family: var(--font-mono,'Courier New',monospace); font-size: 0.58rem; color: var(--navy,#1A3A6B); letter-spacing: 0.14em; font-weight: 600; padding-top: 0.25rem; }
-  .svc-title { font-family: var(--font-display,'Tenor Sans',serif); font-size: clamp(1rem,2.5vw,1.35rem); font-weight: 400; letter-spacing: 0.08em; color: var(--ink,#1A1A1A); margin-bottom: 0.5rem; line-height: 1.2; }
-  .svc-desc { font-size: 0.9rem; line-height: 1.9; color: var(--ink-light,#6B6B6B); font-weight: 300; max-width: 520px; }
-  .svc-empty { font-size: 0.875rem; color: var(--ink-light,#6B6B6B); padding: 2rem 0; }
-  .svc-empty a { color: var(--navy,#1A3A6B); text-decoration: none; }
+  /* Rows: number + title in the left half, detail from the centre line */
+  .s-paper { background: var(--paper); color: var(--blue); }
+  .s-rows { margin: 0; padding: 0; list-style: none; }
+  .s-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px var(--gap); align-items: baseline; padding-block: var(--s-row); border-bottom: 1px solid var(--s-rule); }
+  .s-row-main { display: grid; grid-template-columns: var(--s-num) minmax(0, 1fr); align-items: baseline; }
+  .s-n { font-size: 13px; font-variant-numeric: tabular-nums; color: var(--grey); }
+  .s-row-t { font-size: 20px; font-weight: 500; letter-spacing: -.01em; line-height: 1.3; }
+  .s-row-d { font-size: 15px; line-height: 1.5; color: var(--grey); }
 
-  /* WORK BAND */
-  .work-band { padding: 4rem var(--pad-x,5vw); background: #EFEDE8; }
-  .work-band-inner { display: flex; flex-direction: column; gap: 1.5rem; max-width: 600px; }
-  .work-band-label { font-family: var(--font-mono,'Courier New',monospace); font-size: 0.54rem; letter-spacing: 0.28em; text-transform: uppercase; color: var(--navy,#1A3A6B); }
-  .work-band-title { font-family: var(--font-display,'Tenor Sans',serif); font-size: clamp(1.5rem,4vw,2.5rem); font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink,#1A1A1A); line-height: 1.1; }
-  .btn-ghost { display: inline-flex; align-items: center; font-family: var(--font-body,'Inter',sans-serif); font-size: 0.62rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; text-decoration: none; color: var(--navy,#1A3A6B); background: transparent; padding: 0.85rem 1.75rem; border: 1px solid var(--navy,#1A3A6B); transition: background 0.25s, color 0.25s; align-self: flex-start; }
-  .btn-ghost:hover { background: var(--navy,#1A3A6B); color: #F8F7F4; }
+  .s-row:has(.s-doc-file) { align-items: start; }
+  .s-row:has(.s-doc-file) .s-row-main { align-items: start; }
+  .s-doc-file { display: block; width: 120px; aspect-ratio: 4 / 5; overflow: hidden; background: #fff; border: 1px solid var(--s-rule); box-shadow: 0 8px 24px -14px rgba(12,31,74,.25); transition: transform .6s cubic-bezier(.16,1,.3,1), box-shadow .6s cubic-bezier(.16,1,.3,1); }
+  .s-doc-file img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+  .s-doc-file:hover { transform: translateY(-3px); box-shadow: 0 14px 30px -14px rgba(12,31,74,.35); }
+  .s-doc-pdf { display: grid; place-items: center; height: 100%; font-size: 13px; color: var(--grey); }
+  .s-doc-text { display: grid; gap: 4px; justify-items: start; }
+  .s-doc-text .s-row-t { color: var(--blue); }
+  .s-doc-text .t-link { color: var(--blue); display: inline-block; padding-block: 12px; }
 
-  /* CTA */
-  .cta { background: var(--navy-deep,#0E2140); padding: 4rem var(--pad-x,5vw); }
-  .cta-inner { display: flex; flex-direction: column; gap: 2.5rem; align-items: flex-start; max-width: 1000px; margin: 0 auto; }
-  .cta-title { font-family: var(--font-display,'Tenor Sans',serif); font-size: clamp(2rem,6vw,4rem); font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase; color: #F8F7F4; line-height: 1.05; margin-bottom: 0.85rem; }
-  .cta-sub { font-size: 0.9rem; color: rgba(248,247,244,0.4); line-height: 1.85; font-weight: 300; }
-  .cta-line-btn { display: inline-flex; align-items: center; gap: 0.65rem; font-family: var(--font-body,'Inter',sans-serif); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; text-decoration: none; color: #F8F7F4; background: transparent; padding: 0.9rem 1.8rem; border: 1px solid rgba(248,247,244,0.4); transition: background 0.25s, border-color 0.25s; white-space: nowrap; flex-shrink: 0; }
-  .cta-line-btn:hover { background: rgba(248,247,244,0.1); border-color: rgba(248,247,244,0.7); }
-  .line-dot { display: block; width: 7px; height: 7px; border-radius: 50%; background: #06C755; flex-shrink: 0; }
+  /* Steps share the same centre line (4 columns = 2 per half) */
+  .s-steps { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 40px var(--gap); }
+  .s-steps li { display: grid; gap: 8px; align-content: start; padding-top: var(--s-row); }
+  .s-steps .s-n { color: var(--mute); margin-bottom: 12px; }
+  .s-step-d { font-size: 15px; line-height: 1.5; color: var(--mute); }
 
-  /* FOOTER */
-  .site-footer { background: var(--navy-deep,#0E2140); padding: 3.5rem var(--pad-x,5vw); }
-  .site-footer-inner { display: flex; flex-direction: column; gap: 2rem; width: 100%; }
-  .footer-brand { display: flex; flex-direction: column; gap: 0.3rem; }
-  .site-footer-logo { font-family: var(--font-body,'Inter',sans-serif); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.2em; color: rgba(255,255,255,0.3); display: block; }
-  .site-footer-logo em { font-style: normal; color: rgba(255,255,255,0.65); }
-  .site-footer-sub { font-family: var(--font-mono,'Courier New',monospace); font-size: 0.5rem; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(255,255,255,0.15); }
-  .site-footer-nav { display: flex; flex-wrap: wrap; gap: 0.75rem 2rem; }
-  .site-footer-nav a { font-family: var(--font-mono,'Courier New',monospace); font-size: 0.54rem; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; white-space: nowrap; }
-  .site-footer-nav a:hover { color: rgba(255,255,255,0.8); }
-  .site-footer-copy { font-family: var(--font-mono,'Courier New',monospace); font-size: 0.46rem; color: rgba(255,255,255,0.12); letter-spacing: 0.12em; }
+  .s-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+  .s-tile { aspect-ratio: 4 / 5; }
+  .s-slide { position: absolute; inset: 0; margin: 0; opacity: 0; pointer-events: none; transition: opacity .6s cubic-bezier(.4,0,.2,1); }
+  .s-slide.is-on { opacity: 1; z-index: 1; pointer-events: auto; }
+  .s-slide img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.04); transition: transform 3.5s linear; }
+  .s-slide.is-on img { transform: none; }
+  @media (prefers-reduced-motion: reduce) { .s-slide, .s-slide img { transition: none; transform: none; } }
 
-  @media (min-width: 768px) {
-    .bio-inner { flex-direction: row; gap: 6rem; align-items: flex-start; }
-    .bio-text { flex: 1; }
-    .bio-side { width: 200px; flex-shrink: 0; }
-    .cta-inner { flex-direction: row; align-items: center; justify-content: space-between; gap: 5rem; }
-    .site-footer-inner { flex-direction: row; align-items: flex-start; justify-content: space-between; flex-wrap: nowrap; gap: 0; overflow-x: auto; }
-    .stats-band { flex-wrap: nowrap; gap: 0; }
-    .stat-item { padding-right: 3rem; }
-    .stat-divider { margin-right: 3rem; }
+  /* Subtle motion: page head rises in, photo settles, sections fade up on scroll */
+  :global(html.s-js) .s-rv { opacity: 0; transform: translateY(18px); transition: opacity 1.1s cubic-bezier(.16,1,.3,1) var(--d, 0s), transform 1.1s cubic-bezier(.16,1,.3,1) var(--d, 0s); }
+  :global(html.s-js) .s-rv.is-in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    .s-hero img { animation: s-settle 2.8s cubic-bezier(.16,1,.3,1) both; }
+    .s-page :global(.t-pagehead-main), .s-page :global(.t-pagehead-aside) { animation: s-rise 1.1s cubic-bezier(.16,1,.3,1) both; }
+    .s-page :global(.t-pagehead-aside) { animation-delay: .15s; }
   }
+  @keyframes s-settle { from { transform: scale(1.05); } to { transform: none; } }
+  @keyframes s-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 
-  /* ── DBD DOCUMENT SECTION ── */
-  .doc-section {
-    background: var(--bg-dark, #ECEAE3);
-    padding: 5rem var(--pad-x, 5vw);
-    border-top: 1px solid rgba(17,17,17,0.07);
+  @media (max-width: 1023px) {
+    .s-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
-  .doc-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-    max-width: 900px;
+  @media (max-width: 767px) {
+    .s-page { --s-num: 40px; --s-row: 20px; }
+    .s-hero img { aspect-ratio: 4 / 5; max-height: 78svh; }
+    .s-stats { flex: 1 1 100%; }
+    .s-head, .s-row { grid-template-columns: minmax(0, 1fr); }
+    .s-row-d { padding-left: var(--s-num); }
+    .s-row-t { font-size: 18px; }
+    .s-doc-file { width: 104px; }
   }
-  @media (min-width: 768px) {
-    .doc-inner {
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      gap: 4rem;
-    }
+  @media (max-width: 599px) {
+    .s-steps { grid-template-columns: 1fr; gap: 8px; }
+    .s-steps li { padding-bottom: 8px; }
+    .s-pair { grid-template-columns: 1fr; }
   }
-  .doc-eyebrow {
-    display: block;
-    font-size: 0.575rem; font-weight: 600;
-    letter-spacing: 0.24em; text-transform: uppercase;
-    color: var(--navy, #1A3A6B);
-    margin-bottom: 0.75rem;
-  }
-  .doc-title {
-    font-size: clamp(1.5rem, 3vw, 2rem);
-    font-weight: 800; letter-spacing: -0.03em;
-    color: var(--ink, #111); margin-bottom: 0.75rem;
-  }
-  .doc-body {
-    font-size: 0.85rem; line-height: 1.75;
-    color: var(--ink-light, #777); font-weight: 400;
-    max-width: 420px;
-  }
-  .doc-right { flex-shrink: 0; }
-  .doc-btn {
-    display: inline-flex; align-items: center; gap: 0.75rem;
-    font-size: 0.65rem; font-weight: 600;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    text-decoration: none; color: var(--ink, #111);
-    border: 1px solid rgba(17,17,17,0.25);
-    padding: 1rem 2rem;
-    transition: background 0.22s, color 0.22s, border-color 0.22s;
-  }
-  .doc-btn:hover {
-    background: var(--navy, #1A3A6B);
-    color: #fff; border-color: var(--navy, #1A3A6B);
-  }
-  .doc-preview {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  width: 100%;
-}
-.doc-img-wrap {
-  display: block;
-  width: 100%;
-  border: 1px solid rgba(17,17,17,0.1);
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  transition: box-shadow 0.2s;
-}
-.doc-img-wrap:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.14); }
-.doc-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  max-height: 480px;
-  object-fit: contain;
-  background: #fff;
-}
-.doc-iframe {
-  width: 100%;
-  height: 480px;
-  border: 1px solid rgba(17,17,17,0.1);
-  border-radius: 4px;
-  display: block;
-}
-.doc-pending {
-    font-size: 0.8rem; color: var(--ink-light, #777);
-  }
-  .doc-pending a { color: var(--navy, #1A3A6B); }
 </style>
-
-<script>
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      e.target.classList.add('revealed');
-      io.unobserve(e.target);
-    });
-  }, { threshold: 0.06 });
-  document.querySelectorAll('[data-reveal]').forEach(el => io.observe(el));
-</script>

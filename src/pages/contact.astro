@@ -1,360 +1,136 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import Footer from '../components/Footer.astro';
-import { getCollection } from 'astro:content';
+import Header from '../components/v6/Header.astro';
+import Footer from '../components/v6/Footer.astro';
+import { cld, cldSet } from '../lib/cld';
+import { getProjects, projectName, projectPlace, projectUrl } from '../lib/projects';
+import { site } from '../data/site';
 import contactData from '../content/settings/contact.json';
-import pageData    from '../content/pages/contact.json';
+import pageData from '../content/pages/contact.json';
 
-const allProjects = await getCollection('projects');
-const projects = allProjects.sort((a, b) => b.data.year - a.data.year);
-const featured = projects[0] || null;
+const pd: any = pageData;
+const cd: any = contactData;
+const projects: any[] = await getProjects();
+const coverOf = (p: any) => String(p?.data?.cover || '').trim();
+const nameOf = (p: any) => String(projectName(p) || '');
+const placeOf = (p: any) => String(projectPlace(p) || '');
+const curated = projects.find((p) => nameOf(p).toLowerCase().includes('curated') && coverOf(p)) || projects.find((p) => coverOf(p));
+const own = String(pd.hero_image || '').trim();
+const photo = own ? { src: own, p: null } : curated ? { src: coverOf(curated), p: curated } : null;
 
-const igHandle = (contactData.instagram || '').replace('https://www.instagram.com/','@').replace('https://instagram.com/','@').replace(/\/$/,'');
-const ttHandle = (contactData.tiktok || '').replace('https://www.tiktok.com/','').replace('https://tiktok.com/','').replace(/\/$/,'');
-const lineUrl = (contactData as any).line || '';
-const lineQr = (contactData as any).line_qr || '';
-const LINE_ICON = 'https://res.cloudinary.com/dynjnftnu/image/upload/v1776531320/LINE_Brand_icon_2_ytuls0.png';
-
-// Hero priority: video > hero_images list > hero_image single > slideshow > portfolio pick > latest
-const pd = pageData as any;
-const heroVideo     = pd.hero_video || null;
-const heroSlideshow = pd.hero_slideshow === true;
-
-const heroImages = pd.hero_images || [];
-const firstPhoto = heroImages.length > 0
-  ? (typeof heroImages[0] === 'string' ? heroImages[0] : heroImages[0]?.image || null)
-  : null;
-const singlePhoto = pd.hero_image || null;
-
-const pickedProject = pd.hero_project
-  ? allProjects.find(p => p.data.title === pd.hero_project) || null
-  : null;
-
-// Build slideshow frames — all project covers sorted by year
-const slideshowFrames = heroSlideshow
-  ? projects.map(p => p.data.cover).filter(Boolean)
-  : [];
-
-let heroSrc: string | null = null;
-if (!heroVideo && !heroSlideshow) {
-  if (firstPhoto)                      heroSrc = firstPhoto;
-  else if (singlePhoto)                heroSrc = singlePhoto;
-  else if (pickedProject?.data?.cover) heroSrc = pickedProject.data.cover;
-  else if (featured?.data?.cover)      heroSrc = featured.data.cover;
-}
+const intro = String(pd.intro || '').trim() || 'Send the location, size, opening date and budget. We reply with next steps.';
+const email = String(cd.email || '').trim();
+const socials = [
+  { label: 'Instagram', href: String(cd.instagram || '').trim() },
+  { label: 'TikTok', href: String(cd.tiktok || '').trim() },
+  { label: 'Facebook', href: String(cd.facebook || '').trim() },
+].filter((s) => s.href);
+const mapHref = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Udomsuk Hub, Sukhumvit 101/2, Bang Na, Bangkok 10260');
+const delay = (i: number) => `--d:${(0.2 + i * 0.06).toFixed(2)}s`;
 ---
+<Layout
+  title="Contact — ติดต่อรับเหมาตกแต่งภายใน บูธขายของในห้าง Pop-up Store กรุงเทพฯ"
+  description="ติดต่อ TNC Build Studio รับใบเสนอราคาฟรี รับเหมาตกแต่งภายใน ทำบูธขายของในห้าง Pop-up Store ตกแต่งร้านค้า กรุงเทพ | Contact for a free quote, Bangkok Thailand"
+  bodyClass="v6">
+  <Header active="contact" overlay />
+  <main class="c-page">
+    <div class="c-split">
+      {photo && (
+        <figure class="c-photo">
+          <img src={cld(photo.src, { w: 1600, h: 2000 })} srcset={cldSet(photo.src, [600, 1000, 1600, 2000], 4 / 5)} sizes="(min-width: 900px) 50vw, 100vw" alt={photo.p ? nameOf(photo.p) : ''} fetchpriority="high" />
+          {photo.p && <figcaption class="c-cap"><a href={projectUrl(photo.p)}>{nameOf(photo.p)}{placeOf(photo.p) && `, ${placeOf(photo.p)}`}</a></figcaption>}
+        </figure>
+      )}
 
-<Layout description="ติดต่อ TNC Build Studio รับใบเสนอราคาฟรี รับเหมาตกแต่งภายใน ทำบูธขายของในห้าง Pop-up Store ตกแต่งร้านค้า กรุงเทพ | Contact for free quote Bangkok Thailand"
-  title="ติดต่อเรา — รับเหมาตกแต่งภายใน บูธขายของในห้าง Pop-up Store กรุงเทพ | TNC Build Studio">
-  <Navbar />
-
-  <main class="contact-page">
-
-    {heroVideo
-      ? <video autoplay muted loop playsinline class="bg-img"><source src={heroVideo} type="video/mp4" /></video>
-      : heroSlideshow && slideshowFrames.length > 0
-        ? <div class="bg-slideshow" id="bg-slideshow">
-            {slideshowFrames.map((src, i) => (
-              <img
-                src={src}
-                alt=""
-                class={`bg-slide${i === 0 ? ' active' : ''}`}
-                loading={i === 0 ? 'eager' : 'lazy'}
-              />
-            ))}
-          </div>
-        : heroSrc
-          ? <img src={heroSrc} alt="" class="bg-img" loading="eager" />
-          : null
-    }
-    <div class="bg-veil"></div>
-
-    <div class="page-content">
-
-      <div class="top-bar">
-        <span class="brand-tag">Retail & Interior Design · Bangkok</span>
-      </div>
-
-      <div class="bottom-content">
-        <div class="contact-left">
-          <h1 class="contact-title">{pageData.headline.toUpperCase()}</h1>
-          <p class="contact-sub">{pageData.subtext}</p>
-          {contactData.line && (
-            <a href={contactData.line} target="_blank" rel="noopener" class="line-btn">
-              <img src={LINE_ICON} alt="LINE" class="line-ico" />
-              {pageData.line_label || 'Message us on Line'}
-            </a>
-          )}
-          {pageData.promise && (
-            <p class="promise"><span class="dot"></span>{pageData.promise}</p>
-          )}
-
-        </div>
-
-        <div class="contact-right">
-          {contactData.instagram && (
-            <a href={contactData.instagram} target="_blank" rel="noopener" class="ch">
-              <span class="ch-plat">Instagram</span>
-              <span class="ch-handle">{igHandle}</span>
-            </a>
-          )}
-          {contactData.tiktok && (
-            <a href={contactData.tiktok} target="_blank" rel="noopener" class="ch">
-              <span class="ch-plat">TikTok</span>
-              <span class="ch-handle">{ttHandle}</span>
-            </a>
-          )}
-          {contactData.facebook && (
-            <a href={contactData.facebook} target="_blank" rel="noopener" class="ch">
-              <span class="ch-plat">Facebook</span>
-              <span class="ch-handle">TNC.18</span>
-            </a>
-          )}
-          {contactData.email && (
-            <a href={`mailto:${contactData.email}`} class="ch">
-              <span class="ch-plat">Email</span>
-              <span class="ch-handle">{contactData.email}</span>
-            </a>
-          )}
-          {contactData.phone && (
-            <a href={`tel:${contactData.phone.replace(/\s/g,'')}`} class="ch">
-              <span class="ch-plat">Phone</span>
-              <span class="ch-handle">{contactData.phone}</span>
-
-            </a>
-          )}
-          <div class="studio">
-            <span class="ch-plat">Studio</span>
-            <span class="ch-handle">Bangkok, Thailand</span>
-            <span class="studio-hrs">Mon – Sat · 09:00 – 18:00</span>
+      <section class="c-info" aria-labelledby="c-title">
+        <div class="c-in">
+          <h1 class="c-title c-rv" id="c-title">Contact</h1>
+          <p class="c-intro c-rv" style={delay(0)}>{intro}</p>
+          <dl class="c-dl">
+            <div class="c-rv" style={delay(1)}><dt>LINE</dt><dd><a href={site.lineUrl} rel="noopener">{site.lineId}</a></dd></div>
+            <div class="c-rv" style={delay(2)}><dt>Phone</dt><dd class="c-stack"><a class="t-num" href={site.phoneHref}>{site.phoneDisplay}</a><a class="c-sub t-num" href={site.officeHref}>Office {site.officeDisplay}</a></dd></div>
+            {email && <div class="c-rv" style={delay(3)}><dt>Email</dt><dd><a href={`mailto:${email}`}>{email}</a></dd></div>}
+            <div class="c-rv" style={delay(4)}><dt>Hours</dt><dd>{site.hours}</dd></div>
+            <div class="c-rv" style={delay(5)}><dt>Studio</dt><dd class="c-stack" lang="th">{site.address.lines.map((l) => <span>{l}</span>)}<a class="c-sub" lang="en" href={mapHref} target="_blank" rel="noopener">Get directions ↗</a></dd></div>
+            {socials.length > 0 && <div class="c-rv" style={delay(6)}><dt>Follow</dt><dd class="c-follow">{socials.map((s) => <a href={s.href} target="_blank" rel="noopener">{s.label}</a>)}</dd></div>}
+          </dl>
+          <div class="c-btns c-rv" style={delay(7)}>
+            <a class="t-btn t-btn--line" href={site.lineUrl} rel="noopener">Chat on LINE</a>
+            <a class="t-btn t-btn--ghost" href={site.phoneHref}>Call the studio</a>
           </div>
         </div>
-      </div>
-
+      </section>
     </div>
   </main>
-
+  <Footer compact />
   <script is:inline>
-    (function() {
-      const slides = document.querySelectorAll('.bg-slide');
-      if (!slides.length) return;
-      let cur = 0;
-      setInterval(function() {
-        slides[cur].classList.remove('active');
-        cur = (cur + 1) % slides.length;
-        slides[cur].classList.add('active');
-      }, 4000);
+    (function () {
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('c-js');
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        document.querySelectorAll('.c-rv').forEach(function (el) { el.classList.add('is-in'); });
+      }); });
     })();
   </script>
-
-  <Footer hideCta={true} />
 </Layout>
 
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  /* Full-bleed photo on the left half, calm details on the right half */
+  .c-split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); min-height: calc(100svh - 68px); }
+  .c-photo { position: relative; margin: 0; background: var(--tile); overflow: hidden; }
+  .c-photo::after { content: ""; position: absolute; inset: 0 0 auto; height: 240px; background: linear-gradient(180deg, rgba(8,22,56,.78), rgba(8,22,56,.35) 55%, rgba(8,22,56,0)); pointer-events: none; }
+  .c-photo::before { content: ""; position: absolute; inset: auto 0 0; height: 140px; z-index: 1; background: linear-gradient(0deg, rgba(8,22,56,.55), rgba(8,22,56,0)); pointer-events: none; }
+  .c-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .c-cap { position: absolute; left: var(--m); right: var(--m); bottom: 24px; z-index: 2; font-size: 13px; line-height: 1.4; }
+  .c-cap a { color: rgba(255,255,255,.85); text-shadow: 0 1px 10px rgba(0,0,0,.5); }
+  .c-cap a:hover { color: #fff; }
 
-  .contact-page {
-    position: relative;
-    width: 100%;
-    min-height: 100vh;
-    overflow: hidden;
-    background: #0a0e18;
+  .c-info { display: flex; align-items: center; padding: clamp(100px, 13svh, 136px) var(--m) clamp(40px, 5svh, 72px) clamp(40px, 6vw, 112px); }
+  .c-in { width: 100%; max-width: 520px; }
+  .c-title { margin: 0; font-size: clamp(36px, 3.6vw, 56px); line-height: 1; font-weight: 800; letter-spacing: -.04em; text-transform: uppercase; }
+  .c-intro { margin: 20px 0 0; max-width: 34ch; font-size: 16px; line-height: 1.6; color: var(--mute); }
+
+  .c-dl { margin: clamp(40px, 4vw, 56px) 0 0; display: grid; }
+  .c-dl > div { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 16px; align-items: baseline; padding-block: 14px; border-top: 1px solid rgba(255,255,255,.08); font-size: 15px; line-height: 1.55; }
+  .c-dl > div:last-child { border-bottom: 1px solid rgba(255,255,255,.08); }
+  .c-dl dt { font-size: 13px; color: var(--mute); }
+  .c-dl dd { margin: 0; min-width: 0; overflow-wrap: anywhere; color: var(--soft); }
+  .c-dl a { color: #fff; display: inline-block; padding-block: 12px; margin-block: -12px; transition: color .3s; }
+  .c-dl a:hover { color: var(--soft); }
+  .c-stack { display: grid; gap: 2px; justify-items: start; }
+  .c-stack .c-sub { color: var(--mute); font-size: 14px; }
+  .c-follow { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+  .c-btns { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+
+  /* Subtle motion */
+  :global(html.c-js) .c-rv { opacity: 0; transform: translateY(12px); transition: opacity 1.2s cubic-bezier(.16,1,.3,1) var(--d, 0s), transform 1.2s cubic-bezier(.16,1,.3,1) var(--d, 0s); }
+  :global(html.c-js) .c-rv.is-in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    .c-photo img { animation: c-settle 3s cubic-bezier(.16,1,.3,1) both; }
   }
-  :global(#nav) {
-    background: rgba(245,244,240,0.97) !important;
-    border-bottom: 1px solid rgba(17,17,17,0.07) !important;
-    backdrop-filter: blur(10px) !important;
-  }
-  :global(#nav .nav-logo),
-  :global(#nav .nav-link) { color: #0D0D0D !important; }
-  :global(#nav .nav-burger span) { background: #0D0D0D !important; }
-  :global(#nav .nav-enquire) {
-    color: #fff !important;
-    background: #1A3A6B !important;
-    border-color: #1A3A6B !important;
-  }
+  @keyframes c-settle { from { transform: scale(1.06); } to { transform: none; } }
 
-
-
-  .bg-img {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-    z-index: 0;
-  }
-
-  .bg-veil {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    background: rgba(6,8,14,0.6);
-  }
-
-  .page-content {
-    position: relative;
-    z-index: 2;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 5.5rem var(--pad-x, 5vw) 4rem;
+  /* Desktop: the header line runs over the blue panel only, not across the photo */
+  @media (min-width: 900px) {
+    :global(body.v6:has(.c-page) .t-header--overlay:not(.is-stuck)) { border-bottom-color: transparent; }
+    .c-info { position: relative; }
+    .c-info::before { content: ""; position: absolute; left: 0; right: 0; top: 76px; height: 1px; background: rgba(255,255,255,.14); }
   }
 
-  .top-bar {
-    display: flex;
-    justify-content: flex-end;
+  /* Desktop: the header line runs over the blue panel only, not across the photo */
+  @media (min-width: 900px) {
+    :global(body.v6:has(.c-page) .t-header--overlay:not(.is-stuck)) { border-bottom-color: transparent; }
+    .c-info { position: relative; }
+    .c-info::before { content: ""; position: absolute; left: 0; right: 0; top: 76px; height: 1px; background: rgba(255,255,255,.14); }
   }
 
-  .brand-tag {
-    font-family: 'Courier New', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.45);
+  @media (max-width: 899px) {
+    .c-split { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+    .c-photo { aspect-ratio: 4 / 5; max-height: 72svh; }
+    .c-info { padding: 40px var(--m) 56px; }
+    .c-in { max-width: none; }
   }
-
-  .bottom-content {
-    display: flex;
-    flex-direction: column;
-    gap: 3rem;
-  }
-
-  .contact-title {
-    font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(2.5rem, 7vw, 5.5rem);
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: #fff;
-    line-height: 0.95;
-    margin-bottom: 1.25rem;
-    text-shadow: 0 2px 24px rgba(0,0,0,0.5);
-  }
-
-  .contact-sub {
-    font-size: 0.9rem;
-    line-height: 1.85;
-    color: rgba(255,255,255,0.82);
-    font-weight: 300;
-    max-width: 420px;
-    margin-bottom: 2rem;
-  }
-
-  .line-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.65rem;
-    font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    text-decoration: none;
-    color: #fff;
-    padding: 1rem 2rem;
-    border: 1.5px solid rgba(255,255,255,0.55);
-    transition: background 0.25s, border-color 0.25s;
-    margin-bottom: 1rem;
-  }
-  .line-btn:hover { background: rgba(255,255,255,0.12); border-color: #fff; }
-  .line-ico { width: 22px; height: 22px; object-fit: contain; border-radius: 4px; }
-
-  .promise {
-    display: flex; align-items: center; gap: 0.5rem;
-    font-family: 'Courier New', monospace;
-    font-size: 0.52rem; letter-spacing: 0.18em;
-    text-transform: uppercase; color: rgba(255,255,255,0.6);
-  }
-  .dot { display: block; width: 5px; height: 5px; border-radius: 50%; background: #06C755; flex-shrink: 0; }
-
-  .contact-right { display: flex; flex-direction: column; gap: 0; }
-
-  .ch {
-    display: flex; flex-direction: column; gap: 0.15rem;
-    padding: 0.85rem 0;
-    border-bottom: 0.5px solid rgba(255,255,255,0.12);
-    text-decoration: none; color: inherit;
-    transition: padding-left 0.2s;
-  }
-  .ch:first-child { border-top: none; }
-  .ch:hover { padding-left: 0.4rem; }
-
-  .ch-plat {
-    font-family: var(--font-body, 'Inter', sans-serif);
-    font-size: 0.55rem; letter-spacing: 0.18em;
-    text-transform: uppercase; color: rgba(255,255,255,0.55); font-weight: 500;
-  }
-
-  .ch-handle {
-    font-family: var(--font-display, 'Tenor Sans', serif);
-    font-size: clamp(0.95rem, 1.8vw, 1.25rem);
-    color: rgba(255,255,255,0.95);
-    transition: color 0.2s;
-  }
-  .ch:hover .ch-handle { color: #fff; }
-
-
-
-  .studio {
-    display: flex; flex-direction: column; gap: 0.15rem;
-    padding: 0.85rem 0;
-    border-top: 0.5px solid rgba(255,255,255,0.12);
-    border-bottom: 0.5px solid rgba(255,255,255,0.12);
-  }
-  .studio-hrs {
-    font-family: 'Courier New', monospace;
-    font-size: 0.5rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.4);
-    margin-top: 0.15rem;
-  }
-
-  /* SLIDESHOW */
-  .bg-slideshow {
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-  }
-
-  .bg-slide {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-    opacity: 0;
-    transition: opacity 1.4s cubic-bezier(0.4,0,0.2,1);
-  }
-
-  .bg-slide.active { opacity: 1; }
-
-  /* MOBILE */
-  @media (max-width: 767px) {
-    .page-content { padding: 5rem 6vw 3rem; justify-content: space-between; }
-    .contact-title { font-size: 2.2rem; margin-bottom: 0.85rem; }
-    .contact-sub { font-size: 0.82rem; margin-bottom: 1.25rem; }
-    .line-btn { width: 100%; justify-content: center; margin-bottom: 0.75rem; }
-    .bottom-content { gap: 1.5rem; }
-    .contact-right { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
-    .ch { padding: 0.75rem 0.5rem 0.75rem 0; }
-    .ch:nth-child(2) { border-top: 0.5px solid rgba(255,255,255,0.12); }
-    .studio { grid-column: 1 / -1; border-top: 0.5px solid rgba(255,255,255,0.12); padding-top: 0.85rem; }
-  }
-
-  /* DESKTOP */
-  @media (min-width: 768px) {
-    .bottom-content { flex-direction: row; align-items: flex-end; gap: 8rem; }
-    .contact-left { flex: 1; }
-    .contact-right { width: 36%; flex-shrink: 0; }
-  }
-
-  @media (min-width: 1200px) {
-    .page-content { padding: 6rem 10vw 5rem; }
-    .bottom-content { gap: 10rem; }
+  @media (max-width: 420px) {
+    .c-dl > div { grid-template-columns: 76px minmax(0, 1fr); }
+    .c-btns .t-btn { flex: 1 1 100%; justify-content: center; }
   }
 </style>
