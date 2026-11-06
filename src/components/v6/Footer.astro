@@ -13,7 +13,7 @@ const icons: Record<string, string> = {
   <div class="t-wrap">
     {!compact && (
       <>
-        <div class="t-footer-cta">
+        <div class="t-footer-cta m-rv">
           <div>
             <h2 class="t-footer-h">Start a project</h2>
             <p class="t-footer-lead">Tell us what you are building and when it has to open.</p>
@@ -23,7 +23,7 @@ const icons: Record<string, string> = {
             <a class="t-btn t-btn--ghost" href={site.phoneHref}>Call the studio</a>
           </div>
         </div>
-        <dl class="t-footer-info">
+        <dl class="t-footer-info m-rv" style="--d:.12s">
           <div><dt>LINE</dt><dd><a href={site.lineUrl}>{site.lineId}</a></dd></div>
           <div><dt>Phone</dt><dd class="t-footer-stack"><a class="t-num" href={site.phoneHref}>{site.phoneDisplay}</a><a class="t-footer-sub t-num" href={site.officeHref}>Office {site.officeDisplay}</a></dd></div>
           <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
@@ -51,5 +51,19 @@ const icons: Record<string, string> = {
   const foot = document.querySelector(".t-footer-bar")?.closest("footer");
   if (foot && "IntersectionObserver" in window) {
     new IntersectionObserver(([e]) => document.body.classList.toggle("is-foot", e.isIntersecting), { rootMargin: "0px 0px -15% 0px" }).observe(foot);
+  }
+
+  // Shared scroll reveal: project cards, next project, footer blocks
+  const mEls = [...document.querySelectorAll<HTMLElement>(".m-rv")];
+  mEls.filter((e) => e.classList.contains("t-card")).forEach((e, i) => e.style.setProperty("--d", `${(i % 3) * 0.08}s`));
+  if (!document.documentElement.classList.contains("m-js") || !("IntersectionObserver" in window)) {
+    mEls.forEach((e) => e.classList.add("is-in"));
+  } else {
+    const mio = new IntersectionObserver((es) => es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add("is-in");
+      mio.unobserve(e.target);
+    }), { rootMargin: "0px 0px -8% 0px" });
+    mEls.forEach((e) => mio.observe(e));
   }
 </script>
