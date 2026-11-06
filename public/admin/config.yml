@@ -157,9 +157,29 @@ collections:
               - { label: "Bottom left", value: "left bottom" }
               - { label: "Bottom right", value: "right bottom" }
           - { label: "Hero Video URL (.mp4)", name: hero_video, widget: string, required: false }
-          - { label: "Hero Headline Line 1",  name: hero_line1, widget: string }
-          - { label: "Hero Headline Line 2",  name: hero_line2, widget: string }
-          - { label: "Hero Subline",          name: hero_sub,   widget: string, required: false }
+          - { label: "Hero headline — line 1", name: hero_line1, widget: string, required: false, hint: "Big words on the hero photo, first line, e.g. We build. Shown in capitals." }
+          - { label: "Hero headline — line 2", name: hero_line2, widget: string, required: false, hint: "Second line, e.g. what works. Leave both lines empty to use the default." }
+          - { label: "Hero small line (above the headline)", name: hero_sub, widget: string, required: false, hint: "Small spaced text above the headline, e.g. Bangkok · Thailand" }
+          - { label: "Studio intro", name: intro, widget: text, required: false, hint: "The paragraph under The studio on the homepage. The first sentence shows bright, the rest greyer. Leave empty to use the default text." }
+          - label: "Showcase projects (big slideshow near the bottom)"
+            name: showcase
+            widget: list
+            required: false
+            collapsed: true
+            label_singular: "project"
+            summary: "{{fields.project}}"
+            hint: >-
+              Pick up to 8 projects for the full-width slideshow at the bottom of the homepage.
+              Drag the handle to reorder. Leave empty to let the site choose.
+            fields:
+              - label: "Project"
+                name: project
+                widget: relation
+                collection: projects
+                value_field: title
+                search_fields: [title, client, location]
+                display_fields: ["{{title}} ({{year}})"]
+                options_length: 200
           - { label: "Statement / Tagline",   name: statement,  widget: text }
           - label: "Statement Background Image"
             name: statement_image

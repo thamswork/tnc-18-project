@@ -24,8 +24,8 @@ const slides: { d: string; m: string; pd: string; pm: string }[] = (home.hero_sl
 
 const intro = home.intro || "TNC is a design and build studio in Bangkok. We make shops, pop-ups, exhibition pavilions, clinics and homes, and run every project ourselves, from the first drawing to handover.";
 
-const heroTitle = home.hero_title || home.hero_headline || home.headline || home.hero_heading || "We build\nwhat works.";
-const heroKicker = home.hero_eyebrow || home.hero_kicker || home.hero_label || home.eyebrow || "Bangkok · Thailand";
+const heroTitle = [home.hero_line1, home.hero_line2].map((s) => String(s || "").trim()).filter(Boolean).join("\n") || home.hero_title || home.hero_headline || home.headline || home.hero_heading || "We build\nwhat works.";
+const heroKicker = String(home.hero_sub || "").trim() || home.hero_eyebrow || home.hero_kicker || home.hero_label || home.eyebrow || "Bangkok · Thailand";
 
 const heroLines = String(heroTitle).split(/\n|<br\s*\/?>/i).map((s) => s.trim()).filter(Boolean);
 
@@ -54,7 +54,10 @@ const sel = projects.slice(0, 6);
 // Six grid slots, each swapping between three projects (Works order)
 const groups = [0, 1, 2, 3, 4, 5].map((j) => [j, j + 6, j + 12].map((i) => projects[i]).filter(Boolean));
 const small = projects.slice(2, 6);
-const show = (projects.length > 6 ? projects.slice(6, 11) : projects.slice(0, 5));
+// Showcase: projects picked in the CMS (Homepage Content), else projects 7-11 in Works order
+const pickedTitles: string[] = (Array.isArray(home.showcase) ? home.showcase : []).map((t: any) => String(typeof t === "string" ? t : t?.project ?? "").trim()).filter(Boolean);
+const picked = pickedTitles.map((t) => projects.find((p: any) => String(p.data.title ?? "").trim() === t)).filter((p: any) => p && p.data.cover);
+const show = picked.length > 0 ? picked.slice(0, 8) : (projects.length > 6 ? projects.slice(6, 11) : projects.slice(0, 5));
 
 const byCat = new Map<string, any[]>();
 for (const p of projects) {
