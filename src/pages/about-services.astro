@@ -1,4 +1,5 @@
 ---
+import { site } from '../data/site';
 import Layout from '../layouts/Layout.astro';
 import Header from '../components/v6/Header.astro';
 import Footer from '../components/v6/Footer.astro';
@@ -52,7 +53,7 @@ const stats = [
   { l: 'Years', v: years },
   { l: 'Projects', v: page.projects },
 ].filter((s) => String(s.v || '').trim());
-const aside = `TNC.18 Co., Ltd. Design and build in Bangkok${founded ? ` since ${founded}` : ''}.`;
+const aside = `${site.company}. Design and build in Bangkok${founded ? ` since ${founded}` : ''}.`;
 const statement = page.statement || 'We design and build interiors that have to open on a fixed date and still last. The people who draw your project are the people who build it.';
 const dbd = String((docs as any).dbd_pdf || '').trim();
 const isPdf = /\.pdf(\?|#|$)/i.test(dbd);

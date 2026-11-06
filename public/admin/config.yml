@@ -397,6 +397,7 @@ collections:
         fields:
           - { label: "Main phone", name: phone, widget: string, required: false, hint: "Used by the Call buttons everywhere. Numbers only, e.g. 0800064465. The site adds the spaces." }
           - { label: "Office phone", name: office_phone, widget: string, required: false, hint: "Shown as Office under the main phone. e.g. 0613561422" }
+          - { label: "Company name", name: company_name, widget: string, required: false, hint: "Registered name, exactly as on the company certificate. Shown in the footer copyright line and on the Studio page." }
           - { label: "Email", name: email, widget: string, required: false, hint: "e.g. info@tncbuildstudio.com" }
           - { label: "Opening hours", name: hours, widget: string, required: false, hint: "One line, e.g. Mon–Sat, 09:00–18:00" }
           - { label: "LINE link", name: line, widget: string, required: false, hint: "Full link for the Chat on LINE buttons, e.g. https://lin.ee/RdpRHTR" }

@@ -28,6 +28,7 @@ export const site = {
   lineId: txt("line_id") || "@tncbuildstudio",
   phoneDisplay: show(txt("phone"), "080 006 4465"),
   phoneHref: tel(txt("phone"), "tel:+66800064465"),
+  company: txt("company_name") || "ห้างหุ้นส่วนจำกัด ธนชัย 2018",
   email: txt("email") || "info@tncbuildstudio.com",
   hours: txt("hours") || "Mon–Sat, 09:00–18:00",
   city: txt("address") || "Bangkok, Thailand",
