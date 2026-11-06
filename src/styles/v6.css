@@ -157,3 +157,8 @@ html body.v6 { overflow-x: clip; }
 @media (max-width: 600px) { .v6 .t-footer-info .t-footer-addr { grid-column: auto; } }
 .v6 .t-footer-info dd { overflow-wrap: anywhere; }
 .v6 .t-footer-info dd a { display: inline-block; padding-block: 13px; margin-block: -13px; }
+
+/* Tap targets 2: text links */
+body.v6 .t-link { padding-block: 12px; margin-block: -12px; }
+body.v6 .t-link.h-intro-link { margin-top: 28px; margin-bottom: -12px; }
+body.v6 .t-crumb a, body.v6 .s-cap a, body.v6 .a-prose a { padding-block: 16px; }
