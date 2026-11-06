@@ -16,13 +16,27 @@ const links = [
       {links.map((l) => <a href={l.href} aria-current={active === l.k ? "page" : undefined}>{l.label}</a>)}
     </nav>
     <a class="t-header-line" href={site.lineUrl}><span class="t-dot" aria-hidden="true"></span>Chat on LINE</a>
-    <details class="t-menu">
-      <summary>Menu</summary>
-      <nav aria-label="Mobile">
-        {links.map((l) => <a href={l.href} aria-current={active === l.k ? "page" : undefined}>{l.label}</a>)}
-        <a class="t-btn t-btn--line" href={site.lineUrl}>Chat on LINE</a>
-      </nav>
-    </details>
+    <div class="t-menu" data-menu>
+      <button class="t-menu-btn" type="button" aria-expanded="false" aria-controls="t-menu-panel" aria-label="Open menu">
+        <span class="t-burger" aria-hidden="true"><i></i><i></i></span>
+      </button>
+      <div class="t-menu-panel" id="t-menu-panel">
+        <nav class="t-menu-nav" aria-label="Mobile">
+          {links.map((l, i) => (
+            <a class="t-menu-item" style={`--i:${i}`} href={l.href} aria-current={active === l.k ? "page" : undefined}>
+              <span class="t-menu-n t-num">{String(i + 1).padStart(2, "0")}</span>{l.label}
+            </a>
+          ))}
+        </nav>
+        <div class="t-menu-foot t-menu-item" style="--i:4">
+          <div class="t-menu-btns">
+            <a class="t-btn t-btn--line" href={site.lineUrl}>Chat on LINE</a>
+            <a class="t-btn t-btn--ghost" href={site.phoneHref}>Call</a>
+          </div>
+          <p class="t-menu-info"><span class="t-num">{site.phoneDisplay}</span> · {site.email}</p>
+        </div>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -46,10 +60,30 @@ const links = [
       const y = window.scrollY;
       if (y < 80) reset();
       else if (y < lastY - 4 && y > limit()) show();
-      else if (y > lastY + 4 && !h.querySelector("details[open]")) hide();
+      else if (y > lastY + 4 && !h.querySelector(".t-menu.is-open")) hide();
       lastY = y;
       ticking = false;
     };
     window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+  }
+
+  // Menu (tablet and phone): animated panel
+  const menu = document.querySelector<HTMLElement>("[data-menu]");
+  if (menu) {
+    const btn = menu.querySelector<HTMLButtonElement>(".t-menu-btn")!;
+    const root = document.documentElement;
+    const setOpen = (open: boolean) => {
+      menu.classList.toggle("is-open", open);
+      root.classList.toggle("menu-open", open);
+      btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    };
+    btn.addEventListener("click", () => setOpen(!menu.classList.contains("is-open")));
+    menu.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && menu.classList.contains("is-open")) { setOpen(false); btn.focus(); }
+    });
+    window.matchMedia("(min-width: 961px)").addEventListener("change", (e) => { if (e.matches) setOpen(false); });
+    window.addEventListener("pageshow", () => setOpen(false));
   }
 </script>
