@@ -1,6 +1,7 @@
 ---
 title: Nefelogne — Siam Paragon Pop-Up Kiosk
 year: 2026
+completed: "2026-10"
 category: Pop-up
 client: Nefelogne
 location: Siam Paragon, Bangkok

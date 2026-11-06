@@ -1,6 +1,7 @@
 ---
 title: Menscape Clinic — Asoke
 year: 2026
+completed: "2026-09"
 category: Commercial
 client: Menscape Clinic – Trusted Care
 location: Asoke, Bangkok

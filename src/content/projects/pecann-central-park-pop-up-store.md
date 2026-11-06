@@ -1,6 +1,7 @@
 ---
 title: Pecann — Central Park Pop-Up Store
 year: 2026
+completed: "2026-11"
 category: Pop-up
 client: Pecann
 location: Central Park, Bangkok

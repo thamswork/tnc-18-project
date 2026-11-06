@@ -623,14 +623,8 @@ const { title, description = 'TNC BUILD STUDIO — Retail & Interior Design, Ban
       trigger.setAttribute('aria-expanded', 'false');
     }
 
-    // Show after scrolling past 80% of hero
-    function onScroll() {
-      if (window.scrollY > window.innerHeight * 0.8) {
-        showWrap();
-      } else {
-        hideWrap();
-      }
-    }
+    // Always available: shows as soon as the page loads
+    function onScroll() { showWrap(); }
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
 

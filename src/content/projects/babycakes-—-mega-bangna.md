@@ -1,6 +1,7 @@
 ---
 title: Babycakes — Mega Bangna
 year: 2026
+completed: "2026-06"
 category: Retail
 location: Mega Bangna, Samut Prakan
 cover: https://res.cloudinary.com/dynjnftnu/image/upload/v1782836255/IMG_8211_bxcrl5.jpg
