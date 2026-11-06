@@ -146,3 +146,14 @@ html body.v6 { --sec: clamp(44px, 4.5vw, 72px); }
 
 /* Old site CSS sets body overflow-x: hidden, which breaks position: sticky. clip blocks sideways scroll without that side effect. */
 html body.v6 { overflow-x: clip; }
+
+/* Tap targets: bigger hit area, same look */
+.v6 .t-logo { display: inline-block; padding-block: 11px; margin-block: -11px; }
+.v6 .c-cap a { display: inline-block; padding-block: 14px; margin-block: -14px; }
+.v6 .t-footer-bar nav a { display: inline-block; padding-block: 13px; margin-block: -13px; }
+
+/* Footer: email + socials layout */
+.v6 .t-footer-info .t-footer-addr { grid-column: span 2; }
+@media (max-width: 600px) { .v6 .t-footer-info .t-footer-addr { grid-column: auto; } }
+.v6 .t-footer-info dd { overflow-wrap: anywhere; }
+.v6 .t-footer-info dd a { display: inline-block; padding-block: 13px; margin-block: -13px; }

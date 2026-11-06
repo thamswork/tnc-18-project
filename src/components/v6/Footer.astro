@@ -21,12 +21,13 @@ const socials = site.socials.filter((s) => s.href);
         <dl class="t-footer-info">
           <div><dt>LINE</dt><dd><a href={site.lineUrl}>{site.lineId}</a></dd></div>
           <div><dt>Phone</dt><dd class="t-footer-stack"><a class="t-num" href={site.phoneHref}>{site.phoneDisplay}</a><a class="t-footer-sub t-num" href={site.officeHref}>Office {site.officeDisplay}</a></dd></div>
+          <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
           <div><dt>Hours</dt><dd>{site.hours}</dd></div>
           <div class="t-footer-addr"><dt>Studio</dt><dd lang="th">
             <span class="t-footer-addr-name">{site.address.name}</span>
             {site.address.lines.map((l) => <span>{l}</span>)}
           </dd></div>
-          {socials.length > 0 && <div><dt>Follow</dt><dd>{socials.map((s) => <a href={s.href} rel="noopener">{s.label}</a>)}</dd></div>}
+          {socials.length > 0 && <div><dt>Follow</dt><dd>{socials.map((s) => <a href={s.href} target="_blank" rel="noopener">{s.label}</a>)}</dd></div>}
         </dl>
       </>
     )}

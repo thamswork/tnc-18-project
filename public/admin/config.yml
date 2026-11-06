@@ -375,14 +375,17 @@ collections:
         label: "Contact & Social Links"
         file: src/content/settings/contact.json
         fields:
-          - { label: "Phone",        name: phone,     widget: string, required: false }
-          - { label: "Email",        name: email,     widget: string, required: false }
-          - { label: "LINE OA URL",  name: line,      widget: string, required: false,
-              hint: "Full URL e.g. https://line.me/ti/p/~@yourhandle" }
-          - { label: "Instagram URL", name: instagram, widget: string, required: false }
-          - { label: "TikTok URL",   name: tiktok,    widget: string, required: false }
-          - { label: "Facebook URL", name: facebook,  widget: string, required: false }
-          - { label: "Address",      name: address,   widget: text,   required: false }
+          - { label: "Main phone", name: phone, widget: string, required: false, hint: "Used by the Call buttons everywhere. Numbers only, e.g. 0800064465. The site adds the spaces." }
+          - { label: "Office phone", name: office_phone, widget: string, required: false, hint: "Shown as Office under the main phone. e.g. 0613561422" }
+          - { label: "Email", name: email, widget: string, required: false, hint: "e.g. info@tncbuildstudio.com" }
+          - { label: "Opening hours", name: hours, widget: string, required: false, hint: "One line, e.g. Mon–Sat, 09:00–18:00" }
+          - { label: "LINE link", name: line, widget: string, required: false, hint: "Full link for the Chat on LINE buttons, e.g. https://lin.ee/RdpRHTR" }
+          - { label: "LINE ID", name: line_id, widget: string, required: false, hint: "Shown as text, e.g. @tncbuildstudio" }
+          - { label: "Studio address", name: studio_address, widget: text, required: false, hint: "One line per row, exactly as it should appear on the site (Contact page and footer)." }
+          - { label: "Footer city line", name: address, widget: string, required: false, hint: "Short text at the bottom right of every page, e.g. Bangkok, Thailand" }
+          - { label: "Instagram link", name: instagram, widget: string, required: false, hint: "Full link. Leave empty to hide it." }
+          - { label: "TikTok link", name: tiktok, widget: string, required: false, hint: "Full link. Leave empty to hide it." }
+          - { label: "Facebook link", name: facebook, widget: string, required: false, hint: "Full link. Leave empty to hide it." }
 
       - name: siteinfo
         label: "Site Info & SEO"

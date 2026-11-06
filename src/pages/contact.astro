@@ -25,6 +25,7 @@ const socials = [
   { label: 'TikTok', href: String(cd.tiktok || '').trim() },
   { label: 'Facebook', href: String(cd.facebook || '').trim() },
 ].filter((s) => s.href);
+const mapHref = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent('Udomsuk Hub, Sukhumvit 101/2, Bang Na, Bangkok 10260');
 const delay = (i: number) => `--d:${(0.2 + i * 0.06).toFixed(2)}s`;
 ---
 <Layout
@@ -50,7 +51,7 @@ const delay = (i: number) => `--d:${(0.2 + i * 0.06).toFixed(2)}s`;
             <div class="c-rv" style={delay(2)}><dt>Phone</dt><dd class="c-stack"><a class="t-num" href={site.phoneHref}>{site.phoneDisplay}</a><a class="c-sub t-num" href={site.officeHref}>Office {site.officeDisplay}</a></dd></div>
             {email && <div class="c-rv" style={delay(3)}><dt>Email</dt><dd><a href={`mailto:${email}`}>{email}</a></dd></div>}
             <div class="c-rv" style={delay(4)}><dt>Hours</dt><dd>{site.hours}</dd></div>
-            <div class="c-rv" style={delay(5)}><dt>Studio</dt><dd class="c-stack" lang="th">{site.address.lines.map((l) => <span>{l}</span>)}</dd></div>
+            <div class="c-rv" style={delay(5)}><dt>Studio</dt><dd class="c-stack" lang="th">{site.address.lines.map((l) => <span>{l}</span>)}<a class="c-sub" lang="en" href={mapHref} target="_blank" rel="noopener">Get directions ↗</a></dd></div>
             {socials.length > 0 && <div class="c-rv" style={delay(6)}><dt>Follow</dt><dd class="c-follow">{socials.map((s) => <a href={s.href} target="_blank" rel="noopener">{s.label}</a>)}</dd></div>}
           </dl>
           <div class="c-btns c-rv" style={delay(7)}>
@@ -76,9 +77,10 @@ const delay = (i: number) => `--d:${(0.2 + i * 0.06).toFixed(2)}s`;
   /* Full-bleed photo on the left half, calm details on the right half */
   .c-split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); min-height: calc(100svh - 68px); }
   .c-photo { position: relative; margin: 0; background: var(--tile); overflow: hidden; }
-  .c-photo::after { content: ""; position: absolute; inset: 0 0 auto; height: 160px; background: linear-gradient(180deg, rgba(8,22,56,.45), rgba(8,22,56,0)); pointer-events: none; }
+  .c-photo::after { content: ""; position: absolute; inset: 0 0 auto; height: 240px; background: linear-gradient(180deg, rgba(8,22,56,.78), rgba(8,22,56,.35) 55%, rgba(8,22,56,0)); pointer-events: none; }
+  .c-photo::before { content: ""; position: absolute; inset: auto 0 0; height: 140px; z-index: 1; background: linear-gradient(0deg, rgba(8,22,56,.55), rgba(8,22,56,0)); pointer-events: none; }
   .c-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .c-cap { position: absolute; left: var(--m); right: var(--m); bottom: 24px; z-index: 1; font-size: 12px; line-height: 1.4; }
+  .c-cap { position: absolute; left: var(--m); right: var(--m); bottom: 24px; z-index: 2; font-size: 13px; line-height: 1.4; }
   .c-cap a { color: rgba(255,255,255,.85); text-shadow: 0 1px 10px rgba(0,0,0,.5); }
   .c-cap a:hover { color: #fff; }
 
@@ -106,6 +108,20 @@ const delay = (i: number) => `--d:${(0.2 + i * 0.06).toFixed(2)}s`;
     .c-photo img { animation: c-settle 3s cubic-bezier(.16,1,.3,1) both; }
   }
   @keyframes c-settle { from { transform: scale(1.06); } to { transform: none; } }
+
+  /* Desktop: the header line runs over the blue panel only, not across the photo */
+  @media (min-width: 900px) {
+    :global(body.v6:has(.c-page) .t-header--overlay:not(.is-stuck)) { border-bottom-color: transparent; }
+    .c-info { position: relative; }
+    .c-info::before { content: ""; position: absolute; left: 0; right: 0; top: 76px; height: 1px; background: rgba(255,255,255,.14); }
+  }
+
+  /* Desktop: the header line runs over the blue panel only, not across the photo */
+  @media (min-width: 900px) {
+    :global(body.v6:has(.c-page) .t-header--overlay:not(.is-stuck)) { border-bottom-color: transparent; }
+    .c-info { position: relative; }
+    .c-info::before { content: ""; position: absolute; left: 0; right: 0; top: 76px; height: 1px; background: rgba(255,255,255,.14); }
+  }
 
   @media (max-width: 899px) {
     .c-split { grid-template-columns: minmax(0, 1fr); min-height: 0; }
