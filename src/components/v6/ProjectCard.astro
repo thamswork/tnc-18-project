@@ -4,7 +4,7 @@ interface Props { href: string; title: string; meta?: string; img?: string; rati
 const { href, title, meta, img, ratio = "4/5", sizes = "(max-width: 600px) 100vw, 33vw", eager = false } = Astro.props;
 const r = ratio === "16/11" ? 16 / 11 : ratio === "3/2" ? 3 / 2 : 4 / 5;
 ---
-<a class="t-card" href={href}>
+<a class="t-card m-rv" href={href}>
   <div class="t-ph" style={`aspect-ratio:${ratio}`}>
     {img && (
       <img src={cld(img, { w: 800, h: Math.round(800 / r) })} srcset={cldSet(img, [480, 800, 1200], r)} sizes={sizes}
