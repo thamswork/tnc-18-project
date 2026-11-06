@@ -211,7 +211,7 @@ collections:
     slug: "{{slug}}"
     identifier_field: title
     summary: "{{title}} — {{category}} · {{year}}"
-    sortable_fields: [order, year, title]
+    sortable_fields: [completed, order, year, title]
     view_groups:
       - { label: "Category", field: category }
       - { label: "Year",     field: year }
@@ -221,6 +221,12 @@ collections:
     fields:
       - { label: "Project Title",          name: title,       widget: string }
       - { label: "Year",                   name: year,        widget: number, value_type: int }
+      - label: "Completed (month)"
+        name: completed
+        widget: string
+        required: false
+        pattern: ['^\d{4}-\d{2}$', "Write it as year-month, e.g. 2026-10"]
+        hint: "When the project was finished, as year-month, e.g. 2026-10. The homepage shows the newest projects first. Leave empty if unsure: it then sorts by Year."
       - label: "Category"
         name: category
         widget: select

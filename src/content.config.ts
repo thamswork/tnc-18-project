@@ -18,6 +18,7 @@ const projects = defineCollection({
     area:           z.number().optional(),
     size:           z.string().optional(),
     featured:       z.boolean().default(false),
+    completed:      z.string().optional(),
   }),
 });
 

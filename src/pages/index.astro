@@ -8,7 +8,7 @@ import ProjectCard from "../components/v6/ProjectCard.astro";
 import { getCollection } from "astro:content";
 import homepageData from "../content/pages/homepage.json";
 import { cld, cldSet } from "../lib/cld";
-import { getProjects, projectUrl, projectName, projectMeta, projectPlace } from "../lib/projects";
+import { getProjects, byNewest, projectUrl, projectName, projectMeta, projectPlace } from "../lib/projects";
 
 const home: any = homepageData;
 const projects = await getProjects();
@@ -51,6 +51,8 @@ const facts = (p: any) => {
   return [area, n ? `${n} photos` : ""].filter(Boolean).join(" · ");
 };
 const sel = projects.slice(0, 6);
+// Selected work: newest first, ten shown
+const latest = byNewest(projects);
 // Six grid slots, each swapping between three projects (Works order)
 const groups = [0, 1, 2, 3, 4, 5].map((j) => [j, j + 6, j + 12].map((i) => projects[i]).filter(Boolean));
 const small = projects.slice(2, 6);
@@ -188,11 +190,11 @@ const two = (n: number) => String(n).padStart(2, "0");
         </div>
       </div>
       <ol class="h-works-list">
-        {projects.map((p, i) => {
+        {latest.map((p, i) => {
           const cat = String(p.data.category ?? "").trim();
           const place = String(projectPlace(p) || "");
           return (
-            <li class:list={["h-work", { "is-hidden": i >= 6 }]} data-cat={cat}>
+            <li class:list={["h-work", { "is-hidden": i >= 10 }]} data-cat={cat}>
               <a class="h-work-a" href={projectUrl(p)}>
                 {p.data.cover && (
                   <picture>
@@ -335,7 +337,7 @@ const two = (n: number) => String(n).padStart(2, "0");
     if (!still) window.setInterval(() => { if (!inside) go(k + 1); }, 5000);
   }
 
-  // Selected work: type tabs show up to six projects of that type
+  // Selected work: type tabs show up to ten projects of that type
   const works = document.querySelector<HTMLElement>("[data-works]");
   if (works) {
     const items = [...works.querySelectorAll<HTMLElement>(".h-work")];
@@ -346,7 +348,7 @@ const two = (n: number) => String(n).padStart(2, "0");
       tabs.forEach((x) => x.setAttribute("aria-pressed", String(x === t)));
       let n = 0;
       items.forEach((li) => {
-        const ok = (cat === "all" || li.dataset.cat === cat) && n < 6;
+        const ok = (cat === "all" || li.dataset.cat === cat) && n < 10;
         if (ok) { n++; const num = li.querySelector(".h-work-n"); if (num) num.textContent = String(n).padStart(2, "0"); }
         li.classList.toggle("is-hidden", !ok);
       });
