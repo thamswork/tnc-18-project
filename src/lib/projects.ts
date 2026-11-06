@@ -48,3 +48,10 @@ export function mallsOf(projects: any[]): { name: string; count: number }[] {
   for (const p of projects) { const m = mallOf(p); if (m) c.set(m, (c.get(m) ?? 0) + 1); }
   return [...c.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
 }
+
+// Newest first: "Completed" month (YYYY-MM) if set, else the year. Ties keep the existing order.
+const when = (p: any) => {
+  const c = String(p.data.completed ?? "").trim();
+  return /^\d{4}-\d{2}$/.test(c) ? c : `${String(p.data.year ?? 0).padStart(4, "0")}-00`;
+};
+export const byNewest = (list: any[]) => [...list].sort((a, b) => when(b).localeCompare(when(a)));
