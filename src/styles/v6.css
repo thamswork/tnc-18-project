@@ -166,7 +166,7 @@ body.v6 .t-crumb a, body.v6 .s-cap a, body.v6 .a-prose a { padding-block: 16px; 
 .v6 .t-header:has(.t-menu.is-open) { border-bottom-color: rgba(255, 255, 255, .12); }
 .v6 .t-header:has(.t-menu.is-open)::before { opacity: 0; }
 
-.v6 .t-menu-panel { position: fixed; inset: 0; z-index: -1; background: rgba(12, 31, 74, .62); -webkit-backdrop-filter: blur(28px) saturate(1.2); backdrop-filter: blur(28px) saturate(1.2); padding: 88px var(--m) 28px; display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; overscroll-behavior: contain; visibility: hidden; clip-path: inset(0 0 100% 0); transition: clip-path .6s cubic-bezier(.76,0,.24,1), visibility 0s linear .6s; }
+.v6 .t-menu-panel { position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100lvh; z-index: -1; background: rgba(12, 31, 74, .62); -webkit-backdrop-filter: blur(28px) saturate(1.2); backdrop-filter: blur(28px) saturate(1.2); padding: calc(88px + env(safe-area-inset-top, 0px)) var(--m) calc(28px + env(safe-area-inset-bottom, 0px)); display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto; overscroll-behavior: contain; visibility: hidden; clip-path: inset(0 0 100% 0); transition: clip-path .6s cubic-bezier(.76,0,.24,1), visibility 0s linear .6s; }
 .v6 .t-menu.is-open .t-menu-panel { visibility: visible; clip-path: inset(0 0 0 0); transition: clip-path .75s cubic-bezier(.76,0,.24,1), visibility 0s; }
 
 .v6 .t-menu-nav { display: grid; }
@@ -228,3 +228,8 @@ body.v6 .t-footer-info dd.t-footer-social a:hover { color: #fff; transform: tran
   body.v6 .t-footer-bar > span:last-child { display: none; }
   body.v6 .t-footer--compact .t-footer-bar { padding-top: 10px; }
 }
+
+/* Safe areas (iPhone): the page may run under Safari's bars */
+body.v6 .t-header-in { min-height: calc(76px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px); }
+body.v6 .t-footer { padding-bottom: env(safe-area-inset-bottom, 0px); }
+@media (max-width: 600px) { body.v6 .sd-wrap { bottom: calc(20px + env(safe-area-inset-bottom, 0px)); } }
