@@ -1,6 +1,7 @@
 ---
 title: Adam n Eve — EmQuartier Kiosk
 year: 2026
+completed: "2026-11"
 category: Pop-up
 client: Adam n Eve (by Guss Damn Good)
 location: EmQuartier, Bangkok

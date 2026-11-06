@@ -1,6 +1,7 @@
 ---
 title: Prada Beauty — Summer Market 2026 Pop-Up
 year: 2026
+completed: "2026-08"
 category: Pop-up
 client: Prada Beauty
 location: Siam Paragon / Central Chidlom, Bangkok

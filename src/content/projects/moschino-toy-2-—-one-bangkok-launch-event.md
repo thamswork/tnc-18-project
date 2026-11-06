@@ -1,6 +1,7 @@
 ---
 title: Moschino Toy 2 — One Bangkok Launch Event
 year: 2026
+completed: "2026-08"
 category: Exhibition & Event
 client: Moschino
 location: One Bangkok

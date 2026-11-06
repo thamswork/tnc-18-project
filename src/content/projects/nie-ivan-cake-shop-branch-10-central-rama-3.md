@@ -1,6 +1,7 @@
 ---
 title: Nie & Ivan Cake Shop (Branch 10) — Central Rama 3
 year: 2026
+completed: "2026-10"
 category: Pop-up
 client: Nie & Ivan (Nene Cake)
 location: Central Rama 3, Bangkok
