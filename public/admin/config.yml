@@ -422,7 +422,7 @@ collections:
           - { label: "Tagline",             name: tagline,   widget: string }
           - { label: "Meta Description",    name: meta_desc, widget: text }
           - { label: "Google Analytics ID", name: ga_id,     widget: string, required: false,
-              hint: "e.g. G-XXXXXXXXXX" }
+              hint: "Measurement ID from Google Analytics (Admin → Data streams), e.g. G-99X03FK059. Leave empty to turn tracking off." }
 
       - name: documents
         label: "Documents & PDF Links"
