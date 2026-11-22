@@ -58,8 +58,24 @@ const FIRST = 6;
 const all = byNewest(await getProjects());
 const idx = all.findIndex((p: any) => p.id === project.id);
 const next = all.length > 1 ? all[(idx + 1) % all.length] : null;
+// Search title: add the mall when the title doesn't already name it
+const loc = String(d.location ?? "").split(",")[0].trim();
+const pageTitle = sub || !loc || String(d.title).toLowerCase().includes(loc.toLowerCase()) ? String(d.title) : `${d.title} — ${loc}`;
+const projectLd = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": pageTitle,
+  "url": `https://tncbuildstudio.com${Astro.url.pathname}`,
+  ...(d.description ? { "description": String(d.description) } : {}),
+  "image": [hero, ...photos].filter(Boolean).slice(0, 6).map((u: string) => cld(u, { w: 1600 })),
+  "creator": { "@id": "https://tncbuildstudio.com/#business" },
+  ...(loc ? { "locationCreated": { "@type": "Place", "name": loc } } : {}),
+  "dateCreated": String(d.completed || d.year),
+  ...(cat ? { "genre": cat } : {}),
+};
 ---
-<Layout bodyClass="v6" title={`${d.title}`} image={hero ? cld(hero, { w: 1200, h: 630 }).replace(",f_auto,", ",f_jpg,") : undefined} description={d.description || `${d.title} — Retail & Interior Design by TNC BUILD STUDIO Bangkok`}>
+<Layout bodyClass="v6" title={pageTitle} image={hero ? cld(hero, { w: 1200, h: 630 }).replace(",f_auto,", ",f_jpg,") : undefined} description={d.description || `${d.title} — Retail & Interior Design by TNC BUILD STUDIO Bangkok`}>
+  <script type="application/ld+json" slot="head" set:html={JSON.stringify(projectLd)}></script>
   <Header active="work" />
   <main class="p-page">
     <PageHead title={name}>

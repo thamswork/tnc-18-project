@@ -264,3 +264,14 @@ body.v6 .t-nav a:hover::after, body.v6 .t-nav a[aria-current="page"]::after { tr
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
 }
+
+/* Tablet footer (601–960px): centred like the phone footer */
+@media (min-width: 601px) and (max-width: 960px) {
+  body.v6 .t-footer { text-align: center; }
+  body.v6 .t-footer-cta { flex-direction: column; align-items: center; justify-content: center; }
+  body.v6 .t-footer-btns { justify-content: center; }
+  body.v6 .t-footer-info { text-align: center; }
+  body.v6 .t-footer-info dd { justify-content: center; align-items: center; }
+  body.v6 .t-footer-info dd.t-footer-social a { margin: -6px 0; }
+  body.v6 .t-footer-bar, body.v6 .t-footer-bar nav { justify-content: center; }
+}
