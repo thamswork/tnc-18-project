@@ -1,0 +1,26 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Header from "../components/v6/Header.astro";
+import Footer from "../components/v6/Footer.astro";
+import PageHead from "../components/v6/PageHead.astro";
+import { site } from "../data/site";
+import { t } from "../i18n/en";
+---
+<Layout bodyClass="v6" title={t.notFound.title} description={t.notFound.description}>
+  <Header />
+  <main class="nf-page">
+    <PageHead title={t.notFound.heading}>
+      <p slot="sub">{t.notFound.sub}</p>
+    </PageHead>
+    <section class="t-sec nf-links-sec">
+      <div class="t-wrap nf-links">
+        <a class="t-btn t-btn--ghost" href="/">{t.notFound.home}</a>
+        <a class="t-btn t-btn--ghost" href="/portfolio">{t.notFound.work}</a>
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Layout>
+<style is:global>
+  .nf-page .nf-links { display: flex; flex-wrap: wrap; gap: 12px 16px; }
+</style>

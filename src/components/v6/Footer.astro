@@ -1,5 +1,6 @@
 ---
 import { site } from "../../data/site";
+import { t } from "../../i18n/en";
 interface Props { compact?: boolean }
 const { compact = false } = Astro.props;
 const socials = site.socials.filter((s) => s.href);
@@ -15,31 +16,31 @@ const icons: Record<string, string> = {
       <>
         <div class="t-footer-cta m-rv">
           <div>
-            <h2 class="t-footer-h">Start a project</h2>
-            <p class="t-footer-lead">Tell us what you are building and when it has to open.</p>
+            <h2 class="t-footer-h">{t.footer.title}</h2>
+            <p class="t-footer-lead">{t.footer.lead}</p>
           </div>
           <div class="t-footer-btns">
-            <a class="t-btn t-btn--line" href={site.lineUrl}>Chat on LINE</a>
-            <a class="t-btn t-btn--ghost" href={site.phoneHref}>Call the studio</a>
+            <a class="t-btn t-btn--line" href={site.lineUrl}>{t.cta.line}</a>
+            <a class="t-btn t-btn--ghost" href={site.phoneHref}>{t.cta.callStudio}</a>
           </div>
         </div>
         <dl class="t-footer-info m-rv" style="--d:.12s">
-          <div><dt>LINE</dt><dd><a href={site.lineUrl}>{site.lineId}</a></dd></div>
-          <div><dt>Phone</dt><dd class="t-footer-stack"><a class="t-num" href={site.phoneHref}>{site.phoneDisplay}</a><a class="t-footer-sub t-num" href={site.officeHref}>Office {site.officeDisplay}</a></dd></div>
-          <div><dt>Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
-          <div><dt>Hours</dt><dd>{site.hours}</dd></div>
-          <div class="t-footer-addr"><dt>Studio</dt><dd lang="th">
+          <div><dt>{t.footer.line}</dt><dd><a href={site.lineUrl}>{site.lineId}</a></dd></div>
+          <div><dt>{t.footer.phone}</dt><dd class="t-footer-stack"><a class="t-num" href={site.phoneHref}>{site.phoneDisplay}</a><a class="t-footer-sub t-num" href={site.officeHref}>{t.footer.office} {site.officeDisplay}</a></dd></div>
+          <div><dt>{t.footer.email}</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+          <div><dt>{t.footer.hours}</dt><dd>{site.hours}</dd></div>
+          <div class="t-footer-addr"><dt>{t.footer.studio}</dt><dd lang="th">
             <span class="t-footer-addr-name">{site.address.name}</span>
             {site.address.lines.map((l) => <span>{l}</span>)}
           </dd></div>
-          {socials.length > 0 && <div class="t-footer-follow"><dt>Follow</dt><dd class="t-footer-social">{socials.map((s) => <a href={s.href} target="_blank" rel="noopener" aria-label={s.label} title={s.label} set:html={icons[s.label] ?? s.label}></a>)}</dd></div>}
+          {socials.length > 0 && <div class="t-footer-follow"><dt>{t.footer.follow}</dt><dd class="t-footer-social">{socials.map((s) => <a href={s.href} target="_blank" rel="noopener" aria-label={s.label} title={s.label} set:html={icons[s.label] ?? s.label}></a>)}</dd></div>}
         </dl>
       </>
     )}
     <div class="t-footer-bar">
       <span>© {new Date().getFullYear()} {site.company}</span>
       <nav aria-label="Footer">
-        <a href="/portfolio">Work</a><a href="/about-services">Studio</a><a href="/specbook">Specbook</a><a href="/contact">Contact</a>
+        <a href="/portfolio">{t.nav.work}</a><a href="/about-services">{t.nav.studio}</a><a href="/specbook">{t.nav.specbook}</a><a href="/contact">{t.nav.contact}</a>
       </nav>
       <span>{site.city}</span>
     </div>

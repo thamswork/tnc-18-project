@@ -1,12 +1,13 @@
 ---
 import { site } from "../../data/site";
+import { t } from "../../i18n/en";
 interface Props { active?: "work" | "studio" | "specbook" | "contact"; overlay?: boolean }
 const { active, overlay = false } = Astro.props;
 const links = [
-  { k: "work", label: "Work", href: "/portfolio" },
-  { k: "studio", label: "Studio", href: "/about-services" },
-  { k: "specbook", label: "Specbook", href: "/specbook" },
-  { k: "contact", label: "Contact", href: "/contact" },
+  { k: "work", label: t.nav.work, href: "/portfolio" },
+  { k: "studio", label: t.nav.studio, href: "/about-services" },
+  { k: "specbook", label: t.nav.specbook, href: "/specbook" },
+  { k: "contact", label: t.nav.contact, href: "/contact" },
 ];
 ---
 <header class:list={["t-header", { "t-header--overlay": overlay }]} data-header>
@@ -15,9 +16,9 @@ const links = [
     <nav class="t-nav" aria-label="Main">
       {links.map((l) => <a href={l.href} aria-current={active === l.k ? "page" : undefined}>{l.label}</a>)}
     </nav>
-    <a class="t-header-line" href={site.lineUrl}><span class="t-dot" aria-hidden="true"></span>Chat on LINE</a>
+    <a class="t-header-line" href={site.lineUrl}><span class="t-dot" aria-hidden="true"></span>{t.cta.line}</a>
     <div class="t-menu" data-menu>
-      <button class="t-menu-btn" type="button" aria-expanded="false" aria-controls="t-menu-panel" aria-label="Open menu">
+      <button class="t-menu-btn" type="button" aria-expanded="false" aria-controls="t-menu-panel" aria-label={t.header.openMenu}>
         <span class="t-burger" aria-hidden="true"><i></i><i></i></span>
       </button>
       <div class="t-menu-panel" id="t-menu-panel">
@@ -30,8 +31,8 @@ const links = [
         </nav>
         <div class="t-menu-foot t-menu-item" style="--i:4">
           <div class="t-menu-btns">
-            <a class="t-btn t-btn--line" href={site.lineUrl}>Chat on LINE</a>
-            <a class="t-btn t-btn--ghost" href={site.phoneHref}>Call</a>
+            <a class="t-btn t-btn--line" href={site.lineUrl}>{t.cta.line}</a>
+            <a class="t-btn t-btn--ghost" href={site.phoneHref}>{t.cta.call}</a>
           </div>
           <p class="t-menu-info"><span class="t-num">{site.phoneDisplay}</span> · {site.email}</p>
         </div>

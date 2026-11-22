@@ -18,6 +18,9 @@ for (const p of projects) {
   if (c) counts.set(c, (counts.get(c) ?? 0) + 1);
 }
 const cats = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([name, count]) => ({ name, count }));
+import { mallsFrom } from "../../lib/malls";
+import { t } from "../../i18n/en";
+const malls = mallsFrom(await getProjects());
 ---
 <Layout title="ผลงาน — รับเหมาตกแต่งร้านค้า บูธขายของในห้าง Pop-up Store" description="ผลงานการออกแบบและสร้างบูธขายของในห้าง Pop-up Store ตกแต่งร้านค้า และตกแต่งภายในโดย TNC Build Studio กรุงเทพ | Portfolio of retail booth design and interior fit-out Bangkok" bodyClass="v6">
   <Header active="work" />
@@ -40,12 +43,25 @@ const cats = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([name, count
         {projects.map((p: any, i: number) => (
           <li data-cat={String(p.data.category ?? "").trim()}>
             <ProjectCard href={projectUrl(p)} title={projectName(p)} meta={projectMeta(p)} img={p.data.cover} ratio="4/5"
-              sizes="(max-width: 600px) 100vw, (max-width: 1100px) 50vw, 25vw" eager={i < 4} />
+              sizes="(max-width: 600px) 100vw, (max-width: 1100px) 50vw, 25vw" eager={i < 4} priority={i === 0} />
           </li>
         ))}
       </ul>
     </section>
   </main>
+  <section class="t-sec t-paper w-malls" aria-labelledby="w-malls-h">
+    <div class="t-wrap">
+      <h2 class="t-label w-malls-h" id="w-malls-h">{t.work.malls}</h2>
+      <ul class="w-malls-list">
+        {malls.map((m) => (
+          <li>
+            <span class="w-mall-name">{m.name}</span>
+            <span class="w-mall-projects">{m.projects.map((p, i) => <>{i > 0 && ", "}<a href={p.url}>{p.name}</a></>)}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
   <Footer />
 </Layout>
 
@@ -92,4 +108,16 @@ const cats = [...counts.entries()].sort((a, b) => b[1] - a[1]).map(([name, count
     .w-grid-wrap { padding-top: 28px; }
     .w-grid { grid-template-columns: 1fr; gap: 36px; }
   }
+</style>
+
+<style is:global>
+  .w-malls .w-malls-h { margin: 0 0 24px; }
+  .w-malls .w-malls-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px var(--gap); }
+  .w-malls .w-malls-list li { display: flex; flex-direction: column; gap: 4px; padding-top: 14px; border-top: 1px solid rgba(12,31,74,.12); }
+  .w-malls .w-mall-name { font-size: 15px; font-weight: 600; }
+  .w-malls .w-mall-projects { font-size: 14px; color: var(--grey); line-height: 1.6; }
+  .w-malls .w-mall-projects a { color: inherit; text-decoration: underline; text-decoration-color: rgba(90,98,117,.35); text-underline-offset: 3px; padding-block: 13px; transition: color .3s ease, text-decoration-color .3s ease; }
+  .w-malls .w-mall-projects a:hover { color: var(--blue); text-decoration-color: currentColor; }
+  @media (max-width: 960px) { .w-malls .w-malls-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 600px) { .w-malls .w-malls-list { grid-template-columns: 1fr; } }
 </style>
